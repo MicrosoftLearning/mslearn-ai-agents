@@ -13,7 +13,7 @@ def initialize_tools():
 load_dotenv()
 deployed_model = os.getenv("MODEL_DEPLOYMENT")
 project_client = AIProjectClient.from_connection_string(
-    credential=DefaultAzureCredential(), conn_str=os.getenv("PROJECT_CONNECTION")
+    credential=DefaultAzureCredential(exclude_environment_credential=True, exclude_managed_identity_credential=True), conn_str=os.getenv("PROJECT_CONNECTION")
 )
 
 with project_client:

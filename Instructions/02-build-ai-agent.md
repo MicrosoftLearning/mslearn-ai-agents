@@ -14,8 +14,6 @@ This exercise should take approximately **30** minutes to complete.
 
 To complete this exercise, you'll need:
 
-- [Visual Studio Code](https://code.visualstudio.com/Download?azure-portal=true) installed.
-- [Python](https://www.python.org/downloads/?azure-portal=true) installed on your machine.
 - An Azure subscription. If you don't already have one, you can [sign up for one](https://azure.microsoft.com/?azure-portal=true).
 
 ## Create an Azure AI Foundry project
@@ -99,29 +97,61 @@ Now that you've seen how agents work and how they can accomplish tasks on your b
 
 1. In the Azure AI Foundry portal, view the **Overview** page for your project.
 1. In the **Project details** area, note the **Project connection string**. You'll use this connection string to connect to your project in a client application.
-1. Open VS Code and **Clone** the `https://github.com/MicrosoftLearning/mslearn-ai-agents` respository.
-1. Store the clone on a local drive, and open the folder after cloning.
-1. In the VS Code Explorer (left pane), right-click on the **Labfiles/02-build-ai-agent/Python** folder and select **Open in Integrated Terminal**.
-1. In the terminal, enter the following command to install the Python libraries you'll use, which are:
+1. Open a new browser tab (keeping the Azure AI Foundry portal open in the existing tab). Then in the new tab, browse to the [Azure portal](https://portal.azure.com) at `https://portal.azure.com`; signing in with your Azure credentials if prompted.
+1. Use the **[\>_]** button to the right of the search bar at the top of the page to create a new Cloud Shell in the Azure portal, selecting a ***PowerShell*** environment. The cloud shell provides a command line interface in a pane at the bottom of the Azure portal.
+
+    > **Note**: If you have previously created a cloud shell that uses a *Bash* environment, switch it to ***PowerShell***.
+
+1. In the cloud shell toolbar, in the **Settings** menu, select **Go to Classic version** (this is required to use the code editor).
+
+    > **Tip**: As you paste commands into the cloudshell, the ouput may take up a large amount of the screen buffer. You can clear the screen by entering the `cls` command to make it easier to focus on each task.
+
+1. In the PowerShell pane, enter the following commands to clone the GitHub repo for this exercise:
+
+    ```
+    rm -r mslearn-ai-agents -f
+    git clone https://github.com/microsoftlearning/mslearn-ai-agents mslearn-ai-agents
+    ```
+
+1. After the repo has been cloned, navigate to the folder containing the application code files:  
+
+    ```
+   cd mslearn-ai-agents/Labfiles/02-build-ai-agent/Python
+    ```
+
+1. In the cloud shell command line pane, enter the following command to install the libraries you'll use, which are:
     - **python-dotenv** : Used to load settings from an application configuration file.
     - **azure-identity**: Used to authenticate with Entra ID credentials.
     - **azure-ai-projects**: Used to work with an Azure AI Foundry project.
 
-    ```powershell
-    pip install python-dotenv azure-identity azure-ai-projects
+    ```
+   pip install python-dotenv azure-identity azure-ai-projects
     ```
 
-1. In the VS Code Explorer (left pane), open the **.env** Python configuration file and replace the **your_project_endpoint** placeholder with the connection string for your project (copied from the project **Overview** page in the Azure AI Foundry portal), and the **your_model_deployment** placeholder with the name you assigned to your GPT-4 model deployment.
+1. Enter the following command to edit the configuration file that has been provided:
+
+    ```
+   code .env
+    ```
+
+    The file is opened in a code editor.
+
+1. In the code file, replace the **your_project_endpoint** placeholder with the connection string for your project (copied from the project **Overview** page in the Azure AI Foundry portal), and the **your_model_deployment** placeholder with the name you assigned to your GPT-4 model deployment.
 1. In the Agents playground, copy the name displayed in the **Setup** pane for your Bing resource and enter it in place of the **your_bing_connection** placeholder.
-1. After you've replaced the placeholders, save your changes.
+1. After you've replaced the placeholders, use the **CTRL+S** command to save your changes and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
 
 ### Write code to connect to your project and chat with your model
 
-Now that you've configured the app, you'll add the necessary code to build an agent. In Visual Studio Code, you'll need to sign into your Azure subscription with `az login`.
+> **Tip**: As you add code, be sure to maintain the correct indentation.
+
+1. Enter the following command to edit the code file that has been provided:
+
+    ```
+   code basic-agent.py
+    ```
 
 > **Tip**: In this exercise, you're actually building the whole agent mostly from scratch in your app to understand how to do so. During your own development, you can instead reference the agent ID of the agent you created in the Foundry portal to use that agent definition by using the `project_client.agents.get_agent("<agent_id>")`.
 
-1. In the VS Code Explorer (left pane), open the **basic-agent.py** code file.
 1. Review the included libraries, taking note of the *Azure AI Projects* libraries for the client and tools.
 1. In the definition for *Initialize tools*, add the following code to create the tool definitions and toolset:
 
@@ -185,14 +215,22 @@ Now that you've configured the app, you'll add the necessary code to build an ag
     messages = project_client.agents.list_messages(thread_id=thread.id)
     ```
 
-1. After you've added the code blocks, save your changes.
-1. In the Integrated Terminal, run your agent.
+1. Use the **CTRL+S** command to save your changes to the code file and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
 
-    ```powershell
-    python basic-agent.py
+1. In the cloud shell command line pane, enter the following command to run the app:
+
+    ```
+   python basic-agent.py
     ```
 
-1. Observe the output, which will display the agent's text response and download the image file. Open that file, and you'll see your agent has created a graphical chart with movie revenues.
+> **Note**: If the script returns the error `AzureCliCredential.get_token_info failed: Failed to invoke the Azure CLI`, run the command `az login` and authenticate your connection before running the app again.
+
+1. Observe the output, which will display the agent's text response and download the image file. Open that file with the following command, and you'll see your agent has created a graphical chart with movie revenues:
+
+    ```
+   download ./<your_image_filename>
+    ```
+    
 1. Feel free to edit the message content to try other questions, such as popular movies from other years or certain genres.
 
 ## Clean up
