@@ -17,7 +17,7 @@ def main():
     model_deployment = os.getenv("MODEL_DEPLOYMENT_NAME")
 
 
-    # Connect to the Azure AI Foundry project
+    # Connect to the Agent client
     
 
 
