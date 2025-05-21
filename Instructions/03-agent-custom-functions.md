@@ -92,7 +92,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
     ```
    python -m venv labenv
    ./labenv/bin/Activate.ps1
-   pip install python-dotenv azure-identity azure-ai-projects
+   pip install -r requirements.txt azure-ai-projects
     ```
 
     >**Note:** You can ignore any warning or error messages displayed during the library installation.
@@ -158,18 +158,18 @@ Now that you've created your project in AI Foundry, let's develop an app that im
     ```python
    # Add references
    from azure.identity import DefaultAzureCredential
-   from azure.ai.projects import AIProjectClient
+   from azure.ai.agents import AgentsClient
    from azure.ai.agents.models import FunctionTool, ToolSet, ListSortOrder
    from user_functions import user_functions
     ```
 
-1. Find the comment **Connect to the Azure AI Foundry project** and add the following code to connect to the Azure AI project using the current Azure credentials.
+1. Find the comment **Connect to the Agent client** and add the following code to connect to the Azure AI project using the current Azure credentials.
 
     > **Tip**: Be careful to maintain the correct indentation level.
 
     ```python
-   # Connect to the Azure AI Foundry project
-   project_client = AIProjectClient(
+   # Connect to the Agent client
+   agent_client = AgentsClient(
        endpoint=project_endpoint,
        credential=DefaultAzureCredential
            (exclude_environment_credential=True,
@@ -181,14 +181,14 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 
     ```python
    # Define an agent that can use the custom functions
-   with project_client:
+   with agent_client:
 
         functions = FunctionTool(user_functions)
         toolset = ToolSet()
         toolset.add(functions)
-        project_client.agents.enable_auto_function_calls(toolset)
+        agent_client.enable_auto_function_calls(toolset)
             
-        agent = project_client.agents.create_agent(
+        agent = agent_client.create_agent(
             model=model_deployment,
             name="support-agent",
             instructions="""You are a technical support agent.
@@ -199,7 +199,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
             toolset=toolset
         )
 
-        thread = project_client.agents.threads.create()
+        thread = agent_client.threads.create()
         print(f"You're chatting with: {agent.name} ({agent.id})")
 
     ```
@@ -208,12 +208,12 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 
     ```python
    # Send a prompt to the agent
-   message = project_client.agents.messages.create(
+   message = agent_client.messages.create(
         thread_id=thread.id,
         role="user",
         content=user_prompt
    )
-   run = project_client.agents.runs.create_and_process(thread_id=thread.id, agent_id=agent.id)
+   run = agent_client.runs.create_and_process(thread_id=thread.id, agent_id=agent.id)
     ```
 
     > **Note**: Using the **create_and_process** method to run the thread enables the agent to automatically find your functions and choose to use them based on their names and parameters. As an alternative, you could use the **create_run** method, in which case you would be responsible for writing code to poll for run status to determine when a function call is required, call the function, and return the results to the agent.
@@ -226,22 +226,24 @@ Now that you've created your project in AI Foundry, let's develop an app that im
         print(f"Run failed: {run.last_error}")
     ```
 
-<!--1. Find the comment **Show the latest response from the agent** and add the following code to retrieve the messages from the completed thread and display the last one that was sent by the agent.
+1. Find the comment **Show the latest response from the agent** and add the following code to retrieve the messages from the completed thread and display the last one that was sent by the agent.
 
     ```python
    # Show the latest response from the agent
-   messages = project_client.agents.messages.list(thread_id=thread.id)
-   last_msg = messages.get_last_text_message_by_role("assistant")
+   last_msg = agent_client.messages.get_last_message_text_by_role(
+       thread_id=thread.id,
+       role=MessageRole.AGENT,
+   )
    if last_msg:
         print(f"Last Message: {last_msg.text.value}")
     ```
--->
+
 1. Find the comment **Get the conversation history** and add the following code to print out the messages from the conversation thread; ordering them in chronological sequence
 
     ```python
    # Get the conversation history
    print("\nConversation Log:\n")
-   messages = project_client.agents.messages.list(thread_id=thread.id, order=ListSortOrder.ASCENDING)
+   messages = agent_client.messages.list(thread_id=thread.id, order=ListSortOrder.ASCENDING)
    for message in messages:
        if message.text_messages:
            last_msg = message.text_messages[-1]
@@ -252,7 +254,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 
     ```python
    # Clean up
-   project_client.agents.delete_agent(agent.id)
+   agent_client.delete_agent(agent.id)
    print("Deleted agent")
     ```
 
