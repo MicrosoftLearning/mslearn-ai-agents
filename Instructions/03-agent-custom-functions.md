@@ -45,7 +45,7 @@ Let's start by creating an Azure AI Foundry project.
 
     ![Screenshot of a Azure AI Foundry project overview page.](./Media/ai-foundry-project.png)
 
-1. Copy the **Azure AI Foundry project endpoint** and **API Key** values to a notepad, as you'll use them to connect to your project in a client application.
+1. Copy the **Azure AI Foundry project endpoint** value to a notepad, as you'll use it to connect to your project in a client application.
 
 ## Develop an agent that uses function tools
 
