@@ -212,7 +212,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
         # Add the input prompt to a list of messages to be submitted
         prompt_messages = [f"{prompt}: {expenses_data}"]
         # Invoke the agent for the specified thread with the messages
-        response = await expenses_agent.get_response(thread_id=thread.id, messages=prompt_messages)
+        response = await expenses_agent.get_response(prompt_messages, thread=thread)
         # Display the response
         print(f"\n# {response.name}:\n{response}")
    except Exception as e:
