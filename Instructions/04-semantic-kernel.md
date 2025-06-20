@@ -85,10 +85,10 @@ Now you're ready to create a client app that defines an agent and a custom funct
     ```
    python -m venv labenv
    ./labenv/bin/Activate.ps1
-   pip install python-dotenv azure-identity semantic-kernel[azure] 
+   pip install python-dotenv azure-identity semantic-kernel --upgrade 
     ```
 
-    > **Note**: Installing *semantic-kernel[azure]* autmatically installs a semantic kernel-compatible version of *azure-ai-projects*.
+    > **Note**: Installing *semantic-kernel* autmatically installs a semantic kernel-compatible version of *azure-ai-projects*.
 
 1. Enter the following command to edit the configuration file that has been provided:
 
@@ -207,7 +207,9 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
     ```python
    # Use the agent to process the expenses data
-   thread: AzureAIAgentThread = AzureAIAgentThread(client=project_client)
+   # If no thread is provided, a new thread will be
+   # created and returned with the initial response
+   thread: AzureAIAgentThread | None = None
    try:
         # Add the input prompt to a list of messages to be submitted
         prompt_messages = [f"{prompt}: {expenses_data}"]

@@ -96,10 +96,10 @@ Now you're ready to create a client app that defines an agent and a custom funct
     ```
    python -m venv labenv
    ./labenv/bin/Activate.ps1
-   pip install python-dotenv azure-identity semantic-kernel[azure] 
+   pip install python-dotenv azure-identity semantic-kernel --upgrade
     ```
 
-    > **Note**: Installing *semantic-kernel[azure]* automatically installs a semantic kernel-compatible version of *azure-ai-projects*.
+    > **Note**: Installing *semantic-kernel* automatically installs a semantic kernel-compatible version of *azure-ai-projects*.
 
 1. Enter the following command to edit the configuration file that is provided:
 
@@ -290,7 +290,7 @@ Now you're ready to run your code and watch your AI agents collaborate.
 1. After you have signed in, enter the following command to run the application:
 
     ```
-   python agent_chat.py
+    python agent_chat.py
     ```
 
     You should see some output similar to the following:
