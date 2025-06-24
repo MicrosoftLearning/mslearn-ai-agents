@@ -290,7 +290,7 @@ Now you're ready to run your code and watch your AI agents collaborate.
 1. After you have signed in, enter the following command to run the application:
 
     ```
-    python agent_chat.py
+   python agent_chat.py
     ```
 
     You should see some output similar to the following:
