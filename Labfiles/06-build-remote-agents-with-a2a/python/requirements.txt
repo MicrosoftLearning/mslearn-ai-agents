@@ -2,3 +2,6 @@ python-dotenv
 httpx
 azure-identity
 uvicorn
+starlette
+sse-starlette
+fastapi
