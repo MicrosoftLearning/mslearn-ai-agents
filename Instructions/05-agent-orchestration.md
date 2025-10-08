@@ -93,7 +93,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
     ```
    python -m venv labenv
    ./labenv/bin/Activate.ps1
-   pip install azure-identity agent-framework python-dotenv
+   pip install azure-identity agent-framework
     ```
 
 1. Enter the following command to edit the configuration file that is provided:
@@ -125,7 +125,6 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
     ```python
    # Add references
    import os
-   from dotenv import load_dotenv
    import asyncio
    from typing import cast
    from agent_framework import ChatMessage, Role, SequentialBuilder, WorkflowOutputEvent
@@ -133,14 +132,15 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
    from azure.identity import AzureCliCredential
     ```
 
-1. In the **main** function, find the comment **Agent instructions** and add the following code just before it to load the environment variables from the .env file:
+1. In the **main** function, find the comment **Agent instructions** and add the following code just before it to load the configuration settings from environment variables:
 
     ```python
-   # Load environment variables
-   load_dotenv()
+   # Load configuration from environment
+   project_endpoint = os.getenv("AZURE_AI_PROJECT_ENDPOINT")
+   model_deployment = os.getenv("AZURE_AI_MODEL_DEPLOYMENT_NAME")
     ```
 
-    This loads the `AZURE_AI_PROJECT_ENDPOINT` and `AZURE_AI_MODEL_DEPLOYMENT_NAME` values from the .env file, which are required for the Azure AI Agent client to connect to your project.
+    These values are read from the environment (set by the .env file) and will be passed to the Azure AI Agent client to connect to your project.
 
 1. Take a moment to review the agent instructions that follow. These instructions define the behavior of each agent in the orchestration.
 
@@ -150,7 +150,11 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
    # Create the chat client
    credential = AzureCliCredential()
    async with (
-       AzureAIAgentClient(async_credential=credential) as chat_client,
+       AzureAIAgentClient(
+           async_credential=credential,
+           endpoint=project_endpoint,
+           model=model_deployment
+       ) as chat_client,
    ):
     ```
 

@@ -1,11 +1,11 @@
 # Add references
 import os
-from dotenv import load_dotenv
 
 
 async def main():
-    # Load environment variables
-    load_dotenv()
+    # Load configuration from environment
+    project_endpoint = os.getenv("AZURE_AI_PROJECT_ENDPOINT")
+    model_deployment = os.getenv("AZURE_AI_MODEL_DEPLOYMENT_NAME")
     
     # Agent instructions
     summarizer_instructions="""
