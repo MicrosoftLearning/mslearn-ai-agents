@@ -93,7 +93,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
     ```
    python -m venv labenv
    ./labenv/bin/Activate.ps1
-   pip install azure-identity agent-framework
+   pip install azure-identity agent-framework python-dotenv
     ```
 
 1. Enter the following command to edit the configuration file that is provided:
@@ -104,7 +104,9 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
     The file is opened in a code editor.
 
-1. In the code file, replace the **your_openai_endpoint** placeholder with the endpoint for your project (copied from the project **Overview** page in the Azure AI Foundry portal). Replace the **your_model_deployment** placeholder with the name you assigned to your gpt-4o model deployment.
+1. In the code file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project **Overview** page in the Azure AI Foundry portal). Replace the **your_model_deployment** placeholder with the name you assigned to your gpt-4o model deployment.
+
+    These values are loaded by your application code and used to connect to your Azure AI Foundry project.
 
 1. After you've replaced the placeholders, use the **CTRL+S** command to save your changes and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
 
@@ -122,6 +124,8 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 
     ```python
    # Add references
+   import os
+   from dotenv import load_dotenv
    import asyncio
    from typing import cast
    from agent_framework import ChatMessage, Role, SequentialBuilder, WorkflowOutputEvent
@@ -129,7 +133,16 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
    from azure.identity import AzureCliCredential
     ```
 
-1. In the **main** function, take a moment to review the agent instructions. These instructions define the behavior of each agent in the orchestration.
+1. In the **main** function, find the comment **Agent instructions** and add the following code just before it to load the environment variables from the .env file:
+
+    ```python
+   # Load environment variables
+   load_dotenv()
+    ```
+
+    This loads the `AZURE_AI_PROJECT_ENDPOINT` and `AZURE_AI_MODEL_DEPLOYMENT_NAME` values from the .env file, which are required for the Azure AI Agent client to connect to your project.
+
+1. Take a moment to review the agent instructions that follow. These instructions define the behavior of each agent in the orchestration.
 
 1. Add the following code under the comment **Create the chat client**:
 

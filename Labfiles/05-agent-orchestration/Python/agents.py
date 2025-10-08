@@ -1,7 +1,12 @@
 # Add references
+import os
+from dotenv import load_dotenv
 
 
 async def main():
+    # Load environment variables
+    load_dotenv()
+    
     # Agent instructions
     summarizer_instructions="""
     Summarize the customer's feedback in one short sentence. Keep it neutral and concise.
