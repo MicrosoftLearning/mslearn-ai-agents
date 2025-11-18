@@ -1,31 +1,31 @@
 ---
 lab:
-    title: 'Develop a multi-agent solution with Azure AI Foundry'
-    description: 'Learn to configure multiple agents to collaborate using Azure AI Foundry Agent Service'
+    title: 'Develop a multi-agent solution with Microsoft Foundry'
+    description: 'Learn to configure multiple agents to collaborate using Microsoft Foundry Agent Service'
 ---
 
 # Develop a multi-agent solution
 
-In this exercise, you'll create a project that orchestrates multiple AI agents using Azure AI Foundry Agent Service. You'll design an AI solution that assists with ticket triage. The connected agents will assess the ticket's priority, suggest a team assignment, and determine the level of effort required to complete the ticket. Let's get started!
+In this exercise, you'll create a project that orchestrates multiple AI agents using Microsoft Foundry Agent Service. You'll design an AI solution that assists with ticket triage. The connected agents will assess the ticket's priority, suggest a team assignment, and determine the level of effort required to complete the ticket. Let's get started!
 
-> **Tip**: The code used in this exercise is based on the for Azure AI Foundry SDK for Python. You can develop similar solutions using the SDKs for Microsoft .NET, JavaScript, and Java. Refer to [Azure AI Foundry SDK client libraries](https://learn.microsoft.com/azure/ai-foundry/how-to/develop/sdk-overview) for details.
+> **Tip**: The code used in this exercise is based on the for Microsoft Foundry SDK for Python. You can develop similar solutions using the SDKs for Microsoft .NET, JavaScript, and Java. Refer to [Microsoft Foundry SDK client libraries](https://learn.microsoft.com/azure/ai-foundry/how-to/develop/sdk-overview) for details.
 
 This exercise should take approximately **30** minutes to complete.
 
 > **Note**: Some of the technologies used in this exercise are in preview or in active development. You may experience some unexpected behavior, warnings, or errors.
 
-## Create an Azure AI Foundry project
+## Create an Microsoft Foundry project
 
-Let's start by creating an Azure AI Foundry project.
+Let's start by creating an Microsoft Foundry project.
 
-1. In a web browser, open the [Azure AI Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Azure AI Foundry** logo at the top left to navigate to the home page, which looks similar to the following image (close the **Help** pane if it's open):
+1. In a web browser, open the [Microsoft Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Microsoft Foundry** logo at the top left to navigate to the home page, which looks similar to the following image (close the **Help** pane if it's open):
 
-    ![Screenshot of Azure AI Foundry portal.](./Media/ai-foundry-home.png)
+    ![Screenshot of Microsoft Foundry portal.](./Media/ai-foundry-home.png)
 
 1. In the home page, select **Create an agent**.
 1. When prompted to create a project, enter a valid name for your project and expand **Advanced options**.
 1. Confirm the following settings for your project:
-    - **Azure AI Foundry resource**: *A valid name for your Azure AI Foundry resource*
+    - **Microsoft Foundry resource**: *A valid name for your Microsoft Foundry resource*
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Create or select a resource group*
     - **Region**: *Select any **AI Foundry recommended***\*
@@ -41,9 +41,9 @@ Let's start by creating an Azure AI Foundry project.
 
 1. In the navigation pane on the left, select **Overview** to see the main page for your project; which looks like this:
 
-    ![Screenshot of a Azure AI Foundry project overview page.](./Media/ai-foundry-project.png)
+    ![Screenshot of a Microsoft Foundry project overview page.](./Media/ai-foundry-project.png)
 
-1. Copy the **Azure AI Foundry project endpoint** values to a notepad, as you'll use them to connect to your project in a client application.
+1. Copy the **Microsoft Foundry project endpoint** values to a notepad, as you'll use them to connect to your project in a client application.
 
 ## Create an AI Agent client app
 
@@ -51,7 +51,7 @@ Now you're ready to create a client app that defines the agents and instructions
 
 ### Prepare the environment
 
-1. Open a new browser tab (keeping the Azure AI Foundry portal open in the existing tab). Then in the new tab, browse to the [Azure portal](https://portal.azure.com) at `https://portal.azure.com`; signing in with your Azure credentials if prompted.
+1. Open a new browser tab (keeping the Microsoft Foundry portal open in the existing tab). Then in the new tab, browse to the [Azure portal](https://portal.azure.com) at `https://portal.azure.com`; signing in with your Azure credentials if prompted.
 
     Close any welcome notifications to see the Azure portal home page.
 
@@ -101,7 +101,7 @@ Now you're ready to create a client app that defines the agents and instructions
 
     The file is opened in a code editor.
 
-1. In the code file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project **Overview** page in the Azure AI Foundry portal), and the **your_model_deployment** placeholder with the name you assigned to your gpt-4o model deployment (which by default is `gpt-4o`).
+1. In the code file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project **Overview** page in the Microsoft Foundry portal), and the **your_model_deployment** placeholder with the name you assigned to your gpt-4o model deployment (which by default is `gpt-4o`).
 
 1. After you've replaced the placeholders, use the **CTRL+S** command to save your changes and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
 
@@ -331,7 +331,7 @@ Now you're ready to run your code and watch your AI agents collaborate.
 
     > **Note**: In most scenarios, just using *az login* will be sufficient. However, if you have subscriptions in multiple tenants, you may need to specify the tenant by using the *--tenant* parameter. See [Sign into Azure interactively using the Azure CLI](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) for details.
 
-1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Azure AI Foundry hub if prompted.
+1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Microsoft Foundry hub if prompted.
 
 1. After you have signed in, enter the following command to run the application:
 
