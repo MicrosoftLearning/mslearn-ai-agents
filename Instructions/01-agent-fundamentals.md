@@ -20,6 +20,8 @@ Let's start by creating an Microsoft Foundry project.
 
     ![Screenshot of Microsoft Foundry portal.](./Media/ai-foundry-home.png)
 
+    > **Important**: Make sure the **New Foundry** toggle is *Off* for this lab.
+
 1. In the home page, select **Create an agent**.
 1. When prompted to create a project, enter a valid name for your project.
 1. Expand **Advanced options** and specify the following settings:

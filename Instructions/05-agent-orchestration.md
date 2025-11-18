@@ -26,6 +26,8 @@ Let's start by deploying a model in an Microsoft Foundry project.
 
     ![Screenshot of Microsoft Foundry portal.](./Media/ai-foundry-home.png)
 
+    > **Important**: Make sure the **New Foundry** toggle is *Off* for this lab.
+
 1. In the home page, in the **Explore models and capabilities** section, search for the `gpt-4o` model; which we'll use in our project.
 1. In the search results, select the **gpt-4o** model to see its details, and then at the top of the page for the model, select **Use this model**.
 1. When prompted to create a project, enter a valid name for your project and expand **Advanced options**.
