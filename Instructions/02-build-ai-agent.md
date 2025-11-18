@@ -90,7 +90,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
     ```
    python -m venv labenv
    ./labenv/bin/Activate.ps1
-   pip install -r requirements.txt azure-ai-projects
+   pip install -r requirements.txt azure-ai-projects azure-ai-agents
     ```
 
 1. Enter the following command to edit the configuration file that has been provided:
