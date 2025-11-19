@@ -14,7 +14,7 @@ This exercise should take approximately **30** minutes to complete.
 
 > **Note**: Some of the technologies used in this exercise are in preview or in active development. You may experience some unexpected behavior, warnings, or errors.
 
-## Create an Microsoft Foundry project
+## Create a Microsoft Foundry project
 
 Let's start by creating a Foundry project.
 

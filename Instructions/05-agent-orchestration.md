@@ -18,7 +18,7 @@ This exercise should take approximately **30** minutes to complete.
 
 > **Note**: Some of the technologies used in this exercise are in preview or in active development. You may experience some unexpected behavior, warnings, or errors.
 
-## Deploy a model in an Microsoft Foundry project
+## Deploy a model in a Microsoft Foundry project
 
 Let's start by deploying a model in a Foundry project.
 
