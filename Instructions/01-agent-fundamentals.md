@@ -12,20 +12,20 @@ This exercise takes approximately **30** minutes.
 
 > **Note**: Some of the technologies used in this exercise are in preview or in active development. You may experience some unexpected behavior, warnings, or errors.
 
-## Create an Microsoft Foundry project and agent
+## Create an Foundry project and agent
 
-Let's start by creating an Microsoft Foundry project.
+Let's start by creating an Foundry project.
 
-1. In a web browser, open the [Microsoft Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Microsoft Foundry** logo at the top left to navigate to the home page, which looks similar to the following image (close the **Help** pane if it's open):
+1. In a web browser, open the [Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Foundry** logo at the top left to navigate to the home page, which looks similar to the following image (close the **Help** pane if it's open):
 
-    ![Screenshot of Microsoft Foundry portal.](./Media/ai-foundry-home.png)
+    ![Screenshot of Foundry portal.](./Media/ai-foundry-home.png)
 
     > **Important**: Make sure the **New Foundry** toggle is *Off* for this lab.
 
 1. In the home page, select **Create an agent**.
 1. When prompted to create a project, enter a valid name for your project.
 1. Expand **Advanced options** and specify the following settings:
-    - **Microsoft Foundry resource**: *A valid name for your Microsoft Foundry resource*
+    - **Foundry resource**: *A valid name for your Foundry resource*
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Select your resource group, or create a new one*
     - **Region**: *Select any **AI Foundry recommended***\**
@@ -39,7 +39,7 @@ Let's start by creating an Microsoft Foundry project.
 
 1. When your project is created, the Agents playground will be opened automatically so you can select or deploy a model:
 
-    ![Screenshot of a Microsoft Foundry project Agents playground.](./Media/ai-foundry-agents-playground.png)
+    ![Screenshot of a Foundry project Agents playground.](./Media/ai-foundry-agents-playground.png)
 
     >**Note**: A GPT-4o base model is automatically deployed when creating your Agent and project.
 
@@ -59,7 +59,7 @@ Now that you have a model deployed, you're ready to build an AI agent. In this e
    If a user wants to submit an expense claim, you get their email address, a description of the claim, and the amount to be claimed and write the claim details to a text file that the user can download.
     ```
 
-    ![Screenshot of the AI agent setup page in Microsoft Foundry portal.](./Media/ai-agent-setup.png)
+    ![Screenshot of the AI agent setup page in Foundry portal.](./Media/ai-agent-setup.png)
 
 1. Further down in the **Setup** pane, next to the **Knowledge** header, select **+ Add**. Then in the **Add knowledge** dialog box, select **Files**.
 1. In the **Adding files** dialog box, create a new vector store named `Expenses_Vector_Store`, uploading and saving the **Expenses_policy.docx** local file that you downloaded previously.
@@ -81,7 +81,7 @@ Now that you've created an agent, you can test it in the playground chat.
 1. Submit a prompt that describes the claim and the amount; for example, `Breakfast cost me $20`.
 1. The agent should use the code interpreter to prepare the expense claim text file, and provide a link so you can download it.
 
-    ![Screenshot of the Agent Playground in Microsoft Foundry portal.](./Media/ai-agent-playground.png)
+    ![Screenshot of the Agent Playground in Foundry portal.](./Media/ai-agent-playground.png)
 
 1. Download and open the text document to see the expense claim details.
 
