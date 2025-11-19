@@ -12,9 +12,9 @@ This exercise takes approximately **30** minutes.
 
 > **Note**: Some of the technologies used in this exercise are in preview or in active development. You may experience some unexpected behavior, warnings, or errors.
 
-## Create an Foundry project and agent
+## Create a Foundry project and agent
 
-Let's start by creating an Foundry project.
+Let's start by creating a Foundry project.
 
 1. In a web browser, open the [Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Foundry** logo at the top left to navigate to the home page, which looks similar to the following image (close the **Help** pane if it's open):
 
