@@ -8,24 +8,26 @@ lab:
 
 In this exercise, you'll use Azure AI Agent Service with the A2A protocol to create simple remote agents that interact with one another. These agents will assist technical writers with preparing their developer blog posts. A title agent will generate a headline, and an outline agent will use the title to develop a concise outline for the article. Let's get started
 
-> **Tip**: The code used in this exercise is based on the for Azure AI Foundry SDK for Python. You can develop similar solutions using the SDKs for Microsoft .NET, JavaScript, and Java. Refer to [Azure AI Foundry SDK client libraries](https://learn.microsoft.com/azure/ai-foundry/how-to/develop/sdk-overview) for details.
+> **Tip**: The code used in this exercise is based on the for Microsoft Foundry SDK for Python. You can develop similar solutions using the SDKs for Microsoft .NET, JavaScript, and Java. Refer to [Microsoft Foundry SDK client libraries](https://learn.microsoft.com/azure/ai-foundry/how-to/develop/sdk-overview) for details.
 
 This exercise should take approximately **30** minutes to complete.
 
 > **Note**: Some of the technologies used in this exercise are in preview or in active development. You may experience some unexpected behavior, warnings, or errors.
 
-## Create an Azure AI Foundry project
+## Create an Microsoft Foundry project
 
-Let's start by creating an Azure AI Foundry project.
+Let's start by creating an Microsoft Foundry project.
 
-1. In a web browser, open the [Azure AI Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Azure AI Foundry** logo at the top left to navigate to the home page, which looks similar to the following image (close the **Help** pane if it's open):
+1. In a web browser, open the [Microsoft Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Microsoft Foundry** logo at the top left to navigate to the home page, which looks similar to the following image (close the **Help** pane if it's open):
 
-    ![Screenshot of Azure AI Foundry portal.](./Media/ai-foundry-home.png)
+    ![Screenshot of Microsoft Foundry portal.](./Media/ai-foundry-home.png)
+
+    > **Important**: Make sure the **New Foundry** toggle is *Off* for this lab.
 
 1. In the home page, select **Create an agent**.
 1. When prompted to create a project, enter a valid name for your project and expand **Advanced options**.
 1. Confirm the following settings for your project:
-    - **Azure AI Foundry resource**: *A valid name for your Azure AI Foundry resource*
+    - **Microsoft Foundry resource**: *A valid name for your Microsoft Foundry resource*
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Create or select a resource group*
     - **Region**: *Select any **AI Foundry recommended***\*
@@ -41,9 +43,9 @@ Let's start by creating an Azure AI Foundry project.
 
 1. In the navigation pane on the left, select **Overview** to see the main page for your project; which looks like this:
 
-    ![Screenshot of a Azure AI Foundry project overview page.](./Media/ai-foundry-project.png)
+    ![Screenshot of a Microsoft Foundry project overview page.](./Media/ai-foundry-project.png)
 
-1. Copy the **Azure AI Foundry project endpoint** values to a notepad, as you'll use them to connect to your project in a client application.
+1. Copy the **Microsoft Foundry project endpoint** values to a notepad, as you'll use them to connect to your project in a client application.
 
 ## Create an A2A application
 
@@ -51,7 +53,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 
 ### Clone the repo containing the application code
 
-1. Open a new browser tab (keeping the Azure AI Foundry portal open in the existing tab). Then in the new tab, browse to the [Azure portal](https://portal.azure.com) at `https://portal.azure.com`; signing in with your Azure credentials if prompted.
+1. Open a new browser tab (keeping the Microsoft Foundry portal open in the existing tab). Then in the new tab, browse to the [Azure portal](https://portal.azure.com) at `https://portal.azure.com`; signing in with your Azure credentials if prompted.
 
     Close any welcome notifications to see the Azure portal home page.
 
@@ -119,7 +121,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 
     The file is opened in a code editor.
 
-1. In the code file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project **Overview** page in the Azure AI Foundry portal) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name (which should be *gpt-4o*).
+1. In the code file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project **Overview** page in the Microsoft Foundry portal) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name (which should be *gpt-4o*).
 1. After you've replaced the placeholder, use the **CTRL+S** command to save your changes and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
 
 ### Create a discoverable agent
@@ -223,7 +225,7 @@ In this task, you create the title agent that helps writers create trendy headli
    # Create agent card
    agent_card = AgentCard(
        name='AI Foundry Title Agent',
-       description='An intelligent title generator agent powered by Azure AI Foundry. '
+       description='An intelligent title generator agent powered by Microsoft Foundry. '
        'I can help you generate catchy titles for your articles.',
        url=f'http://{host}:{port}/',
        version='1.0.0',
@@ -410,7 +412,7 @@ In this task, you use the A2A protocol to enable the routing agent to send messa
 
     > **Note**: In most scenarios, just using *az login* will be sufficient. However, if you have subscriptions in multiple tenants, you may need to specify the tenant by using the *--tenant* parameter. See [Sign into Azure interactively using the Azure CLI](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) for details.
     
-1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Azure AI Foundry hub if prompted.
+1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Microsoft Foundry hub if prompted.
 1. After you have signed in, enter the following command to run the application:
 
     ```
