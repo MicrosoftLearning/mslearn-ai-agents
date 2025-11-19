@@ -92,7 +92,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
     ```
    python -m venv labenv
    ./labenv/bin/Activate.ps1
-   pip install -r requirements.txt azure-ai-projects
+   pip install -r requirements.txt azure-ai-projects azure-ai-agents
     ```
 
     >**Note:** You can ignore any warning or error messages displayed during the library installation.
