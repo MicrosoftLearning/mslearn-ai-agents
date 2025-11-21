@@ -18,7 +18,7 @@ Before starting this exercise, ensure you have:
 - Visual Studio Code installed
 - An active Azure subscription
 
-## Install the Foundry VS Code extension
+## Install the Microsoft Foundry VS Code extension
 
 Let's start by installing and setting up the VS Code extension.
 
@@ -26,9 +26,9 @@ Let's start by installing and setting up the VS Code extension.
 
 1. Select **Extensions** from the left pane (or press **Ctrl+Shift+X**).
 
-1. In the search bar, type **Foundry** and press Enter.
+1. In the search bar, type **Microsoft Foundry** and press Enter.
 
-1. Select the **Foundry** extension from Microsoft and click **Install**.
+1. Select the **Microsoft Foundry** extension from Microsoft and click **Install**.
 
 1. After installation is complete, verify the extension appears in the primary navigation bar on the left side of Visual Studio Code.
 
@@ -36,13 +36,15 @@ Let's start by installing and setting up the VS Code extension.
 
 Now you'll connect to your Azure resources and create a new AI Foundry project.
 
-1. In the VS Code sidebar, select the **Foundry** extension icon.
+1. In the VS Code sidebar, select the **Microsoft Foundry** extension icon.
 
-1. In the Azure Resources view, select **Sign in to Azure...** and follow the authentication prompts.
+1. In the Resources view, select **Sign in to Azure...** and follow the authentication prompts.
 
-1. After signing in, select your Azure subscription from the dropdown.
+   > **Note**: You won't see this option if you're already signed in.
 
 1. Create a new Foundry project by selecting the **+** (plus) icon next to **Resources** in the Foundry Extension view.
+
+1. Select your Azure subscription from the dropdown.
 
 1. Choose whether to create a new resource group or use an existing one:
    
@@ -64,21 +66,21 @@ You'll need a deployed model to use with your agent.
 
 1. When the "Project deployed successfully" popup appears, select the **Deploy a model** button. This opens the Model Catalog.
 
-   > **Tip**: You can also access the Model Catalog by selecting the **+** icon next to **Models** in the Resources section, or by pressing **F1** and running the command **Foundry: Open Model Catalog**.
+   > **Tip**: You can also access the Model Catalog by selecting the **+** icon next to **Models** in the Resources section, or by pressing **F1** and running the command **Microsoft Foundry: Open Model Catalog**.
 
-1. In the Model Catalog, locate the **gpt-4o** model (you can use the search bar to find it quickly).
+1. In the Model Catalog, locate the **gpt-4** model (you can use the search bar to find it quickly).
 
     ![Screenshot of the Model Catalog in the Foundry VS Code extension.](Media/vs-code-model.png)
 
-1. Select **Deploy in Azure** next to the gpt-4o model.
+1. Select **Deploy** next to the gpt-4 model.
 
 1. Configure the deployment settings:
-   - **Deployment name**: Enter a name like "gpt-4o-deployment"
+   - **Deployment name**: Enter a name like "gpt-4-deployment"
    - **Deployment type**: Select **Global Standard** (or **Standard** if Global Standard is not available)
    - **Model version**: Leave as default
    - **Tokens per minute**: Leave as default
 
-1. Select **Deploy in Foundry** in the bottom-left corner.
+1. Select **Deploy in Microsoft Foundry** in the bottom-left corner.
 
 1. In the confirmation dialog, select **Deploy** to deploy the model.
 
@@ -86,23 +88,22 @@ You'll need a deployed model to use with your agent.
 
 ## Create an AI agent with the designer view
 
-Now you'll create an AI agent using the visual designer interface.
+Now you'll create an AI agent using the visual designer interface. Rather than writing code, you'll configure the agent's instructions, settings, and tools through the user interface.
 
-1. In the Foundry extension view, find the **Resources** section.
+1. In the Microsoft Foundry extension view, find the **Resources** section.
 
-1. Select the **+** (plus) icon next to the **Agents** subsection to create a new AI Agent.
+1. Select the **+** (plus) icon next to the **Declarative Agents** subsection to create a new AI Agent.
 
-    ![Screenshot of an creating an agent in the Foundry VS Code extension.](Media/vs-code-new-agent.png)
+    ![Screenshot of an creating an agent in the Microsoft Foundry VS Code extension.](Media/vs-code-new-agent.png)
 
 1. Choose a location to save your agent files when prompted.
 
-1. The agent designer view will open along with a `.yaml` configuration file.
+1. A **New Agent** tab will open to an "Agent Preferences" editor, along with a `.yaml` configuration file.
 
 ### Configure your agent in the designer
 
-1. In the agent designer, configure the following fields:
+1. In the agent preferences, configure the following fields:
    - **Name**: Enter a descriptive name for your agent (e.g., "data-research-agent")
-   - **Description**: Add a description explaining the agent's purpose
    - **Model**: Select your GPT-4o deployment from the dropdown
    - **Instructions**: Enter system instructions such as:
      ```
@@ -129,17 +130,17 @@ You'll now add a Model Context Protocol (MCP) server tool that allows your agent
 
 1. Select the **Create tool** button to add the tool to your agent.
 
-## Deploy your agent to Foundry
+## Deploy your agent to Microsoft Foundry
 
-1. In the designer view, select the **Create on Foundry** button in the bottom-left corner.
+1. In the agent designer view, select the **Create Agent on Microsoft Foundry** button in the bottom-left corner.
 
 1. Wait for the deployment to complete.
 
-1. In the VS Code navbar, refresh the **Azure Resources** view. Your deployed agent should now appear under the **Agents** subsection.
+1. In the VS Code navbar, refresh the **Resources** view. Your deployed agent should now appear under the **Declarative Agents** subsection.
 
 ## Test your agent in the playground
 
-1. Right-click on your deployed agent in the **Agents** subsection.
+1. Right-click on your deployed agent in the **Declarative Agents** subsection.
 
 1. Select **Open Playground** from the context menu.
 
