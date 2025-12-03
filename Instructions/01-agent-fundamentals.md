@@ -24,7 +24,7 @@ Let's start by creating a Foundry project.
 1. In the top banner, select **Start building** to try the new Microsoft Foundry Experience.
 1. When prompted, create a **new** project, and enter a valid name for your project.
 1. Expand **Advanced options** and specify the following settings:
-    - **Microsfot Foundry resource**: *A valid name for your Foundry resource*
+    - **Microsoft Foundry resource**: *A valid name for your Foundry resource*
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Select your resource group, or create a new one*
     - **Region**: *Select any **AI Foundry recommended***\**
@@ -80,6 +80,25 @@ Now that you've created an agent, you can test it in the playground chat.
     ![Screenshot of the Agent Playground in Foundry portal.](./Media/ai-agent-code-interpreter.png)
 
 1. Download and open the text document to see the expense claim details.
+
+## Optional: Explore the code
+
+After experimenting with your agent in the playground, you may want to integrate it into your own client application. The **Code** tab provides sample code that shows how to interact with your agent programmatically.
+
+1. In the agent playground, select the **Code** tab to view the sample code.
+
+    ![Screenshot showing the Code tab in the agent playground.](./Media/ai-agent-code-tab.png)
+
+1. Review the Python code. This code demonstrates how to:
+    - Connect to your agent using the Azure AI Projects SDK
+    - Send messages to the agent
+    - Retrieve and process responses
+    
+1. Select **.env variables** to view the environment variables you need to run this code.
+1. You can use this code as a starting point for building your own client application that interacts with the agent you created.
+1. Optionally, select **Open in VS Code for the Web** to launch a preconfigured workspace with the sample code ready to run.
+
+    > **Note**: It may take a few minutes for the workspace to be prepared. Follow the instructions provided in the workspace to successfully run the code.
 
 ## Clean up
 
