@@ -1,0 +1,44 @@
+{
+  "name": "DevContainer",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "extensions": [
+    "AndrsDC.base16-themes",
+    "artlaman.chalice-color-theme",
+    "bierner.markdown-mermaid",
+    "donjayamanne.githistory",
+    "donjayamanne.python-extension-pack",
+    "DotJoshJohnson.xml",
+    "dracula-theme.theme-dracula",
+    "eamodio.gitlens",
+    "fnando.linter",
+    "foxundermoon.shell-format",
+    "hashicorp.terraform",
+    "hediet.vscode-drawio",
+    "ms-kubernetes-tools.vscode-kubernetes-tools",
+    "ms-python.python",
+    "ms-toolsai.jupyter",
+    "mhutchie.git-graph",
+    "oderwat.indent-rainbow",
+    "prince.lookify",
+    "redhat.vscode-yaml",
+    "selfrefactor.Niketa-theme",
+    "shd101wyy.markdown-preview-enhanced",
+    "Tim-Koehler.helm-intellisense",
+    "timonwong.shellcheck",
+    "thegeoffstevens.best-light-themes-pack",
+    "yzhang.markdown-all-in-one",
+    "zed-nait.kaolin-vscode-themes"
+  ],
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "editor.cursorBlinking": "expand",
+        "editor.cursorSmoothCaretAnimation": "on",
+        "notebook.output.scrolling": true,
+        "notebook.output.textLineLimit": 30
+      }
+    }
+  }
+}
