@@ -139,7 +139,7 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
    # Create the chat client
    credential = AzureCliCredential()
    async with (
-       AzureAIAgentClient(async_credential=credential) as chat_client,
+       AzureAIAgentClient(credential=credential) as chat_client,
    ):
     ```
 
