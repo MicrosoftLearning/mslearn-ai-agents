@@ -303,7 +303,9 @@ In this section, you'll add conditional logic to route the ticket based on its c
 
 
     Copilot said:
-    Thank you for reaching out about the 403 error when creating invoices. This error typically indicates a permissions or access issue. Please ensure that your API key has the necessary permissions for invoice creation and that your request is being sent to the correct endpoint. If the issue persists, try regenerating your API key and updating it in your integration to see if that resolves the problem.
+    Thank you for reaching out about the 403 error when creating invoices. This error typically indicates a permissions or access issue. 
+    Please ensure that your API key has the necessary permissions for invoice creation and that your request is being sent to the correct endpoint. 
+    If the issue persists, try regenerating your API key and updating it in your integration to see if that resolves the problem.
     ```
 
 ## Summary
