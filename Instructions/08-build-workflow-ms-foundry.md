@@ -314,8 +314,9 @@ In this exercise, you created a sequential workflow in Microsoft Foundry that pr
 
 ## Clean up
 
-If you've finished exploring Azure AI Agent Service, you should delete the resources you have created in this exercise to avoid incurring unnecessary Azure costs.
+If you've finished exploring workflows in Microsoft Foundry, you should delete the resources you have created in this exercise to avoid incurring unnecessary Azure costs.
 
-1. Return to the browser tab containing the Azure portal (or re-open the [Azure portal](https://portal.azure.com) at `https://portal.azure.com` in a new browser tab) and view the contents of the resource group where you deployed the resources used in this exercise.
+1. Navigate to the [Azure portal](https://portal.azure.com) at `https://portal.azure.com` and view the contents of the resource group where your Foundry project was deployed.
+
 1. On the toolbar, select **Delete resource group**.
 1. Enter the resource group name and confirm that you want to delete it.
