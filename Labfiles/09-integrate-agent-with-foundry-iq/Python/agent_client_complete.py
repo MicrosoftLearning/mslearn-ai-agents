@@ -2,102 +2,81 @@ import os
 from dotenv import load_dotenv
 from azure.identity import DefaultAzureCredential
 from azure.ai.projects import AIProjectClient
-from azure.ai.projects.models import MessageRole, MessageTextContent
 
 # Load environment variables
 load_dotenv()
 project_endpoint = os.getenv("PROJECT_ENDPOINT")
-agent_id = os.getenv("AGENT_ID")
+agent_name = os.getenv("AGENT_NAME")
 
 # Validate configuration
-if not project_endpoint or not agent_id:
-    raise ValueError("PROJECT_ENDPOINT and AGENT_ID must be set in .env file")
+if not project_endpoint or not agent_name:
+    raise ValueError("PROJECT_ENDPOINT and AGENT_NAME must be set in .env file")
 
 print(f"Connecting to project: {project_endpoint}")
-print(f"Using agent: {agent_id}\n")
+print(f"Using agent: {agent_name}\n")
 
 # Connect to the project and agent
 credential = DefaultAzureCredential()
-project_client = AIProjectClient.from_connection_string(
+project_client = AIProjectClient(
     credential=credential,
-    conn_str=project_endpoint
+    endpoint=project_endpoint
 )
 
-# Create an agent client
-agent_client = project_client.agents
+# Get the OpenAI client
+openai_client = project_client.get_openai_client()
 
-# Create a thread for the conversation
-thread = agent_client.create_thread()
-print(f"Created conversation thread: {thread.id}\n")
+# Get the agent
+agent = project_client.agents.get(agent_name=agent_name)
+print(f"Connected to agent: {agent.name} (id: {agent.id})\n")
 
-# Conversation history for context
+# Create a new conversation
+conversation = openai_client.conversations.create(items=[])
+print(f"Created conversation (id: {conversation.id})\n")
+
+# Conversation history for context (client-side tracking)
 conversation_history = []
 
 
 def send_message_to_agent(user_message):
     """
-    Send a message to the agent and handle the response.
+    Send a message to the agent and handle the response using the responses API.
     """
     try:
-        # Store in conversation history
+        print(f"You: {user_message}\n")
+        print("Agent: ", end="", flush=True)
+        
+        # Add user message to the conversation
+        openai_client.conversations.items.create(
+            conversation_id=conversation.id,
+            items=[{"type": "message", "role": "user", "content": user_message}],
+        )
+        
+        # Store in conversation history (client-side)
         conversation_history.append({
             "role": "user",
             "content": user_message
         })
         
-        print(f"You: {user_message}\n")
-        print("Agent: ", end="", flush=True)
-        
-        # Add user message to thread
-        message = agent_client.create_message(
-            thread_id=thread.id,
-            role=MessageRole.USER,
-            content=user_message
+        # Create a response using the agent
+        response = openai_client.responses.create(
+            conversation=conversation.id,
+            extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
+            input=""
         )
         
-        # Run the agent
-        run = agent_client.create_run(
-            thread_id=thread.id,
-            agent_id=agent_id
-        )
-        
-        # Poll for completion
-        while run.status in ["queued", "in_progress", "requires_action"]:
-            run = agent_client.get_run(thread_id=thread.id, run_id=run.id)
-            
-        # Check for errors
-        if run.status == "failed":
-            print(f"\n\nError: Run failed - {run.last_error}\n")
-            return None
-        
-        # Retrieve the agent's response
-        messages = agent_client.list_messages(thread_id=thread.id)
-        
-        # Get the latest assistant message
-        latest_message = None
-        for msg in messages:
-            if msg.role == MessageRole.ASSISTANT:
-                latest_message = msg
-                break
-        
-        if latest_message and latest_message.content:
-            # Extract text content
-            response_text = ""
-            for content_item in latest_message.content:
-                if isinstance(content_item, MessageTextContent):
-                    response_text = content_item.text.value
-                    break
+        # Extract the response text
+        if response and response.output_text:
+            response_text = response.output_text
             
             print(f"{response_text}\n")
             
-            # Check for citations/annotations
-            if latest_message.content[0].text.annotations:
+            # Check for citations if available
+            if hasattr(response, 'citations') and response.citations:
                 print("\nSources:")
-                for annotation in latest_message.content[0].text.annotations:
-                    if hasattr(annotation, 'file_citation'):
-                        print(f"  - {annotation.file_citation.file_id}")
+                for citation in response.citations:
+                    print(f"  - {citation.content if hasattr(citation, 'content') else 'Knowledge Base'}")
             
-            # Store in conversation history
+            # Store in conversation history (client-side)
             conversation_history.append({
                 "role": "assistant",
                 "content": response_text
@@ -163,11 +142,12 @@ def main():
     
     # Cleanup
     try:
-        agent_client.delete_thread(thread_id=thread.id)
-        print("Thread cleaned up successfully.")
+        project_client.agents.delete_version(agent_name=agent.name, agent_version=agent.version)
+        print("Agent deleted")
     except:
         pass
 
 
 if __name__ == "__main__":
     main()
+print("\nConversation ended.")
