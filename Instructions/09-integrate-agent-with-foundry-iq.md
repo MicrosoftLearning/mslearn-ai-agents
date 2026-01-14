@@ -136,8 +136,8 @@ Before connecting from code, test your agent in the portal playground.
     - The agent stays focused on product information
 
 1. In the agent details page, locate and copy the following information to a notepad (you'll need these later):
-    - **Agent ID**: Found in the agent details or URL
-    - **Project endpoint**: Found in the project settings or overview
+    - **Agent name**: This is the name you created (`product-expert-agent`)
+    - **Project endpoint**: Found in the project settings or overview page
 
 ## Connect to Your Agent from Visual Studio Code
 
@@ -179,7 +179,7 @@ Now you'll create a Python application to interact with your agent programmatica
 1. Open the `.env` file in VS Code.
 1. Replace the placeholder values with your actual values:
     - Replace `your_project_endpoint` with your project endpoint (from earlier)
-    - Replace `your_agent_id` with your agent ID (from earlier)
+    - Replace `your_agent_name` with your agent name (should be `product-expert-agent`)
 1. Save the file.
 
 ### Complete the agent client code
@@ -190,77 +190,57 @@ Now you'll create a Python application to interact with your agent programmatica
     - The `display_conversation_history()` function
     - The main program loop
 
-1. Find the first **TODO** comment and add the following code to connect to the project and create a conversation thread:
+1. Find the first **TODO** comment and add the following code to connect to the project, get the OpenAI client, retrieve the agent, and create a new conversation:
 
     ```python
     # Connect to the project and agent
     credential = DefaultAzureCredential()
-    project_client = AIProjectClient.from_connection_string(
+    project_client = AIProjectClient(
         credential=credential,
-        conn_str=project_endpoint
+        endpoint=project_endpoint
     )
 
-    # Create an agent client
-    agent_client = project_client.agents
+    # Get the OpenAI client
+    openai_client = project_client.get_openai_client()
 
-    # Create a thread for the conversation
-    thread = agent_client.create_thread()
-    print(f"Created conversation thread: {thread.id}\n")
+    # Get the agent
+    agent = project_client.agents.get(agent_name=agent_name)
+    print(f"Connected to agent: {agent.name} (id: {agent.id})\n")
+
+    # Create a new conversation
+    conversation = openai_client.conversations.create(items=[])
+    print(f"Created conversation (id: {conversation.id})\n")
     ```
 
-1. Find the second **TODO** comment inside the `send_message_to_agent()` function and add the following code to send messages and handle responses:
+1. Find the second **TODO** comment inside the `send_message_to_agent()` function and add the following code to send messages and handle responses using the conversations API:
 
     ```python
-    # Add user message to thread
-    message = agent_client.create_message(
-        thread_id=thread.id,
-        role=MessageRole.USER,
-        content=user_message
+    # Add user message to the conversation
+    openai_client.conversations.items.create(
+        conversation_id=conversation.id,
+        items=[{"type": "message", "role": "user", "content": user_message}],
     )
     
-    # Run the agent
-    run = agent_client.create_run(
-        thread_id=thread.id,
-        agent_id=agent_id
+    # Create a response using the agent
+    response = openai_client.responses.create(
+        conversation=conversation.id,
+        extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
+        input=""
     )
     
-    # Poll for completion
-    while run.status in ["queued", "in_progress", "requires_action"]:
-        run = agent_client.get_run(thread_id=thread.id, run_id=run.id)
-        
-    # Check for errors
-    if run.status == "failed":
-        print(f"\n\nError: Run failed - {run.last_error}\n")
-        return None
-    
-    # Retrieve the agent's response
-    messages = agent_client.list_messages(thread_id=thread.id)
-    
-    # Get the latest assistant message
-    latest_message = None
-    for msg in messages:
-        if msg.role == MessageRole.ASSISTANT:
-            latest_message = msg
-            break
-    
-    if latest_message and latest_message.content:
-        # Extract text content
-        response_text = ""
-        for content_item in latest_message.content:
-            if isinstance(content_item, MessageTextContent):
-                response_text = content_item.text.value
-                break
+    # Extract the response text
+    if response and response.output_text:
+        response_text = response.output_text
         
         print(f"{response_text}\n")
         
-        # Check for citations/annotations
-        if latest_message.content[0].text.annotations:
+        # Check for citations if available
+        if hasattr(response, 'citations') and response.citations:
             print("\nSources:")
-            for annotation in latest_message.content[0].text.annotations:
-                if hasattr(annotation, 'file_citation'):
-                    print(f"  - {annotation.file_citation.file_id}")
+            for citation in response.citations:
+                print(f"  - {citation.content if hasattr(citation, 'content') else 'Knowledge Base'}")
         
-        # Store in conversation history
+        # Store in conversation history (client-side)
         conversation_history.append({
             "role": "assistant",
             "content": response_text
@@ -272,7 +252,11 @@ Now you'll create a Python application to interact with your agent programmatica
         return None
     ```
 
-1. Save the file.
+1. Save the file. The code now uses the conversations API to manage interactions with your agent, where:
+    - A conversation is created and tracked by its ID
+    - User messages are added to the conversation using `conversations.items.create()`
+    - Responses are generated using `responses.create()` with an agent reference
+    - The agent automatically retrieves information from Foundry IQ as needed
 
 ## Test the Integration
 

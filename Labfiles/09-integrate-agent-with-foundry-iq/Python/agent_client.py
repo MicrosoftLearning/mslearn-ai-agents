@@ -2,52 +2,52 @@ import os
 from dotenv import load_dotenv
 from azure.identity import DefaultAzureCredential
 from azure.ai.projects import AIProjectClient
-from azure.ai.projects.models import MessageRole, MessageTextContent
 
 # Load environment variables
 load_dotenv()
 project_endpoint = os.getenv("PROJECT_ENDPOINT")
-agent_id = os.getenv("AGENT_ID")
+agent_name = os.getenv("AGENT_NAME")
 
 # Validate configuration
-if not project_endpoint or not agent_id:
-    raise ValueError("PROJECT_ENDPOINT and AGENT_ID must be set in .env file")
+if not project_endpoint or not agent_name:
+    raise ValueError("PROJECT_ENDPOINT and AGENT_NAME must be set in .env file")
 
 print(f"Connecting to project: {project_endpoint}")
-print(f"Using agent: {agent_id}\n")
+print(f"Using agent: {agent_name}\n")
 
-# TODO: Connect to the project and create agent client
+# TODO: Connect to the project and create a conversation
 # Add your code here to:
 # 1. Create DefaultAzureCredential
-# 2. Create AIProjectClient using from_connection_string
-# 3. Get the agent client
-# 4. Create a conversation thread
+# 2. Create AIProjectClient with endpoint
+# 3. Get the OpenAI client
+# 4. Get the agent by name
+# 5. Create a new conversation
 
 
-# Conversation history for context
+# Conversation history for context (client-side tracking)
 conversation_history = []
 
 
 def send_message_to_agent(user_message):
     """
-    Send a message to the agent and handle the response.
+    Send a message to the agent and handle the response using the conversations API.
     """
     try:
-        # TODO: Add user message to thread and run the agent
-        # Add your code here to:
-        # 1. Create a message with the user's input
-        # 2. Create and run the agent
-        # 3. Poll for completion
-        # 4. Retrieve and display the response
+        print(f"You: {user_message}\n")
+        print("Agent: ", end="", flush=True)
         
-        # Store in conversation history
+        # TODO: Add user message to conversation and get response
+        # Add your code here to:
+        # 1. Add the user message to the conversation using conversations.items.create()
+        # 2. Create a response using responses.create() with agent reference
+        # 3. Extract and display the response text
+        # 4. Check for and display any citations
+        
+        # Store in conversation history (client-side)
         conversation_history.append({
             "role": "user",
             "content": user_message
         })
-        
-        print(f"You: {user_message}\n")
-        print("Agent: ", end="", flush=True)
         
         # Your code will go here
         
@@ -104,12 +104,7 @@ def main():
         except Exception as e:
             print(f"\nUnexpected error: {str(e)}\n")
     
-    # Cleanup
-    try:
-        agent_client.delete_thread(thread_id=thread.id)
-        print("Thread cleaned up successfully.")
-    except:
-        pass
+    print("\nConversation ended.")
 
 
 if __name__ == "__main__":
