@@ -140,7 +140,7 @@ with (
             items=[{"type": "message", "role": "user", "content": prompt}],
         )
         
-        # Run the conversation using the primary agent
+        # Get a response from the primary agent
         print("\nProcessing agent response. Please wait.")
         response = openai_client.responses.create(
             conversation=conversation.id,

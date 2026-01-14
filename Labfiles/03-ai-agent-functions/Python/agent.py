@@ -44,7 +44,7 @@ def main():
                                     Then you use those values to submit a support ticket using the function available to you.
                                     If a file is saved, tell the user the file name.
                                  """,
-                    toolset=toolset
+                    tools=toolset.definitions
                 ),
             )
             print(f"You're chatting with: {agent.name} ({agent.id})")
