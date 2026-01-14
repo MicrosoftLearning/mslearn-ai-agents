@@ -122,123 +122,129 @@ Now you're ready to create a client app that uses an agent. Some code has been p
     ```python
    # Add references
    from azure.identity import DefaultAzureCredential
-   from azure.ai.agents import AgentsClient
-   from azure.ai.agents.models import FilePurpose, CodeInterpreterTool, ListSortOrder, MessageRole
+   from azure.ai.projects import AIProjectClient
+   from azure.ai.projects.models import PromptAgentDefinition, CodeInterpreterTool
     ```
 
-1. Find the comment **Connect to the Agent client** and add the following code to connect to the Azure AI project.
+1. Find the comment **Connect to the AI Project client** and add the following code to connect to the Azure AI project.
 
     > **Tip**: Be careful to maintain the correct indentation level.
 
     ```python
-   # Connect to the Agent client
-   agent_client = AgentsClient(
-       endpoint=project_endpoint,
-       credential=DefaultAzureCredential
-           (exclude_environment_credential=True,
-            exclude_managed_identity_credential=True)
-   )
-   with agent_client:
+   # Connect to the AI Project client
+   with (
+       DefaultAzureCredential() as credential,
+       AIProjectClient(endpoint=project_endpoint, credential=credential) as project_client,
+   ):
     ```
 
-    The code connects to the Foundry project using the current Azure credentials. The final *with agent_client* statement starts a code block that defines the scope of the client, ensuring it's cleaned up when the code within the block is finished.
+    The code connects to the Foundry project using the current Azure credentials. The *with* statement starts a code block that defines the scope of the clients, ensuring they're cleaned up when the code within the block is finished.
 
-1. Find the comment **Upload the data file and create a CodeInterpreterTool**, within the *with agent_client* block, and add the following code to upload the data file to the project and create a CodeInterpreterTool that can access the data in it:
+1. Find the comment **Upload the data file and create a CodeInterpreterTool**, within the *with* block, and add the following code to upload the data file to the project and create a CodeInterpreterTool that can access the data in it:
 
     ```python
    # Upload the data file and create a CodeInterpreterTool
-   file = agent_client.files.upload_and_poll(
-        file_path=file_path, purpose=FilePurpose.AGENTS
+   file = project_client.files.upload_and_poll(
+        file_path=file_path, purpose="agents"
    )
    print(f"Uploaded {file.filename}")
 
    code_interpreter = CodeInterpreterTool(file_ids=[file.id])
     ```
     
-1. Find the comment **Define an agent that uses the CodeInterpreterTool** and add the following code to define an AI agent that analyzes data and can use the code interpreter tool you defined previously:
+1. Find the comment **Define an agent that uses the CodeInterpreterTool** and add the following code to get an OpenAI client and define an AI agent that analyzes data and can use the code interpreter tool you defined previously:
 
     ```python
    # Define an agent that uses the CodeInterpreterTool
-   agent = agent_client.create_agent(
-        model=model_deployment,
-        name="data-agent",
-        instructions="You are an AI agent that analyzes the data in the file that has been uploaded. Use Python to calculate statistical metrics as necessary.",
-        tools=code_interpreter.definitions,
-        tool_resources=code_interpreter.resources,
-   )
-   print(f"Using agent: {agent.name}")
+   with project_client.get_openai_client() as openai_client:
+        agent = project_client.agents.create_version(
+            agent_name="data-agent",
+            definition=PromptAgentDefinition(
+                model=model_deployment,
+                instructions="You are an AI agent that analyzes the data in the file that has been uploaded. Use Python to calculate statistical metrics as necessary.",
+                tools=code_interpreter.definitions,
+                tool_resources=code_interpreter.resources,
+            ),
+        )
+        print(f"Using agent: {agent.name} (version: {agent.version})")
     ```
 
-1. Find the comment **Create a thread for the conversation** and add the following code to start a thread on which the chat session with the agent will run:
+1. Find the comment **Create a conversation for the chat session** and add the following code to start a conversation on which the chat session with the agent will run:
 
     ```python
-   # Create a thread for the conversation
-   thread = agent_client.threads.create()
+   # Create a conversation for the chat session
+   conversation = openai_client.conversations.create()
+   print(f"Created conversation (id: {conversation.id})")
     ```
     
 1. Note that the next section of code sets up a loop for a user to enter a prompt, ending when the user enters "quit".
 
-1. Find the comment **Send a prompt to the agent** and add the following code to add a user message to the prompt (along with the data from the file that was loaded previously), and then run thread with the agent.
+1. Find the comment **Send a prompt to the agent** and add the following code to add a user message to the conversation and then get a response from the agent.
 
     ```python
    # Send a prompt to the agent
-   message = agent_client.messages.create(
-        thread_id=thread.id,
-        role="user",
-        content=user_prompt,
-    )
+   openai_client.conversations.items.create(
+        conversation_id=conversation.id,
+        items=[{"type": "message", "role": "user", "content": user_prompt}],
+   )
 
-   run = agent_client.runs.create_and_process(thread_id=thread.id, agent_id=agent.id)
+   response = openai_client.responses.create(
+        conversation=conversation.id,
+        extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
+        input="",
+   )
     ```
 
-1. Find the comment **Check the run status for failures** and add the following code to check for any errors.
+1. Find the comment **Check the response status for failures** and add the following code to check for any errors.
 
     ```python
-   # Check the run status for failures
-   if run.status == "failed":
-        print(f"Run failed: {run.last_error}")
+   # Check the response status for failures
+   if response.status == "failed":
+        print(f"Response failed: {response.error}")
     ```
 
-1. Find the comment **Show the latest response from the agent** and add the following code to retrieve the messages from the completed thread and display the last one that was sent by the agent.
+1. Find the comment **Show the latest response from the agent** and add the following code to display the response from the agent.
 
     ```python
    # Show the latest response from the agent
-   last_msg = agent_client.messages.get_last_message_text_by_role(
-       thread_id=thread.id,
-       role=MessageRole.AGENT,
-   )
-   if last_msg:
-       print(f"Last Message: {last_msg.text.value}")
+   print(f"Agent: {response.output_text}")
     ```
 
-1. Find the comment **Get the conversation history**, which is after the loop ends, and add the following code to print out the messages from the conversation thread; reversing the order to show them in chronological sequence
+1. Find the comment **Get the conversation history**, which is after the loop ends, and add the following code to print out the messages from the conversation
 
     ```python
    # Get the conversation history
    print("\nConversation Log:\n")
-   messages = agent_client.messages.list(thread_id=thread.id, order=ListSortOrder.ASCENDING)
-   for message in messages:
-       if message.text_messages:
-           last_msg = message.text_messages[-1]
-           print(f"{message.role}: {last_msg.text.value}\n")
+   items = openai_client.conversations.items.list(conversation_id=conversation.id)
+   for item in items.data:
+        if item.type == "message":
+            role = item.role.upper()
+            content = item.content[0].text.value if item.content and item.content[0].type == "text" else ""
+            print(f"{role}: {content}\n")
     ```
 
-1. Find the comment **Clean up** and add the following code to delete the agent and thread when no longer needed.
+1. Find the comment **Clean up** and add the following code to delete the conversation and agent when no longer needed.
 
     ```python
    # Clean up
-   agent_client.delete_agent(agent.id)
+   openai_client.conversations.delete(conversation_id=conversation.id)
+   print("Conversation deleted")
+
+   project_client.agents.delete_version(agent_name=agent.name, agent_version=agent.version)
+   print("Agent deleted")
     ```
 
 1. Review the code, using the comments to understand how it:
     - Connects to the AI Foundry project.
     - Uploads the data file and creates a code interpreter tool that can access it.
+    - Gets an OpenAI client from the project client.
     - Creates a new agent that uses the code interpreter tool and has explicit instructions to use Python as necessary for statistical analysis.
-    - Runs a thread with a prompt message from the user along with the data to be analyzed.
-    - Checks the status of the run in case there's a failure
-    - Retrieves the messages from the completed thread and displays the last one sent by the agent.
+    - Creates a conversation for the chat session.
+    - Adds user messages to the conversation and gets responses from the agent.
+    - Checks the status of the response in case there's a failure
+    - Displays the agent's response.
     - Displays the conversation history
-    - Deletes the agent and thread when they're no longer required.
+    - Deletes the conversation and agent when they're no longer required.
 
 1. Save the code file (*CTRL+S*) when you have finished. You can also close the code editor (*CTRL+Q*); though you may want to keep it open in case you need to make any edits to the code you added. In either case, keep the cloud shell command-line pane open.
 

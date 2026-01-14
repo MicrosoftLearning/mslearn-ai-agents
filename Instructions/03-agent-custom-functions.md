@@ -158,114 +158,122 @@ Now that you've created your project in AI Foundry, let's develop an app that im
     ```python
    # Add references
    from azure.identity import DefaultAzureCredential
-   from azure.ai.agents import AgentsClient
-   from azure.ai.agents.models import FunctionTool, ToolSet, ListSortOrder, MessageRole
+   from azure.ai.projects import AIProjectClient
+   from azure.ai.projects.models import PromptAgentDefinition, FunctionTool, ToolSet
    from user_functions import user_functions
     ```
 
-1. Find the comment **Connect to the Agent client** and add the following code to connect to the Azure AI project using the current Azure credentials.
+1. Find the comment **Connect to the AI Project client** and add the following code to connect to the Azure AI project using the current Azure credentials.
 
     > **Tip**: Be careful to maintain the correct indentation level.
 
     ```python
-   # Connect to the Agent client
-   agent_client = AgentsClient(
-       endpoint=project_endpoint,
-       credential=DefaultAzureCredential
-           (exclude_environment_credential=True,
-            exclude_managed_identity_credential=True)
-   )
+   # Connect to the AI Project client
+   with (
+       DefaultAzureCredential() as credential,
+       AIProjectClient(endpoint=project_endpoint, credential=credential) as project_client,
+   ):
     ```
     
-1. Find the comment **Define an agent that can use the custom functions** section, and add the following code to add your function code to a toolset, and then create an agent that can use the toolset and a thread on which to run the chat session.
+1. Find the comment **Define an agent that can use the custom functions** section, and add the following code to add your function code to a toolset, enable auto function calling, and then create an agent that can use the toolset and a conversation on which to run the chat session.
 
     ```python
    # Define an agent that can use the custom functions
-   with agent_client:
+   functions = FunctionTool(user_functions)
+   toolset = ToolSet()
+   toolset.add(functions)
 
-        functions = FunctionTool(user_functions)
-        toolset = ToolSet()
-        toolset.add(functions)
-        agent_client.enable_auto_function_calls(toolset)
-            
-        agent = agent_client.create_agent(
-            model=model_deployment,
-            name="support-agent",
-            instructions="""You are a technical support agent.
-                            When a user has a technical issue, you get their email address and a description of the issue.
-                            Then you use those values to submit a support ticket using the function available to you.
-                            If a file is saved, tell the user the file name.
-                         """,
-            toolset=toolset
+   with project_client.get_openai_client() as openai_client:
+        project_client.enable_auto_function_calls(toolset)
+        
+        agent = project_client.agents.create_version(
+            agent_name="support-agent",
+            definition=PromptAgentDefinition(
+                model=model_deployment,
+                instructions="""You are a technical support agent.
+                                When a user has a technical issue, you get their email address and a description of the issue.
+                                Then you use those values to submit a support ticket using the function available to you.
+                                If a file is saved, tell the user the file name.
+                             """,
+                toolset=toolset
+            ),
         )
-
-        thread = agent_client.threads.create()
         print(f"You're chatting with: {agent.name} ({agent.id})")
+
+        # Create a conversation for the chat session
+        conversation = openai_client.conversations.create()
+        print(f"Created conversation (id: {conversation.id})")
 
     ```
 
-1. Find the comment **Send a prompt to the agent** and add the following code to add the user's prompt as a message and run the thread.
+1. Find the comment **Send a prompt to the agent** and add the following code to add the user's prompt as a message and get a response from the agent.
 
     ```python
    # Send a prompt to the agent
-   message = agent_client.messages.create(
-        thread_id=thread.id,
-        role="user",
-        content=user_prompt
+   openai_client.conversations.items.create(
+        conversation_id=conversation.id,
+        items=[{"type": "message", "role": "user", "content": user_prompt}],
    )
-   run = agent_client.runs.create_and_process(thread_id=thread.id, agent_id=agent.id)
+
+   response = openai_client.responses.create(
+        conversation=conversation.id,
+        extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
+        input="",
+   )
     ```
 
-    > **Note**: Using the **create_and_process** method to run the thread enables the agent to automatically find your functions and choose to use them based on their names and parameters. As an alternative, you could use the **create_run** method, in which case you would be responsible for writing code to poll for run status to determine when a function call is required, call the function, and return the results to the agent.
+    > **Note**: The agent automatically finds your functions and chooses to use them based on their names and parameters.
 
-1. Find the comment **Check the run status for failures** and add the following code to show any errors that occur.
+1. Find the comment **Check the response status for failures** and add the following code to show any errors that occur.
 
     ```python
-   # Check the run status for failures
-   if run.status == "failed":
-        print(f"Run failed: {run.last_error}")
+   # Check the response status for failures
+   if response.status == "failed":
+        print(f"Response failed: {response.error}")
     ```
 
-1. Find the comment **Show the latest response from the agent** and add the following code to retrieve the messages from the completed thread and display the last one that was sent by the agent.
+1. Find the comment **Show the latest response from the agent** and add the following code to display the response from the agent.
 
     ```python
    # Show the latest response from the agent
-   last_msg = agent_client.messages.get_last_message_text_by_role(
-       thread_id=thread.id,
-       role=MessageRole.AGENT,
-   )
-   if last_msg:
-        print(f"Last Message: {last_msg.text.value}")
+   print(f"Agent: {response.output_text}")
     ```
 
-1. Find the comment **Get the conversation history** and add the following code to print out the messages from the conversation thread; ordering them in chronological sequence
+1. Find the comment **Get the conversation history** and add the following code to print out the messages from the conversation
 
     ```python
    # Get the conversation history
    print("\nConversation Log:\n")
-   messages = agent_client.messages.list(thread_id=thread.id, order=ListSortOrder.ASCENDING)
-   for message in messages:
-        if message.text_messages:
-           last_msg = message.text_messages[-1]
-           print(f"{message.role}: {last_msg.text.value}\n")
+   items = openai_client.conversations.items.list(conversation_id=conversation.id)
+   for item in items.data:
+        if item.type == "message":
+            role = item.role.upper()
+            content = item.content[0].text.value if item.content and item.content[0].type == "text" else ""
+            print(f"{role}: {content}\n")
     ```
 
-1. Find the comment **Clean up** and add the following code to delete the agent and thread when no longer needed.
+1. Find the comment **Clean up** and add the following code to delete the conversation and agent when no longer needed.
 
     ```python
    # Clean up
-   agent_client.delete_agent(agent.id)
-   print("Deleted agent")
+   openai_client.conversations.delete(conversation_id=conversation.id)
+   print("Conversation deleted")
+
+   project_client.agents.delete_version(agent_name=agent.name, agent_version=agent.version)
+   print("Agent deleted")
     ```
 
 1. Review the code, using the comments to understand how it:
     - Adds your set of custom functions to a toolset
+    - Connects to the AI project and gets an OpenAI client
+    - Enables auto function calling for the toolset
     - Creates an agent that uses the toolset.
-    - Runs a thread with a prompt message from the user.
-    - Checks the status of the run in case there's a failure
-    - Retrieves the messages from the completed thread and displays the last one sent by the agent.
+    - Creates a conversation for the chat session.
+    - Adds user messages to the conversation and gets responses from the agent.
+    - Checks the status of the response in case there's a failure
+    - Displays the agent's response.
     - Displays the conversation history
-    - Deletes the agent and thread when they're no longer required.
+    - Deletes the conversation and agent when they're no longer required.
 
 1. Save the code file (*CTRL+S*) when you have finished. You can also close the code editor (*CTRL+Q*); though you may want to keep it open in case you need to make any edits to the code you added. In either case, keep the cloud shell command-line pane open.
 

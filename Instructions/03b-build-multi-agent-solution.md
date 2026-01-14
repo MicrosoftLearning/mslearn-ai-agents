@@ -123,29 +123,26 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 
     ```python
    # Add references
-   from azure.ai.agents import AgentsClient
-   from azure.ai.agents.models import ConnectedAgentTool, MessageRole, ListSortOrder, ToolSet, FunctionTool
    from azure.identity import DefaultAzureCredential
+   from azure.ai.projects import AIProjectClient
+   from azure.ai.projects.models import PromptAgentDefinition, ConnectedAgentTool
     ```
 
 1. Note that code to load the project endpoint and model name from your environment variables has been provided.
 
-1. Find the comment **Connect to the agents client**, and add the following code to create an AgentsClient connected to your project:
+1. Find the comment **Connect to the AI Project client**, and add the following code to create an AIProjectClient connected to your project:
 
     ```python
-   # Connect to the agents client
-   agents_client = AgentsClient(
-        endpoint=project_endpoint,
-        credential=DefaultAzureCredential(
-            exclude_environment_credential=True, 
-            exclude_managed_identity_credential=True
-        ),
-   )
+   # Connect to the AI Project client
+   with (
+       DefaultAzureCredential() as credential,
+       AIProjectClient(endpoint=project_endpoint, credential=credential) as project_client,
+   ):
     ```
 
-    Now you'll add code that uses the AgentsClient to create multiple agents, each with a specific role to play in processing a support ticket.
+    Now you'll add code that uses the AIProjectClient to create multiple agents, each with a specific role to play in processing a support ticket.
 
-    > **Tip**: When adding subsequent code, be sure to maintain the right level of indentation under the `using agents_client:` statement.
+    > **Tip**: When adding subsequent code, be sure to maintain the right level of indentation under the `with` statement.
 
 1. Find the comment **Create an agent to prioritize support tickets**, and enter the following code (being careful to retain the right level of indentation):
 
@@ -163,10 +160,12 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
    Only output the urgency level and a very brief explanation.
    """
 
-   priority_agent = agents_client.create_agent(
-        model=model_deployment,
-        name=priority_agent_name,
-        instructions=priority_agent_instructions
+   priority_agent = project_client.agents.create_version(
+        agent_name=priority_agent_name,
+        definition=PromptAgentDefinition(
+            model=model_deployment,
+            instructions=priority_agent_instructions
+        ),
    )
     ```
 
@@ -187,10 +186,12 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
    Base your answer on the content of the ticket. Respond with the team name and a very brief explanation.
    """
 
-   team_agent = agents_client.create_agent(
-        model=model_deployment,
-        name=team_agent_name,
-        instructions=team_agent_instructions
+   team_agent = project_client.agents.create_version(
+        agent_name=team_agent_name,
+        definition=PromptAgentDefinition(
+            model=model_deployment,
+            instructions=team_agent_instructions
+        ),
    )
     ```
 
@@ -210,10 +211,12 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
    Base your estimate on the complexity implied by the ticket. Respond with the effort level and a brief justification.
    """
 
-   effort_agent = agents_client.create_agent(
-        model=model_deployment,
-        name=effort_agent_name,
-        instructions=effort_agent_instructions
+   effort_agent = project_client.agents.create_version(
+        agent_name=effort_agent_name,
+        definition=PromptAgentDefinition(
+            model=model_deployment,
+            instructions=effort_agent_instructions
+        ),
    )
     ```
 
@@ -254,15 +257,17 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
    which team it should be assigned to, and how much effort it may take.
    """
 
-   triage_agent = agents_client.create_agent(
-        model=model_deployment,
-        name=triage_agent_name,
-        instructions=triage_agent_instructions,
-        tools=[
-            priority_agent_tool.definitions[0],
-            team_agent_tool.definitions[0],
-            effort_agent_tool.definitions[0]
-        ]
+   triage_agent = project_client.agents.create_version(
+        agent_name=triage_agent_name,
+        definition=PromptAgentDefinition(
+            model=model_deployment,
+            instructions=triage_agent_instructions,
+            tools=[
+                priority_agent_tool.definitions[0],
+                team_agent_tool.definitions[0],
+                effort_agent_tool.definitions[0]
+            ]
+        ),
    )
     ```
 
@@ -272,32 +277,41 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 
     ```python
    # Use the agents to triage a support issue
-   print("Creating agent thread.")
-   thread = agents_client.threads.create()  
+   with project_client.get_openai_client() as openai_client:
+        print("Creating conversation.")
+        conversation = openai_client.conversations.create()
 
-   # Create the ticket prompt
-   prompt = input("\nWhat's the support problem you need to resolve?: ")
-    
-   # Send a prompt to the agent
-   message = agents_client.messages.create(
-        thread_id=thread.id,
-        role=MessageRole.USER,
-        content=prompt,
-   )   
-    
-   # Run the thread usng the primary agent
-   print("\nProcessing agent thread. Please wait.")
-   run = agents_client.runs.create_and_process(thread_id=thread.id, agent_id=triage_agent.id)
+        # Create the ticket prompt
+        prompt = input("\nWhat's the support problem you need to resolve?: ")
         
-   if run.status == "failed":
-        print(f"Run failed: {run.last_error}")
+        # Send a prompt to the agent
+        openai_client.conversations.items.create(
+            conversation_id=conversation.id,
+            items=[{"type": "message", "role": "user", "content": prompt}],
+        )
+        
+        # Get a response from the primary agent
+        print("\nProcessing agent response. Please wait.")
+        response = openai_client.responses.create(
+            conversation=conversation.id,
+            extra_body={"agent": {"name": triage_agent.name, "type": "agent_reference"}},
+            input="",
+        )
+            
+        if response.status == "failed":
+            print(f"Response failed: {response.error}")
 
-   # Fetch and display messages
-   messages = agents_client.messages.list(thread_id=thread.id, order=ListSortOrder.ASCENDING)
-   for message in messages:
-        if message.text_messages:
-            last_msg = message.text_messages[-1]
-            print(f"{message.role}:\n{last_msg.text.value}\n")
+        # Fetch and display messages
+        items = openai_client.conversations.items.list(conversation_id=conversation.id)
+        for item in items.data:
+            if item.type == "message":
+                role = item.role.upper()
+                content = item.content[0].text.value if item.content and item.content[0].type == "text" else ""
+                print(f"{role}:\n{content}\n")
+        
+        # Clean up conversation
+        openai_client.conversations.delete(conversation_id=conversation.id)
+        print("Conversation deleted")
    
     ```
 
@@ -306,13 +320,13 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
     ```python
    # Clean up
    print("Cleaning up agents:")
-   agents_client.delete_agent(triage_agent.id)
+   project_client.agents.delete_version(agent_name=triage_agent.name, agent_version=triage_agent.version)
    print("Deleted triage agent.")
-   agents_client.delete_agent(priority_agent.id)
+   project_client.agents.delete_version(agent_name=priority_agent.name, agent_version=priority_agent.version)
    print("Deleted priority agent.")
-   agents_client.delete_agent(team_agent.id)
+   project_client.agents.delete_version(agent_name=team_agent.name, agent_version=team_agent.version)
    print("Deleted team agent.")
-   agents_client.delete_agent(effort_agent.id)
+   project_client.agents.delete_version(agent_name=effort_agent.name, agent_version=effort_agent.version)
    print("Deleted effort agent.")
     ```
     
