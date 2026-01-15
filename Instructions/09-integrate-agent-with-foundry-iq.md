@@ -35,35 +35,37 @@ Let's start by creating a Foundry project with the new Foundry experience.
 1. Select **Create** and wait for your project to be created. This may take a few minutes.
 1. When your project is created, you'll see the project home page.
 
-## Deploy a language model
+## Create an agent
 
-Before creating your agent, you need a language model deployed in your project.
+1. On the home page, under **Start buidling**, select **Create an agent**.
+1. Give your agent a name, such as *FoundryIQAgent*.
+1. Select **Create**.
 
-1. In the left navigation pane, under **My assets**, select **Models + endpoints**.
-1. Select **+ Deploy model**, then choose **Deploy base model**.
-1. Search for and select the **gpt-4.1** model, then select **Confirm**.
-1. Use the default deployment settings:
-    - **Deployment name**: *gpt-4.1*
-    - **Deployment type**: *Standard* or *Global Standard* (depending on availability)
-    - **Model version**: *Default*
-    
-1. Select **Deploy** and wait for the deployment to complete.
+When creating an agent, it will deploy the default model (like `gpt-4.1`). Once your agent is created, you'll see the agent playground with that default model automatically selected for you.
 
-## Create a Search Resource
+## Configure Foundry IQ
 
-To use Foundry IQ, you need an Azure AI Search resource to power the knowledge base.
+Now you'll configure your agent that uses Foundry IQ to search the knowledge base.
 
-1. In the left navigation pane, select **AI Search**.
-1. Select **+ New AI Search**.
-1. Configure the search resource with the following settings:
-    - **Search service name**: *A globally unique name*
+1. First, give your agent the following instructions:
+    ```
+    You are a helpful AI assistant for Contoso, specializing in outdoor camping and hiking products. 
+    You must ALWAYS search the knowledge base to answer questions about our products or product 
+    catalog. Provide detailed, accurate information and always cite your sources.
+    If you don't find relevant information in the knowledge base, say so clearly.
+    ```
+
+1. Then, in the **Knowledge** section, expand the **Add** dropdown, and select **Connect to Foundry IQ**.
+1. In the Foundry IQ setup window, select **Connect to an AI Search resource** and then **Create new resource** which should open up the Azure portal in a new tab.
+1. Create a search resource with the following settings:
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Use the same resource group as your project*
+    - **Service name**: *A globally unique name*
     - **Location**: *The same location as your project*
-    - **Pricing tier**: *Basic* or *Standard*
-    
-1. Select **Create** and wait for the search resource to be provisioned. This may take a few minutes.
-1. Once the deployment completes, **refresh your browser** to see the new search resource available in your project.
+    - **Pricing tier**: *Free* if available, otherwise choose *Basic*
+
+1. Once your search service is created, close the Azure Portal tab and navigate back to the Foundry IQ page in Microsoft Foundry and refresh the page.
+1. Select your search service, and click **Connect**.
 
 ## Create a Knowledge Base
 
@@ -76,7 +78,9 @@ Now you'll create a knowledge base with sample product information documents.
         - `contoso-backpacks-guide.pdf`
         - `contoso-camping-accessories.pdf`
 
-1. In the Foundry portal, in the left navigation pane, select **Data + indexes**.
+1. In the Foundry portal, on the Foundry IQ page with your search resource selected, select **Create a knowledge base**.
+
+2. 
 1. Select **+ New data source**.
 1. Choose **Upload files** as the data source type.
 1. Configure the data source:
@@ -92,33 +96,7 @@ Now you'll create a knowledge base with sample product information documents.
 1. Select **Create** and wait for the indexing process to complete. This may take several minutes as the documents are processed and embedded.
 1. When complete, you should see your data source and index listed in the **Data + indexes** page.
 
-## Create an Agent in the Portal
 
-Now you'll create an agent that uses Foundry IQ to search the knowledge base.
-
-1. In the left navigation pane, select **Agents**.
-1. Select **+ New agent**.
-1. Configure the agent with the following settings:
-    - **Agent name**: *product-expert-agent*
-    - **Description**: *An AI agent that provides information about Contoso outdoor and camping products*
-    - **Instructions**: Enter the following:
-        ```
-        You are a helpful AI assistant for Contoso, specializing in outdoor camping and hiking products. 
-        Use the knowledge base to answer questions about our product catalog, including tents, backpacks, 
-        and camping accessories. Provide detailed, accurate information and always cite your sources.
-        If you don't find relevant information in the knowledge base, say so clearly.
-        ```
-    - **Model**: *gpt-4.1*
-    - **Temperature**: *0.7*
-
-1. In the **Tools** section, enable **Foundry IQ**.
-1. Under Foundry IQ settings:
-    - Select **+ Add data source**
-    - Choose the **contoso-products-index** you created earlier
-    - Set **Retrieval mode**: *Hybrid (vector + keyword)*
-    - Set **Top K results**: *5*
-
-1. Select **Create agent**.
 
 ## Test the Agent in the Portal
 
