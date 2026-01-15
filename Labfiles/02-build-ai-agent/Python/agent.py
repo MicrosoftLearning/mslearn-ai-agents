@@ -25,18 +25,18 @@ def main():
         data = file.read() + "\n"
         print(data)
 
-    # Connect to the Agent client
-
+    # Connect to the AI Project and OpenAI clients
+    
 
         # Upload the data file and create a CodeInterpreterTool
-
+        
 
         # Define an agent that uses the CodeInterpreterTool
+        
 
+        # Create a conversation for the chat session
+        
 
-        # Create a thread for the conversation
-
-    
         # Loop until the user types 'quit'
         while True:
             # Get input text
@@ -48,20 +48,18 @@ def main():
                 continue
 
             # Send a prompt to the agent
+            
 
+            # Check the response status for failures
+            
 
-            # Check the run status for failures
-
-    
             # Show the latest response from the agent
-
+            
 
         # Get the conversation history
-    
+
 
         # Clean up
-
-    
 
 
 if __name__ == '__main__': 

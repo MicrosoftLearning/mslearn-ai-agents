@@ -20,32 +20,34 @@ Let's start by creating a Foundry project.
 
 1. In a web browser, open the [Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Foundry** logo at the top left to navigate to the home page, which looks similar to the following image (close the **Help** pane if it's open):
 
-    ![Screenshot of Foundry portal.](./Media/ai-foundry-home.png)
+    ![Screenshot of Foundry portal.](./Media/ai-foundry-home-new.png)
 
-    > **Important**: Make sure the **New Foundry** toggle is *Off* for this lab.
-
-1. In the home page, select **Create an agent**.
-1. When prompted to create a project, enter a valid name for your project and expand **Advanced options**.
-1. Confirm the following settings for your project:
+    > **Important**: For this lab, you're using the **New** Foundry experience.
+1. In the top banner, select **Start building** to try the new Microsoft Foundry Experience.
+1. When prompted, create a **new** project, and enter a valid name for your project.
+1. Expand **Advanced options** and specify the following settings:
     - **Foundry resource**: *A valid name for your Foundry resource*
     - **Subscription**: *Your Azure subscription*
-    - **Resource group**: *Create or select a resource group*
-    - **Region**: *Select any **AI Foundry recommended***\*
+    - **Resource group**: *Select your resource group, or create a new one*
+    - **Region**: *Select any **AI Foundry recommended***\**
 
     > \* Some Azure AI resources are constrained by regional model quotas. In the event of a quota limit being exceeded later in the exercise, there's a possibility you may need to create another resource in a different region.
 
 1. Select **Create** and wait for your project to be created.
-1. If prompted, deploy a **gpt-4o** model using either the *Global Standard* or *Standard* deployment option (depending on your quota availability).
 
-    >**Note**: If quota is available, a GPT-4o base model may be deployed automatically when creating your Agent and project.
+1. After your project is created, select **Build** from the navigation bar.
 
-1. When your project is created, the Agents playground will be opened.
+1. Select **Models** from the left-hand menu, and then select **Deploy a base model**.
 
-1. In the navigation pane on the left, select **Overview** to see the main page for your project; which looks like this:
+1. Enter **gpt-4.1** in the search box, and then select the **gpt-4.1** model from the search results.
 
-    ![Screenshot of a Foundry project overview page.](./Media/ai-foundry-project.png)
+1. Select **Deploy** with the default settings to create a deployment of the model.
 
-1. Copy the **Foundry project endpoint** values to a notepad, as you'll use them to connect to your project in a client application.
+    After the model is deployed, the playground for the model is displayed.
+
+1. In the navigation bar on the left, select **Microsoft Foundry** to return to the Foundry home page.
+
+1. Copy the **Project endpoint** value to a notepad, as you'll use them to connect to your project in a client application.
 
 ## Create an agent client app
 
@@ -92,7 +94,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
     ```
    python -m venv labenv
    ./labenv/bin/Activate.ps1
-   pip install -r requirements.txt azure-ai-projects azure-ai-agents
+   pip install -r requirements.txt azure-ai-agents
     ```
 
 1. Enter the following command to edit the configuration file that has been provided:
@@ -103,7 +105,8 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 
     The file is opened in a code editor.
 
-1. In the code file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project **Overview** page in the Foundry portal) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name (which should be *gpt-4o*).
+1. In the code file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project overview page in the Foundry portal) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name (which should be *gpt-4.1*).
+
 1. After you've replaced the placeholder, use the **CTRL+S** command to save your changes and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
 
 ### Write code for an agent app
@@ -122,23 +125,24 @@ Now you're ready to create a client app that uses an agent. Some code has been p
     ```python
    # Add references
    from azure.identity import DefaultAzureCredential
-   from azure.ai.agents import AgentsClient
-   from azure.ai.agents.models import FilePurpose, CodeInterpreterTool, ListSortOrder, MessageRole
+   from azure.ai.projects import AIProjectClient
+   from azure.ai.projects.models import PromptAgentDefinition, CodeInterpreterTool, CodeInterpreterToolAuto
+
     ```
 
-1. Find the comment **Connect to the Agent client** and add the following code to connect to the Azure AI project.
+1. Find the comment **Connect to the AI Project and OpenAI clients** and add the following code to connect to the Azure AI project.
 
     > **Tip**: Be careful to maintain the correct indentation level.
 
     ```python
-   # Connect to the Agent client
-   agent_client = AgentsClient(
-       endpoint=project_endpoint,
-       credential=DefaultAzureCredential
-           (exclude_environment_credential=True,
-            exclude_managed_identity_credential=True)
-   )
-   with agent_client:
+   # Connect to the AI Project and OpenAI clients
+   with (
+       DefaultAzureCredential(
+           exclude_environment_credential=True,
+           exclude_managed_identity_credential=True) as credential,
+        AIProjectClient(endpoint=project_endpoint, credential=credential) as project_client,
+        project_client.get_openai_client() as openai_client
+   ):
     ```
 
     The code connects to the Foundry project using the current Azure credentials. The final *with agent_client* statement starts a code block that defines the scope of the client, ensuring it's cleaned up when the code within the block is finished.
@@ -147,33 +151,37 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 
     ```python
    # Upload the data file and create a CodeInterpreterTool
-   file = agent_client.files.upload_and_poll(
-        file_path=file_path, purpose=FilePurpose.AGENTS
+   file = openai_client.files.create(
+       file=open(file_path, "rb"), purpose="assistants"
    )
    print(f"Uploaded {file.filename}")
 
-   code_interpreter = CodeInterpreterTool(file_ids=[file.id])
+   code_interpreter = CodeInterpreterTool(
+       container=CodeInterpreterToolAuto(file_ids=[file.id])
+   )
+
     ```
     
 1. Find the comment **Define an agent that uses the CodeInterpreterTool** and add the following code to define an AI agent that analyzes data and can use the code interpreter tool you defined previously:
 
     ```python
    # Define an agent that uses the CodeInterpreterTool
-   agent = agent_client.create_agent(
-        model=model_deployment,
-        name="data-agent",
-        instructions="You are an AI agent that analyzes the data in the file that has been uploaded. Use Python to calculate statistical metrics as necessary.",
-        tools=code_interpreter.definitions,
-        tool_resources=code_interpreter.resources,
+   agent = project_client.agents.create_version(
+       agent_name="data-agent",
+       definition=PromptAgentDefinition(
+           model=model_deployment,
+           instructions="You are an AI agent that analyzes the data in the file that has been uploaded. Use Python to calculate statistical metrics as necessary.",
+           tools=[code_interpreter],
+       ),
    )
    print(f"Using agent: {agent.name}")
     ```
 
-1. Find the comment **Create a thread for the conversation** and add the following code to start a thread on which the chat session with the agent will run:
+1. Find the comment **Create a conversation for the chat session** and add the following code to start a thread on which the chat session with the agent will run:
 
     ```python
-   # Create a thread for the conversation
-   thread = agent_client.threads.create()
+   # Create a conversation for the chat session
+   conversation = openai_client.conversations.create()
     ```
     
 1. Note that the next section of code sets up a loop for a user to enter a prompt, ending when the user enters "quit".
@@ -182,33 +190,31 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 
     ```python
    # Send a prompt to the agent
-   message = agent_client.messages.create(
-        thread_id=thread.id,
-        role="user",
-        content=user_prompt,
-    )
+   openai_client.conversations.items.create(
+       conversation_id=conversation.id,
+       items=[{"type": "message", "role": "user", "content": user_prompt}],
+   )
 
-   run = agent_client.runs.create_and_process(thread_id=thread.id, agent_id=agent.id)
+   response = openai_client.responses.create(
+       conversation=conversation.id,
+       extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
+       input="",
+   )
     ```
 
-1. Find the comment **Check the run status for failures** and add the following code to check for any errors.
+1. Find the comment **Check the response status for failures** and add the following code to check for any errors.
 
     ```python
-   # Check the run status for failures
-   if run.status == "failed":
-        print(f"Run failed: {run.last_error}")
+   # Check the response status for failures
+   if response.status == "failed":
+       print(f"Response failed: {response.error}")
     ```
 
 1. Find the comment **Show the latest response from the agent** and add the following code to retrieve the messages from the completed thread and display the last one that was sent by the agent.
 
     ```python
    # Show the latest response from the agent
-   last_msg = agent_client.messages.get_last_message_text_by_role(
-       thread_id=thread.id,
-       role=MessageRole.AGENT,
-   )
-   if last_msg:
-       print(f"Last Message: {last_msg.text.value}")
+   print(f"Agent: {response.output_text}")
     ```
 
 1. Find the comment **Get the conversation history**, which is after the loop ends, and add the following code to print out the messages from the conversation thread; reversing the order to show them in chronological sequence
@@ -216,18 +222,24 @@ Now you're ready to create a client app that uses an agent. Some code has been p
     ```python
    # Get the conversation history
    print("\nConversation Log:\n")
-   messages = agent_client.messages.list(thread_id=thread.id, order=ListSortOrder.ASCENDING)
-   for message in messages:
-       if message.text_messages:
-           last_msg = message.text_messages[-1]
-           print(f"{message.role}: {last_msg.text.value}\n")
+       items = openai_client.conversations.items.list(conversation_id=conversation.id)
+       for item in items:
+           if item.type == "message":
+               print(f"item.content[0].type = {item.content[0].type}")
+               role = item.role.upper()
+               content = item.content[0].text
+               print(f"{role}: {content}\n")
     ```
 
 1. Find the comment **Clean up** and add the following code to delete the agent and thread when no longer needed.
 
     ```python
    # Clean up
-   agent_client.delete_agent(agent.id)
+   openai_client.conversations.delete(conversation_id=conversation.id)
+   print("Conversation deleted")
+
+   project_client.agents.delete(agent_name=agent.name, agent_version=agent.version)
+   print("Agent deleted")
     ```
 
 1. Review the code, using the comments to understand how it:

@@ -43,19 +43,21 @@ This exercise should take approximately **30** minutes to complete.
 
 Let's start by creating a Foundry project.
 
-1. In a web browser, open the [Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Foundry** logo at the top left to navigate to the home page, which looks similar to the following image (close the **Help** pane if it's open).
+1. In a web browser, open the [Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials.
 
-1. Switch the **New Foundry** toggle to *On*.
+1. Ensure the **New Foundry** toggle is set to *On*.
 
     <img src="./Media/ai-foundry-toggle.png" alt="Screenshot of the New Foundry toggle" width="300">
 
-1. You'll be prompted to create one before continuing to the New Foundry experience. Select **Create a new project**.
+1. You may be prompted to create a new project before continuing to the New Foundry experience. Select **Create a new project**.
 
     <img src="./Media/ai-foundry-new-project.png" alt="Screenshot of the Create project pane." width="600">
 
+    If you're not prompted, select the projects drop down menu on the upper left, and then select **Create new project**.
+
 1. Enter a name for your Foundry project in the textbox and select **Create**.
 
-    Wait a few moments for the project to be created. The new Foundry portal home page should appear.
+    Wait a few moments for the project to be created. The new Foundry portal home page should appear with your project selected.
 
 ## Create a customer support triage workflow
 
