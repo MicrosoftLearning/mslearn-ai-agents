@@ -22,7 +22,7 @@ Let's start by creating a Foundry project with the new Foundry experience.
 
     > **Important**: Make sure the **New Foundry** toggle is *On* for this lab to use the updated user interface.
 
-1. In the home page, select **+ Create project**.
+1. Once you toggle to the **New Foundry**, you'll be asked to select a project. In the dropdown, select **Create a new project**.
 1. In the **Create a project** dialog, enter a valid name for your project (for example, *agent-iq-lab*).
 1. Confirm or configure the following settings for your project:
     - **Hub**: *Create a new hub or select an existing one*
@@ -37,13 +37,13 @@ Let's start by creating a Foundry project with the new Foundry experience.
 
 ## Create an agent
 
-1. On the home page, under **Start buidling**, select **Create an agent**.
-1. Give your agent a name, such as *FoundryIQAgent*.
+1. On the home page, under **Start building**, select **Create an agent**.
+1. Give your agent a name, such as `product-expert-agent`.
 1. Select **Create**.
 
 When creating an agent, it will deploy the default model (like `gpt-4.1`). Once your agent is created, you'll see the agent playground with that default model automatically selected for you.
 
-## Configure Foundry IQ
+## Configure your data and Foundry IQ
 
 Now you'll configure your agent that uses Foundry IQ to search the knowledge base.
 
@@ -55,6 +55,7 @@ Now you'll configure your agent that uses Foundry IQ to search the knowledge bas
     If you don't find relevant information in the knowledge base, say so clearly.
     ```
 
+1. Select **Save** to save your current agent configuration.
 1. Then, in the **Knowledge** section, expand the **Add** dropdown, and select **Connect to Foundry IQ**.
 1. In the Foundry IQ setup window, select **Connect to an AI Search resource** and then **Create new resource** which should open up the Azure portal in a new tab.
 1. Create a search resource with the following settings:
@@ -64,54 +65,56 @@ Now you'll configure your agent that uses Foundry IQ to search the knowledge bas
     - **Location**: *The same location as your project*
     - **Pricing tier**: *Free* if available, otherwise choose *Basic*
 
-1. Once your search service is created, close the Azure Portal tab and navigate back to the Foundry IQ page in Microsoft Foundry and refresh the page.
+Now you'll upload sample product information documents to connect to with Foundry IQ.
+
+1. Download the sample product information files by opening a new browser tab and navigating to `https://github.com/MicrosoftLearning/mslearn-ai-agents/raw/main/Labfiles/09-integrate-agent-with-foundry-iq/data/contoso-products.zip`
+1. Extract the files from the zip, which should be 3 PDFs detailing the products from Contoso.
+1. In the Azure Portal tab, in the top search bar, search fo **Storage accounts** and select **Storage accounts** from the services section.
+1. Create a storage account with the following settings:
+    - **Subscription**: *Your Azure subscription*
+    - **Resource group**: *Use the same resource group as your project*
+    - **Storage account name**: *A unique storage account name*
+    - **Region**: *The same location as your project*
+    - **Preferred storage type**: *Azure Blob Storage or Azure Data Lake Storage Gen 2*
+    - **Performance**: *Standard*
+    - **Redundancy**: *Locally-redundant storage (LRS)*
+1. Once created, go to the storage account you created and select **Upload** from the top bar.
+1. In the **Upload blob** blade, create a new container named `contosoproducts`.
+1. Browse for the files extracted from the zip file, select all 3 PDF files, and select **Upload**.
+1. Once your files are uploaded, close the Azure Portal tab and navigate back to the Foundry IQ page in Microsoft Foundry and refresh the page.
 1. Select your search service, and click **Connect**.
+1. On the Foundry IQ page, select **Create a knowledge base**, choosing **Azure Blob Storage** as your knowledge source, then select **Connect**.
+1. Configure your knowledge source with the following settings:
+    - **Name**: `ks-contosoproducts`
+    - **Description**: `Contoso product catalog items`
+    - **Storage account name**: *Select your storage account*
+    - **Container name**: `contosoproducts`
+    - **Content extraction mode**: *minimal*
+    - **Authentication type**: *API Key*
+    - **Include embedding model**: *Selected*
+    - **Embedding model**: *Select the available deployed model, likely text-embedding-3-small*
+    - **Chat completions model**: *Select the available deployed model, likely gpt-4.1*
+1. Select **Create**.
+1. On the knowledge base creation page, select the `gpt-4.1` model from the **Chat completions model** dropdown, leaving the rest of the optional fields as is.
+1. Select **Save knowledge base**, and then refresh your browser to verify the knowledge source status is *active*. If it isn't yet, wait a minute and refresh your page until it is.
+1. On the top right, expand the **Use in an agent** dropdown, and select your `product-expert-agent`.
 
-## Create a Knowledge Base
-
-Now you'll create a knowledge base with sample product information documents.
-
-1. Download the sample product information files:
-    - In a new browser tab, navigate to `https://github.com/MicrosoftLearning/mslearn-ai-agents/tree/main/Labfiles/09-integrate-agent-with-foundry-iq/data`
-    - Download the following PDF files to your local computer:
-        - `contoso-tents-catalog.pdf`
-        - `contoso-backpacks-guide.pdf`
-        - `contoso-camping-accessories.pdf`
-
-1. In the Foundry portal, on the Foundry IQ page with your search resource selected, select **Create a knowledge base**.
-
-2. 
-1. Select **+ New data source**.
-1. Choose **Upload files** as the data source type.
-1. Configure the data source:
-    - **Data source name**: *contoso-products*
-    - **Index name**: *contoso-products-index*
-    
-1. Select **Browse** and upload the three PDF files you downloaded.
-1. Select **Next** to configure the index settings:
-    - **Vector settings**: Enable vector search
-    - **Chunk size**: *Default (1024)*
-    - **Overlap**: *Default (128)*
-    
-1. Select **Create** and wait for the indexing process to complete. This may take several minutes as the documents are processed and embedded.
-1. When complete, you should see your data source and index listed in the **Data + indexes** page.
-
-
-
-## Test the Agent in the Portal
+## Test the Agent in the playground
 
 Before connecting from code, test your agent in the portal playground.
 
-1. In the agent page, you should see a playground/chat interface on the right side.
+1. In the agent page, you should see a playground tab selected and your knowledge base listed in the knowledge section.
 1. Try the following test queries to verify the agent can retrieve information from the knowledge base:
     - `What types of tents does Contoso offer?`
-    - `Tell me about the features of your waterproof backpacks.`
+    - `Tell me about which backpacks are available in XL.`
     - `What camping accessories are available?`
     
 1. Review the responses and notice:
     - The agent provides specific information from the knowledge base
     - Citations or references to the source documents may be included
     - The agent stays focused on product information
+
+1. You can also try interacting with your agent in the **Preview agent** for a more refined webapp experience.
 
 1. In the agent details page, locate and copy the following information to a notepad (you'll need these later):
     - **Agent name**: This is the name you created (`product-expert-agent`)
