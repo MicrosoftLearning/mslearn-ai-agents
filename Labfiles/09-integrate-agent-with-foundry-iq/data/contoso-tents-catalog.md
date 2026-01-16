@@ -259,4 +259,4 @@ Follow us on social media for camping tips, gear reviews, and adventure inspirat
 
 *Prices and specifications subject to change. All weights are approximate and may vary slightly. See individual product pages for detailed specifications.*
 
-**Last Updated:** January 2026
+**Last Updated:** December 2025

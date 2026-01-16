@@ -660,4 +660,4 @@ Website: www.contosooutdoor.com
 
 *All specifications are approximate. Products and prices subject to change without notice. Check website for current availability and pricing.*
 
-**Last Updated:** January 2026
+**Last Updated:** November 2025
