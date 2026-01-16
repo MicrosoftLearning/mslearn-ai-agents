@@ -20,32 +20,37 @@ Let's start by creating a Foundry project.
 
 1. In a web browser, open the [Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Foundry** logo at the top left to navigate to the home page, which looks similar to the following image (close the **Help** pane if it's open):
 
-    ![Screenshot of Foundry portal.](./Media/ai-foundry-home.png)
+    ![Screenshot of Foundry portal.](./Media/ai-foundry-home-new.png)
 
-    > **Important**: Make sure the **New Foundry** toggle is *Off* for this lab.
+    > **Important**: For this lab, you're using the **New** Foundry experience.
 
-1. In the home page, select **Create an agent**.
-1. When prompted to create a project, enter a valid name for your project and expand **Advanced options**.
-1. Confirm the following settings for your project:
+1. In the top banner, select **Start building** to try the new Microsoft Foundry Experience.
+
+1. When prompted, select **Create a new project** and enter a valid name for your project.
+
+1. Expand **Advanced options** and specify the following settings:
     - **Foundry resource**: *A valid name for your Foundry resource*
     - **Subscription**: *Your Azure subscription*
-    - **Resource group**: *Create or select a resource group*
-    - **Region**: *Select any **AI Foundry recommended***\*
+    - **Resource group**: *Select your resource group, or create a new one*
+    - **Region**: *Select any **AI Foundry recommended***\**
 
     > \* Some Azure AI resources are constrained by regional model quotas. In the event of a quota limit being exceeded later in the exercise, there's a possibility you may need to create another resource in a different region.
 
 1. Select **Create** and wait for your project to be created.
-1. If prompted, deploy a **gpt-4o** model using either the *Global Standard* or *Standard* deployment option (depending on your quota availability).
 
-    >**Note**: If quota is available, a GPT-4o base model may be deployed automatically when creating your Agent and project.
+1. After your project is created, select **Build** from the navigation bar.
 
-1. When your project is created, the Agents playground will be opened.
+1. Select **Models** from the left-hand menu, and then select **Deploy a base model**.
 
-1. In the navigation pane on the left, select **Overview** to see the main page for your project; which looks like this:
+1. Enter **gpt-4.1** in the search box, and then select the **gpt-4.1** model from the search results.
 
-    ![Screenshot of a Foundry project overview page.](./Media/ai-foundry-project.png)
+1. Select **Deploy** with the default settings to create a deployment of the model.
 
-1. Copy the **Foundry project endpoint** values to a notepad, as you'll use them to connect to your project in a client application.
+    After the model is deployed, the playground for the model is displayed.
+
+1. In the navigation bar on the left, select **Microsoft Foundry** to return to the Foundry home page.
+
+1. Copy the **Project endpoint** value to a notepad, as you'll use them to connect to your project in a client application.
 
 ## Develop an agent that uses function tools
 
@@ -92,7 +97,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
     ```
    python -m venv labenv
    ./labenv/bin/Activate.ps1
-   pip install -r requirements.txt azure-ai-projects azure-ai-agents
+   pip install -r requirements.txt azure-ai-agents
     ```
 
     >**Note:** You can ignore any warning or error messages displayed during the library installation.
@@ -105,44 +110,11 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 
     The file is opened in a code editor.
 
-1. In the code file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project **Overview** page in the Foundry portal) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name (which should be *gpt-4o*).
+1. In the code file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project **Overview** page in the Foundry portal) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name (which should be *gpt-4.1*).
+
 1. After you've replaced the placeholder, use the **CTRL+S** command to save your changes and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
 
-### Define a custom function
-
-1. Enter the following command to edit the code file that has been provided for your function code:
-
-    ```
-   code user_functions.py
-    ```
-
-1. Find the comment **Create a function to submit a support ticket** and add the following code, which generates a ticket number and saves a support ticket as a text file.
-
-    ```python
-   # Create a function to submit a support ticket
-   def submit_support_ticket(email_address: str, description: str) -> str:
-        script_dir = Path(__file__).parent  # Get the directory of the script
-        ticket_number = str(uuid.uuid4()).replace('-', '')[:6]
-        file_name = f"ticket-{ticket_number}.txt"
-        file_path = script_dir / file_name
-        text = f"Support ticket: {ticket_number}\nSubmitted by: {email_address}\nDescription:\n{description}"
-        file_path.write_text(text)
-    
-        message_json = json.dumps({"message": f"Support ticket {ticket_number} submitted. The ticket file is saved as {file_name}"})
-        return message_json
-    ```
-
-1. Find the comment **Define a set of callable functions** and add the following code, which statically defines a set of callable functions in this code file (in this case, there's only one - but in a real solution you may have multiple functions that your agent can call):
-
-    ```python
-   # Define a set of callable functions
-   user_functions: Set[Callable[..., Any]] = {
-        submit_support_ticket
-    }
-    ```
-1. Save the file (*CTRL+S*).
-
-### Write code to implement an agent that can use your function
+### Create a function for the agent to use
 
 1. Enter the following command to begin editing the agent code.
 
@@ -153,119 +125,203 @@ Now that you've created your project in AI Foundry, let's develop an app that im
     > **Tip**: As you add code to the code file, be sure to maintain the correct indentation.
 
 1. Review the existing code, which retrieves the application configuration settings and sets up a loop in which the user can enter prompts for the agent. The rest of the file includes comments where you'll add the necessary code to implement your technical support agent.
-1. Find the comment **Add references** and add the following code to import the classes you'll need to build an Azure AI agent that uses your function code as a tool:
+
+1. Find the comment **Add references** and add the following code to import the classes you'll need to build an Azure AI agent that uses a function tool:
 
     ```python
    # Add references
+   import json
+   import uuid
+   from pathlib import Path
    from azure.identity import DefaultAzureCredential
-   from azure.ai.agents import AgentsClient
-   from azure.ai.agents.models import FunctionTool, ToolSet, ListSortOrder, MessageRole
-   from user_functions import user_functions
+   from azure.ai.projects import AIProjectClient
+   from azure.ai.projects.models import PromptAgentDefinition, FunctionTool
+   from openai.types.responses.response_input_param import FunctionCallOutput, ResponseInputParam
     ```
 
-1. Find the comment **Connect to the Agent client** and add the following code to connect to the Azure AI project using the current Azure credentials.
+1. Find the comment **Create a function to submit a support ticket** and add the following code:
+
+    ```python
+   # Create a function to submit a support ticket
+   def submit_support_ticket(email_address: str, description: str) -> str:
+       script_dir = Path(__file__).parent  # Get the directory of the script
+       ticket_number = str(uuid.uuid4()).replace('-', '')[:6]
+       file_name = f"ticket-{ticket_number}.txt"
+       file_path = script_dir / file_name
+       text = f"Support ticket: {ticket_number}\nSubmitted by: {email_address}\nDescription:\n{description}"
+       file_path.write_text(text)
+
+       message_json = json.dumps({"message": f"Support ticket {ticket_number} submitted. The ticket file is saved as {file_name}"})
+       return message_json
+    ```
+
+    This code defines a function that generates a ticket number, saves the support ticket as a text file, and returns a message indicating that the ticket was submitted.
+
+### Connect to the Foundry project
+
+1. Find the comment **Connect to the AI Project client** and add the following code to connect to the Azure AI project.
 
     > **Tip**: Be careful to maintain the correct indentation level.
 
     ```python
-   # Connect to the Agent client
-   agent_client = AgentsClient(
-       endpoint=project_endpoint,
-       credential=DefaultAzureCredential
-           (exclude_environment_credential=True,
-            exclude_managed_identity_credential=True)
-   )
+   # Connect to the AI Project client
+   with (
+       DefaultAzureCredential(
+           exclude_environment_credential=True,
+           exclude_managed_identity_credential=True) as credential,
+       AIProjectClient(endpoint=project_endpoint, credential=credential) as project_client,
+       project_client.get_openai_client() as openai_client,
+   ):
     ```
-    
-1. Find the comment **Define an agent that can use the custom functions** section, and add the following code to add your function code to a toolset, and then create an agent that can use the toolset and a thread on which to run the chat session.
+
+### Define the function tool
+
+1. Find the comment **Create a FunctionTool definition** and add the following code to define a function tool that uses your custom function:
 
     ```python
-   # Define an agent that can use the custom functions
-   with agent_client:
+   # Create a FunctionTool definition
+   tool = FunctionTool(
+       name="submit_support_ticket",
+       parameters={
+           "type": "object",
+           "properties": {
+               "email_address": {"type": "string", "description": "The user's email address"},
+               "description": {"type": "string", "description": "A description of the technical issue"},
+            },
+            "required": ["email_address", "description"],
+            "additionalProperties": False,
+       },
+       description="Submit a support ticket for a technical issue",
+       strict=True,
+   )
+    ```
 
-        functions = FunctionTool(user_functions)
-        toolset = ToolSet()
-        toolset.add(functions)
-        agent_client.enable_auto_function_calls(toolset)
-            
-        agent = agent_client.create_agent(
-            model=model_deployment,
-            name="support-agent",
-            instructions="""You are a technical support agent.
+    The **FunctionTool** object uses a JSON schema to define the parameters that the function accepts, and a description of what the function does.
+
+### Create the agent that uses the function tool
+
+1. Find the comment **Define an agent that can use the custom functions** section, and add the following code to create an agent that can use the function tool you defined:
+
+    ```python
+   # Initialize the agent with the FunctionTool
+   agent = project_client.agents.create_version(
+       agent_name="support-agent",
+       definition=PromptAgentDefinition(
+           model=model_deployment,
+           instructions="""You are a technical support agent.
                             When a user has a technical issue, you get their email address and a description of the issue.
                             Then you use those values to submit a support ticket using the function available to you.
                             If a file is saved, tell the user the file name.
                          """,
-            toolset=toolset
-        )
-
-        thread = agent_client.threads.create()
-        print(f"You're chatting with: {agent.name} ({agent.id})")
-
+           tools=[tool],
+       ),
+   )
+   print(f"Using agent: {agent.name} (version: {agent.version})")
     ```
 
-1. Find the comment **Send a prompt to the agent** and add the following code to add the user's prompt as a message and run the thread.
+### Send a message to the agent and process the response
+
+1. Find the comment **Create a thread for the chat session** and add the following code:
+
+    ```python
+   # Create a thread for the chat session
+       conversation = openai_client.conversations.create()
+       print(f"Created conversation (id: {conversation.id})")
+    ```
+
+1. Find the comment **Send a prompt to the agent** and add the following code to add the user's prompt as a message.
 
     ```python
    # Send a prompt to the agent
-   message = agent_client.messages.create(
-        thread_id=thread.id,
-        role="user",
-        content=user_prompt
+   openai_client.conversations.items.create(
+       conversation_id=conversation.id,
+       items=[{"type": "message", "role": "user", "content": user_prompt}],
    )
-   run = agent_client.runs.create_and_process(thread_id=thread.id, agent_id=agent.id)
     ```
 
-    > **Note**: Using the **create_and_process** method to run the thread enables the agent to automatically find your functions and choose to use them based on their names and parameters. As an alternative, you could use the **create_run** method, in which case you would be responsible for writing code to poll for run status to determine when a function call is required, call the function, and return the results to the agent.
+1. Find the comment **Get the agent's response** and add the following code to retrieve the agent's response.
+
+    ```python
+   # Get the agent's response
+   response = openai_client.responses.create(
+       conversation=conversation.id,
+       extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
+       input="",
+   )
+    ```
 
 1. Find the comment **Check the run status for failures** and add the following code to show any errors that occur.
 
     ```python
    # Check the run status for failures
-   if run.status == "failed":
-        print(f"Run failed: {run.last_error}")
+   if response.status == "failed":
+       print(f"Response failed: {response.error}")
     ```
 
-1. Find the comment **Show the latest response from the agent** and add the following code to retrieve the messages from the completed thread and display the last one that was sent by the agent.
+### Process function calls and display the agent's response
+
+1. Find the comment **Process function calls** and add the following code to handle any function calls made by the agent:
 
     ```python
-   # Show the latest response from the agent
-   last_msg = agent_client.messages.get_last_message_text_by_role(
-       thread_id=thread.id,
-       role=MessageRole.AGENT,
-   )
-   if last_msg:
-        print(f"Last Message: {last_msg.text.value}")
+   # Process function calls
+   input_list: ResponseInputParam = []
+   for item in response.output:
+       if item.type == "function_call":
+           if item.name == "submit_support_ticket":
+               # Execute the function logic for submit_support_ticket
+               result = submit_support_ticket(**json.loads(item.arguments))
+
+               # Provide function call results to the model
+               input_list.append(
+                   FunctionCallOutput(
+                       type="function_call_output",
+                       call_id=item.call_id,
+                       output=result,
+                   )
+               )
     ```
 
-1. Find the comment **Get the conversation history** and add the following code to print out the messages from the conversation thread; ordering them in chronological sequence
+    This code checks for function calls in the agent's response, executes the corresponding function, and prepares the results to be sent back to the agent.
+
+1. Find the comment **If there are function call outputs, send them back to the model** and add the following:
 
     ```python
-   # Get the conversation history
-   print("\nConversation Log:\n")
-   messages = agent_client.messages.list(thread_id=thread.id, order=ListSortOrder.ASCENDING)
-   for message in messages:
-        if message.text_messages:
-           last_msg = message.text_messages[-1]
-           print(f"{message.role}: {last_msg.text.value}\n")
+   # If there are function call outputs, send them back to the model
+   if input_list:
+       response = openai_client.responses.create(
+           input=input_list,
+           previous_response_id=response.id,
+           extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
+       )
+
+   print(f"Agent response: {response.output_text}")
     ```
+
+    This code sends the function call results back to the agent and prints the agent's response.
+
 
 1. Find the comment **Clean up** and add the following code to delete the agent and thread when no longer needed.
 
     ```python
    # Clean up
-   agent_client.delete_agent(agent.id)
-   print("Deleted agent")
+   openai_client.conversations.delete(conversation_id=conversation.id)
+   print("Conversation deleted")
+
+   project_client.agents.delete_version(agent_name=agent.name, agent_version=agent.version)
+   print("Agent deleted")
     ```
 
-1. Review the code, using the comments to understand how it:
-    - Adds your set of custom functions to a toolset
-    - Creates an agent that uses the toolset.
-    - Runs a thread with a prompt message from the user.
-    - Checks the status of the run in case there's a failure
-    - Retrieves the messages from the completed thread and displays the last one sent by the agent.
-    - Displays the conversation history
-    - Deletes the agent and thread when they're no longer required.
+1. Review the complete code you've added to the file. It should now include sections that:
+   - Import necessary libraries
+   - Define a function to submit support tickets
+   - Connect to the Foundry project and AI Project client
+   - Define a function tool using your custom function
+   - Create an agent that can use the function tool
+   - Create a conversation thread for the chat session
+   - Send user prompts to the agent and retrieve responses
+   - Process any function calls made by the agent
+   - Send function call results back to the agent and display responses
+   - Clean up resources by deleting the conversation and agent
 
 1. Save the code file (*CTRL+S*) when you have finished. You can also close the code editor (*CTRL+Q*); though you may want to keep it open in case you need to make any edits to the code you added. In either case, keep the cloud shell command-line pane open.
 
@@ -302,8 +358,8 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 
     When it has enough information, the agent should choose to use your function as required.
 
-1. You can continue the conversation if you like. The thread is *stateful*, so it retains the conversation history - meaning that the agent has the full context for each response. Enter `quit` when you're done.
-1. Review the conversation messages that were retrieved from the thread, and the tickets that were generated.
+1. Review the messages that were retrieved from the conversation, and the tickets that were generated.
+
 1. The tool should have saved support tickets in the app folder. You can use the `ls` command to check, and then use the `cat` command to view the file contents, like this:
 
     ```

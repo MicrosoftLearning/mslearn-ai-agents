@@ -1,10 +1,12 @@
 import os
 from dotenv import load_dotenv
 from typing import Any
-from pathlib import Path
-
 
 # Add references
+
+
+# Create a function to submit a support ticket
+
 
 def main(): 
 
@@ -16,15 +18,18 @@ def main():
     project_endpoint= os.getenv("PROJECT_ENDPOINT")
     model_deployment = os.getenv("MODEL_DEPLOYMENT_NAME")
 
+    # Connect to the AI Project client
+   
 
-    # Connect to the Agent client
-    
+        # Create a FunctionTool definition
+        
 
+        # Initialize the agent with the FunctionTool
+        
 
-    # Define an agent that can use the custom functions
+        # Create a thread for the chat session
+       
 
-
-    
         # Loop until the user types 'quit'
         while True:
             # Get input text
@@ -36,22 +41,22 @@ def main():
                 continue
 
             # Send a prompt to the agent
+            
 
+            # Get the agent's response
+            
 
             # Check the run status for failures
 
-                
-            # Show the latest response from the agent
 
+            # Process function calls
+            
 
-        # Get the conversation history
-
+            # If there are function call outputs, send them back to the model
+            
 
         # Clean up
-
-    
-
-
+        
 
 if __name__ == '__main__': 
     main()
