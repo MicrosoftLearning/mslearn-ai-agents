@@ -50,7 +50,32 @@ def send_message_to_agent(user_message):
         })
         
         # Your code will go here
+
+
         
+        
+        # Extract the response text
+        if response and response.output_text:
+            response_text = response.output_text
+            
+            print(f"{response_text}\n")
+            
+            # Check for citations if available
+            if hasattr(response, 'citations') and response.citations:
+                print("\nSources:")
+                for citation in response.citations:
+                    print(f"  - {citation.content if hasattr(citation, 'content') else 'Knowledge Base'}")
+            
+            # Store in conversation history (client-side)
+            conversation_history.append({
+                "role": "assistant",
+                "content": response_text
+            })
+            
+            return response_text
+        else:
+            print("No response received.\n")
+            return None
     except Exception as e:
         print(f"\n\nError: {str(e)}\n")
         return None

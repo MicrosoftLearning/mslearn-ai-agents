@@ -16,7 +16,10 @@ print(f"Connecting to project: {project_endpoint}")
 print(f"Using agent: {agent_name}\n")
 
 # Connect to the project and agent
-credential = DefaultAzureCredential()
+credential = DefaultAzureCredential(
+    exclude_environment_credential=True,
+    exclude_managed_identity_credential=True
+)
 project_client = AIProjectClient(
     credential=credential,
     endpoint=project_endpoint
@@ -40,9 +43,9 @@ conversation_history = []
 def send_message_to_agent(user_message):
     """
     Send a message to the agent and handle the response using the responses API.
+    Handles MCP approval requests if needed.
     """
     try:
-        print(f"You: {user_message}\n")
         print("Agent: ", end="", flush=True)
         
         # Add user message to the conversation
@@ -63,6 +66,62 @@ def send_message_to_agent(user_message):
             extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
             input=""
         )
+
+        # Check if the response output contains an MCP approval request
+        approval_request = None
+        if hasattr(response, 'output') and response.output:
+            for item in response.output:
+                if hasattr(item, 'type') and item.type == 'mcp_approval_request':
+                    approval_request = item
+                    break
+        
+        # Handle approval request if present
+        if approval_request:
+            print(f"[Approval required for: {approval_request.name}]\n")
+            print(f"Server: {approval_request.server_label}")
+            
+            # Parse and display the arguments (optional, for transparency)
+            import json
+            try:
+                args = json.loads(approval_request.arguments)
+                print(f"Arguments: {json.dumps(args, indent=2)}\n")
+            except:
+                print(f"Arguments: {approval_request.arguments}\n")
+            
+            # Prompt user for approval
+            approval_input = input("Approve this action? (yes/no): ").strip().lower()
+            
+            if approval_input in ['yes', 'y']:
+                print("Approving action...\n")
+                
+                # Create approval response item
+                approval_response = {
+                    "type": "mcp_approval_response",
+                    "approval_request_id": approval_request.id,
+                    "approve": True
+                }
+            else:
+                print("Action denied.\n")
+                
+                # Create denial response item
+                approval_response = {
+                    "type": "mcp_approval_response",
+                    "approval_request_id": approval_request.id,
+                    "approve": False
+                }
+            
+            # Add the approval response to the conversation
+            openai_client.conversations.items.create(
+                conversation_id=conversation.id,
+                items=[approval_response]
+            )
+            
+            # Get the actual response after approval/denial
+            response = openai_client.responses.create(
+                conversation=conversation.id,
+                extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
+                input=""
+            )
         
         # Extract the response text
         if response and response.output_text:
