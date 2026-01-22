@@ -220,15 +220,15 @@ Now you're ready to create a client app that uses an agent. Some code has been p
 1. Find the comment **Get the conversation history**, which is after the loop ends, and add the following code to print out the messages from the conversation thread; reversing the order to show them in chronological sequence
 
     ```python
-   # Get the conversation history
-   print("\nConversation Log:\n")
-       items = openai_client.conversations.items.list(conversation_id=conversation.id)
-       for item in items:
-           if item.type == "message":
-               print(f"item.content[0].type = {item.content[0].type}")
-               role = item.role.upper()
-               content = item.content[0].text
-               print(f"{role}: {content}\n")
+    # Get the conversation history
+    print("\nConversation Log:\n")
+    items = openai_client.conversations.items.list(conversation_id=conversation.id)
+    for item in items:
+        if item.type == "message":
+            print(f"item.content[0].type = {item.content[0].type}")
+            role = item.role.upper()
+            content = item.content[0].text
+            print(f"{role}: {content}\n")
     ```
 
 1. Find the comment **Clean up** and add the following code to delete the agent and thread when no longer needed.
