@@ -151,17 +151,17 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 
     ```python
    # Create agents
-   summarizer = chat_client.create_agent(
+   summarizer = chat_client.as_agent(
        instructions=summarizer_instructions,
        name="summarizer",
    )
 
-   classifier = chat_client.create_agent(
+   classifier = chat_client.as_agent(
        instructions=classifier_instructions,
        name="classifier",
    )
 
-   action = chat_client.create_agent(
+   action = chat_client.as_agent(
        instructions=action_instructions,
        name="action",
    )
