@@ -225,8 +225,8 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 
     ```python
    # Create a thread for the chat session
-       conversation = openai_client.conversations.create()
-       print(f"Created conversation (id: {conversation.id})")
+   conversation = openai_client.conversations.create()
+   print(f"Created conversation (id: {conversation.id})")
     ```
 
 1. Find the comment **Send a prompt to the agent** and add the following code to add the user's prompt as a message.
