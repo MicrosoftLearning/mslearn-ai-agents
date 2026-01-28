@@ -1,0 +1,10 @@
+Date,Region,Product,Category,Units_Sold,Cost,Revenue
+2024-01-15,North,Widget A,Hardware,150,3750,7500
+2024-01-15,South,Widget B,Software,200,6000,12000
+2024-01-15,East,Widget A,Hardware,175,4375,8750
+2024-02-15,North,Widget A,Hardware,165,4125,8250
+2024-02-15,South,Widget B,Software,220,6600,13200
+2024-02-15,East,Widget A,Hardware,190,4750,9500
+2024-03-15,North,Widget A,Hardware,180,4500,9000
+2024-03-15,South,Widget B,Software,240,7200,14400
+2024-03-15,East,Widget A,Hardware,205,5125,10250

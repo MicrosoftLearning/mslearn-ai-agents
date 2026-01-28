@@ -1,0 +1,70 @@
+{
+  "status": "success",
+  "total_records": 20,
+  "by_region": {
+    "North": {
+      "units": 900,
+      "revenue": 45000.0,
+      "count": 5,
+      "avg_revenue": 9000.0
+    },
+    "South": {
+      "units": 1200,
+      "revenue": 72000.0,
+      "count": 5,
+      "avg_revenue": 14400.0
+    },
+    "East": {
+      "units": 1025,
+      "revenue": 51250.0,
+      "count": 5,
+      "avg_revenue": 10250.0
+    },
+    "West": {
+      "units": 775,
+      "revenue": 50375.0,
+      "count": 5,
+      "avg_revenue": 10075.0
+    }
+  },
+  "by_product": {
+    "Widget A": {
+      "units": 1925,
+      "revenue": 96250.0,
+      "count": 10
+    },
+    "Widget B": {
+      "units": 1200,
+      "revenue": 72000.0,
+      "count": 5
+    },
+    "Widget C": {
+      "units": 775,
+      "revenue": 50375.0,
+      "count": 5
+    }
+  },
+  "by_sales_rep": {
+    "John Smith": {
+      "units": 900,
+      "revenue": 45000.0,
+      "count": 5
+    },
+    "Jane Doe": {
+      "units": 1200,
+      "revenue": 72000.0,
+      "count": 5
+    },
+    "Bob Johnson": {
+      "units": 1025,
+      "revenue": 51250.0,
+      "count": 5
+    },
+    "Alice Williams": {
+      "units": 775,
+      "revenue": 50375.0,
+      "count": 5
+    }
+  },
+  "processed_at": "2026-01-28T11:43:37.998156"
+}

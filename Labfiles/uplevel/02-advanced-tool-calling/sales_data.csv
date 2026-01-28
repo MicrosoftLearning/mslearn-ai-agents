@@ -1,0 +1,21 @@
+Date,Region,Product,Units_Sold,Revenue,Sales_Rep
+2024-01-15,North,Widget A,150,7500,John Smith
+2024-01-15,South,Widget B,200,12000,Jane Doe
+2024-01-15,East,Widget A,175,8750,Bob Johnson
+2024-01-15,West,Widget C,125,8125,Alice Williams
+2024-02-15,North,Widget A,165,8250,John Smith
+2024-02-15,South,Widget B,220,13200,Jane Doe
+2024-02-15,East,Widget A,190,9500,Bob Johnson
+2024-02-15,West,Widget C,140,9100,Alice Williams
+2024-03-15,North,Widget A,180,9000,John Smith
+2024-03-15,South,Widget B,240,14400,Jane Doe
+2024-03-15,East,Widget A,205,10250,Bob Johnson
+2024-03-15,West,Widget C,155,10075,Alice Williams
+2024-04-15,North,Widget A,195,9750,John Smith
+2024-04-15,South,Widget B,260,15600,Jane Doe
+2024-04-15,East,Widget A,220,11000,Bob Johnson
+2024-04-15,West,Widget C,170,11050,Alice Williams
+2024-05-15,North,Widget A,210,10500,John Smith
+2024-05-15,South,Widget B,280,16800,Jane Doe
+2024-05-15,East,Widget A,235,11750,Bob Johnson
+2024-05-15,West,Widget C,185,12025,Alice Williams
