@@ -1,20 +1,20 @@
 ---
 lab:
     title: 'Advanced Tool Calling and Code Interpreter'
-    description: 'Master advanced agent capabilities with code interpreter, async functions, and data processing.'
+    description: 'Master advanced agent capabilities with code interpreter, async functions, and data processing using a unified interactive application.'
 ---
 
-# Advanced Tool Calling and Code Interpreter
+# Lab 2: Advanced Tool Calling and Code Interpreter
 
-In this exercise, you'll dive deep into advanced agent capabilities by mastering the code interpreter tool for dynamic data analysis, implementing sophisticated async custom functions, and building production-ready file processing workflows. You'll build a Sales Analytics Agent that demonstrates real-world data analysis scenarios.
+In this lab, you'll master advanced agent capabilities through a unified interactive application. You'll explore the code interpreter tool for dynamic data analysis, implement sophisticated async custom functions, and build production-ready file processing workflows.
 
-This exercise takes approximately **60** minutes.
+This lab takes approximately **60** minutes.
 
 > **Note**: This lab builds on Lab 1. You should have completed Lab 1 or be familiar with basic agent creation and custom functions.
 
 ## Learning Objectives
 
-By the end of this exercise, you'll be able to:
+By the end of this lab, you'll be able to:
 
 1. Use the code interpreter tool for dynamic data analysis and visualization
 2. Implement advanced async function patterns with proper error handling
@@ -25,17 +25,17 @@ By the end of this exercise, you'll be able to:
 
 ## Prerequisites
 
-Before starting this exercise, ensure you have:
+Before starting this lab, ensure you have:
 
 - Completed Lab 1 (Build AI Agents with Portal and VS Code)
-- An Azure AI Foundry project with a deployed model
+- An Microsoft Foundry project with a deployed model
 - Visual Studio Code with Foundry extension installed
 - Python 3.12 or later installed
 - Familiarity with async/await patterns in Python
 
 ## Scenario
 
-You'll build a **Sales Analytics Agent** for Contoso Corporation that helps sales teams analyze data, generate reports, and automate workflows. The agent will:
+You'll work with a **Sales Analytics Agent** for Contoso Corporation that helps sales teams analyze data, generate reports, and automate workflows. The agent will:
 
 - Analyze sales data from uploaded CSV files using code interpreter
 - Generate visualizations (charts, graphs) dynamically
@@ -43,993 +43,686 @@ You'll build a **Sales Analytics Agent** for Contoso Corporation that helps sale
 - Apply custom business logic with advanced functions
 - Handle errors gracefully with retries and fallbacks
 
+## Lab Structure
+
+This lab uses a **unified interactive application** (`advanced_tool_lab.py`) that provides a menu-driven interface for all exercises. You'll stay in one application throughout the lab, with each exercise building on the previous one.
+
+```
+Menu Options:
+1. Exercise 1: Data Analysis with Code Interpreter
+2. Exercise 2: Advanced Async Custom Functions
+3. Exercise 3: File Operations and Data Transformation
+4. Exercise 4: Comprehensive Demo (All Tools Combined)
+5. View Architecture Overview
+0. Exit
+```
+
+---
+
+## Setup
+
+### Task 1: Navigate to the lab directory
+
+1. Open Visual Studio Code.
+
+2. Open the lab folder:
+   ```
+   C:\repos\mslearn-ai-agents\Labfiles\uplevel\02-advanced-tool-calling\Python
+   ```
+   
+   Use **File > Open Folder** in VS Code.
+
+### Task 2: Configure environment
+
+1. Create a `.env` file (if you don't already have one from Lab 1):
+
+    ```
+    PROJECT_ENDPOINT=<your_project_endpoint>
+    MODEL_DEPLOYMENT_NAME=gpt-4o
+    ```
+    
+    **To get your project endpoint:** In VS Code, open the **Microsoft Foundry** extension, right-click on your active project, and select **Copy Endpoint**.
+
+2. Install dependencies:
+
+    ```powershell
+    pip install -r requirements.txt
+    ```
+
+### Task 3: Verify file structure
+
+Ensure you have these files:
+- `advanced_tool_lab.py` - Main unified application ⭐
+- `advanced_functions.py` - Custom async functions module
+- `data_processor.py` - File processing utilities module
+- `requirements.txt`
+- `.env` (your configuration)
+
 ---
 
 ## Exercise 1: Data Analysis with Code Interpreter
 
-In this exercise, you'll use the code interpreter tool to enable your agent to dynamically generate and execute Python code for data analysis.
+In this exercise, you'll explore the code interpreter tool that enables agents to dynamically generate and execute Python code for data analysis.
 
-### Create the Sales Analytics Agent
+### What is Code Interpreter?
 
-1. Open Visual Studio Code and navigate to your lab project folder (or create a new one, e.g., `C:\labs\sales-analytics-agent`).
+The code interpreter tool allows agents to:
+- Write and execute Python code dynamically
+- Process uploaded files (CSV, Excel, JSON, etc.)
+- Perform statistical analysis
+- Generate charts and visualizations
+- Handle data transformations
+- Debug and retry code execution
 
-1. Open this folder in VS Code (**File > Open Folder**).
+**Key benefit**: No need to pre-define specific analysis functions - the agent adapts to any data structure and query.
 
-1. Create a new file named `sales_analytics_agent.py`.
+### Task 1: Run Exercise 1
 
-1. Add the following code:
+1. **Start the unified application**:
 
-    ```python
-    import os
-    from azure.ai.projects import AIProjectClient
-    from azure.identity import DefaultAzureCredential
-    from azure.ai.projects.models import CodeInterpreterTool
-    
-    def main():
-        # Initialize the project client
-        project_endpoint = os.environ.get("PROJECT_ENDPOINT")
-        
-        if not project_endpoint:
-            print("Error: PROJECT_ENDPOINT environment variable not set")
-            print("Please set it in your .env file")
-            return
-        
-        print("Connecting to Azure AI Foundry project...")
-        credential = DefaultAzureCredential()
-        project_client = AIProjectClient.from_connection_string(
-            conn_str=project_endpoint,
-            credential=credential
-        )
-        
-        print("Creating Sales Analytics Agent with code interpreter...")
-        
-        # Create agent with code interpreter tool
-        agent = project_client.agents.create_agent(
-            model="gpt-4o",
-            name="sales-analytics-agent",
-            instructions="""You are a Sales Analytics Agent for Contoso Corporation.
-            You help sales teams analyze data, generate insights, and create visualizations.
-            
-            When analyzing data:
-            - Always examine the data structure first
-            - Provide clear explanations of your findings
-            - Create visualizations when appropriate
-            - Highlight key trends and anomalies
-            - Suggest actionable recommendations
-            
-            You have access to Python code interpreter for data analysis.""",
-            tools=[CodeInterpreterTool()]
-        )
-        
-        print(f"✅ Agent created with ID: {agent.id}")
-        
-        # Create a thread for conversation
-        thread = project_client.agents.create_thread()
-        print(f"✅ Thread created with ID: {thread.id}\n")
-        
-        # Interactive chat loop
-        print("="*70)
-        print("Sales Analytics Agent Ready!")
-        print("Upload data files and ask analysis questions.")
-        print("Type 'exit' to quit.")
-        print("="*70 + "\n")
-        
-        while True:
-            user_input = input("You: ").strip()
-            
-            if user_input.lower() in ['exit', 'quit', 'bye']:
-                print("\nThank you for using Sales Analytics Agent!")
-                break
-            
-            if not user_input:
-                continue
-            
-            # Add user message to thread
-            project_client.agents.create_message(
-                thread_id=thread.id,
-                role="user",
-                content=user_input
-            )
-            
-            # Run the agent
-            print("\n🔄 Analyzing...")
-            run = project_client.agents.create_run(
-                thread_id=thread.id,
-                agent_id=agent.id
-            )
-            
-            # Wait for completion
-            import time
-            while run.status in ["queued", "in_progress"]:
-                time.sleep(1)
-                run = project_client.agents.get_run(
-                    thread_id=thread.id,
-                    run_id=run.id
-                )
-            
-            # Check for errors
-            if run.status == "failed":
-                print(f"❌ Error: {run.last_error}")
-                continue
-            
-            # Get the response
-            messages = project_client.agents.list_messages(thread_id=thread.id)
-            
-            # Display the latest assistant message
-            for message in messages:
-                if message.role == "assistant":
-                    for content in message.content:
-                        if hasattr(content, 'text'):
-                            print(f"\nAgent: {content.text.value}\n")
-                        # Display images if generated
-                        elif hasattr(content, 'image_file'):
-                            print(f"📊 Chart generated: {content.image_file.file_id}")
-                    break
-    
-    if __name__ == "__main__":
-        main()
+    ```powershell
+    python advanced_tool_lab.py
     ```
 
-### Upload and Analyze Sales Data
+2. **Select option 1** from the menu: "Exercise 1: Data Analysis with Code Interpreter"
 
-1. Download the sample sales data file. Create a new file named `sales_data.csv` in your project folder with the following content:
+### Task 2: Observe code interpreter in action
 
-    ```csv
-    Date,Region,Product,Units_Sold,Revenue,Sales_Rep
-    2024-01-15,North,Widget A,150,7500,John Smith
-    2024-01-15,South,Widget B,200,12000,Jane Doe
-    2024-01-15,East,Widget A,175,8750,Bob Johnson
-    2024-01-15,West,Widget C,125,8125,Alice Williams
-    2024-02-15,North,Widget A,165,8250,John Smith
-    2024-02-15,South,Widget B,220,13200,Jane Doe
-    2024-02-15,East,Widget A,190,9500,Bob Johnson
-    2024-02-15,West,Widget C,140,9100,Alice Williams
-    2024-03-15,North,Widget A,180,9000,John Smith
-    2024-03-15,South,Widget B,240,14400,Jane Doe
-    2024-03-15,East,Widget A,205,10250,Bob Johnson
-    2024-03-15,West,Widget C,155,10075,Alice Williams
-    ```
+The application will demonstrate code interpreter with three sample queries:
 
-1. Set up your environment configuration. Create a `.env` file (if you don't already have one):
+1. **Analyze key trends** - Agent examines sales data and identifies patterns
+2. **Create visualizations** - Agent generates charts showing sales by region
+3. **Calculate statistics** - Agent computes mean, median, and totals
 
-    ```
-    PROJECT_ENDPOINT=<your_endpoint_from_lab_1>
-    ```
+**What you'll see:**
 
-1. Run the agent:
+```
+✅ Created agent: sales-analytics-agent
 
-    ```bash
-    python sales_analytics_agent.py
-    ```
+📤 Uploading ../sales_data.csv...
+✅ File uploaded: file-abc123
 
-1. Upload the CSV file. When prompted, you can use the agent's file upload capability:
+🔍 Testing code interpreter with sample queries:
 
-    > **Note**: The agent can accept file uploads through the API. For now, you'll ask the agent to analyze data you describe.
+[Query 1] Analyze the sales data in file file-abc123. What are the key trends?
 
-1. Try these analysis prompts:
+⏳ Agent generating and executing code...
 
-    ```
-    Can you analyze the sales trends by region over the three months?
-    ```
+📊 ANALYSIS:
+I've analyzed your sales data. Here are the key findings:
 
-    ```
-    Create a bar chart showing total revenue by product
-    ```
+1. Revenue Trends: Total revenue is $145,320 with steady growth...
+2. Regional Performance: North region leads with 35% of sales...
+3. Product Mix: Software products account for 60% of revenue...
 
-    ```
-    Which sales representative has the highest average revenue per month?
-    ```
+Recommendations:
+- Focus on North region expansion
+- Increase software product inventory
+- Address declining Midwest performance
+```
 
-    ```
-    Are there any concerning trends I should know about?
-    ```
+### Task 3: Understand the architecture
 
-1. Observe how the agent:
-   - Generates Python code dynamically
-   - Analyzes the data structure
-   - Creates visualizations
-   - Provides insights and recommendations
+**Code Interpreter Flow:**
+```
+User Query
+    ↓
+Agent receives request
+    ↓
+Agent generates Python code
+    ↓
+Code executes in sandbox
+    ↓
+Results returned to agent
+    ↓
+Agent formats response
+```
 
-### Understanding Code Interpreter
+**Agent Configuration** (from `advanced_tool_lab.py`):
+```python
+code_interpreter = CodeInterpreterTool()
 
-The code interpreter tool enables agents to:
+agent = agents_client.create_agent(
+    model="gpt-4o",
+    name="sales-analytics-agent",
+    instructions="Use code interpreter to analyze data...",
+    tools=[code_interpreter]  # Enable dynamic code generation
+)
+```
 
-- ✅ Write and execute Python code dynamically
-- ✅ Process uploaded files (CSV, Excel, JSON, etc.)
-- ✅ Perform statistical analysis
-- ✅ Generate charts and visualizations
-- ✅ Handle data transformations
-- ✅ Debug and retry code execution
+### Task 4: Key concepts
 
-**Key Benefits**:
-- No need to pre-define specific analysis functions
-- Agent adapts to any data structure
-- Handles edge cases automatically
-- Can fix errors and retry
+**Code Interpreter Benefits:**
+- ✅ **Dynamic**: Agent generates code based on each query
+- ✅ **Flexible**: Works with any data structure
+- ✅ **Secure**: Code runs in isolated sandbox
+- ✅ **Self-correcting**: Can fix errors and retry
+- ✅ **Powerful**: Full Python capabilities (pandas, matplotlib, numpy)
+
+**When to use Code Interpreter:**
+- Data analysis with unknown/varying structure
+- Statistical computations
+- Chart and graph generation
+- File format conversions
+- Complex calculations
+
+**When to use Custom Functions instead:**
+- Specific business logic
+- External API calls
+- Database operations
+- Consistent, repeatable operations
 
 ---
 
-## Exercise 2: Advanced Custom Function Patterns
+## Exercise 2: Advanced Async Custom Functions
 
-Now you'll implement sophisticated custom functions with async patterns, error handling, and parameter validation.
+In this exercise, you'll explore sophisticated custom function patterns including async operations, function chaining, and error handling.
 
-### Create Advanced Functions Module
+### What are Advanced Functions?
 
-1. Create a new file named `advanced_functions.py`:
+While code interpreter is great for dynamic analysis, custom functions provide:
+- **Specific business logic** (pricing rules, approval workflows)
+- **External integrations** (CRM systems, databases, APIs)
+- **Controlled operations** (with validation and permissions)
+- **Consistent behavior** (repeatable, testable)
 
-    ```python
-    import asyncio
-    from typing import List, Dict, Optional
-    from datetime import datetime, timedelta
-    import json
+### Task 1: Run Exercise 2
+
+1. If the application isn't running, start it:
+   ```powershell
+   python advanced_tool_lab.py
+   ```
+
+2. **Select option 2** from the menu: "Exercise 2: Advanced Async Custom Functions"
+
+### Task 2: Observe advanced functions
+
+The exercise demonstrates 4 sophisticated functions from `advanced_functions.py`:
+
+| Function | Purpose | Key Pattern |
+|----------|---------|-------------|
+| `analyze_customer_segment` | Customer behavior analysis | Async/await, validation |
+| `calculate_forecast` | Sales forecasting | Data processing, error handling |
+| `process_sales_pipeline` | Pipeline analysis | Structured responses |
+| `get_comprehensive_recommendations` | Combined insights | Function orchestration |
+
+**Sample interaction:**
+
+```
+💬 USER: Analyze the enterprise customer segment for quarterly performance
+
+⏳ Processing with advanced functions...
+  🔧 Calling: analyze_customer_segment
+
+🤖 AGENT: Based on the quarterly analysis of our enterprise segment:
+
+Revenue: $1.2M (↑ 15% QoQ)
+Customer Count: 45 active accounts
+Growth Rate: 15%
+Retention: 92%
+
+Key Insights:
+- Strong quarter-over-quarter growth driven by upsells
+- High retention indicates satisfied customers
+- Average deal size increased 12%
+
+Recommendations:
+- Focus on expanding successful accounts
+- Identify upsell opportunities in stable accounts
+```
+
+### Task 3: Understand async patterns
+
+**Why Async?**
+```python
+# From advanced_functions.py
+async def analyze_customer_segment(segment: str, time_period: str) -> str:
+    # Simulates concurrent operations (API calls, database queries)
+    await asyncio.sleep(0.5)  # Non-blocking wait
     
-    # Simulated data store (in production, this would be a database)
-    SALES_CACHE = {}
+    # Process data
+    results = {
+        "segment": segment,
+        "metrics": calculate_metrics(segment),
+        "insights": generate_insights(segment)
+    }
     
-    
-    async def analyze_customer_segment(
-        segment: str,
-        time_period: str = "30d",
-        metrics: Optional[List[str]] = None
-    ) -> dict:
-        """
-        Analyze customer segment with async data fetching.
-        
-        Args:
-            segment: Customer segment ('enterprise', 'smb', 'consumer')
-            time_period: Analysis period ('7d', '30d', '90d')
-            metrics: Optional list of metrics to calculate
-        
-        Returns:
-            dict: Analysis results with metrics
-        """
-        # Validate parameters
-        valid_segments = ["enterprise", "smb", "consumer"]
-        if segment not in valid_segments:
-            return {
-                "status": "error",
-                "error": f"Invalid segment. Must be one of: {', '.join(valid_segments)}"
-            }
-        
-        valid_periods = ["7d", "30d", "90d"]
-        if time_period not in valid_periods:
-            return {
-                "status": "error",
-                "error": f"Invalid period. Must be one of: {', '.join(valid_periods)}"
-            }
-        
-        # Default metrics if none provided
-        if metrics is None:
-            metrics = ["revenue", "growth", "retention"]
-        
-        try:
-            # Simulate async data fetching
-            print(f"  📊 Fetching {segment} data for {time_period}...")
-            await asyncio.sleep(0.5)  # Simulate API call
-            
-            # Simulate data processing
-            results = {
-                "segment": segment,
-                "time_period": time_period,
-                "timestamp": datetime.now().isoformat(),
-                "metrics": {}
-            }
-            
-            # Calculate requested metrics
-            for metric in metrics:
-                if metric == "revenue":
-                    results["metrics"]["revenue"] = {
-                        "total": 125000 + (5000 * len(segment)),
-                        "currency": "USD"
-                    }
-                elif metric == "growth":
-                    results["metrics"]["growth"] = {
-                        "percentage": 15.5,
-                        "trend": "increasing"
-                    }
-                elif metric == "retention":
-                    results["metrics"]["retention"] = {
-                        "rate": 0.92,
-                        "cohort_size": 450
-                    }
-            
-            results["status"] = "success"
-            return results
-            
-        except Exception as e:
-            # Graceful error handling
-            return {
-                "status": "error",
-                "error": str(e),
-                "fallback_data": await get_cached_segment_data(segment)
-            }
-    
-    
-    async def get_cached_segment_data(segment: str) -> dict:
-        """Fallback function to retrieve cached data."""
-        await asyncio.sleep(0.1)
-        return {
-            "cached": True,
-            "segment": segment,
-            "last_updated": (datetime.now() - timedelta(hours=1)).isoformat()
-        }
-    
-    
-    async def calculate_forecast(
-        product: str,
-        months: int = 3,
-        include_confidence: bool = True
-    ) -> dict:
-        """
-        Calculate sales forecast with confidence intervals.
-        
-        Args:
-            product: Product name
-            months: Number of months to forecast
-            include_confidence: Include confidence intervals
-        
-        Returns:
-            dict: Forecast results
-        """
-        # Validate parameters
-        if months < 1 or months > 12:
-            return {
-                "status": "error",
-                "error": "Months must be between 1 and 12"
-            }
-        
-        try:
-            print(f"  🔮 Calculating {months}-month forecast for {product}...")
-            await asyncio.sleep(0.3)
-            
-            # Simulate forecast calculation
-            base_value = 10000
-            forecast = []
-            
-            for month in range(1, months + 1):
-                prediction = {
-                    "month": month,
-                    "predicted_units": base_value + (month * 500),
-                    "predicted_revenue": (base_value + (month * 500)) * 50
+    return json.dumps(results, indent=2)
+```
+
+**Benefits of Async Functions:**
+- ⚡ **Performance**: Handle multiple operations concurrently
+- 🔄 **Scalability**: Don't block while waiting for I/O
+- 🎯 **Responsiveness**: Agent can process other tasks
+- 💪 **Real-world**: Matches production API patterns
+
+### Task 4: Function definition pattern
+
+**How the agent knows about functions** (from `advanced_tool_lab.py`):
+
+```python
+functions = [
+    FunctionTool(
+        name="analyze_customer_segment",
+        description="Analyze customer behavior for a specific segment",
+        parameters={
+            "type": "object",
+            "properties": {
+                "segment": {
+                    "type": "string",
+                    "enum": ["enterprise", "mid-market", "small-business"]
+                },
+                "time_period": {
+                    "type": "string",
+                    "enum": ["monthly", "quarterly", "yearly"]
                 }
-                
-                if include_confidence:
-                    prediction["confidence_interval"] = {
-                        "lower": prediction["predicted_units"] * 0.85,
-                        "upper": prediction["predicted_units"] * 1.15
-                    }
-                
-                forecast.append(prediction)
-            
-            return {
-                "status": "success",
-                "product": product,
-                "forecast": forecast,
-                "model": "linear_regression",
-                "timestamp": datetime.now().isoformat()
-            }
-            
-        except Exception as e:
-            return {
-                "status": "error",
-                "error": str(e)
-            }
-    
-    
-    async def process_sales_pipeline(data: Dict) -> dict:
-        """
-        Chain multiple analysis functions together.
-        
-        Args:
-            data: Input data with segments and products
-        
-        Returns:
-            dict: Combined analysis results
-        """
-        try:
-            print("  🔄 Processing sales pipeline...")
-            
-            # Step 1: Analyze segments (parallel)
-            segments = data.get("segments", ["enterprise", "smb"])
-            segment_tasks = [
-                analyze_customer_segment(seg, "30d")
-                for seg in segments
-            ]
-            segment_results = await asyncio.gather(*segment_tasks)
-            
-            # Step 2: Calculate forecasts (parallel)
-            products = data.get("products", ["Widget A", "Widget B"])
-            forecast_tasks = [
-                calculate_forecast(prod, 3)
-                for prod in products
-            ]
-            forecast_results = await asyncio.gather(*forecast_tasks)
-            
-            # Step 3: Combine results
-            return {
-                "status": "success",
-                "pipeline_completed": datetime.now().isoformat(),
-                "segment_analysis": segment_results,
-                "forecasts": forecast_results,
-                "recommendations": generate_recommendations(
-                    segment_results,
-                    forecast_results
-                )
-            }
-            
-        except Exception as e:
-            return {
-                "status": "error",
-                "error": str(e)
-            }
-    
-    
-    def generate_recommendations(segments, forecasts) -> List[str]:
-        """Generate actionable recommendations based on analysis."""
-        recommendations = []
-        
-        # Check growth trends
-        for seg in segments:
-            if seg.get("status") == "success":
-                metrics = seg.get("metrics", {})
-                growth = metrics.get("growth", {})
-                if growth.get("percentage", 0) > 10:
-                    recommendations.append(
-                        f"Strong growth in {seg['segment']} segment - consider expanding"
-                    )
-        
-        # Check forecast trends
-        for forecast in forecasts:
-            if forecast.get("status") == "success":
-                predictions = forecast.get("forecast", [])
-                if len(predictions) > 0:
-                    last_month = predictions[-1]["predicted_revenue"]
-                    if last_month > 600000:
-                        recommendations.append(
-                            f"High revenue forecast for {forecast['product']} - increase inventory"
-                        )
-        
-        return recommendations if recommendations else ["Continue monitoring trends"]
-    
-    
-    # For testing
-    async def test_functions():
-        """Test all async functions."""
-        print("\n=== Testing Async Functions ===\n")
-        
-        # Test 1: Segment analysis
-        result1 = await analyze_customer_segment("enterprise", "30d")
-        print(f"✅ Segment analysis: {result1['status']}")
-        
-        # Test 2: Forecast
-        result2 = await calculate_forecast("Widget A", 3)
-        print(f"✅ Forecast: {result2['status']}")
-        
-        # Test 3: Pipeline
-        result3 = await process_sales_pipeline({
-            "segments": ["enterprise", "smb"],
-            "products": ["Widget A", "Widget B"]
-        })
-        print(f"✅ Pipeline: {result3['status']}")
-        print(f"\nRecommendations:")
-        for rec in result3.get("recommendations", []):
-            print(f"  • {rec}")
-    
-    
-    if __name__ == "__main__":
-        asyncio.run(test_functions())
-    ```
+            },
+            "required": ["segment", "time_period"]
+        }
+    ),
+    # More functions...
+]
 
-### Test Advanced Functions
+agent = agents_client.create_agent(
+    model="gpt-4o",
+    tools=functions  # Agent knows these are available
+)
+```
 
-1. Run the test script to verify all functions work:
+**Function Calling Flow:**
+```
+1. User asks a question
+2. Agent determines which function(s) to call
+3. Agent extracts parameters from user query
+4. Function executes (async)
+5. Results returned as JSON
+6. Agent synthesizes natural language response
+```
 
-    ```bash
-    python advanced_functions.py
-    ```
+### Task 5: Key concepts
 
-1. You should see output like:
+**Advanced Function Patterns:**
 
-    ```
-    === Testing Async Functions ===
+1. **Parameter Validation**
+   ```python
+   if segment not in ["enterprise", "mid-market", "small-business"]:
+       return {"status": "error", "message": "Invalid segment"}
+   ```
 
-    📊 Fetching enterprise data for 30d...
-    ✅ Segment analysis: success
-    🔮 Calculating 3-month forecast for Widget A...
-    ✅ Forecast: success
-    🔄 Processing sales pipeline...
-    📊 Fetching enterprise data for 30d...
-    📊 Fetching smb data for 30d...
-    🔮 Calculating 3-month forecast for Widget A...
-    🔮 Calculating 3-month forecast for Widget B...
-    ✅ Pipeline: success
+2. **Error Handling**
+   ```python
+   try:
+       result = await fetch_data(segment)
+   except Exception as e:
+       return {"status": "error", "details": str(e)}
+   ```
 
-    Recommendations:
-      • Strong growth in enterprise segment - consider expanding
-      • Strong growth in smb segment - consider expanding
-      • High revenue forecast for Widget A - increase inventory
-      • High revenue forecast for Widget B - increase inventory
-    ```
+3. **Structured Responses**
+   ```python
+   return json.dumps({
+       "status": "success",
+       "data": results,
+       "timestamp": datetime.now().isoformat()
+   })
+   ```
 
-### Key Advanced Patterns Demonstrated
-
-1. **Async/Await**: Non-blocking operations for better performance
-2. **Parameter Validation**: Input checking with clear error messages
-3. **Error Handling**: Try-catch with graceful fallbacks
-4. **Function Chaining**: Pipeline pattern for complex workflows
-5. **Parallel Execution**: Multiple async operations with `gather()`
-6. **Type Hints**: Clear function signatures
-7. **Fallback Data**: Cached data when live calls fail
+4. **Function Chaining**
+   ```python
+   segment_data = await analyze_customer_segment(...)
+   forecast = await calculate_forecast(segment_data...)
+   recommendations = combine_insights(segment_data, forecast)
+   ```
 
 ---
 
 ## Exercise 3: File Operations and Data Transformation
 
-In this exercise, you'll build a comprehensive file processing system that combines code interpreter with custom functions.
+In this exercise, you'll explore file processing capabilities that complement both code interpreter and custom functions.
 
-### Create Data Processor Module
+### What are File Operations?
 
-1. Create a new file named `data_processor.py`:
+File operations enable agents to:
+- Load and parse CSV/JSON files
+- Transform and aggregate data
+- Export results in multiple formats
+- Handle data validation
+- Process batch operations
 
-    ```python
-    import csv
-    import json
-    from typing import List, Dict
-    from pathlib import Path
-    from datetime import datetime
-    
-    
-    def load_csv_file(file_path: str) -> List[Dict]:
-        """
-        Load CSV file and return as list of dictionaries.
-        
-        Args:
-            file_path: Path to CSV file
-        
-        Returns:
-            List of dictionaries with CSV data
-        """
-        try:
-            data = []
-            with open(file_path, 'r') as f:
-                reader = csv.DictReader(f)
-                for row in reader:
-                    data.append(row)
-            
-            print(f"✅ Loaded {len(data)} rows from {Path(file_path).name}")
-            return data
-            
-        except FileNotFoundError:
-            print(f"❌ Error: File not found: {file_path}")
-            return []
-        except Exception as e:
-            print(f"❌ Error loading file: {e}")
-            return []
-    
-    
-    def transform_sales_data(data: List[Dict]) -> Dict:
-        """
-        Transform sales data with aggregations and calculations.
-        
-        Args:
-            data: List of sales records
-        
-        Returns:
-            Transformed data with summaries
-        """
-        if not data:
-            return {"error": "No data to transform"}
-        
-        try:
-            # Initialize aggregators
-            by_region = {}
-            by_product = {}
-            by_rep = {}
-            
-            # Process each record
-            for record in data:
-                region = record.get("Region", "Unknown")
-                product = record.get("Product", "Unknown")
-                rep = record.get("Sales_Rep", "Unknown")
-                
-                # Convert numeric values
-                units = int(record.get("Units_Sold", 0))
-                revenue = float(record.get("Revenue", 0))
-                
-                # Aggregate by region
-                if region not in by_region:
-                    by_region[region] = {"units": 0, "revenue": 0, "count": 0}
-                by_region[region]["units"] += units
-                by_region[region]["revenue"] += revenue
-                by_region[region]["count"] += 1
-                
-                # Aggregate by product
-                if product not in by_product:
-                    by_product[product] = {"units": 0, "revenue": 0, "count": 0}
-                by_product[product]["units"] += units
-                by_product[product]["revenue"] += revenue
-                by_product[product]["count"] += 1
-                
-                # Aggregate by rep
-                if rep not in by_rep:
-                    by_rep[rep] = {"units": 0, "revenue": 0, "count": 0}
-                by_rep[rep]["units"] += units
-                by_rep[rep]["revenue"] += revenue
-                by_rep[rep]["count"] += 1
-            
-            # Calculate averages
-            for region_data in by_region.values():
-                region_data["avg_revenue"] = region_data["revenue"] / region_data["count"]
-            
-            return {
-                "status": "success",
-                "total_records": len(data),
-                "by_region": by_region,
-                "by_product": by_product,
-                "by_sales_rep": by_rep,
-                "processed_at": datetime.now().isoformat()
-            }
-            
-        except Exception as e:
-            return {"error": str(e)}
-    
-    
-    def process_multiple_files(file_paths: List[str]) -> Dict:
-        """
-        Process multiple CSV files and combine results.
-        
-        Args:
-            file_paths: List of paths to CSV files
-        
-        Returns:
-            Combined analysis
-        """
-        print(f"\n🔄 Processing {len(file_paths)} file(s)...\n")
-        
-        all_data = []
-        file_summaries = []
-        
-        for file_path in file_paths:
-            # Load file
-            data = load_csv_file(file_path)
-            if data:
-                all_data.extend(data)
-                
-                # Transform individual file
-                transformed = transform_sales_data(data)
-                file_summaries.append({
-                    "file": Path(file_path).name,
-                    "records": len(data),
-                    "summary": transformed
-                })
-        
-        # Transform combined data
-        combined_transform = transform_sales_data(all_data)
-        
-        return {
+### Task 1: Run Exercise 3
+
+1. **Select option 3** from the menu: "Exercise 3: File Operations and Data Transformation"
+
+### Task 2: Observe file processing
+
+The exercise demonstrates three operations from `data_processor.py`:
+
+**Test 1: Load CSV File**
+```
+📂 Loaded ../sales_data.csv
+   Successfully loaded 20 rows with 5 columns
+   Columns: date, region, product, quantity, revenue
+```
+
+**Test 2: Transform and Aggregate**
+```
+📊 Transformation results:
+   By Region: {
+       "North": {"count": 7, "total_revenue": 45000},
+       "South": {"count": 5, "total_revenue": 32000},
+       "East": {"count": 8, "total_revenue": 38000}
+   }
+   
+   By Product: {
+       "Software": {"count": 12, "total_revenue": 75000},
+       "Hardware": {"count": 8, "total_revenue": 40000}
+   }
+```
+
+**Test 3: Export Results**
+```
+💾 Export result: Successfully exported to analysis_results.json
+```
+
+### Task 3: Understand file processing patterns
+
+**File Operations in Agent Context:**
+
+```python
+# Define file operation as a function tool
+file_ops = FunctionTool(
+    name="transform_sales_data",
+    description="Transform and aggregate sales data by region and product",
+    parameters={"type": "object", "properties": {}, "required": []}
+)
+
+# Agent can call it during conversation
+agent = agents_client.create_agent(
+    model="gpt-4o",
+    tools=[code_interpreter, *custom_functions, file_ops]
+)
+```
+
+**When agent calls the function:**
+```
+User: "Show me sales by region"
+  ↓
+Agent: Calls transform_sales_data()
+  ↓
+Function: Loads CSV, aggregates by region, returns JSON
+  ↓
+Agent: "Here's the breakdown:
+        North: $45,000 (35%)
+        South: $32,000 (25%)
+        East: $38,000 (30%)"
+```
+
+### Task 4: File operation patterns
+
+**From `data_processor.py`:**
+
+```python
+async def load_csv_file(file_path: str) -> str:
+    """
+    Patterns demonstrated:
+    • Async file I/O
+    • Error handling (file not found, parse errors)
+    • Data validation
+    • Structured error responses
+    """
+    try:
+        data = pd.read_csv(file_path)
+        return json.dumps({
             "status": "success",
-            "files_processed": len(file_paths),
-            "total_records": len(all_data),
-            "individual_files": file_summaries,
-            "combined_analysis": combined_transform
-        }
-    
-    
-    def export_results(data: Dict, output_path: str, format: str = "json") -> bool:
-        """
-        Export analysis results to file.
-        
-        Args:
-            data: Data to export
-            output_path: Output file path
-            format: Export format ('json' or 'csv')
-        
-        Returns:
-            Success status
-        """
-        try:
-            if format == "json":
-                with open(output_path, 'w') as f:
-                    json.dump(data, f, indent=2)
-                print(f"✅ Exported to {output_path}")
-                return True
-                
-            elif format == "csv":
-                # Export summary as CSV
-                with open(output_path, 'w', newline='') as f:
-                    writer = csv.writer(f)
-                    writer.writerow(["Metric", "Value"])
-                    
-                    if "combined_analysis" in data:
-                        writer.writerow(["Total Records", data["total_records"]])
-                        writer.writerow(["Files Processed", data["files_processed"]])
-                
-                print(f"✅ Exported to {output_path}")
-                return True
-            else:
-                print(f"❌ Unsupported format: {format}")
-                return False
-                
-        except Exception as e:
-            print(f"❌ Export failed: {e}")
-            return False
-    
-    
-    # For testing
-    def main():
-        """Test data processing functions."""
-        print("\n=== Testing Data Processing ===\n")
-        
-        # Test with sales_data.csv if it exists
-        if Path("sales_data.csv").exists():
-            # Test 1: Load and transform
-            data = load_csv_file("sales_data.csv")
-            if data:
-                transformed = transform_sales_data(data)
-                print(f"\n📊 Analysis Complete:")
-                print(f"  • Total records: {transformed.get('total_records', 0)}")
-                print(f"  • Regions: {len(transformed.get('by_region', {}))}")
-                print(f"  • Products: {len(transformed.get('by_product', {}))}")
-                
-                # Test 2: Export results
-                export_results(
-                    transformed,
-                    "analysis_results.json",
-                    "json"
-                )
-        else:
-            print("⚠️  sales_data.csv not found. Create it first.")
-    
-    
-    if __name__ == "__main__":
-        main()
-    ```
+            "rows": len(data),
+            "columns": list(data.columns)
+        })
+    except FileNotFoundError:
+        return json.dumps({
+            "status": "error",
+            "error": "File not found"
+        })
+```
 
-### Test File Processing
+### Task 5: Key concepts
 
-1. Run the data processor:
+**File Operations vs Code Interpreter:**
 
-    ```bash
-    python data_processor.py
-    ```
+| Aspect | File Operations Function | Code Interpreter |
+|--------|-------------------------|------------------|
+| **Control** | Predefined logic | Dynamic code generation |
+| **Validation** | Built-in validation | Agent-generated validation |
+| **Performance** | Optimized for specific tasks | Flexible but may be slower |
+| **Security** | Controlled file access | Sandboxed execution |
+| **Use Case** | Consistent, repeatable transformations | Ad-hoc, exploratory analysis |
 
-1. You should see output analyzing your sales_data.csv file.
+**Best Practice**: Use both together!
+- File operations for structured, validated data loading
+- Code interpreter for exploratory analysis on loaded data
 
-1. Check the generated `analysis_results.json` file to see the structured output.
+---
 
-### Combine Code Interpreter with File Processing
+## Exercise 4: Comprehensive Interactive Demo
 
-Now you'll integrate everything into a comprehensive analytics workflow.
+In this exercise, you'll interact with an agent that combines ALL the capabilities you've learned.
 
-1. Create a new file named `comprehensive_agent.py` that combines code interpreter with your custom functions:
+### Task 1: Run Exercise 4
 
-    ```python
-    import os
-    from azure.ai.projects import AIProjectClient
-    from azure.identity import DefaultAzureCredential
-    from azure.ai.projects.models import CodeInterpreterTool, FunctionTool
-    import asyncio
-    import json
-    
-    # Import your custom functions
-    from advanced_functions import (
-        analyze_customer_segment,
-        calculate_forecast,
-        process_sales_pipeline
-    )
-    from data_processor import (
-        load_csv_file,
-        transform_sales_data,
-        export_results
-    )
-    
-    
-    # Function schemas for agent
-    functions = [
-        FunctionTool(
-            name="analyze_customer_segment",
-            description="Analyze customer segment with metrics",
-            parameters={
-                "type": "object",
-                "properties": {
-                    "segment": {
-                        "type": "string",
-                        "description": "Customer segment",
-                        "enum": ["enterprise", "smb", "consumer"]
-                    },
-                    "time_period": {
-                        "type": "string",
-                        "description": "Analysis period",
-                        "enum": ["7d", "30d", "90d"],
-                        "default": "30d"
-                    }
-                },
-                "required": ["segment"]
-            }
-        ),
-        FunctionTool(
-            name="calculate_forecast",
-            description="Calculate sales forecast for a product",
-            parameters={
-                "type": "object",
-                "properties": {
-                    "product": {
-                        "type": "string",
-                        "description": "Product name"
-                    },
-                    "months": {
-                        "type": "integer",
-                        "description": "Number of months to forecast",
-                        "default": 3
-                    }
-                },
-                "required": ["product"]
-            }
-        )
-    ]
-    
-    
-    def main():
-        # Initialize project client
-        project_endpoint = os.environ.get("PROJECT_ENDPOINT")
-        
-        if not project_endpoint:
-            print("Error: PROJECT_ENDPOINT not set")
-            return
-        
-        print("Creating Comprehensive Analytics Agent...")
-        credential = DefaultAzureCredential()
-        project_client = AIProjectClient.from_connection_string(
-            conn_str=project_endpoint,
-            credential=credential
-        )
-        
-        # Create agent with BOTH code interpreter AND custom functions
-        agent = project_client.agents.create_agent(
-            model="gpt-4o",
-            name="comprehensive-analytics-agent",
-            instructions="""You are an advanced Sales Analytics Agent.
-            
-            You have access to:
-            1. Code Interpreter - for dynamic data analysis and visualization
-            2. Custom Functions - for specific business analytics
-            
-            Use code interpreter for:
-            - Analyzing uploaded files
-            - Creating visualizations
-            - Statistical analysis
-            
-            Use custom functions for:
-            - Customer segment analysis
-            - Sales forecasting with confidence intervals
-            
-            Always provide clear insights and actionable recommendations.""",
-            tools=[CodeInterpreterTool()] + functions
-        )
-        
-        print(f"✅ Agent created with ID: {agent.id}")
-        print("✅ Tools: Code Interpreter + 2 Custom Functions\n")
-        
-        # Create thread
-        thread = project_client.agents.create_thread()
-        
-        # Function map for execution
-        function_map = {
-            "analyze_customer_segment": lambda **kwargs: asyncio.run(analyze_customer_segment(**kwargs)),
-            "calculate_forecast": lambda **kwargs: asyncio.run(calculate_forecast(**kwargs))
-        }
-        
-        # Interactive loop
-        print("="*70)
-        print("Comprehensive Analytics Agent Ready!")
-        print("I can analyze data, create forecasts, and generate insights.")
-        print("Type 'exit' to quit.")
-        print("="*70 + "\n")
-        
-        while True:
-            user_input = input("You: ").strip()
-            
-            if user_input.lower() in ['exit', 'quit']:
-                break
-            
-            if not user_input:
-                continue
-            
-            # Add message
-            project_client.agents.create_message(
-                thread_id=thread.id,
-                role="user",
-                content=user_input
-            )
-            
-            # Run agent
-            print("\n🔄 Processing...")
-            run = project_client.agents.create_run(
-                thread_id=thread.id,
-                agent_id=agent.id
-            )
-            
-            # Handle function calls and code execution
-            while run.status in ["queued", "in_progress", "requires_action"]:
-                run = project_client.agents.get_run(thread_id=thread.id, run_id=run.id)
-                
-                if run.status == "requires_action":
-                    tool_outputs = []
-                    for tool_call in run.required_action.submit_tool_outputs.tool_calls:
-                        function_name = tool_call.function.name
-                        function_args = json.loads(tool_call.function.arguments)
-                        
-                        print(f"  ⚡ Calling: {function_name}")
-                        
-                        if function_name in function_map:
-                            result = function_map[function_name](**function_args)
-                            tool_outputs.append({
-                                "tool_call_id": tool_call.id,
-                                "output": json.dumps(result)
-                            })
-                    
-                    project_client.agents.submit_tool_outputs(
-                        thread_id=thread.id,
-                        run_id=run.id,
-                        tool_outputs=tool_outputs
-                    )
-                
-                import time
-                time.sleep(1)
-            
-            # Get response
-            messages = project_client.agents.list_messages(thread_id=thread.id)
-            for message in messages:
-                if message.role == "assistant":
-                    for content in message.content:
-                        if hasattr(content, 'text'):
-                            print(f"\nAgent: {content.text.value}\n")
-                    break
-    
-    
-    if __name__ == "__main__":
-        main()
-    ```
+1. **Select option 4** from the menu: "Exercise 4: Comprehensive Demo"
 
-1. Test the comprehensive agent:
+2. The agent now has access to:
+   - 📊 Code interpreter (dynamic analysis)
+   - 🔧 Advanced async functions (business logic)
+   - 📁 File operations (data processing)
 
-    ```bash
-    python comprehensive_agent.py
-    ```
+### Task 2: Experiment with combined capabilities
 
-1. Try combining code interpreter with custom functions:
+**Try these queries:**
 
-    ```
-    Analyze the enterprise segment for the last 30 days and create a 3-month forecast for Widget A
-    ```
+1. **Code interpreter query:**
+   ```
+   Generate a sample sales dataset and analyze it
+   ```
 
-    The agent will call both the custom function AND use code interpreter as needed!
+2. **Custom function query:**
+   ```
+   Analyze the enterprise customer segment monthly
+   ```
+
+3. **File operation query:**
+   ```
+   Transform our sales data by region and product
+   ```
+
+4. **Combined query:**
+   ```
+   Load our sales data, calculate quarterly forecasts for each product category, 
+   and create a visualization showing trends
+   ```
+
+### Task 3: Observe tool selection
+
+The agent intelligently selects tools based on the query:
+
+```
+Query: "Show me sales trends"
+  → Uses code interpreter (dynamic visualization)
+
+Query: "Analyze enterprise customers"
+  → Uses custom function (specific business logic)
+
+Query: "Export data by region"
+  → Uses file operations (structured transformation)
+```
+
+### Task 4: Explore agent decision-making
+
+**How does the agent choose?**
+
+The agent considers:
+1. **Function descriptions** - Matches query intent to tool purpose
+2. **Parameter requirements** - Checks if query provides needed inputs
+3. **Tool capabilities** - Selects most appropriate tool for task
+4. **Context** - Considers previous messages and results
+
+**Example:**
+```
+USER: "I need a forecast for software products, next 6 months"
+
+AGENT REASONING:
+- Query mentions "forecast" → matches calculate_forecast function
+- Query specifies "software" → matches product_category parameter
+- Query specifies "6 months" → matches forecast_months parameter
+→ Calls: calculate_forecast("software", 6)
+```
+
+---
+
+## Exercise 5: Architecture Overview
+
+### Task 1: View architecture
+
+**Select option 5** from the menu to see the complete architecture diagram.
+
+### Comprehensive Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                   Your AI Agent                             │
+│         (Microsoft Foundry Project)                          │
+└────────┬────────────────┬────────────────┬──────────────────┘
+         │                 │                │
+         │                 │                │
+┌────────▼────────┐ ┌─────▼──────┐ ┌──────▼────────────────┐
+│ Code Interpreter│ │  Custom    │ │  File Operations      │
+│                 │ │  Functions │ │                       │
+│ • Generate code │ │            │ │ • Load CSV            │
+│ • Execute Python│ │ • Async    │ │ • Transform data      │
+│ • Create charts │ │ • Chaining │ │ • Export results      │
+│ • Statistics    │ │ • Error    │ │ • Validation          │
+│                 │ │   handling │ │                       │
+└─────────────────┘ └────────────┘ └───────────────────────┘
+```
+
+### Tool Decision Matrix
+
+| User Need | Recommended Tool | Why |
+|-----------|------------------|-----|
+| "Analyze this CSV" | Code Interpreter | Dynamic, exploratory |
+| "Calculate quarterly forecast" | Custom Function | Specific business logic |
+| "Export data by region" | File Operations | Structured transformation |
+| "Create a chart" | Code Interpreter | Visualization generation |
+| "Check enterprise segment" | Custom Function | Validated business queries |
+
+### Production Patterns
+
+**Error Handling:**
+```python
+try:
+    result = await function_call()
+except ValidationError as e:
+    return {"status": "error", "message": "Invalid input"}
+except TimeoutError:
+    return {"status": "error", "message": "Operation timed out"}
+except Exception as e:
+    logger.error(f"Unexpected error: {e}")
+    return {"status": "error", "message": "Internal error"}
+```
+
+**Performance Optimization:**
+```python
+# Batch operations
+results = await asyncio.gather(
+    analyze_segment("enterprise"),
+    analyze_segment("mid-market"),
+    analyze_segment("small-business")
+)
+
+# Caching
+if cache_key in CACHE:
+    return CACHE[cache_key]
+result = await expensive_operation()
+CACHE[cache_key] = result
+```
+
+**Testing:**
+```python
+# Unit test functions
+async def test_analyze_segment():
+    result = await analyze_customer_segment("enterprise", "quarterly")
+    assert result["status"] == "success"
+    assert "metrics" in result
+
+# Integration test agent
+def test_agent_with_functions():
+    response = query_agent("Analyze enterprise customers")
+    assert "revenue" in response.lower()
+```
 
 ---
 
 ## Summary
 
-In this exercise, you:
+Congratulations! You've completed Lab 2 and mastered advanced tool calling patterns.
 
-✅ Mastered code interpreter for dynamic data analysis  
-✅ Implemented advanced async function patterns  
-✅ Built production-ready error handling and validation  
-✅ Created file processing and transformation workflows  
-✅ Combined code interpreter with custom functions  
-✅ Applied real-world analytics patterns  
+### What You've Learned
 
-You now have the skills to build powerful, production-ready analytics agents!
+1. **Code Interpreter**
+   - Dynamic Python code generation
+   - Data analysis and visualization
+   - Adaptive to any data structure
 
-## Next Steps
+2. **Advanced Async Functions**
+   - Async/await patterns for performance
+   - Function chaining and composition
+   - Error handling and validation
 
-Continue your learning journey:
+3. **File Operations**
+   - CSV/JSON parsing and transformation
+   - Data aggregation and export
+   - Integration with agent workflows
 
-- **Lab 3: MCP Integration** - Extend agents with external tools via Model Context Protocol
-- **Lab 4: Multi-Agent Orchestration** - Coordinate multiple specialized agents
-- **Lab 5: M365 & Teams Integration** - Deploy to production in Microsoft Teams
+4. **Tool Selection**
+   - When to use each tool type
+   - How agents decide which tool to call
+   - Combining tools for powerful solutions
 
-### Additional Resources
+### Key Takeaways
 
-- [Code Interpreter Documentation](https://learn.microsoft.com/azure/ai-services/agents/how-to/tools/code-interpreter)
-- [Python Async Programming](https://docs.python.org/3/library/asyncio.html)
-- [Azure AI Projects SDK Reference](https://learn.microsoft.com/python/api/overview/azure/ai-projects-readme)
+| Pattern | Use When | Benefit |
+|---------|----------|---------|
+| **Code Interpreter** | Exploratory analysis, unknown data | Maximum flexibility |
+| **Custom Functions** | Specific business logic | Control and validation |
+| **File Operations** | Structured data processing | Performance and reliability |
+| **Combined Approach** | Complex workflows | Best of all worlds |
+
+### Production Checklist
+
+Before deploying advanced tool agents:
+
+- ✅ Validate all function parameters
+- ✅ Implement comprehensive error handling
+- ✅ Add retry logic for transient failures
+- ✅ Log tool usage and performance
+- ✅ Test with edge cases
+- ✅ Monitor token usage (code interpreter can be expensive)
+- ✅ Set appropriate timeouts
+- ✅ Implement rate limiting for external APIs
+
+### Next Steps
+
+In **Lab 3: MCP Integration**, you'll learn how to extend agents even further by connecting to external MCP servers, enabling access to specialized tools and data sources without writing custom function wrappers.
+
+**Continue to**: [Lab 3 - MCP Integration](./03-mcp-integration.md)
+
+---
+
+## Clean Up
+
+All agents created in this lab were automatically deleted after each exercise. No additional cleanup required.
+
+## Additional Resources
+
+- [Microsoft Foundry Code Interpreter Documentation](https://learn.microsoft.com/azure/ai-foundry/agents/tools/code-interpreter)
+- [Custom Functions Best Practices](https://learn.microsoft.com/azure/ai-foundry/agents/tools/functions)
+- [Async Programming in Python](https://docs.python.org/3/library/asyncio.html)
+- [Pandas Data Analysis](https://pandas.pydata.org/docs/)

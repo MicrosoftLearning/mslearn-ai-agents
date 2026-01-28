@@ -1,12 +1,12 @@
 ---
 lab:
     title: 'Build AI Agents with Portal and VS Code'
-    description: 'Create an AI agent using both Azure AI Foundry portal and VS Code extension with built-in tools and custom functions.'
+    description: 'Create an AI agent using both Microsoft Foundry portal and VS Code extension with built-in tools and custom functions.'
 ---
 
 # Build AI Agents with Portal and VS Code
 
-In this exercise, you'll build a complete AI agent solution using both the Azure AI Foundry portal and the Microsoft Foundry VS Code extension. You'll start by creating a basic agent in the portal with grounding data and built-in tools, then extend it programmatically using VS Code with custom functions.
+In this exercise, you'll build a complete AI agent solution using both the Microsoft Foundry portal and the Microsoft Foundry VS Code extension. You'll start by creating a basic agent in the portal with grounding data and built-in tools, then extend it programmatically using VS Code with custom functions.
 
 This exercise takes approximately **45** minutes.
 
@@ -16,7 +16,7 @@ This exercise takes approximately **45** minutes.
 
 By the end of this exercise, you'll be able to:
 
-1. Create and configure an AI agent in the Azure AI Foundry portal
+1. Create and configure an AI agent in the Microsoft Foundry portal
 2. Add grounding data and enable built-in tools (file search, code interpreter)
 3. Use the Microsoft Foundry VS Code extension to work with agents programmatically
 4. Implement custom functions to extend agent capabilities
@@ -41,7 +41,7 @@ You'll build an **IT Support Agent** that helps employees with common technical 
 
 ---
 
-## Exercise 1: Create an AI agent in Azure AI Foundry portal
+## Exercise 1: Create an AI agent in Microsoft Foundry portal
 
 Let's start by creating a Foundry project and a basic agent using the portal.
 
@@ -322,7 +322,7 @@ Now let's create a Python application that interacts with your agent and adds cu
             print("Error: PROJECT_ENDPOINT environment variable not set")
             return
         
-        print("Connecting to Azure AI Foundry project...")
+        print("Connecting to Microsoft Foundry project...")
         credential = DefaultAzureCredential()
         project_client = AIProjectClient.from_connection_string(
             conn_str=project_endpoint,
@@ -457,8 +457,10 @@ Now let's create a Python application that interacts with your agent and adds cu
 1. Create a `.env` file (copy from `.env.example`) and add your actual project endpoint:
 
     ```
-    PROJECT_ENDPOINT=<your_endpoint_from_portal>
+    PROJECT_ENDPOINT=<your_project_endpoint>
     ```
+    
+    **To get your project endpoint:** In VS Code, open the **Microsoft Foundry** extension, right-click on your active project, and select **Copy Endpoint**.
 
 1. Open a terminal in VS Code (**Terminal > New Terminal**).
 
@@ -552,7 +554,7 @@ To avoid unnecessary Azure charges, delete the resources you created:
 
 In this exercise, you:
 
-✅ Created an AI agent in the Azure AI Foundry portal with grounding data  
+✅ Created an AI agent in the Microsoft Foundry portal with grounding data  
 ✅ Enabled built-in tools like file search  
 ✅ Connected to your project using the VS Code extension  
 ✅ Implemented custom functions programmatically  
@@ -595,7 +597,7 @@ Ready to take your agent development skills to the next level? Continue with:
 
 In this exercise, you:
 
-✅ Created an AI agent in the Azure AI Foundry portal with grounding data  
+✅ Created an AI agent in the Microsoft Foundry portal with grounding data  
 ✅ Enabled built-in tools like file search  
 ✅ Connected to your project using the VS Code extension  
 ✅ Implemented custom functions programmatically  

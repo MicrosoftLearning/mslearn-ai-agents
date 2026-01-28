@@ -12,7 +12,7 @@ def main():
         print("Please set it in your .env file")
         return
     
-    print("Connecting to Azure AI Foundry project...")
+    print("Connecting to Microsoft Foundry project...")
     credential = DefaultAzureCredential()
     project_client = AIProjectClient.from_connection_string(
         conn_str=project_endpoint,
