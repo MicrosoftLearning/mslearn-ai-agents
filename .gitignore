@@ -22,6 +22,8 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+package.json
+package-lock.json
 
 # Virtual environments
 venv/

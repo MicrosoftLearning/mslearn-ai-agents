@@ -337,7 +337,7 @@ Now let's create a Python application that interacts with your agent and adds cu
         
         # Create agent with functions
         agent = project_client.agents.create_agent(
-            model="gpt-4o",
+            model="gpt-4.1",
             name=agent_name,
             instructions="""You are an IT Support Agent for Contoso Corporation.
             You help employees with technical issues and IT policy questions.

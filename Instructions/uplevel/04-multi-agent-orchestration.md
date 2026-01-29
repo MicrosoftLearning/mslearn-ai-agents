@@ -81,7 +81,7 @@ Menu Options:
 
     ```
     PROJECT_ENDPOINT=<your_project_endpoint>
-    MODEL_DEPLOYMENT_NAME=gpt-4o
+    MODEL_DEPLOYMENT_NAME=gpt-4.1
     ```
     
     **To get your endpoint:** In VS Code, open the **Microsoft Foundry** extension, right-click on your active project, and select **Copy Endpoint**.

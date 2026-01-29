@@ -6,6 +6,8 @@ This application provides a menu-driven interface to explore advanced agent capa
 - Advanced async custom functions
 - File operations and data transformation
 
+UPDATED: Now uses the new Responses API and AIProjectClient pattern (Lab 09 style)
+
 Run this single file to complete all exercises.
 The advanced_functions.py and data_processor.py modules are imported as needed.
 """
@@ -48,7 +50,7 @@ class AdvancedToolLab:
     def __init__(self):
         """Initialize the lab with Microsoft Foundry connection."""
         self.project_endpoint = os.getenv("PROJECT_ENDPOINT")
-        self.model_deployment = os.getenv("MODEL_DEPLOYMENT_NAME", "gpt-4o")
+        self.model_deployment = os.getenv("MODEL_DEPLOYMENT_NAME", "gpt-4.1")
         
         if not self.project_endpoint:
             print("❌ Error: PROJECT_ENDPOINT not set in .env file")
@@ -57,15 +59,21 @@ class AdvancedToolLab:
         
         print("Connecting to Microsoft Foundry project...")
         self.credential = DefaultAzureCredential()
-        self.agents_client = None
+        self.project_client = None
+        self.openai_client = None
         
     def connect(self):
-        """Establish connection to Microsoft Foundry."""
+        """Establish connection to Microsoft Foundry using new API pattern."""
         try:
-            self.agents_client = AIProjectClient.from_connection_string(
-                conn_str=self.project_endpoint,
-                credential=self.credential
+            # New pattern: Create AIProjectClient with endpoint
+            self.project_client = AIProjectClient(
+                credential=self.credential,
+                endpoint=self.project_endpoint
             )
+            
+            # Get the OpenAI client for Responses API
+            self.openai_client = self.project_client.get_openai_client()
+            
             print("✅ Connected to Microsoft Foundry\n")
             return True
         except Exception as e:

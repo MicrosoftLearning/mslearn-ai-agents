@@ -23,7 +23,7 @@ def main():
     
     # Create agent with code interpreter tool
     agent = project_client.agents.create_agent(
-        model="gpt-4o",
+        model="gpt-4.1",
         name="sales-analytics-agent",
         instructions="""You are a Sales Analytics Agent for Contoso Corporation.
         You help sales teams analyze data, generate insights, and create visualizations.

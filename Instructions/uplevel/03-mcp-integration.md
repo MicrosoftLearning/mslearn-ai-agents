@@ -100,7 +100,7 @@ In this exercise, you'll connect your agent to Microsoft's Learn documentation M
     The `.env` file should contain:
     ```
     PROJECT_ENDPOINT=<paste_your_endpoint_here>
-    MODEL_DEPLOYMENT_NAME=gpt-4o
+    MODEL_DEPLOYMENT_NAME=gpt-4.1
     ```
 
 ### Task 2: Run the unified MCP lab application

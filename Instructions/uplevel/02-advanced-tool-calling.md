@@ -80,10 +80,10 @@ Menu Options:
 
     ```
     PROJECT_ENDPOINT=<your_project_endpoint>
-    MODEL_DEPLOYMENT_NAME=gpt-4o
+    MODEL_DEPLOYMENT_NAME=gpt-4.1
     ```
     
-    **To get your project endpoint:** In VS Code, open the **Microsoft Foundry** extension, right-click on your active project, and select **Copy Endpoint**.
+    **To get your project endpoint:** In VS Code, open the **Microsoft Foundry** extension, right-click on your active project, and select **Copy Project Endpoint**.
 
 1. Install dependencies:
 
@@ -185,7 +185,7 @@ Agent formats response
 code_interpreter = CodeInterpreterTool()
 
 agent = agents_client.create_agent(
-    model="gpt-4o",
+    model="gpt-4.1",
     name="sales-analytics-agent",
     instructions="Use code interpreter to analyze data...",
     tools=[code_interpreter]  # Enable dynamic code generation
@@ -326,7 +326,7 @@ functions = [
 ]
 
 agent = agents_client.create_agent(
-    model="gpt-4o",
+    model="gpt-4.1",
     tools=functions  # Agent knows these are available
 )
 ```
@@ -439,7 +439,7 @@ file_ops = FunctionTool(
 
 # Agent can call it during conversation
 agent = agents_client.create_agent(
-    model="gpt-4o",
+    model="gpt-4.1",
     tools=[code_interpreter, *custom_functions, file_ops]
 )
 ```
@@ -712,7 +712,375 @@ Before deploying advanced tool agents:
 
 ### Next Steps
 
-In **Lab 3: MCP Integration**, you'll learn how to extend agents even further by connecting to external MCP servers, enabling access to specialized tools and data sources without writing custom function wrappers.
+**Option A**: In **Lab 3: MCP Integration**, you'll learn how to extend agents even further by connecting to external MCP servers, enabling access to specialized tools and data sources without writing custom function wrappers.
+
+**Option B**: Continue with **Exercise 5** below to learn how to build a web UI for your agent using Streamlit.
+
+---
+
+## Exercise 5 (Bonus): Interactive Web Dashboard
+
+In this bonus exercise, you'll build a production-ready web interface for your Sales Analytics Agent using Streamlit, demonstrating how to create user-facing applications powered by AI agents.
+
+**Duration**: 30 minutes (optional)
+
+### What is Streamlit?
+
+**Streamlit** is a Python framework for building interactive web applications without JavaScript:
+- 🎨 Beautiful UI with minimal code
+- 📊 Built-in charts and visualizations
+- 📁 File upload widgets
+- 💬 Chat interfaces
+- 🚀 Fast development (under 200 lines)
+
+### Why Add a Web UI?
+
+**Benefits:**
+1. **Better User Experience** - Non-technical users can interact via web browser
+2. **Visual Results** - Charts, graphs, and dashboards instead of terminal output
+3. **Production Ready** - Real-world deployment pattern
+4. **Accessibility** - Share link, no Python installation required
+5. **Interactive** - Upload files, chat, explore data in real-time
+
+### Task 1: Install Streamlit
+
+The dependency is already in `requirements.txt`. If you haven't installed it yet:
+
+```powershell
+pip install streamlit plotly
+```
+
+This installs:
+- `streamlit` - Web framework
+- `plotly` - Interactive visualizations
+
+### Task 2: Understand the application
+
+The `streamlit_app.py` file provides a complete web UI with 4 tabs:
+
+**Tab 1: Upload Data** 📁
+- Drag-and-drop CSV upload
+- Data preview and statistics
+- Agent initialization
+
+**Tab 2: Chat with Agent** 💬
+- Interactive chat interface
+- Ask questions about data
+- Get AI-powered insights
+- Chat history
+
+**Tab 3: Dashboard** 📊
+- Automatic visualizations
+- Key metrics
+- Interactive charts
+- Data export
+
+**Tab 4: Help** ℹ️
+- Getting started guide
+- Sample questions
+- Troubleshooting
+- Technical details
+
+### Task 3: Run the Streamlit application
+
+1. **Navigate to the lab directory** (if not already there):
+   ```powershell
+   cd C:\repos\mslearn-ai-agents\Labfiles\uplevel\02-advanced-tool-calling\Python
+   ```
+
+2. **Ensure your `.env` file is configured** with your PROJECT_ENDPOINT
+
+3. **Start the Streamlit server**:
+   ```powershell
+   streamlit run streamlit_app.py
+   ```
+
+4. **Open in browser**:
+   - Streamlit automatically opens your browser
+   - Or navigate to: `http://localhost:8501`
+
+5. **You should see**:
+   - Clean web interface with sidebar
+   - Sales Analytics Agent title
+   - Four tabs for different features
+
+### Task 4: Upload and analyze data
+
+**Step-by-step walkthrough:**
+
+1. **Go to "Upload Data" tab**
+
+2. **Click "Choose a CSV file"**
+   - Select: `../sales_data.csv` (or use your own data)
+   - See automatic data preview
+   - View summary statistics
+
+3. **Click "Initialize Agent"**
+   - Agent connects to Microsoft Foundry
+   - File uploads to agent
+   - Thread created for conversation
+
+4. **Wait for confirmation**:
+   ```
+   ✅ Agent initialized! Go to the Chat tab to start analyzing.
+   🎈 [balloons animation]
+   ```
+
+### Task 5: Chat with your agent
+
+1. **Switch to "Chat with Agent" tab**
+
+2. **Try these questions**:
+
+   **Trend Analysis:**
+   ```
+   What are the sales trends in my data?
+   ```
+
+   **Regional Performance:**
+   ```
+   Which region has the highest sales?
+   ```
+
+   **Top Performers:**
+   ```
+   Show me the top 5 products by revenue
+   ```
+
+   **Forecasting:**
+   ```
+   Can you predict next month's sales based on the trends?
+   ```
+
+3. **Observe the interaction**:
+   - Your message appears with 👤 avatar
+   - Agent response appears with 🤖 avatar
+   - "Analyzing..." spinner shows while processing
+   - Agent uses code interpreter for analysis
+
+4. **Continue the conversation**:
+   - Ask follow-up questions
+   - Build on previous responses
+   - Context is maintained in the thread
+
+### Task 6: Explore the dashboard
+
+1. **Switch to "Dashboard" tab**
+
+2. **See automatic visualizations**:
+   - **Key Metrics**: Total sales, average sale, record count
+   - **Sales Trend Chart**: Line chart showing trends over time
+   - **Regional Breakdown**: Bar chart by region
+   - **Complete Data Table**: Interactive, sortable data
+
+3. **Interact with visualizations**:
+   - Hover over charts for details
+   - Use slider to adjust rows displayed
+   - Sort by different columns
+   - Download data as CSV
+
+### Task 7: Understand the architecture
+
+**Streamlit Application Flow:**
+
+```
+┌────────────────────────────────────────┐
+│    User's Web Browser                  │
+│    (http://localhost:8501)             │
+└───────────────┬────────────────────────┘
+                │
+                │ HTTP
+                ▼
+┌────────────────────────────────────────┐
+│    Streamlit Server                    │
+│    (streamlit_app.py)                  │
+└───────────┬─────────────┬──────────────┘
+            │             │
+            │ Azure AI    │ File I/O
+            │ SDK         │
+            ▼             ▼
+┌─────────────────┐  ┌──────────────┐
+│ Microsoft       │  │ Local CSV    │
+│ Foundry         │  │ Files        │
+│                 │  │              │
+│ • Create Agent  │  │ • Upload     │
+│ • Upload Files  │  │ • Preview    │
+│ • Chat Thread   │  │ • Transform  │
+│ • Get Responses │  │              │
+└─────────────────┘  └──────────────┘
+```
+
+### Task 8: Key code patterns
+
+**File Upload Pattern:**
+```python
+uploaded_file = st.file_uploader("Choose a CSV file", type=['csv'])
+
+if uploaded_file:
+    df = pd.read_csv(uploaded_file)
+    st.dataframe(df.head(10))
+```
+
+**Chat Interface Pattern:**
+```python
+if prompt := st.chat_input("Ask about your data..."):
+    # Display user message
+    with st.chat_message("user"):
+        st.write(prompt)
+    
+    # Get agent response
+    with st.chat_message("assistant"):
+        with st.spinner("Analyzing..."):
+            response = query_agent(prompt)
+            st.write(response)
+```
+
+**Visualization Pattern:**
+```python
+# Create interactive chart
+fig = px.line(df, x='date', y='sales', title='Sales Trend')
+st.plotly_chart(fig, use_container_width=True)
+```
+
+**Session State Pattern:**
+```python
+# Store data across interactions
+if 'messages' not in st.session_state:
+    st.session_state.messages = []
+
+# Access later
+for msg in st.session_state.messages:
+    st.write(msg)
+```
+
+### Task 9: Production considerations
+
+**When deploying to production:**
+
+1. **Authentication**
+   ```python
+   # Add user authentication
+   import streamlit_authenticator as stauth
+   
+   authenticator = stauth.Authenticate(...)
+   name, authentication_status, username = authenticator.login('Login', 'main')
+   ```
+
+2. **Error Handling**
+   ```python
+   try:
+       response = agent.run(query)
+   except Exception as e:
+       st.error(f"Error: {str(e)}")
+       # Log error
+       logger.error(f"Agent error: {e}")
+   ```
+
+3. **Rate Limiting**
+   ```python
+   # Limit queries per user
+   if st.session_state.query_count > MAX_QUERIES:
+       st.warning("Query limit reached. Please try again later.")
+       st.stop()
+   ```
+
+4. **Data Privacy**
+   ```python
+   # Don't store sensitive data
+   # Clear after session
+   if st.button("Clear Data"):
+       st.session_state.clear()
+   ```
+
+5. **Deployment Options**
+   - **Streamlit Cloud**: `streamlit deploy streamlit_app.py`
+   - **Azure App Service**: Deploy as web app
+   - **Docker**: Containerize for any platform
+   - **Internal Server**: Run behind corporate firewall
+
+### Task 10: Extend the application
+
+**Ideas for enhancement:**
+
+1. **Multi-file Upload**
+   ```python
+   uploaded_files = st.file_uploader("Upload files", accept_multiple_files=True)
+   for file in uploaded_files:
+       process_file(file)
+   ```
+
+2. **Advanced Charts**
+   ```python
+   # Add more visualization types
+   chart_type = st.selectbox("Chart Type", ["Line", "Bar", "Scatter"])
+   if chart_type == "Line":
+       st.line_chart(data)
+   ```
+
+3. **Export Options**
+   ```python
+   # Export to different formats
+   export_format = st.radio("Format", ["CSV", "Excel", "JSON"])
+   if export_format == "Excel":
+       df.to_excel("export.xlsx")
+   ```
+
+4. **Real-time Updates**
+   ```python
+   # Auto-refresh data
+   if st.checkbox("Auto-refresh"):
+       time.sleep(5)
+       st.rerun()
+   ```
+
+### Task 11: Compare CLI vs Web UI
+
+| Aspect | CLI (advanced_tool_lab.py) | Web UI (streamlit_app.py) |
+|--------|---------------------------|---------------------------|
+| **Setup** | `python advanced_tool_lab.py` | `streamlit run streamlit_app.py` |
+| **Interface** | Terminal menu | Web browser |
+| **Visualizations** | Text only | Interactive charts |
+| **File Upload** | File path | Drag-and-drop |
+| **Chat** | Text input/output | Rich chat interface |
+| **Sharing** | Share code | Share URL |
+| **Best For** | Developers, debugging | End users, demos |
+
+**Recommendation**: Use both!
+- **Development**: CLI for testing and debugging
+- **Production**: Web UI for end users
+
+### Key Concepts Summary
+
+**What you learned:**
+1. ✅ How to build web UIs for AI agents
+2. ✅ Streamlit framework basics
+3. ✅ File upload and data preview
+4. ✅ Chat interface patterns
+5. ✅ Interactive visualizations
+6. ✅ Production deployment considerations
+
+**When to add a web UI:**
+- ✅ Non-technical users need access
+- ✅ Want visual, interactive results
+- ✅ Building demos or prototypes
+- ✅ Need to share with stakeholders
+- ✅ Production user-facing applications
+
+---
+
+## Summary (Updated with Exercise 5)
+
+Congratulations! You've completed Lab 2 including the bonus web UI exercise.
+
+### Complete Skills Acquired
+
+1. **Code Interpreter** - Dynamic data analysis
+2. **Advanced Async Functions** - Business logic
+3. **File Operations** - Data transformation
+4. **Tool Selection** - Intelligent agent decisions
+5. **Web UI Development** ⭐ NEW - User-facing applications
+
+### Next Steps
 
 **Continue to**: [Lab 3 - MCP Integration](./03-mcp-integration.md)
 
