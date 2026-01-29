@@ -132,6 +132,7 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
    from azure.identity import DefaultAzureCredential
    from azure.ai.projects import AIProjectClient
    from azure.ai.projects.models import PromptAgentDefinition, MCPTool
+   from openai.types.responses.response_input_param import McpApprovalResponse, ResponseInputParam
     ```
 
 1. Find the comment **Connect to the agents client** and add the following code to connect to the Azure AI project using the current Azure credentials.
