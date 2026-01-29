@@ -32,6 +32,16 @@ After completing this lab, you'll be able to:
 
 - **Estimated Time**: 60 minutes
 
+## Prerequisites
+
+Before starting this lab, ensure you have:
+
+- Completed Lab 1 (you'll reuse the same Microsoft Foundry project)
+- Python 3.10 or higher installed
+- Visual Studio Code with Microsoft Foundry extension
+- Azure CLI installed and configured
+- Active Azure subscription with Foundry access
+
 ## Architecture
 
 This lab demonstrates two MCP integration patterns:
@@ -65,17 +75,29 @@ In this exercise, you'll connect your agent to Microsoft's Learn documentation M
 
 1. **Open VS Code** and ensure the **Microsoft Foundry** extension is installed and signed in.
 
-2. **Create the lab directory**:
+2. **Navigate to the lab directory**:
+   - Open a terminal in VS Code
    - Navigate to `C:\repos\mslearn-ai-agents\Labfiles\uplevel\03-mcp-integration\Python`
-   - This is where you'll create all files for this exercise.
 
-3. **Copy your project endpoint**:
-   - In VS Code, open the **Microsoft Foundry** extension
-   - Right-click on your active project (created in Lab 1)
-   - Select **Copy Endpoint**
+3. **Install dependencies**:
 
-4. **Create environment file** - Create `.env`:
+    ```powershell
+    pip install -r requirements.txt
+    ```
 
+    This will install the required packages:
+    - `azure-ai-projects` - Microsoft Foundry SDK
+    - `azure-identity` - Azure authentication
+    - `mcp` - Model Context Protocol SDK
+    - `python-dotenv` - Environment variable management
+    - `pytz` - Timezone support
+
+4. **Configure environment file**:
+   - In the lab folder, locate the provided `.env` file
+   - Open the `.env` file and replace `your_project_endpoint_here` with your actual project endpoint
+   - **To get your project endpoint:** In VS Code, open the **Microsoft Foundry** extension, right-click on your active project (created in Lab 1), and select **Copy Endpoint**
+
+    The `.env` file should contain:
     ```
     PROJECT_ENDPOINT=<paste_your_endpoint_here>
     MODEL_DEPLOYMENT_NAME=gpt-4o

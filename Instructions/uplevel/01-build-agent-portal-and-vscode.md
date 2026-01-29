@@ -41,7 +41,7 @@ You'll build an **IT Support Agent** that helps employees with common technical 
 
 ---
 
-## Exercise 1: Create an AI agent in Microsoft Foundry portal
+## Create an AI agent in Microsoft Foundry portal
 
 Let's start by creating a Foundry project and a basic agent using the portal.
 
@@ -136,11 +136,13 @@ Great! You've created a basic agent with grounding data and file search capabili
 
 ---
 
-## Exercise 2: Extend your agent with VS Code
+## Extend your agent with VS Code
 
 Now you'll use the Microsoft Foundry VS Code extension to work with your agent programmatically and add custom functions.
 
 ### Install and configure the VS Code extension
+
+If you already have installed the extension for Foundry, you can skip this section.
 
 1. Open Visual Studio Code on your local machine.
 
@@ -438,23 +440,13 @@ Now let's create a Python application that interacts with your agent and adds cu
         main()
     ```
 
-1. Create a new file named `.env.example` with the following content:
-
-    ```
-    PROJECT_ENDPOINT=your_project_endpoint_here
-    ```
-
-1. Create a new file named `requirements.txt` with the following content:
-
-    ```
-    azure-ai-projects>=1.0.0
-    azure-identity>=1.15.0
-    python-dotenv>=1.0.0
-    ```
-
 ### Configure environment and run the application
 
-1. Create a `.env` file (copy from `.env.example`) and add your actual project endpoint:
+1. In the lab repository, navigate to `Labfiles/uplevel/01-build-agent-portal-and-vscode/Python/` and locate the provided `.env` and `requirements.txt` files.
+
+1. Copy these files to your project folder (`C:\labs\it-support-agent`).
+
+1. Open the `.env` file and replace `your_project_endpoint_here` with your actual project endpoint:
 
     ```
     PROJECT_ENDPOINT=<your_project_endpoint>
@@ -568,47 +560,8 @@ Ready to take your agent development skills to the next level? Continue with:
 
 - **Lab 2: Advanced Tool Calling and Code Interpreter** - Learn to use code interpreter for dynamic data analysis, implement advanced async function patterns, and master file operations with batch processing.
 
-- **Lab 3: MCP Integration** - Discover how to extend your agent's capabilities by connecting to external tools and services using the Model Context Protocol.
-
-- **Lab 5: M365 & Teams Integration** - Deploy your agents to Microsoft Teams and integrate with Microsoft 365 services for real-world production scenarios.
-
 ### Additional Resources
 
 - [Azure AI Agent Service Documentation](https://learn.microsoft.com/azure/ai-services/agents/)
 - [Microsoft Foundry VS Code Extension](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.vscode-ai)
 - [Azure AI Projects SDK](https://learn.microsoft.com/python/api/overview/azure/ai-projects-readme)
-
----
-
-## Troubleshooting
-
-### Common Issues
-
-**Issue**: "Connection string invalid"
-- **Solution**: Ensure you copied the full project endpoint from the portal. It should start with `https://` and include your project details.
-
-**Issue**: "Agent not found"
-- **Solution**: Make sure you set the correct project as active in the VS Code extension.
-
-**Issue**: "Function not executing"
-- **Solution**: Verify the function schema matches the implementation and check that required parameters are provided.
-
-## Summary
-
-In this exercise, you:
-
-✅ Created an AI agent in the Microsoft Foundry portal with grounding data  
-✅ Enabled built-in tools like file search  
-✅ Connected to your project using the VS Code extension  
-✅ Implemented custom functions programmatically  
-✅ Integrated MCP servers for external data access  
-✅ Learned when to use portal vs code-based approaches  
-
-You now have the skills to build comprehensive AI agent solutions using both the portal and VS Code!
-
-## Next Steps
-
-- Explore multi-agent orchestration patterns
-- Build more complex MCP servers with database connections
-- Implement authentication and security for production agents
-- Integrate agents with Teams, Slack, or other platforms

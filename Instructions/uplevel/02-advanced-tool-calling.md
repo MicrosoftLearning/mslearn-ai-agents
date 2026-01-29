@@ -74,7 +74,9 @@ Menu Options:
 
 ### Task 2: Configure environment
 
-1. Create a `.env` file (if you don't already have one from Lab 1):
+1. In the lab folder, locate the provided `.env` and `requirements.txt` files.
+
+1. Open the `.env` file and replace `your_project_endpoint_here` with your actual project endpoint:
 
     ```
     PROJECT_ENDPOINT=<your_project_endpoint>
@@ -83,7 +85,7 @@ Menu Options:
     
     **To get your project endpoint:** In VS Code, open the **Microsoft Foundry** extension, right-click on your active project, and select **Copy Endpoint**.
 
-2. Install dependencies:
+1. Install dependencies:
 
     ```powershell
     pip install -r requirements.txt
