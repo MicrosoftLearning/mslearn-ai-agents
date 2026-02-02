@@ -104,6 +104,6 @@ After experimenting with your agent in the playground, you may want to integrate
 
 Now that you've finished the exercise, you should delete the cloud resources you've created to avoid unnecessary resource usage.
 
-1. Open the [Azure portal](https://portal.azure.com) at `https://portal.azure.com` and view the contents of the resource group where you deployed the Foundry resources used in this exercise.
+1. Open the [Azure portal](https://portal.azure.com) at `https://portal.azure.com` and view the contents of the resource group where you deployed the hub resources used in this exercise.
 1. On the toolbar, select **Delete resource group**.
 1. Enter the resource group name and confirm that you want to delete it.
