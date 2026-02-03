@@ -6,15 +6,15 @@ This application demonstrates production deployment patterns for AI agents:
 2. Microsoft Teams deployment concepts
 3. Microsoft 365 (Graph API) integration
 
+UPDATED: Now uses the Responses API pattern with OpenAI client
+
 Run this single file to explore all production integration patterns.
 """
 
 import os
-import time
 from dotenv import load_dotenv
 from azure.ai.projects import AIProjectClient
 from azure.identity import DefaultAzureCredential
-from azure.ai.projects.models import FunctionTool
 
 # Load environment variables
 load_dotenv()
@@ -32,16 +32,22 @@ class M365TeamsLab:
         
         print("Connecting to Microsoft Foundry project...")
         self.credential = DefaultAzureCredential()
-        self.agents_client = None
+        self.project_client = None
+        self.openai_client = None
         
     def connect(self):
-        """Establish connection to Microsoft Foundry."""
+        """Establish connection to Microsoft Foundry using Responses API pattern."""
         try:
-            self.agents_client = AIProjectClient.from_connection_string(
-                conn_str=self.project_endpoint,
-                credential=self.credential
+            # New pattern: Create AIProjectClient with endpoint
+            self.project_client = AIProjectClient(
+                credential=self.credential,
+                endpoint=self.project_endpoint
             )
-            print("✅ Connected to Microsoft Foundry\n")
+            
+            # Get the OpenAI client for Responses API
+            self.openai_client = self.project_client.get_openai_client()
+            
+            print("✅ Connected to Microsoft Foundry (Responses API)\n")
             return True
         except Exception as e:
             print(f"❌ Connection failed: {e}")
@@ -52,17 +58,17 @@ class M365TeamsLab:
         print("\n" + "=" * 70)
         print("      LAB 5: M365 & TEAMS INTEGRATION")
         print("=" * 70)
-        print("\n📚 Choose an exercise:\n")
-        print("  1. Exercise 1: Foundry IQ Knowledge Agent")
+        print("\n📚 Choose a step:\n")
+        print("  1. Step 1: Foundry IQ Knowledge Agent")
         print("     (Enterprise knowledge search with AI Search)")
         print()
-        print("  2. Exercise 2: Microsoft Teams Deployment Concepts")
+        print("  2. Step 2: Microsoft Teams Deployment Concepts")
         print("     (Deploy agents to Teams with Teams Toolkit)")
         print()
-        print("  3. Exercise 3: Microsoft 365 (Graph API) Integration")
+        print("  3. Step 3: Microsoft 365 (Graph API) Integration")
         print("     (Connect agents to SharePoint, Calendar, Email)")
         print()
-        print("  4. Exercise 4: Production Deployment Demo")
+        print("  4. Step 4: Production Deployment Demo")
         print("     (Complete enterprise knowledge agent)")
         print()
         print("  5. View Architecture & Deployment Guide")
@@ -70,10 +76,10 @@ class M365TeamsLab:
         print("  0. Exit")
         print("\n" + "=" * 70)
     
-    def exercise_1_foundry_iq(self):
-        """Exercise 1: Foundry IQ Knowledge Agent."""
+    def step_1_foundry_iq(self):
+        """Step 1: Foundry IQ Knowledge Agent."""
         print("\n" + "=" * 70)
-        print("EXERCISE 1: FOUNDRY IQ KNOWLEDGE AGENT")
+        print("STEP 1: FOUNDRY IQ KNOWLEDGE AGENT")
         print("=" * 70)
         print("\nFoundry IQ enables agents to search enterprise knowledge bases")
         print("using Azure AI Search and grounding data.\n")
@@ -114,17 +120,17 @@ class M365TeamsLab:
         
         print("3. **Agent Configuration**")
         print("   ```python")
-        print("   # Create agent with Foundry IQ")
-        print("   agent = agents_client.create_agent(")
-        print("       model='gpt-4.1',")
-        print("       name='knowledge-agent',")
-        print("       instructions='Search and answer from knowledge base',")
-        print("       tools=[")
-        print("           AzureAISearchTool(")
-        print("               search_endpoint='https://your-search.search.windows.net',")
-        print("               index_name='company-knowledge'")
-        print("           )")
-        print("       ]")
+        print("   # Create agent with Foundry IQ using Responses API")
+        print("   agent = openai_client.agents.create_version(")
+        print("       agent_name='knowledge-agent',")
+        print("       definition={")
+        print("           'kind': 'prompt',")
+        print("           'model': 'gpt-4.1',")
+        print("           'instructions': 'Search and answer from knowledge base',")
+        print("           'tools': [")
+        print("               {'type': 'azure_ai_search', ...}")
+        print("           ]")
+        print("       }")
         print("   )")
         print("   ```\n")
         
@@ -133,20 +139,23 @@ class M365TeamsLab:
         print("=" * 70 + "\n")
         
         try:
-            # Create a knowledge agent (simulated - no actual Azure AI Search)
-            agent = self.agents_client.create_agent(
-                model=self.model_deployment,
-                name="enterprise-knowledge-agent",
-                instructions="""You are an Enterprise Knowledge Assistant.
-                You help employees find information from company documentation,
-                policies, and procedures.
-                
-                Provide accurate answers based on company knowledge.
-                Always cite sources when available.
-                If information isn't in the knowledge base, say so clearly."""
+            # Create a knowledge agent using Responses API
+            agent = self.openai_client.agents.create_version(
+                agent_name="enterprise-knowledge-agent",
+                definition={
+                    "kind": "prompt",
+                    "model": self.model_deployment,
+                    "instructions": """You are an Enterprise Knowledge Assistant.
+                    You help employees find information from company documentation,
+                    policies, and procedures.
+                    
+                    Provide accurate answers based on company knowledge.
+                    Always cite sources when available.
+                    If information isn't in the knowledge base, say so clearly."""
+                }
             )
             
-            print(f"✅ Created Knowledge Agent (ID: {agent.id})\n")
+            print(f"✅ Created Knowledge Agent (version {agent.version})\n")
             
             # Simulate knowledge queries
             knowledge_queries = [
@@ -155,48 +164,48 @@ class M365TeamsLab:
                 "What are the company's security guidelines for laptops?"
             ]
             
-            thread = self.agents_client.create_thread()
-            
             print("🔍 Testing knowledge queries:\n")
             
             for i, query in enumerate(knowledge_queries, 1):
                 print(f"[Query {i}] {query}")
                 
-                self.agents_client.create_message(
-                    thread_id=thread.id,
-                    role="user",
-                    content=query
+                # Create conversation
+                conversation = self.openai_client.conversations.create(
+                    items=[{"type": "message", "role": "user", "content": query}]
                 )
                 
                 print("   ⏳ Searching knowledge base...")
-                run = self.agents_client.create_and_process_run(
-                    thread_id=thread.id,
-                    agent_id=agent.id
+                
+                # Get response
+                response = self.openai_client.responses.create(
+                    conversation=conversation.id,
+                    extra_body={
+                        "agent": {
+                            "type": "agent_reference",
+                            "name": agent.name,
+                            "version": agent.version
+                        }
+                    }
                 )
                 
-                while run.status in ["queued", "in_progress"]:
-                    time.sleep(1)
-                    run = self.agents_client.runs.get(
-                        thread_id=thread.id,
-                        run_id=run.id
-                    )
-                
-                if run.status == "completed":
-                    messages = self.agents_client.messages.list(thread_id=thread.id)
-                    for msg in messages:
-                        if msg.role == "assistant" and msg.text_messages:
-                            response = msg.text_messages[-1].text.value
-                            print(f"   ✅ Response: {response[:100]}...")
-                            break
+                # Display response
+                if response.output:
+                    for item in response.output:
+                        if item.type == "message" and item.content:
+                            for content_item in item.content:
+                                if content_item.type == "text":
+                                    print(f"   ✅ Response: {content_item.text[:100]}...")
                 
                 print()
             
             # Cleanup
-            self.agents_client.delete_agent(agent.id)
+            self.openai_client.agents.delete_version(agent_name=agent.name, version=agent.version)
             print("✅ Demonstration complete!\n")
             
         except Exception as e:
             print(f"❌ Error: {e}")
+            import traceback
+            traceback.print_exc()
         
         print("💡 Key Takeaways:")
         print("  ✅ Foundry IQ connects agents to Azure AI Search")
@@ -213,10 +222,10 @@ class M365TeamsLab:
         
         input("\nPress Enter to return to menu...")
     
-    def exercise_2_teams_deployment(self):
-        """Exercise 2: Microsoft Teams deployment concepts."""
+    def step_2_teams_deployment(self):
+        """Step 2: Microsoft Teams deployment concepts."""
         print("\n" + "=" * 70)
-        print("EXERCISE 2: MICROSOFT TEAMS DEPLOYMENT")
+        print("STEP 2: MICROSOFT TEAMS DEPLOYMENT")
         print("=" * 70)
         print("\nDeploy your AI agents to Microsoft Teams for seamless")
         print("collaboration and enterprise-wide access.\n")
@@ -330,10 +339,10 @@ class M365TeamsLab:
         
         input("\nPress Enter to return to menu...")
     
-    def exercise_3_graph_api_integration(self):
-        """Exercise 3: Microsoft Graph API integration."""
+    def step_3_graph_api_integration(self):
+        """Step 3: Microsoft Graph API integration."""
         print("\n" + "=" * 70)
-        print("EXERCISE 3: MICROSOFT 365 (GRAPH API) INTEGRATION")
+        print("STEP 3: MICROSOFT 365 (GRAPH API) INTEGRATION")
         print("=" * 70)
         print("\nIntegrate agents with Microsoft 365 services using")
         print("Microsoft Graph API.\n")
@@ -464,10 +473,10 @@ class M365TeamsLab:
         
         input("\nPress Enter to return to menu...")
     
-    def exercise_4_production_demo(self):
-        """Exercise 4: Complete production deployment demo."""
+    def step_4_production_demo(self):
+        """Step 4: Complete production deployment demo."""
         print("\n" + "=" * 70)
-        print("EXERCISE 4: PRODUCTION ENTERPRISE AGENT DEMO")
+        print("STEP 4: PRODUCTION ENTERPRISE AGENT DEMO")
         print("=" * 70)
         print("\nThis demo shows a complete enterprise agent with:")
         print("  • Knowledge base search")
@@ -478,25 +487,29 @@ class M365TeamsLab:
         print("=" * 70 + "\n")
         
         try:
-            # Create enterprise agent
-            agent = self.agents_client.create_agent(
-                model=self.model_deployment,
-                name="enterprise-assistant",
-                instructions="""You are an Enterprise Assistant for Contoso Corporation.
-                
-                You help employees with:
-                • Finding company information and policies
-                • Searching documents and SharePoint
-                • Managing calendar and meetings
-                • Email and communication tasks
-                
-                Always be professional, accurate, and helpful.
-                When you don't have information, suggest where users can find it."""
+            # Create enterprise agent using Responses API
+            agent = self.openai_client.agents.create_version(
+                agent_name="enterprise-assistant",
+                definition={
+                    "kind": "prompt",
+                    "model": self.model_deployment,
+                    "instructions": """You are an Enterprise Assistant for Contoso Corporation.
+                    
+                    You help employees with:
+                    • Finding company information and policies
+                    • Searching documents and SharePoint
+                    • Managing calendar and meetings
+                    • Email and communication tasks
+                    
+                    Always be professional, accurate, and helpful.
+                    When you don't have information, suggest where users can find it."""
+                }
             )
             
             print(f"✅ Created Enterprise Assistant\n")
             
-            thread = self.agents_client.create_thread()
+            # Create conversation for this session
+            conversation = self.openai_client.conversations.create()
             
             print("💡 Try these queries:")
             print("   • 'Find documents about remote work policy'")
@@ -514,43 +527,46 @@ class M365TeamsLab:
                 if not user_input:
                     continue
                 
-                self.agents_client.create_message(
-                    thread_id=thread.id,
-                    role="user",
-                    content=user_input
-                )
-                
                 print("\n⏳ Processing...\n")
-                run = self.agents_client.create_and_process_run(
-                    thread_id=thread.id,
-                    agent_id=agent.id
+                
+                # Add message to conversation
+                conversation = self.openai_client.conversations.update(
+                    conversation_id=conversation.id,
+                    items=[{"type": "message", "role": "user", "content": user_input}]
                 )
                 
-                while run.status in ["queued", "in_progress"]:
-                    time.sleep(1)
-                    run = self.agents_client.runs.get(
-                        thread_id=thread.id,
-                        run_id=run.id
-                    )
+                # Get response
+                response = self.openai_client.responses.create(
+                    conversation=conversation.id,
+                    extra_body={
+                        "agent": {
+                            "type": "agent_reference",
+                            "name": agent.name,
+                            "version": agent.version
+                        }
+                    }
+                )
                 
-                if run.status == "completed":
-                    messages = self.agents_client.messages.list(thread_id=thread.id)
-                    for msg in messages:
-                        if msg.role == "assistant" and msg.text_messages:
-                            response = msg.text_messages[-1].text.value
-                            print(f"AGENT: {response}\n")
-                            break
+                # Display response
+                if response.output:
+                    for item in response.output:
+                        if item.type == "message" and item.content:
+                            for content_item in item.content:
+                                if content_item.type == "text":
+                                    print(f"AGENT: {content_item.text}\n")
                 else:
-                    print(f"⚠️  Status: {run.status}\n")
+                    print("⚠️  No response generated\n")
                 
                 print("-" * 70 + "\n")
             
             # Cleanup
-            self.agents_client.delete_agent(agent.id)
+            self.openai_client.agents.delete_version(agent_name=agent.name, version=agent.version)
             print("\n✅ Demo complete! Agent deleted.\n")
             
         except Exception as e:
             print(f"❌ Error: {e}")
+            import traceback
+            traceback.print_exc()
         
         input("\nPress Enter to return to menu...")
     
@@ -701,13 +717,13 @@ class M365TeamsLab:
             choice = input("\nSelect an option (0-5): ").strip()
             
             if choice == "1":
-                self.exercise_1_foundry_iq()
+                self.step_1_foundry_iq()
             elif choice == "2":
-                self.exercise_2_teams_deployment()
+                self.step_2_teams_deployment()
             elif choice == "3":
-                self.exercise_3_graph_api_integration()
+                self.step_3_graph_api_integration()
             elif choice == "4":
-                self.exercise_4_production_demo()
+                self.step_4_production_demo()
             elif choice == "5":
                 self.show_architecture()
             elif choice == "0":
@@ -716,7 +732,6 @@ class M365TeamsLab:
                 break
             else:
                 print("\n⚠️  Invalid choice. Please select 0-5.")
-                time.sleep(1)
 
 def main():
     """Entry point."""

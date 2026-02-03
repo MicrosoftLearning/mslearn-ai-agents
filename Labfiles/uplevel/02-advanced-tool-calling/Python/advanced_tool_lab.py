@@ -6,7 +6,7 @@ This application provides a menu-driven interface to explore advanced agent capa
 - Advanced async custom functions
 - File operations and data transformation
 
-UPDATED: Now uses the new Responses API and AIProjectClient pattern (Lab 09 style)
+UPDATED: Now uses the new AIProjectClient pattern with endpoint parameter (Lab 09 style)
 
 Run this single file to complete all exercises.
 The advanced_functions.py and data_processor.py modules are imported as needed.
@@ -122,7 +122,7 @@ class AdvancedToolLab:
             # Create agent with code interpreter
             code_interpreter = CodeInterpreterTool()
             
-            agent = self.agents_client.create_agent(
+            agent = self.project_client.agents.create_agent(
                 model=self.model_deployment,
                 name="sales-analytics-agent",
                 instructions="""You are a sales analytics assistant.
@@ -136,14 +136,14 @@ class AdvancedToolLab:
             print(f"✅ Created agent: {agent.name}\n")
             
             # Create thread
-            thread = self.agents_client.create_thread()
+            thread = self.project_client.agents.create_thread()
             
             # Upload file if available
             file_id = None
             if csv_file:
                 print(f"📤 Uploading {csv_file}...")
                 with open(csv_file, "rb") as f:
-                    file = self.agents_client.upload_file(
+                    file = self.project_client.agents.upload_file(
                         file=f,
                         purpose=FilePurpose.AGENTS
                     )
@@ -170,14 +170,14 @@ class AdvancedToolLab:
             for i, query in enumerate(queries, 1):
                 print(f"\n[Query {i}] {query}\n")
                 
-                self.agents_client.create_message(
+                self.project_client.agents.create_message(
                     thread_id=thread.id,
                     role="user",
                     content=query
                 )
                 
                 print("⏳ Agent generating and executing code...")
-                run = self.agents_client.create_and_process_run(
+                run = self.project_client.agents.create_and_process_run(
                     thread_id=thread.id,
                     agent_id=agent.id
                 )
@@ -185,14 +185,14 @@ class AdvancedToolLab:
                 # Wait for completion
                 while run.status in ["queued", "in_progress"]:
                     time.sleep(1)
-                    run = self.agents_client.runs.get(
+                    run = self.project_client.agents.runs.get(
                         thread_id=thread.id,
                         run_id=run.id
                     )
                 
                 if run.status == "completed":
                     # Get response
-                    messages = self.agents_client.messages.list(thread_id=thread.id)
+                    messages = self.project_client.agents.messages.list(thread_id=thread.id)
                     for msg in messages:
                         if msg.role == "assistant" and msg.text_messages:
                             response = msg.text_messages[-1].text.value
@@ -207,7 +207,7 @@ class AdvancedToolLab:
                     time.sleep(1)
             
             # Cleanup
-            self.agents_client.delete_agent(agent.id)
+            self.project_client.agents.delete_agent(agent.id)
             print("\n✅ Exercise 1 complete! Agent deleted.\n")
             
             print("💡 Key Takeaways:")
@@ -306,7 +306,7 @@ class AdvancedToolLab:
             ]
             
             # Create agent
-            agent = self.agents_client.create_agent(
+            agent = self.project_client.agents.create_agent(
                 model=self.model_deployment,
                 name="advanced-analytics-agent",
                 instructions="""You are an advanced sales analytics assistant.
@@ -318,7 +318,7 @@ class AdvancedToolLab:
             print(f"✅ Created agent with {len(functions)} advanced functions\n")
             
             # Create thread
-            thread = self.agents_client.create_thread()
+            thread = self.project_client.agents.create_thread()
             
             # Test queries
             test_queries = [
@@ -334,14 +334,14 @@ class AdvancedToolLab:
             for query in test_queries:
                 print(f"\n💬 USER: {query}\n")
                 
-                self.agents_client.create_message(
+                self.project_client.agents.create_message(
                     thread_id=thread.id,
                     role="user",
                     content=query
                 )
                 
                 print("⏳ Processing with advanced functions...")
-                run = self.agents_client.create_and_process_run(
+                run = self.project_client.agents.create_and_process_run(
                     thread_id=thread.id,
                     agent_id=agent.id
                 )
@@ -349,7 +349,7 @@ class AdvancedToolLab:
                 # Wait for completion
                 while run.status in ["queued", "in_progress", "requires_action"]:
                     time.sleep(1)
-                    run = self.agents_client.runs.get(
+                    run = self.project_client.agents.runs.get(
                         thread_id=thread.id,
                         run_id=run.id
                     )
@@ -391,14 +391,14 @@ class AdvancedToolLab:
                             })
                         
                         # Submit tool outputs
-                        run = self.agents_client.runs.submit_tool_outputs(
+                        run = self.project_client.agents.runs.submit_tool_outputs(
                             thread_id=thread.id,
                             run_id=run.id,
                             tool_outputs=tool_outputs
                         )
                 
                 if run.status == "completed":
-                    messages = self.agents_client.messages.list(thread_id=thread.id)
+                    messages = self.project_client.agents.messages.list(thread_id=thread.id)
                     for msg in messages:
                         if msg.role == "assistant" and msg.text_messages:
                             response = msg.text_messages[-1].text.value
@@ -410,7 +410,7 @@ class AdvancedToolLab:
                 print("-" * 70)
             
             # Cleanup
-            self.agents_client.delete_agent(agent.id)
+            self.project_client.agents.delete_agent(agent.id)
             print("\n✅ Exercise 2 complete! Agent deleted.\n")
             
             print("💡 Key Takeaways:")
@@ -532,7 +532,7 @@ class AdvancedToolLab:
                     )
                 ])
             
-            agent = self.agents_client.create_agent(
+            agent = self.project_client.agents.create_agent(
                 model=self.model_deployment,
                 name="comprehensive-analytics-agent",
                 instructions="""You are a comprehensive sales analytics assistant.
@@ -547,7 +547,7 @@ class AdvancedToolLab:
             
             print(f"✅ Created comprehensive agent with {len(tools)} tools\n")
             
-            thread = self.agents_client.create_thread()
+            thread = self.project_client.agents.create_thread()
             
             print("💡 Try asking:")
             print("   • 'Generate a sample sales dataset and analyze it'")
@@ -564,14 +564,14 @@ class AdvancedToolLab:
                 if not user_input:
                     continue
                 
-                self.agents_client.create_message(
+                self.project_client.agents.create_message(
                     thread_id=thread.id,
                     role="user",
                     content=user_input
                 )
                 
                 print("\n⏳ Processing...\n")
-                run = self.agents_client.create_and_process_run(
+                run = self.project_client.agents.create_and_process_run(
                     thread_id=thread.id,
                     agent_id=agent.id
                 )
@@ -579,7 +579,7 @@ class AdvancedToolLab:
                 # Wait and handle function calls
                 while run.status in ["queued", "in_progress", "requires_action"]:
                     time.sleep(1)
-                    run = self.agents_client.runs.get(
+                    run = self.project_client.agents.runs.get(
                         thread_id=thread.id,
                         run_id=run.id
                     )
@@ -607,14 +607,14 @@ class AdvancedToolLab:
                                 "output": result
                             })
                         
-                        run = self.agents_client.runs.submit_tool_outputs(
+                        run = self.project_client.agents.runs.submit_tool_outputs(
                             thread_id=thread.id,
                             run_id=run.id,
                             tool_outputs=tool_outputs
                         )
                 
                 if run.status == "completed":
-                    messages = self.agents_client.messages.list(thread_id=thread.id)
+                    messages = self.project_client.agents.messages.list(thread_id=thread.id)
                     for msg in messages:
                         if msg.role == "assistant" and msg.text_messages:
                             response = msg.text_messages[-1].text.value
@@ -626,7 +626,7 @@ class AdvancedToolLab:
                 print("-" * 70 + "\n")
             
             # Cleanup
-            self.agents_client.delete_agent(agent.id)
+            self.project_client.agents.delete_agent(agent.id)
             print("\n✅ Exercise 4 complete! Agent deleted.\n")
             
         except Exception as e:

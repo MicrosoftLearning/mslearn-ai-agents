@@ -54,7 +54,7 @@ project_client = AIProjectClient.from_connection_string(
 
 # Create an agent with custom functions
 agent = project_client.agents.create_agent(
-    model="gpt-4o",
+    model="gpt-4.1",
     name="my-agent",
     instructions="You are a helpful assistant.",
     tools=[
@@ -167,7 +167,7 @@ def check_system_status(system_name: str) -> dict:
 
 # Create agent in portal OR via code
 agent = project_client.agents.create_agent(
-    model="gpt-4o",
+    model="gpt-4.1",
     name="it-support-agent",
     instructions="Help users with IT issues.",
     tools=[FunctionTool(check_system_status)]

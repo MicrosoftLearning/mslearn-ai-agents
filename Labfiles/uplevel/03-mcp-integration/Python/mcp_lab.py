@@ -7,6 +7,8 @@ This application provides a menu-driven interface to explore all MCP concepts:
 - Hybrid architectures
 - Error handling patterns
 
+UPDATED: Now uses the Responses API pattern with OpenAI client
+
 Run this single file to complete all exercises.
 """
 
@@ -15,7 +17,7 @@ import time
 from dotenv import load_dotenv
 from azure.ai.projects import AIProjectClient
 from azure.identity import DefaultAzureCredential
-from azure.ai.projects.models import MCPServerTool, ListSortOrder
+from azure.ai.projects.models import MCPTool
 
 # Load environment variables
 load_dotenv()
@@ -33,16 +35,22 @@ class MCPLab:
         
         print("Connecting to Microsoft Foundry project...")
         self.credential = DefaultAzureCredential()
-        self.agents_client = None
+        self.project_client = None
+        self.openai_client = None
         
     def connect(self):
-        """Establish connection to Microsoft Foundry."""
+        """Establish connection to Microsoft Foundry using Responses API pattern."""
         try:
-            self.agents_client = AIProjectClient.from_connection_string(
-                conn_str=self.project_endpoint,
-                credential=self.credential
+            # New pattern: Create AIProjectClient with endpoint
+            self.project_client = AIProjectClient(
+                credential=self.credential,
+                endpoint=self.project_endpoint
             )
-            print("✅ Connected to Microsoft Foundry\n")
+            
+            # Get the OpenAI client for Responses API
+            self.openai_client = self.project_client.get_openai_client()
+            
+            print("✅ Connected to Microsoft Foundry (Responses API)\n")
             return True
         except Exception as e:
             print(f"❌ Connection failed: {e}")
@@ -80,30 +88,30 @@ class MCPLab:
         print("to query official documentation.\n")
         
         try:
-            # Configure remote MCP server
-            mcp_tool = MCPServerTool(
+            # Configure remote MCP server tool
+            mcp_tool = MCPTool(
                 server_url="https://learn.microsoft.com/api/mcp",
                 server_label="mslearn"
             )
             
             print(f"📡 Configured remote MCP server:")
-            print(f"   Label: {mcp_tool.server_label}")
-            print(f"   URL: {mcp_tool.server_url}\n")
+            print(f"   Label: mslearn")
+            print(f"   URL: https://learn.microsoft.com/api/mcp\n")
             
-            # Create agent
-            agent = self.agents_client.create_agent(
-                model=self.model_deployment,
-                name="docs-research-agent",
-                instructions="""You are a developer documentation assistant.
-                Use Microsoft Learn MCP tools to search and retrieve documentation.
-                Provide accurate answers with relevant links when available.""",
-                tools=[mcp_tool]
+            # Create agent using Responses API pattern
+            agent = self.openai_client.agents.create_version(
+                agent_name="docs-research-agent",
+                definition={
+                    "kind": "prompt",
+                    "model": self.model_deployment,
+                    "instructions": """You are a developer documentation assistant.
+                    Use Microsoft Learn MCP tools to search and retrieve documentation.
+                    Provide accurate answers with relevant links when available.""",
+                    "tools": [{"type": "mcp", **mcp_tool.as_dict()}]
+                }
             )
             
-            print(f"✅ Created agent: {agent.name}\n")
-            
-            # Create thread
-            thread = self.agents_client.create_thread()
+            print(f"✅ Created agent: {agent.name} (version {agent.version})\n")
             
             # Sample queries
             queries = [
@@ -116,44 +124,47 @@ class MCPLab:
             for i, query in enumerate(queries, 1):
                 print(f"Query {i}: {query}\n")
                 
-                # Create and process message
-                self.agents_client.create_message(
-                    thread_id=thread.id,
-                    role="user",
-                    content=query
+                # Create conversation
+                conversation = self.openai_client.conversations.create(
+                    items=[{"type": "message", "role": "user", "content": query}]
                 )
                 
                 print("Processing with MCP tools...")
-                run = self.agents_client.create_and_process_run(
-                    thread_id=thread.id,
-                    agent_id=agent.id
+                
+                # Create response with agent
+                response = self.openai_client.responses.create(
+                    conversation=conversation.id,
+                    extra_body={
+                        "agent": {
+                            "type": "agent_reference",
+                            "name": agent.name,
+                            "version": agent.version
+                        }
+                    }
                 )
                 
-                if run.status == "completed":
-                    messages = self.agents_client.messages.list(
-                        thread_id=thread.id,
-                        order=ListSortOrder.ASCENDING
-                    )
-                    
-                    # Get last assistant message
-                    for msg in reversed(list(messages)):
-                        if msg.role == "assistant" and msg.text_messages:
-                            response = msg.text_messages[-1].text.value
-                            print(f"\n📝 RESPONSE:\n{response}\n")
-                            break
+                # Extract and display response
+                if response.output:
+                    for item in response.output:
+                        if item.type == "message" and item.content:
+                            for content_item in item.content:
+                                if content_item.type == "text":
+                                    print(f"\n📝 RESPONSE:\n{content_item.text}\n")
                 else:
-                    print(f"⚠️  Run status: {run.status}")
+                    print("⚠️  No response generated")
                 
                 print("-" * 70)
                 if i < len(queries):
                     print()
             
             # Cleanup
-            self.agents_client.delete_agent(agent.id)
+            self.openai_client.agents.delete_version(agent_name=agent.name, version=agent.version)
             print("\n✅ Exercise 1 complete! Agent deleted.\n")
             
         except Exception as e:
             print(f"❌ Error in Exercise 1: {e}")
+            import traceback
+            traceback.print_exc()
         
         input("\nPress Enter to return to menu...")
     
@@ -176,29 +187,29 @@ class MCPLab:
             return
         
         try:
-            # Configure local MCP server
-            mcp_tool = MCPServerTool(
+            # Configure local MCP server tool
+            mcp_tool = MCPTool(
                 name="business-tools-mcp-server",
                 command="python",
                 args=["mcp_server.py"]
             )
             
-            print(f"🔧 Configured local MCP server: {mcp_tool.name}\n")
+            print(f"🔧 Configured local MCP server: business-tools-mcp-server\n")
             
-            # Create agent
-            agent = self.agents_client.create_agent(
-                model=self.model_deployment,
-                name="business-operations-agent",
-                instructions="""You are a business operations assistant.
-                Help with inventory management and provide global office information.
-                Use your tools to provide specific, actionable recommendations.""",
-                tools=[mcp_tool]
+            # Create agent using Responses API
+            agent = self.openai_client.agents.create_version(
+                agent_name="business-operations-agent",
+                definition={
+                    "kind": "prompt",
+                    "model": self.model_deployment,
+                    "instructions": """You are a business operations assistant.
+                    Help with inventory management and provide global office information.
+                    Use your tools to provide specific, actionable recommendations.""",
+                    "tools": [{"type": "mcp", **mcp_tool.as_dict()}]
+                }
             )
             
-            print(f"✅ Created agent: {agent.name}\n")
-            
-            # Create thread
-            thread = self.agents_client.create_thread()
+            print(f"✅ Created agent: {agent.name} (version {agent.version})\n")
             
             # Test queries
             test_queries = [
@@ -214,47 +225,47 @@ class MCPLab:
             for query in test_queries:
                 print(f"\n💬 USER: {query}\n")
                 
-                self.agents_client.create_message(
-                    thread_id=thread.id,
-                    role="user",
-                    content=query
+                # Create conversation
+                conversation = self.openai_client.conversations.create(
+                    items=[{"type": "message", "role": "user", "content": query}]
                 )
                 
                 print("⏳ Processing...")
-                run = self.agents_client.create_and_process_run(
-                    thread_id=thread.id,
-                    agent_id=agent.id
+                
+                # Create response
+                response = self.openai_client.responses.create(
+                    conversation=conversation.id,
+                    extra_body={
+                        "agent": {
+                            "type": "agent_reference",
+                            "name": agent.name,
+                            "version": agent.version
+                        }
+                    }
                 )
                 
-                # Wait for completion
-                while run.status in ["queued", "in_progress"]:
-                    time.sleep(1)
-                    run = self.agents_client.runs.get(
-                        thread_id=thread.id,
-                        run_id=run.id
-                    )
-                
                 # Display response
-                if run.status == "completed":
-                    messages = self.agents_client.messages.list(thread_id=thread.id)
-                    for msg in messages:
-                        if msg.role == "assistant" and msg.text_messages:
-                            response = msg.text_messages[-1].text.value
-                            print(f"\n🤖 AGENT: {response}\n")
-                            break
+                if response.output:
+                    for item in response.output:
+                        if item.type == "message" and item.content:
+                            for content_item in item.content:
+                                if content_item.type == "text":
+                                    print(f"\n🤖 AGENT: {content_item.text}\n")
                 else:
-                    print(f"⚠️  Run status: {run.status}")
+                    print("⚠️  No response generated")
                 
                 print("-" * 70)
             
             # Cleanup
-            self.agents_client.delete_agent(agent.id)
+            self.openai_client.agents.delete_version(agent_name=agent.name, version=agent.version)
             print("\n✅ Exercise 2 complete! Agent deleted.\n")
             
         except Exception as e:
             print(f"❌ Error in Exercise 2: {e}")
             print("\nMake sure mcp_server.py is in the current directory")
             print("and all dependencies are installed (pip install -r requirements.txt)")
+            import traceback
+            traceback.print_exc()
         
         input("\nPress Enter to return to menu...")
     
@@ -277,35 +288,41 @@ class MCPLab:
         
         try:
             # Configure both MCP servers
-            remote_mcp = MCPServerTool(
+            remote_mcp = MCPTool(
                 server_url="https://learn.microsoft.com/api/mcp",
                 server_label="mslearn"
             )
             
-            local_mcp = MCPServerTool(
+            local_mcp = MCPTool(
                 name="business-tools-mcp-server",
                 command="python",
                 args=["mcp_server.py"]
             )
             
-            # Create hybrid agent
-            agent = self.agents_client.create_agent(
-                model=self.model_deployment,
-                name="hybrid-assistant",
-                instructions="""You are a comprehensive assistant for Contoso Corporation.
-                
-                You have access to:
-                1. Microsoft Learn documentation (technical questions)
-                2. Business operations tools (inventory, office information)
-                
-                Intelligently choose the right tools for each question.""",
-                tools=[remote_mcp, local_mcp]
+            # Create hybrid agent with both MCP tools
+            agent = self.openai_client.agents.create_version(
+                agent_name="hybrid-assistant",
+                definition={
+                    "kind": "prompt",
+                    "model": self.model_deployment,
+                    "instructions": """You are a comprehensive assistant for Contoso Corporation.
+                    
+                    You have access to:
+                    1. Microsoft Learn documentation (technical questions)
+                    2. Business operations tools (inventory, office information)
+                    
+                    Intelligently choose the right tools for each question.""",
+                    "tools": [
+                        {"type": "mcp", **remote_mcp.as_dict()},
+                        {"type": "mcp", **local_mcp.as_dict()}
+                    ]
+                }
             )
             
             print(f"✅ Created hybrid agent with dual MCP access\n")
             
-            # Create thread
-            thread = self.agents_client.create_thread()
+            # Create conversation for this session
+            conversation = self.openai_client.conversations.create()
             
             # Suggest some queries
             print("💡 Try these example queries:")
@@ -324,45 +341,46 @@ class MCPLab:
                 if not user_input:
                     continue
                 
-                self.agents_client.create_message(
-                    thread_id=thread.id,
-                    role="user",
-                    content=user_input
-                )
-                
                 print("\n⏳ Processing...\n")
-                run = self.agents_client.create_and_process_run(
-                    thread_id=thread.id,
-                    agent_id=agent.id
+                
+                # Add user message to conversation
+                conversation = self.openai_client.conversations.update(
+                    conversation_id=conversation.id,
+                    items=[{"type": "message", "role": "user", "content": user_input}]
                 )
                 
-                # Wait for completion
-                while run.status in ["queued", "in_progress"]:
-                    time.sleep(1)
-                    run = self.agents_client.runs.get(
-                        thread_id=thread.id,
-                        run_id=run.id
-                    )
+                # Create response
+                response = self.openai_client.responses.create(
+                    conversation=conversation.id,
+                    extra_body={
+                        "agent": {
+                            "type": "agent_reference",
+                            "name": agent.name,
+                            "version": agent.version
+                        }
+                    }
+                )
                 
                 # Display response
-                if run.status == "completed":
-                    messages = self.agents_client.messages.list(thread_id=thread.id)
-                    for msg in messages:
-                        if msg.role == "assistant" and msg.text_messages:
-                            response = msg.text_messages[-1].text.value
-                            print(f"AGENT: {response}\n")
-                            break
+                if response.output:
+                    for item in response.output:
+                        if item.type == "message" and item.content:
+                            for content_item in item.content:
+                                if content_item.type == "text":
+                                    print(f"AGENT: {content_item.text}\n")
                 else:
-                    print(f"⚠️  Run status: {run.status}\n")
+                    print("⚠️  No response generated\n")
                 
                 print("-" * 70 + "\n")
             
             # Cleanup
-            self.agents_client.delete_agent(agent.id)
+            self.openai_client.agents.delete_version(agent_name=agent.name, version=agent.version)
             print("\n✅ Exercise 3 complete! Agent deleted.\n")
             
         except Exception as e:
             print(f"❌ Error in Exercise 3: {e}")
+            import traceback
+            traceback.print_exc()
         
         input("\nPress Enter to return to menu...")
     
@@ -383,28 +401,29 @@ class MCPLab:
             return
         
         try:
-            mcp_tool = MCPServerTool(
+            mcp_tool = MCPTool(
                 name="business-tools-mcp-server",
                 command="python",
                 args=["mcp_server.py"]
             )
             
-            agent = self.agents_client.create_agent(
-                model=self.model_deployment,
-                name="robust-agent",
-                instructions="""You are a reliable operations assistant.
-                
-                Error Handling Guidelines:
-                - Acknowledge errors gracefully
-                - Suggest alternatives when tools fail
-                - Maintain helpful tone even with errors
-                - Provide manual steps as fallback""",
-                tools=[mcp_tool]
+            agent = self.openai_client.agents.create_version(
+                agent_name="robust-agent",
+                definition={
+                    "kind": "prompt",
+                    "model": self.model_deployment,
+                    "instructions": """You are a reliable operations assistant.
+                    
+                    Error Handling Guidelines:
+                    - Acknowledge errors gracefully
+                    - Suggest alternatives when tools fail
+                    - Maintain helpful tone even with errors
+                    - Provide manual steps as fallback""",
+                    "tools": [{"type": "mcp", **mcp_tool.as_dict()}]
+                }
             )
             
             print(f"✅ Created robust agent with error handling\n")
-            
-            thread = self.agents_client.create_thread()
             
             # Test with valid and invalid inputs
             test_cases = [
@@ -421,12 +440,12 @@ class MCPLab:
                 print(f"\n[{test_type}]")
                 print(f"💬 USER: {query}\n")
                 
-                response = self._query_with_retry(agent, thread, query)
+                response = self._query_with_retry(agent, query)
                 print(f"🤖 AGENT: {response}\n")
                 print("-" * 70)
             
             # Cleanup
-            self.agents_client.delete_agent(agent.id)
+            self.openai_client.agents.delete_version(agent_name=agent.name, version=agent.version)
             print("\n✅ Exercise 4 complete! Agent deleted.\n")
             print("Key Observations:")
             print("  • Valid queries succeeded immediately")
@@ -436,52 +455,44 @@ class MCPLab:
             
         except Exception as e:
             print(f"❌ Error in Exercise 4: {e}")
+            import traceback
+            traceback.print_exc()
         
         input("\nPress Enter to return to menu...")
     
-    def _query_with_retry(self, agent, thread, query, max_retries=2):
-        """Helper: Query agent with retry logic."""
+    def _query_with_retry(self, agent, query, max_retries=2):
+        """Helper: Query agent with retry logic using Responses API."""
         for attempt in range(max_retries):
             try:
-                self.agents_client.create_message(
-                    thread_id=thread.id,
-                    role="user",
-                    content=query
-                )
-                
                 if attempt > 0:
                     print(f"   Retry attempt {attempt + 1}...")
                 
-                run = self.agents_client.create_and_process_run(
-                    thread_id=thread.id,
-                    agent_id=agent.id
+                # Create conversation
+                conversation = self.openai_client.conversations.create(
+                    items=[{"type": "message", "role": "user", "content": query}]
                 )
                 
-                timeout = 30
-                elapsed = 0
+                # Create response with timeout
+                response = self.openai_client.responses.create(
+                    conversation=conversation.id,
+                    extra_body={
+                        "agent": {
+                            "type": "agent_reference",
+                            "name": agent.name,
+                            "version": agent.version
+                        }
+                    }
+                )
                 
-                while run.status in ["queued", "in_progress"] and elapsed < timeout:
-                    time.sleep(1)
-                    elapsed += 1
-                    run = self.agents_client.runs.get(
-                        thread_id=thread.id,
-                        run_id=run.id
-                    )
+                # Extract response text
+                if response.output:
+                    for item in response.output:
+                        if item.type == "message" and item.content:
+                            for content_item in item.content:
+                                if content_item.type == "text":
+                                    return content_item.text
                 
-                if run.status == "completed":
-                    messages = self.agents_client.messages.list(thread_id=thread.id)
-                    for msg in messages:
-                        if msg.role == "assistant" and msg.text_messages:
-                            return msg.text_messages[-1].text.value
-                    return "No response generated"
-                
-                elif run.status == "failed":
-                    if attempt < max_retries - 1:
-                        continue
-                    return f"❌ Failed after {max_retries} attempts: {run.last_error}"
-                
-                elif elapsed >= timeout:
-                    return "⏱️  Request timed out"
+                return "No response generated"
                     
             except Exception as e:
                 if attempt < max_retries - 1:

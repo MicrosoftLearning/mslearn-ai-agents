@@ -1,7 +1,6 @@
 import os
 from azure.ai.projects import AIProjectClient
 from azure.identity import DefaultAzureCredential
-from azure.ai.projects.models import FunctionTool
 import json
 from datetime import datetime
 
@@ -71,53 +70,10 @@ def create_support_ticket(issue_type: str, description: str, priority: str = "me
     return json.dumps(result)
 
 
-# Function definitions for the agent
-functions = [
-    FunctionTool(
-        name="check_system_status",
-        description="Check the status of a system or service",
-        parameters={
-            "type": "object",
-            "properties": {
-                "system_name": {
-                    "type": "string",
-                    "description": "Name of the system to check (e.g., 'email', 'vpn', 'printer')"
-                }
-            },
-            "required": ["system_name"]
-        }
-    ),
-    FunctionTool(
-        name="create_support_ticket",
-        description="Create a support ticket for an IT issue",
-        parameters={
-            "type": "object",
-            "properties": {
-                "issue_type": {
-                    "type": "string",
-                    "description": "Type of issue",
-                    "enum": ["hardware", "software", "network", "access"]
-                },
-                "description": {
-                    "type": "string",
-                    "description": "Detailed description of the issue"
-                },
-                "priority": {
-                    "type": "string",
-                    "description": "Priority level",
-                    "enum": ["low", "medium", "high"],
-                    "default": "medium"
-                }
-            },
-            "required": ["issue_type", "description"]
-        }
-    )
-]
-
-
 def main():
     # Initialize the project client
     project_endpoint = os.environ.get("PROJECT_ENDPOINT")
+    agent_name = os.environ.get("AGENT_NAME", "it-support-agent")
     
     if not project_endpoint:
         print("Error: PROJECT_ENDPOINT environment variable not set")
@@ -126,35 +82,22 @@ def main():
     
     print("Connecting to Microsoft Foundry project...")
     credential = DefaultAzureCredential()
-    project_client = AIProjectClient.from_connection_string(
-        conn_str=project_endpoint,
-        credential=credential
+    project_client = AIProjectClient(
+        credential=credential,
+        endpoint=project_endpoint
     )
     
-    # Get the agent
-    agent_name = "it-support-agent"
+    # Get the OpenAI client for Responses API
+    openai_client = project_client.get_openai_client()
+    
+    # Get the agent created in the portal
     print(f"Loading agent: {agent_name}")
+    agent = project_client.agents.get(agent_name=agent_name)
+    print(f"Connected to agent: {agent.name} (id: {agent.id})")
     
-    # Create agent with functions
-    agent = project_client.agents.create_agent(
-        model="gpt-4.1",
-        name=agent_name,
-        instructions="""You are an IT Support Agent for Contoso Corporation.
-        You help employees with technical issues and IT policy questions.
-        
-        You have access to these tools:
-        - check_system_status: Check if systems are operational
-        - create_support_ticket: Create support tickets for issues
-        
-        Use these tools when appropriate to help users.""",
-        tools=functions
-    )
-    
-    print(f"Agent created with ID: {agent.id}")
-    
-    # Create a thread for conversation
-    thread = project_client.agents.create_thread()
-    print(f"Thread created with ID: {thread.id}")
+    # Create a conversation
+    conversation = openai_client.conversations.create(items=[])
+    print(f"Conversation created (id: {conversation.id})")
     
     # Function map for execution
     function_map = {
@@ -178,62 +121,64 @@ def main():
         if not user_input:
             continue
         
-        # Add user message to thread
-        project_client.agents.create_message(
-            thread_id=thread.id,
-            role="user",
-            content=user_input
+        # Add user message to conversation
+        openai_client.conversations.items.create(
+            conversation_id=conversation.id,
+            items=[{"type": "message", "role": "user", "content": user_input}]
         )
         
-        # Run the agent
-        run = project_client.agents.create_run(
-            thread_id=thread.id,
-            agent_id=agent.id
+        # Get response from agent
+        response = openai_client.responses.create(
+            conversation=conversation.id,
+            extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
+            input=""
         )
         
-        # Wait for completion and handle function calls
-        while run.status in ["queued", "in_progress", "requires_action"]:
-            run = project_client.agents.get_run(
-                thread_id=thread.id,
-                run_id=run.id
-            )
+        # Handle function calls if needed
+        while True:
+            # Check if response needs function execution
+            needs_function_call = False
+            if hasattr(response, 'output') and response.output:
+                for item in response.output:
+                    if hasattr(item, 'type') and item.type == 'function_call':
+                        needs_function_call = True
+                        function_name = item.name
+                        function_args = json.loads(item.arguments) if hasattr(item, 'arguments') else {}
+                        
+                        print(f"\n[Calling function: {function_name}]")
+                        
+                        # Execute the function
+                        if function_name in function_map:
+                            function_result = function_map[function_name](**function_args)
+                            
+                            # Add function result to conversation
+                            openai_client.conversations.items.create(
+                                conversation_id=conversation.id,
+                                items=[{
+                                    "type": "function_call_output",
+                                    "call_id": item.call_id if hasattr(item, 'call_id') else item.id,
+                                    "output": function_result
+                                }]
+                            )
             
-            if run.status == "requires_action":
-                tool_outputs = []
-                for tool_call in run.required_action.submit_tool_outputs.tool_calls:
-                    function_name = tool_call.function.name
-                    function_args = json.loads(tool_call.function.arguments)
-                    
-                    print(f"\n[Calling function: {function_name}]")
-                    
-                    # Execute the function
-                    if function_name in function_map:
-                        function_result = function_map[function_name](**function_args)
-                        tool_outputs.append({
-                            "tool_call_id": tool_call.id,
-                            "output": function_result
-                        })
-                
-                # Submit tool outputs
-                project_client.agents.submit_tool_outputs(
-                    thread_id=thread.id,
-                    run_id=run.id,
-                    tool_outputs=tool_outputs
+            # If function was called, get new response
+            if needs_function_call:
+                response = openai_client.responses.create(
+                    conversation=conversation.id,
+                    extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
+                    input=""
                 )
-            
-            import time
-            time.sleep(1)
-        
-        # Get the response
-        messages = project_client.agents.list_messages(thread_id=thread.id)
-        
-        # Display the latest assistant message
-        for message in messages:
-            if message.role == "assistant":
-                for content in message.content:
-                    if hasattr(content, 'text'):
-                        print(f"\nAgent: {content.text.value}\n")
+            else:
                 break
+        
+        # Display response
+        if hasattr(response, 'output_text') and response.output_text:
+            print(f"\nAgent: {response.output_text}\n")
+        elif hasattr(response, 'output') and response.output:
+            # Fallback: extract text from output items
+            for item in response.output:
+                if hasattr(item, 'text'):
+                    print(f"\nAgent: {item.text}\n")
 
 
 if __name__ == "__main__":

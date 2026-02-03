@@ -184,7 +184,7 @@ Agent formats response
 ```python
 code_interpreter = CodeInterpreterTool()
 
-agent = agents_client.create_agent(
+agent = project_client.agents.create_agent(
     model="gpt-4.1",
     name="sales-analytics-agent",
     instructions="Use code interpreter to analyze data...",
@@ -325,7 +325,7 @@ functions = [
     # More functions...
 ]
 
-agent = agents_client.create_agent(
+agent = project_client.agents.create_agent(
     model="gpt-4.1",
     tools=functions  # Agent knows these are available
 )
@@ -438,7 +438,7 @@ file_ops = FunctionTool(
 )
 
 # Agent can call it during conversation
-agent = agents_client.create_agent(
+agent = project_client.agents.create_agent(
     model="gpt-4.1",
     tools=[code_interpreter, *custom_functions, file_ops]
 )

@@ -1,16 +1,16 @@
 ---
 lab:
-    title: 'Multi-Agent Orchestration'
+    title: 'Lab 5: Multi-Agent Orchestration'
     description: 'Master multi-agent coordination patterns from local to distributed to visual orchestration using a unified interactive application.'
 ---
 
-# Lab 4: Multi-Agent Orchestration
+# Lab 5: Multi-Agent Orchestration
 
 In this lab, you'll master multi-agent coordination by exploring three different orchestration patterns: local coordination (agents in the same process), distributed coordination with Agent-to-Agent (A2A) protocol, and visual workflow orchestration. You'll build a complete content creation pipeline using specialized agents working together.
 
 This lab takes approximately **75** minutes.
 
-> **Note**: This lab builds on Labs 1-3. You should be familiar with basic agent creation, custom functions, and tool integration.
+> **Note**: This lab builds on Labs 1-4. You should be familiar with basic agent creation, custom functions, and tool integration.
 
 ## Learning Objectives
 

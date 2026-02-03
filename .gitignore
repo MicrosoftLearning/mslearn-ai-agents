@@ -24,6 +24,7 @@ share/python-wheels/
 MANIFEST
 package.json
 package-lock.json
+uplevelenv/
 
 # Virtual environments
 venv/

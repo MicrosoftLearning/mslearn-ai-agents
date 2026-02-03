@@ -12,6 +12,8 @@ IMPORTANT: This app imports and reuses the lab's existing modules:
 
 This demonstrates production best practices: one codebase, multiple frontends.
 
+UPDATED: Now uses the new AIProjectClient pattern with endpoint parameter (Lab 09 style)
+
 Run with: streamlit run streamlit_app.py
 """
 
@@ -102,9 +104,9 @@ def init_agent_client():
     
     try:
         credential = DefaultAzureCredential()
-        client = AIProjectClient.from_connection_string(
-            conn_str=project_endpoint,
-            credential=credential
+        client = AIProjectClient(
+            credential=credential,
+            endpoint=project_endpoint
         )
         return client
     except Exception as e:
