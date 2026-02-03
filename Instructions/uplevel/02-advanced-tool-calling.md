@@ -61,7 +61,7 @@ Menu Options:
 
 ## Setup
 
-### Task 1: Navigate to the lab directory
+### Navigate to the lab directory
 
 1. Open Visual Studio Code.
 
@@ -72,7 +72,7 @@ Menu Options:
    
    Use **File > Open Folder** in VS Code.
 
-### Task 2: Configure environment
+### Configure environment
 
 1. In the lab folder, locate the provided `.env` and `requirements.txt` files.
 
@@ -91,18 +91,17 @@ Menu Options:
     pip install -r requirements.txt
     ```
 
-### Task 3: Verify file structure
+### Verify file structure
 
 Ensure you have these files:
-- `advanced_tool_lab.py` - Main unified application ⭐
-- `advanced_functions.py` - Custom async functions module
+- `advanced_tool_lab.py` - Main unified application - `advanced_functions.py` - Custom async functions module
 - `data_processor.py` - File processing utilities module
 - `requirements.txt`
 - `.env` (your configuration)
 
 ---
 
-## Exercise 1: Data Analysis with Code Interpreter
+## Data Analysis with Code Interpreter
 
 In this exercise, you'll explore the code interpreter tool that enables agents to dynamically generate and execute Python code for data analysis.
 
@@ -118,7 +117,7 @@ The code interpreter tool allows agents to:
 
 **Key benefit**: No need to pre-define specific analysis functions - the agent adapts to any data structure and query.
 
-### Task 1: Run Exercise 1
+### Run Exercise 1
 
 1. **Start the unified application**:
 
@@ -128,7 +127,7 @@ The code interpreter tool allows agents to:
 
 2. **Select option 1** from the menu: "Exercise 1: Data Analysis with Code Interpreter"
 
-### Task 2: Observe code interpreter in action
+### Observe code interpreter in action
 
 The application will demonstrate code interpreter with three sample queries:
 
@@ -139,18 +138,18 @@ The application will demonstrate code interpreter with three sample queries:
 **What you'll see:**
 
 ```
-✅ Created agent: sales-analytics-agent
+Created agent: sales-analytics-agent
 
-📤 Uploading ../sales_data.csv...
-✅ File uploaded: file-abc123
+Uploading ../sales_data.csv...
+File uploaded: file-abc123
 
-🔍 Testing code interpreter with sample queries:
+Testing code interpreter with sample queries:
 
 [Query 1] Analyze the sales data in file file-abc123. What are the key trends?
 
 ⏳ Agent generating and executing code...
 
-📊 ANALYSIS:
+ANALYSIS:
 I've analyzed your sales data. Here are the key findings:
 
 1. Revenue Trends: Total revenue is $145,320 with steady growth...
@@ -163,7 +162,7 @@ Recommendations:
 - Address declining Midwest performance
 ```
 
-### Task 3: Understand the architecture
+### Understand the architecture
 
 **Code Interpreter Flow:**
 ```
@@ -192,14 +191,14 @@ agent = project_client.agents.create_agent(
 )
 ```
 
-### Task 4: Key concepts
+### Key concepts
 
 **Code Interpreter Benefits:**
-- ✅ **Dynamic**: Agent generates code based on each query
-- ✅ **Flexible**: Works with any data structure
-- ✅ **Secure**: Code runs in isolated sandbox
-- ✅ **Self-correcting**: Can fix errors and retry
-- ✅ **Powerful**: Full Python capabilities (pandas, matplotlib, numpy)
+- **Dynamic**: Agent generates code based on each query
+- **Flexible**: Works with any data structure
+- **Secure**: Code runs in isolated sandbox
+- **Self-correcting**: Can fix errors and retry
+- **Powerful**: Full Python capabilities (pandas, matplotlib, numpy)
 
 **When to use Code Interpreter:**
 - Data analysis with unknown/varying structure
@@ -216,7 +215,7 @@ agent = project_client.agents.create_agent(
 
 ---
 
-## Exercise 2: Advanced Async Custom Functions
+## Advanced Async Custom Functions
 
 In this exercise, you'll explore sophisticated custom function patterns including async operations, function chaining, and error handling.
 
@@ -228,7 +227,7 @@ While code interpreter is great for dynamic analysis, custom functions provide:
 - **Controlled operations** (with validation and permissions)
 - **Consistent behavior** (repeatable, testable)
 
-### Task 1: Run Exercise 2
+### Run Exercise 2
 
 1. If the application isn't running, start it:
    ```powershell
@@ -237,7 +236,7 @@ While code interpreter is great for dynamic analysis, custom functions provide:
 
 2. **Select option 2** from the menu: "Exercise 2: Advanced Async Custom Functions"
 
-### Task 2: Observe advanced functions
+### Observe advanced functions
 
 The exercise demonstrates 4 sophisticated functions from `advanced_functions.py`:
 
@@ -251,12 +250,12 @@ The exercise demonstrates 4 sophisticated functions from `advanced_functions.py`
 **Sample interaction:**
 
 ```
-💬 USER: Analyze the enterprise customer segment for quarterly performance
+USER: Analyze the enterprise customer segment for quarterly performance
 
 ⏳ Processing with advanced functions...
-  🔧 Calling: analyze_customer_segment
+  Calling: analyze_customer_segment
 
-🤖 AGENT: Based on the quarterly analysis of our enterprise segment:
+AGENT: Based on the quarterly analysis of our enterprise segment:
 
 Revenue: $1.2M (↑ 15% QoQ)
 Customer Count: 45 active accounts
@@ -273,7 +272,7 @@ Recommendations:
 - Identify upsell opportunities in stable accounts
 ```
 
-### Task 3: Understand async patterns
+### Understand async patterns
 
 **Why Async?**
 ```python
@@ -293,12 +292,12 @@ async def analyze_customer_segment(segment: str, time_period: str) -> str:
 ```
 
 **Benefits of Async Functions:**
-- ⚡ **Performance**: Handle multiple operations concurrently
-- 🔄 **Scalability**: Don't block while waiting for I/O
-- 🎯 **Responsiveness**: Agent can process other tasks
-- 💪 **Real-world**: Matches production API patterns
+- **Performance**: Handle multiple operations concurrently
+- **Scalability**: Don't block while waiting for I/O
+- **Responsiveness**: Agent can process other tasks
+- **Real-world**: Matches production API patterns
 
-### Task 4: Function definition pattern
+### Function definition pattern
 
 **How the agent knows about functions** (from `advanced_tool_lab.py`):
 
@@ -341,7 +340,7 @@ agent = project_client.agents.create_agent(
 6. Agent synthesizes natural language response
 ```
 
-### Task 5: Key concepts
+### Key concepts
 
 **Advanced Function Patterns:**
 
@@ -377,7 +376,7 @@ agent = project_client.agents.create_agent(
 
 ---
 
-## Exercise 3: File Operations and Data Transformation
+## File Operations and Data Transformation
 
 In this exercise, you'll explore file processing capabilities that complement both code interpreter and custom functions.
 
@@ -390,24 +389,24 @@ File operations enable agents to:
 - Handle data validation
 - Process batch operations
 
-### Task 1: Run Exercise 3
+### Run Exercise 3
 
 1. **Select option 3** from the menu: "Exercise 3: File Operations and Data Transformation"
 
-### Task 2: Observe file processing
+### Observe file processing
 
 The exercise demonstrates three operations from `data_processor.py`:
 
 **Test 1: Load CSV File**
 ```
-📂 Loaded ../sales_data.csv
+Loaded ../sales_data.csv
    Successfully loaded 20 rows with 5 columns
    Columns: date, region, product, quantity, revenue
 ```
 
 **Test 2: Transform and Aggregate**
 ```
-📊 Transformation results:
+Transformation results:
    By Region: {
        "North": {"count": 7, "total_revenue": 45000},
        "South": {"count": 5, "total_revenue": 32000},
@@ -422,10 +421,10 @@ The exercise demonstrates three operations from `data_processor.py`:
 
 **Test 3: Export Results**
 ```
-💾 Export result: Successfully exported to analysis_results.json
+Export result: Successfully exported to analysis_results.json
 ```
 
-### Task 3: Understand file processing patterns
+### Understand file processing patterns
 
 **File Operations in Agent Context:**
 
@@ -458,7 +457,7 @@ Agent: "Here's the breakdown:
         East: $38,000 (30%)"
 ```
 
-### Task 4: File operation patterns
+### File operation patterns
 
 **From `data_processor.py`:**
 
@@ -485,7 +484,7 @@ async def load_csv_file(file_path: str) -> str:
         })
 ```
 
-### Task 5: Key concepts
+### Key concepts
 
 **File Operations vs Code Interpreter:**
 
@@ -503,20 +502,20 @@ async def load_csv_file(file_path: str) -> str:
 
 ---
 
-## Exercise 4: Comprehensive Interactive Demo
+## Comprehensive Interactive Demo
 
 In this exercise, you'll interact with an agent that combines ALL the capabilities you've learned.
 
-### Task 1: Run Exercise 4
+### Run Exercise 4
 
 1. **Select option 4** from the menu: "Exercise 4: Comprehensive Demo"
 
 2. The agent now has access to:
-   - 📊 Code interpreter (dynamic analysis)
-   - 🔧 Advanced async functions (business logic)
-   - 📁 File operations (data processing)
+   - Code interpreter (dynamic analysis)
+   - Advanced async functions (business logic)
+   - File operations (data processing)
 
-### Task 2: Experiment with combined capabilities
+### Experiment with combined capabilities
 
 **Try these queries:**
 
@@ -541,7 +540,7 @@ In this exercise, you'll interact with an agent that combines ALL the capabiliti
    and create a visualization showing trends
    ```
 
-### Task 3: Observe tool selection
+### Observe tool selection
 
 The agent intelligently selects tools based on the query:
 
@@ -556,7 +555,7 @@ Query: "Export data by region"
   → Uses file operations (structured transformation)
 ```
 
-### Task 4: Explore agent decision-making
+### Explore agent decision-making
 
 **How does the agent choose?**
 
@@ -579,9 +578,9 @@ AGENT REASONING:
 
 ---
 
-## Exercise 5: Architecture Overview
+## Architecture Overview
 
-### Task 1: View architecture
+### View architecture
 
 **Select option 5** from the menu to see the complete architecture diagram.
 
@@ -701,14 +700,14 @@ Congratulations! You've completed Lab 2 and mastered advanced tool calling patte
 
 Before deploying advanced tool agents:
 
-- ✅ Validate all function parameters
-- ✅ Implement comprehensive error handling
-- ✅ Add retry logic for transient failures
-- ✅ Log tool usage and performance
-- ✅ Test with edge cases
-- ✅ Monitor token usage (code interpreter can be expensive)
-- ✅ Set appropriate timeouts
-- ✅ Implement rate limiting for external APIs
+- Validate all function parameters
+- Implement comprehensive error handling
+- Add retry logic for transient failures
+- Log tool usage and performance
+- Test with edge cases
+- Monitor token usage (code interpreter can be expensive)
+- Set appropriate timeouts
+- Implement rate limiting for external APIs
 
 ### Next Steps
 
@@ -718,7 +717,7 @@ Before deploying advanced tool agents:
 
 ---
 
-## Exercise 5 (Bonus): Interactive Web Dashboard
+## Interactive Web Dashboard
 
 In this bonus exercise, you'll build a production-ready web interface for your Sales Analytics Agent using Streamlit, demonstrating how to create user-facing applications powered by AI agents.
 
@@ -727,11 +726,11 @@ In this bonus exercise, you'll build a production-ready web interface for your S
 ### What is Streamlit?
 
 **Streamlit** is a Python framework for building interactive web applications without JavaScript:
-- 🎨 Beautiful UI with minimal code
-- 📊 Built-in charts and visualizations
-- 📁 File upload widgets
-- 💬 Chat interfaces
-- 🚀 Fast development (under 200 lines)
+- Beautiful UI with minimal code
+- Built-in charts and visualizations
+- File upload widgets
+- Chat interfaces
+- Fast development (under 200 lines)
 
 ### Why Add a Web UI?
 
@@ -742,7 +741,7 @@ In this bonus exercise, you'll build a production-ready web interface for your S
 4. **Accessibility** - Share link, no Python installation required
 5. **Interactive** - Upload files, chat, explore data in real-time
 
-### Task 1: Install Streamlit
+### Install Streamlit
 
 The dependency is already in `requirements.txt`. If you haven't installed it yet:
 
@@ -754,23 +753,20 @@ This installs:
 - `streamlit` - Web framework
 - `plotly` - Interactive visualizations
 
-### Task 2: Understand the application
+### Understand the application
 
 The `streamlit_app.py` file provides a complete web UI with 4 tabs:
 
-**Tab 1: Upload Data** 📁
-- Drag-and-drop CSV upload
+**Tab 1: Upload Data** - Drag-and-drop CSV upload
 - Data preview and statistics
 - Agent initialization
 
-**Tab 2: Chat with Agent** 💬
-- Interactive chat interface
+**Tab 2: Chat with Agent** - Interactive chat interface
 - Ask questions about data
 - Get AI-powered insights
 - Chat history
 
-**Tab 3: Dashboard** 📊
-- Automatic visualizations
+**Tab 3: Dashboard** - Automatic visualizations
 - Key metrics
 - Interactive charts
 - Data export
@@ -781,7 +777,7 @@ The `streamlit_app.py` file provides a complete web UI with 4 tabs:
 - Troubleshooting
 - Technical details
 
-### Task 3: Run the Streamlit application
+### Run the Streamlit application
 
 1. **Navigate to the lab directory** (if not already there):
    ```powershell
@@ -804,7 +800,7 @@ The `streamlit_app.py` file provides a complete web UI with 4 tabs:
    - Sales Analytics Agent title
    - Four tabs for different features
 
-### Task 4: Upload and analyze data
+### Upload and analyze data
 
 **Step-by-step walkthrough:**
 
@@ -822,11 +818,11 @@ The `streamlit_app.py` file provides a complete web UI with 4 tabs:
 
 4. **Wait for confirmation**:
    ```
-   ✅ Agent initialized! Go to the Chat tab to start analyzing.
-   🎈 [balloons animation]
+   Agent initialized! Go to the Chat tab to start analyzing.
+   [balloons animation]
    ```
 
-### Task 5: Chat with your agent
+### Chat with your agent
 
 1. **Switch to "Chat with Agent" tab**
 
@@ -853,8 +849,8 @@ The `streamlit_app.py` file provides a complete web UI with 4 tabs:
    ```
 
 3. **Observe the interaction**:
-   - Your message appears with 👤 avatar
-   - Agent response appears with 🤖 avatar
+   - Your message appears with avatar
+   - Agent response appears with avatar
    - "Analyzing..." spinner shows while processing
    - Agent uses code interpreter for analysis
 
@@ -863,7 +859,7 @@ The `streamlit_app.py` file provides a complete web UI with 4 tabs:
    - Build on previous responses
    - Context is maintained in the thread
 
-### Task 6: Explore the dashboard
+### Explore the dashboard
 
 1. **Switch to "Dashboard" tab**
 
@@ -879,7 +875,7 @@ The `streamlit_app.py` file provides a complete web UI with 4 tabs:
    - Sort by different columns
    - Download data as CSV
 
-### Task 7: Understand the architecture
+### Understand the architecture
 
 **Streamlit Application Flow:**
 
@@ -910,7 +906,7 @@ The `streamlit_app.py` file provides a complete web UI with 4 tabs:
 └─────────────────┘  └──────────────┘
 ```
 
-### Task 8: Key code patterns
+### Key code patterns
 
 **File Upload Pattern:**
 ```python
@@ -953,7 +949,7 @@ for msg in st.session_state.messages:
     st.write(msg)
 ```
 
-### Task 9: Production considerations
+### Production considerations
 
 **When deploying to production:**
 
@@ -998,7 +994,7 @@ for msg in st.session_state.messages:
    - **Docker**: Containerize for any platform
    - **Internal Server**: Run behind corporate firewall
 
-### Task 10: Extend the application
+### Extend the application
 
 **Ideas for enhancement:**
 
@@ -1033,7 +1029,7 @@ for msg in st.session_state.messages:
        st.rerun()
    ```
 
-### Task 11: Compare CLI vs Web UI
+### Compare CLI vs Web UI
 
 | Aspect | CLI (advanced_tool_lab.py) | Web UI (streamlit_app.py) |
 |--------|---------------------------|---------------------------|
@@ -1052,19 +1048,19 @@ for msg in st.session_state.messages:
 ### Key Concepts Summary
 
 **What you learned:**
-1. ✅ How to build web UIs for AI agents
-2. ✅ Streamlit framework basics
-3. ✅ File upload and data preview
-4. ✅ Chat interface patterns
-5. ✅ Interactive visualizations
-6. ✅ Production deployment considerations
+1. How to build web UIs for AI agents
+2. Streamlit framework basics
+3. File upload and data preview
+4. Chat interface patterns
+5. Interactive visualizations
+6. Production deployment considerations
 
 **When to add a web UI:**
-- ✅ Non-technical users need access
-- ✅ Want visual, interactive results
-- ✅ Building demos or prototypes
-- ✅ Need to share with stakeholders
-- ✅ Production user-facing applications
+- Non-technical users need access
+- Want visual, interactive results
+- Building demos or prototypes
+- Need to share with stakeholders
+- Production user-facing applications
 
 ---
 
@@ -1078,7 +1074,7 @@ Congratulations! You've completed Lab 2 including the bonus web UI exercise.
 2. **Advanced Async Functions** - Business logic
 3. **File Operations** - Data transformation
 4. **Tool Selection** - Intelligent agent decisions
-5. **Web UI Development** ⭐ NEW - User-facing applications
+5. **Web UI Development** NEW - User-facing applications
 
 ### Next Steps
 

@@ -19,11 +19,11 @@ Both SDKs enable you to build powerful AI agents, but they take different archit
 | **Approach** | Portal-first, then code | Code-first |
 | **Best For** | Microsoft Foundry projects | Cross-platform, framework enthusiasts |
 | **Learning Curve** | Easier (portal + code) | Steeper (all code) |
-| **Portal Integration** | ✅ Native | ❌ Limited |
-| **Multi-Provider** | ❌ Azure only | ✅ OpenAI, Azure, Anthropic, local |
-| **Plugin Ecosystem** | ❌ No | ✅ Yes (community plugins) |
+| **Portal Integration** | Native | Limited |
+| **Multi-Provider** | Azure only | OpenAI, Azure, Anthropic, local |
+| **Plugin Ecosystem** | No | Yes (community plugins) |
 | **Code Samples** | All Labs 1-5 | Lab 04 |
-| **Production Ready** | ✅ Yes | ✅ Yes |
+| **Production Ready** | Yes | Yes |
 
 ---
 
@@ -81,7 +81,7 @@ messages = project_client.agents.list_messages(thread_id=thread.id)
 
 ### When to Use:
 
-✅ **Use Azure AI Projects SDK when:**
+**Use Azure AI Projects SDK when:**
 - Building agents for Microsoft Foundry projects
 - Want to leverage Foundry portal for agent management
 - Need VS Code extension integration
@@ -136,7 +136,7 @@ async with (
 
 ### When to Use:
 
-✅ **Use Microsoft Agent Framework when:**
+**Use Microsoft Agent Framework when:**
 - Need to switch between AI providers (OpenAI, Azure, local)
 - Building cross-platform applications
 - Want to use community plugins (Office365, GitHub, JIRA, etc.)
@@ -188,13 +188,13 @@ run = project_client.agents.create_and_process_run(
 ```
 
 **Pros:**
-- ✅ Can create agent in portal first
-- ✅ Simple thread-based conversation
-- ✅ Clear, straightforward API
+- Can create agent in portal first
+- Simple thread-based conversation
+- Clear, straightforward API
 
 **Cons:**
-- ❌ Azure-only
-- ❌ Less flexibility in execution patterns
+- Azure-only
+- Less flexibility in execution patterns
 
 ---
 
@@ -231,14 +231,14 @@ async with (
 ```
 
 **Pros:**
-- ✅ Provider-agnostic (can swap to OpenAI easily)
-- ✅ Framework patterns (async, context managers)
-- ✅ Plugin architecture for reusability
+- Provider-agnostic (can swap to OpenAI easily)
+- Framework patterns (async, context managers)
+- Plugin architecture for reusability
 
 **Cons:**
-- ❌ No portal integration
-- ❌ More boilerplate code
-- ❌ Requires async/await understanding
+- No portal integration
+- More boilerplate code
+- Requires async/await understanding
 
 ---
 
@@ -321,10 +321,10 @@ else:
 5. Test in Foundry portal
 
 **Compatibility:**
-- ✅ Custom functions translate directly
-- ✅ Instructions/prompts work the same
-- ❌ Plugins need rewriting as functions
-- ❌ Memory patterns differ
+- Custom functions translate directly
+- Instructions/prompts work the same
+- Plugins need rewriting as functions
+- Memory patterns differ
 
 ---
 
@@ -343,10 +343,10 @@ else:
 5. Implement memory if needed
 
 **Compatibility:**
-- ✅ Instructions work the same
-- ✅ Custom functions translate directly
-- ❌ MCP servers not directly supported
-- ❌ Code interpreter requires separate implementation
+- Instructions work the same
+- Custom functions translate directly
+- MCP servers not directly supported
+- Code interpreter requires separate implementation
 
 ---
 
@@ -515,15 +515,15 @@ Consider learning Microsoft Agent Framework if:
 ## Summary
 
 **For most learners completing Labs 1-5:**
-- ✅ **Azure AI Projects SDK** is the right choice
-- ✅ You have all the skills needed for production agents
-- ✅ No need to learn Agent Framework unless specific requirements
+- **Azure AI Projects SDK** is the right choice
+- You have all the skills needed for production agents
+- No need to learn Agent Framework unless specific requirements
 
 **Agent Framework is valuable when:**
-- 🔄 Need multi-provider support
-- 🔌 Want plugin ecosystem
-- 🎯 Require advanced planning/memory
-- 💻 Prefer code-first, framework patterns
+- Need multi-provider support
+- Want plugin ecosystem
+- Require advanced planning/memory
+- Prefer code-first, framework patterns
 
 **Both SDKs are production-ready and Microsoft-supported.** Your choice depends on your requirements, not quality or capability.
 

@@ -72,7 +72,7 @@ Each step builds on the previous, creating a complete production system.
 
 Before deploying, you need to install and verify all required tools.
 
-### Task 1: Navigate to the lab directory
+### Navigate to the lab directory
 
 1. Open Visual Studio Code.
 
@@ -83,7 +83,7 @@ Before deploying, you need to install and verify all required tools.
    
    Use **File > Open Folder** in VS Code.
 
-### Task 2: Install Azure Developer CLI
+### Install Azure Developer CLI
 
 The Azure Developer CLI (azd) automates deployment to Azure.
 
@@ -107,7 +107,7 @@ azd version
 
 You should see version 1.23.0 or later.
 
-### Task 3: Install Docker Desktop
+### Install Docker Desktop
 
 Docker is required for containerizing your agent.
 
@@ -122,7 +122,7 @@ docker --version
 docker ps
 ```
 
-### Task 4: Verify all prerequisites
+### Verify all prerequisites
 
 Run the automated prerequisites checker:
 
@@ -131,11 +131,11 @@ python check_prerequisites.py
 ```
 
 This script verifies:
-- ✅ Python 3.10+
-- ✅ Azure Developer CLI
-- ✅ Azure CLI
-- ✅ Docker (installed and running)
-- ✅ Git (optional)
+- Python 3.10+
+- Azure Developer CLI
+- Azure CLI
+- Docker (installed and running)
+- Git (optional)
 
 **Expected Output:**
 
@@ -146,21 +146,21 @@ Lab 6: Prerequisites Check
 
 Prerequisites Check Results:
 ------------------------------------------------------------
-✅ Python: 3.12.0
-✅ Azure Developer CLI: 1.23.0
-✅ Azure CLI: Installed
-✅ Docker: 24.0.7
-✅ Docker: Running
-⚠️  Azure CLI: Not logged in (run 'az login')
-✅ Git: 2.42.0
+Python: 3.12.0
+Azure Developer CLI: 1.23.0
+Azure CLI: Installed
+Docker: 24.0.7
+Docker: Running
+Azure CLI: Not logged in (run 'az login')
+Git: 2.42.0
 ------------------------------------------------------------
 
-✅ All required prerequisites are installed!
+All required prerequisites are installed!
 ```
 
 If any checks fail, follow the installation instructions provided by the script.
 
-### Task 5: Azure login
+### Azure login
 
 Log into Azure with both CLI tools:
 
@@ -199,7 +199,7 @@ The deployment creates:
 
 **Estimated time:** 20 minutes (10-15 minutes for initial deployment)
 
-### Task 1: Review the agent configuration
+### Review the agent configuration
 
 Before deploying, review the agent definition in `agent.yaml`:
 
@@ -220,7 +220,7 @@ tools: []  # Will add search tool in Step 3
 
 This defines your agent's behavior and configuration.
 
-### Task 2: Run the deployment helper
+### Run the deployment helper
 
 Start the interactive deployment wizard:
 
@@ -242,17 +242,13 @@ The wizard will guide you through:
 - **Azure region**: Choose "northcentralus", "eastus", or "westus"
   - (These regions have good OpenAI availability)
 
-### Task 3: Wait for deployment
+### Wait for deployment
 
 The deployment process will:
 
 ```
-[1/5] Creating resource group...          ✅
-[2/5] Deploying Foundry project...        ✅
-[3/5] Creating OpenAI deployment...       ✅
-[4/5] Building agent container...         ⏳ (can take 5-10 minutes)
-[5/5] Deploying agent...                  ✅
-```
+[1/5] Creating resource group...          [2/5] Deploying Foundry project...        [3/5] Creating OpenAI deployment...       [4/5] Building agent container...         ⏳ (can take 5-10 minutes)
+[5/5] Deploying agent...                  ```
 
 **⏱️ This takes 10-15 minutes.** Go get coffee! ☕
 
@@ -266,7 +262,7 @@ The deployment is complete when you see:
 Your agent has been deployed to Azure!
 ```
 
-### Task 4: Validate the deployment
+### Validate the deployment
 
 Run the validation script to confirm everything worked:
 
@@ -281,19 +277,19 @@ python validate_deployment.py
   Lab 6: Deployment Validation
 ========================================
 
-🔍 Retrieving deployment information from azd...
+Retrieving deployment information from azd...
 
-   ✅ Found endpoint: https://your-project.services.ai.azure.com
-   ✅ Found project: your-project-name
-   ✅ Found resource group: rg-lab5-xyz
+   Found endpoint: https://your-project.services.ai.azure.com
+   Found project: your-project-name
+   Found resource group: rg-lab5-xyz
 
-🔍 Testing connection to AI Project...
+Testing connection to AI Project...
 
-   ✅ Successfully connected to project!
+   Successfully connected to project!
 
-🔍 Checking Azure resources...
+Checking Azure resources...
 
-   ✅ Found 8 resources in 'rg-lab5-xyz'
+   Found 8 resources in 'rg-lab5-xyz'
 
 🌐 Portal URLs:
 
@@ -304,11 +300,11 @@ python validate_deployment.py
   Validation Summary
 ========================================
 
-✅ All checks passed!
-✅ Your agent is deployed and ready to use!
+All checks passed!
+Your agent is deployed and ready to use!
 ```
 
-### Task 5: Test in Foundry Playground
+### Test in Foundry Playground
 
 1. Open the **Foundry Portal**: https://ai.azure.com
 
@@ -347,7 +343,7 @@ Now you'll add enterprise knowledge search capabilities by creating Azure AI Sea
 
 **Estimated time:** 15 minutes
 
-### Task 1: Review sample documents
+### Review sample documents
 
 The lab includes realistic company policy documents in `sample_documents/`:
 
@@ -361,7 +357,7 @@ sample_documents/
 
 Open one or two documents to see the content. These will be searchable by your agent.
 
-### Task 2: Run the search setup script
+### Run the search setup script
 
 This script automates everything:
 
@@ -382,37 +378,37 @@ The script will:
 
 ```
 Step 1: Retrieving Deployment Information
-✅ Resource Group: rg-lab5-xyz
-✅ Location: northcentralus
+Resource Group: rg-lab5-xyz
+Location: northcentralus
 
 Step 2: Creating Azure AI Search Service
 Creating search service: search-abc123
 ⏱️  This takes 2-3 minutes...
-✅ Search service created successfully!
+Search service created successfully!
 
 Step 3: Creating Search Index
-✅ Index 'company-knowledge' created successfully!
+Index 'company-knowledge' created successfully!
 
 Step 4: Uploading Sample Documents
-   📄 company_handbook.md
-   📄 remote_work_policy.txt
-   📄 expense_report_guide.md
-   📄 it_security_policy.txt
+   company_handbook.md
+   remote_work_policy.txt
+   expense_report_guide.md
+   it_security_policy.txt
 
-✅ Uploaded 4 documents successfully!
+Uploaded 4 documents successfully!
 
 Step 5: Testing Search
-   📄 Remote Work Policy - Contoso Corporation
+   Remote Work Policy - Contoso Corporation
       Category: Policy
       Source: remote_work_policy.txt
 
-✅ Search is working correctly!
+Search is working correctly!
 
 Step 6: Saving Configuration
-✅ Configuration saved to .env
+Configuration saved to .env
 ```
 
-### Task 3: Verify search in Azure Portal
+### Verify search in Azure Portal
 
 1. Open **Azure Portal**: https://portal.azure.com
 
@@ -438,7 +434,7 @@ Now you'll connect your agent to the Azure AI Search service using the Foundry p
 
 **Estimated time:** 10 minutes
 
-### Task 1: Open Foundry portal
+### Open Foundry portal
 
 1. Go to: **https://ai.azure.com**
 
@@ -446,7 +442,7 @@ Now you'll connect your agent to the Azure AI Search service using the Foundry p
 
 3. Ensure you're in the correct subscription and project
 
-### Task 2: Navigate to Management Center
+### Navigate to Management Center
 
 1. In the Foundry portal, click **Management Center** in the bottom left corner
 
@@ -454,7 +450,7 @@ Now you'll connect your agent to the Azure AI Search service using the Foundry p
 
 This is where you manage connections to external services like Azure AI Search.
 
-### Task 3: Add Azure AI Search connection
+### Add Azure AI Search connection
 
 1. Click **+ New Connection** button
 
@@ -471,7 +467,7 @@ This is where you manage connections to external services like Azure AI Search.
 
 6. You should see a success message: "Connection created successfully"
 
-### Task 4: Update agent with search tool
+### Update agent with search tool
 
 Now add the search tool to your agent:
 
@@ -500,7 +496,7 @@ Now add the search tool to your agent:
 
 **Your agent now has search capabilities!** 🎉
 
-### Task 5: Test in playground with knowledge queries
+### Test in playground with knowledge queries
 
 1. Click **Open in playground** on your agent
 
@@ -527,14 +523,14 @@ Now add the search tool to your agent:
    
    **Expected**: Agent provides information about encryption, passwords, VPN usage.
 
-### Task 6: Observe search behavior
+### Observe search behavior
 
 As you test, notice:
 
-✅ **Grounding**: Agent responses include information from your documents  
-✅ **Citations**: (In production) Agent shows which documents were used  
-✅ **Relevance**: Semantic search finds relevant content even without exact keyword matches  
-✅ **Context**: Agent understands the question and finds appropriate information
+**Grounding**: Agent responses include information from your documents  
+**Citations**: (In production) Agent shows which documents were used  
+**Relevance**: Semantic search finds relevant content even without exact keyword matches  
+**Context**: Agent understands the question and finds appropriate information
 
 ### Troubleshooting
 
@@ -572,7 +568,7 @@ The Foundry portal will automatically:
 - Package app icons and configuration
 - Provide downloadable `manifest.zip`
 
-### Task 1: Prepare app information
+### Prepare app information
 
 Before publishing, gather this information:
 
@@ -586,7 +582,7 @@ Before publishing, gather this information:
 
 > **Note**: For this lab, placeholder URLs are fine. In production, these should be real policy pages.
 
-### Task 2: Create app icons
+### Create app icons
 
 You'll need two simple icons:
 
@@ -602,7 +598,7 @@ You'll need two simple icons:
 
 **Quick option**: Use a solid color square with your initials or a simple emoji as the icon for this lab.
 
-### Task 3: Publish from Foundry portal
+### Publish from Foundry portal
 
 1. Go to your agent in Foundry portal (**Build** → **Agents**)
 
@@ -614,7 +610,7 @@ You'll need two simple icons:
 
 5. Click **Continue**
 
-### Task 4: Configure Teams app details
+### Configure Teams app details
 
 Fill in the Teams app configuration form:
 
@@ -643,7 +639,7 @@ Fill in the Teams app configuration form:
 
 Click **Generate Package**
 
-### Task 5: Download manifest package
+### Download manifest package
 
 After generation completes:
 
@@ -656,12 +652,12 @@ After generation completes:
 4. Save the file to your computer
 
 **What just happened:**
-- ✅ Azure Bot Service was created automatically
-- ✅ Bot authentication was configured
-- ✅ Teams manifest was generated
-- ✅ App package was created
+- Azure Bot Service was created automatically
+- Bot authentication was configured
+- Teams manifest was generated
+- App package was created
 
-### Task 6: Upload to Microsoft Teams
+### Upload to Microsoft Teams
 
 Now install the app in Teams:
 
@@ -682,7 +678,7 @@ Now install the app in Teams:
 
 8. The app installs and opens automatically
 
-### Task 7: Test your agent in Teams!
+### Test your agent in Teams!
 
 1. Find your agent in Teams (should open automatically after install)
 
@@ -706,11 +702,11 @@ Now install the app in Teams:
 
 ### What You've Accomplished
 
-✅ Published agent to Teams via Foundry portal  
-✅ Created Azure Bot Service automatically  
-✅ Generated Teams app manifest  
-✅ Installed custom app in Teams  
-✅ Tested knowledge queries in production environment
+Published agent to Teams via Foundry portal  
+Created Azure Bot Service automatically  
+Generated Teams app manifest  
+Installed custom app in Teams  
+Tested knowledge queries in production environment
 
 ### Troubleshooting
 
@@ -754,7 +750,7 @@ Leaving resources running incurs charges:
 
 Cleaning up now saves money! 💰
 
-### Task 1: Run the cleanup script
+### Run the cleanup script
 
 The cleanup script safely removes all Azure resources:
 
@@ -762,7 +758,7 @@ The cleanup script safely removes all Azure resources:
 python cleanup_all.py
 ```
 
-### Task 2: Confirm deletion
+### Confirm deletion
 
 The script will:
 
@@ -792,33 +788,33 @@ The script will:
 
 4. Type **yes** and press Enter
 
-### Task 3: Wait for cleanup
+### Wait for cleanup
 
 The cleanup process:
 
 ```
-🚀 Running azd down...
+Running azd down...
 ⏱️  This may take 3-5 minutes...
 
 Deleting resource group...
 Removing Azure Bot Service...
 Purging OpenAI resources...
 
-✅ All resources deleted successfully!
+All resources deleted successfully!
 ```
 
-### Task 4: Verify cleanup
+### Verify cleanup
 
 The script automatically verifies resources were deleted:
 
 ```
-✅ Verifying cleanup...
+Verifying cleanup...
 
-✅ Resource group 'rg-lab5-xyz' deleted
-✅ All resources removed successfully!
+Resource group 'rg-lab5-xyz' deleted
+All resources removed successfully!
 ```
 
-### Task 5: Remove Teams app (optional)
+### Remove Teams app (optional)
 
 If you installed the agent in Teams, uninstall it:
 
@@ -836,7 +832,7 @@ If you installed the agent in Teams, uninstall it:
 
 The Azure Bot Service backend is already deleted, so the app won't work anymore anyway.
 
-### Task 6: Verify in Azure Portal
+### Verify in Azure Portal
 
 Double-check everything is gone:
 
@@ -871,12 +867,12 @@ az group delete --name rg-lab5-xyz --yes --no-wait
 
 ### What You Accomplished
 
-✅ **Deployed a real AI agent to Azure** using Azure Developer CLI  
-✅ **Created Azure AI Search** with indexed company documents  
-✅ **Connected agent to search** using Foundry portal (Foundry IQ)  
-✅ **Published to Microsoft Teams** using Foundry portal automation  
-✅ **Tested in production** with real knowledge queries  
-✅ **Cleaned up resources** to manage costs
+**Deployed a real AI agent to Azure** using Azure Developer CLI  
+**Created Azure AI Search** with indexed company documents  
+**Connected agent to search** using Foundry portal (Foundry IQ)  
+**Published to Microsoft Teams** using Foundry portal automation  
+**Tested in production** with real knowledge queries  
+**Cleaned up resources** to manage costs
 
 ### Skills You Learned
 
@@ -908,12 +904,12 @@ az group delete --name rg-lab5-xyz --yes --no-wait
 
 From this lab, you learned:
 
-✅ **Automate deployments** - Use scripts and tools like `azd`  
-✅ **Use portal UIs** - When available, portals simplify complex tasks  
-✅ **Monitor resources** - Application Insights tracks agent behavior  
-✅ **Manage costs** - Always clean up when done  
-✅ **Test thoroughly** - Validate at each step before proceeding  
-✅ **Document setup** - Keep track of endpoints and configuration
+**Automate deployments** - Use scripts and tools like `azd`  
+**Use portal UIs** - When available, portals simplify complex tasks  
+**Monitor resources** - Application Insights tracks agent behavior  
+**Manage costs** - Always clean up when done  
+**Test thoroughly** - Validate at each step before proceeding  
+**Document setup** - Keep track of endpoints and configuration
 
 ### Next Steps
 
@@ -955,7 +951,7 @@ You've successfully deployed a production AI agent with knowledge search and Tea
 }
 ```
 
-### Task 4: Deployment walkthrough
+### Deployment walkthrough
 
 The application walks through the 9-step deployment process:
 
@@ -969,7 +965,7 @@ The application walks through the 9-step deployment process:
 8. **Publish to Teams** - Submit to admin center
 9. **Users Install App** - Teams App Store
 
-### Task 5: Teams capabilities
+### Teams capabilities
 
 **What agents can do in Teams:**
 
@@ -983,15 +979,15 @@ The application walks through the 9-step deployment process:
 | **SSO** | Single Sign-On | Seamless auth |
 | **Notifications** | Proactive messages | Alerts, updates |
 
-### Task 6: Security and compliance
+### Security and compliance
 
 **Built-in security features:**
-- ✅ Azure AD authentication
-- ✅ Respects Teams data policies
-- ✅ Audit logging enabled
-- ✅ Data residency compliance
-- ✅ Admin controls and policies
-- ✅ User consent and permissions
+- Azure AD authentication
+- Respects Teams data policies
+- Audit logging enabled
+- Data residency compliance
+- Admin controls and policies
+- User consent and permissions
 
 **Production considerations:**
 - Implement rate limiting
@@ -1002,7 +998,7 @@ The application walks through the 9-step deployment process:
 
 ---
 
-## Exercise 3: Microsoft 365 (Graph API) Integration
+## Microsoft 365 (Graph API) Integration
 
 In this exercise, you'll learn how to integrate agents with Microsoft 365 services using Microsoft Graph API.
 
@@ -1015,11 +1011,11 @@ In this exercise, you'll learn how to integrate agents with Microsoft 365 servic
 One API → All M365 Services
 ```
 
-### Task 1: Run Exercise 3
+### Run Exercise 3
 
 1. **Select option 3** from the menu: "Exercise 3: Microsoft 365 (Graph API) Integration"
 
-### Task 2: Understand Graph API architecture
+### Understand Graph API architecture
 
 ```
 ┌─────────────────────────────────┐
@@ -1037,7 +1033,7 @@ One API → All M365 Services
 └─────────────────────────────────┘
 ```
 
-### Task 3: Common integrations
+### Common integrations
 
 The application shows 4 common integration patterns:
 
@@ -1117,7 +1113,7 @@ def get_user_profile() -> dict:
 - Get manager info
 - Access user preferences
 
-### Task 4: Authentication flow
+### Authentication flow
 
 **OAuth 2.0 Process:**
 
@@ -1138,7 +1134,7 @@ scopes = [
 ]
 ```
 
-### Task 5: Implementation pattern
+### Implementation pattern
 
 **Complete example:**
 ```python
@@ -1158,9 +1154,9 @@ def search_company_docs(query: str):
     return format_results(results)
 ```
 
-### Task 6: Benefits and considerations
+### Benefits and considerations
 
-**✅ Benefits:**
+**Benefits:**
 - Unified API for all M365 services
 - Strong authentication and security
 - Respects user permissions (no elevation)
@@ -1168,7 +1164,7 @@ def search_company_docs(query: str):
 - Webhooks for real-time events
 - Well-documented with SDKs
 
-**⚠️ Considerations:**
+**Considerations:**
 - Requires proper permission scopes
 - Rate limiting (throttling)
 - Token expiration and refresh
@@ -1177,17 +1173,17 @@ def search_company_docs(query: str):
 
 ---
 
-## Exercise 4: Production Enterprise Agent Demo
+## Production Enterprise Agent Demo
 
 In this exercise, you'll interact with a complete enterprise agent demonstrating all integration concepts.
 
-### Task 1: Run Exercise 4
+### Run Exercise 4
 
 1. **Select option 4** from the menu: "Exercise 4: Production Enterprise Agent Demo"
 
 2. The application creates an interactive enterprise assistant.
 
-### Task 2: Try the enterprise agent
+### Try the enterprise agent
 
 **Suggested Queries:**
 
@@ -1211,14 +1207,14 @@ In this exercise, you'll interact with a complete enterprise agent demonstrating
 - "Where can I find the employee handbook?"
 - "What's the org chart for my department?"
 
-### Task 3: Observe agent behavior
+### Observe agent behavior
 
 **The agent demonstrates:**
-- ✅ Natural language understanding
-- ✅ Context retention across messages
-- ✅ Professional, helpful tone
-- ✅ Graceful handling of unknown information
-- ✅ Suggestions for further help
+- Natural language understanding
+- Context retention across messages
+- Professional, helpful tone
+- Graceful handling of unknown information
+- Suggestions for further help
 
 **In production, this agent would:**
 - Search actual SharePoint/documents
@@ -1227,7 +1223,7 @@ In this exercise, you'll interact with a complete enterprise agent demonstrating
 - Personalize based on user profile
 - Log all interactions for compliance
 
-### Task 4: Production enhancements
+### Production enhancements
 
 **To make this production-ready:**
 
@@ -1263,9 +1259,9 @@ In this exercise, you'll interact with a complete enterprise agent demonstrating
 
 ---
 
-## Exercise 5: Architecture & Deployment Guide
+## Architecture & Deployment Guide
 
-### Task 1: View the complete architecture
+### View the complete architecture
 
 **Select option 5** from the menu to see the production architecture.
 
@@ -1346,14 +1342,14 @@ In this exercise, you'll interact with a complete enterprise agent demonstrating
 - Encrypt data at rest and in transit
 - Regular security reviews
 
-**📊 Monitoring:**
+**Monitoring:**
 - Application Insights for telemetry
 - Custom metrics (response time, success rate)
 - Error tracking and alerting
 - User feedback collection
 - Cost monitoring (token usage)
 
-**⚡ Performance:**
+**Performance:**
 - Cache frequent queries
 - Optimize token usage
 - Use async operations
@@ -1367,7 +1363,7 @@ In this exercise, you'll interact with a complete enterprise agent demonstrating
 - Rich Adaptive Cards
 - Feedback mechanisms
 
-**🔧 Operations:**
+**Operations:**
 - CI/CD pipelines
 - Automated testing
 - Blue-green deployments
@@ -1445,14 +1441,14 @@ Congratulations! You've completed Lab 6 and learned production deployment patter
 
 Before going live:
 
-- ✅ **Security**: Auth, permissions, encryption
-- ✅ **Compliance**: Data residency, audit logs, policies
-- ✅ **Performance**: Caching, scaling, optimization
-- ✅ **Monitoring**: Telemetry, alerts, dashboards
-- ✅ **Testing**: Unit, integration, load, security tests
-- ✅ **Documentation**: User guides, admin docs, runbooks
-- ✅ **Training**: User training, admin training
-- ✅ **Support**: Help desk, escalation procedures
+- **Security**: Auth, permissions, encryption
+- **Compliance**: Data residency, audit logs, policies
+- **Performance**: Caching, scaling, optimization
+- **Monitoring**: Telemetry, alerts, dashboards
+- **Testing**: Unit, integration, load, security tests
+- **Documentation**: User guides, admin docs, runbooks
+- **Training**: User training, admin training
+- **Support**: Help desk, escalation procedures
 
 ### Congratulations!
 

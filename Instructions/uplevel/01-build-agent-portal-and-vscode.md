@@ -443,19 +443,19 @@ Observe how the agent uses the custom functions to fulfill your requests. Type `
 Now that you've worked with both approaches, here's guidance on when to use each:
 
 ### Use the Portal when:
-- ✅ Rapid prototyping and testing agent configurations
-- ✅ Quick adjustments to instructions and system prompts
-- ✅ Testing with grounding data and built-in tools
-- ✅ Demonstrating concepts to stakeholders
-- ✅ You need a quick agent without writing code
+- Rapid prototyping and testing agent configurations
+- Quick adjustments to instructions and system prompts
+- Testing with grounding data and built-in tools
+- Demonstrating concepts to stakeholders
+- You need a quick agent without writing code
 
 ### Use VS Code / SDK when:
-- ✅ Building production applications
-- ✅ Implementing custom functions and complex logic
-- ✅ Integrating with existing code and systems
-- ✅ Version control and CI/CD pipelines
-- ✅ Advanced orchestration and multi-agent scenarios
-- ✅ Programmatic agent management at scale
+- Building production applications
+- Implementing custom functions and complex logic
+- Integrating with existing code and systems
+- Version control and CI/CD pipelines
+- Advanced orchestration and multi-agent scenarios
+- Programmatic agent management at scale
 
 ### Hybrid Approach (Best Practice):
 1. **Prototype** in the portal to validate concepts
@@ -493,11 +493,11 @@ To avoid unnecessary Azure charges, delete the resources you created:
 
 In this exercise, you:
 
-✅ Created an AI agent in the Microsoft Foundry portal with grounding data  
-✅ Enabled built-in tools like file search  
-✅ Connected to your project using the VS Code extension  
-✅ Implemented custom functions programmatically  
-✅ Learned when to use portal vs code-based approaches  
+Created an AI agent in the Microsoft Foundry portal with grounding data  
+Enabled built-in tools like file search  
+Connected to your project using the VS Code extension  
+Implemented custom functions programmatically  
+Learned when to use portal vs code-based approaches  
 
 You now have the foundational skills to build AI agents using both visual and code-based workflows!
 

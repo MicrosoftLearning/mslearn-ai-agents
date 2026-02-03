@@ -37,10 +37,10 @@ Before starting this lab, ensure you have:
 
 You'll build a **Content Creation Pipeline** that coordinates multiple specialized agents:
 
-- **🔍 Research Agent**: Gathers information and key findings on topics
-- **📋 Outline Agent**: Creates structured outlines from research
-- **✍️ Writer Agent**: Generates polished content from outlines
-- **👁️ Review Agent**: (Optional) Quality checks and editorial review
+- **Research Agent**: Gathers information and key findings on topics
+- **Outline Agent**: Creates structured outlines from research
+- **Writer Agent**: Generates polished content from outlines
+- **Review Agent**: (Optional) Quality checks and editorial review
 
 These agents will work together in three different orchestration patterns, allowing you to understand the progression from simple to sophisticated multi-agent systems.
 
@@ -62,7 +62,7 @@ Menu Options:
 
 ## Setup
 
-### Task 1: Navigate to the lab directory
+### Navigate to the lab directory
 
 1. Open Visual Studio Code.
 
@@ -73,7 +73,7 @@ Menu Options:
    
    Use **File > Open Folder** in VS Code.
 
-### Task 2: Configure environment
+### Configure environment
 
 1. In the lab folder, locate the provided `.env` and `requirements.txt` files.
 
@@ -92,16 +92,16 @@ Menu Options:
     pip install -r requirements.txt
     ```
 
-### Task 3: Verify setup
+### Verify setup
 
 Ensure you have:
-- ✅ `multi_agent_lab.py` - Main unified application
-- ✅ `requirements.txt`
-- ✅ `.env` with your project endpoint
+- `multi_agent_lab.py` - Main unified application
+- `requirements.txt`
+- `.env` with your project endpoint
 
 ---
 
-## Exercise 1: Local Multi-Agent Coordination
+## Local Multi-Agent Coordination
 
 In this exercise, you'll see how multiple specialized agents can work together sequentially in the same process to complete a complex task.
 
@@ -124,7 +124,7 @@ In this exercise, you'll see how multiple specialized agents can work together s
 └─────────────────────────────────────┘
 ```
 
-### Task 1: Run Exercise 1
+### Run Exercise 1
 
 1. **Start the unified application**:
 
@@ -134,15 +134,15 @@ In this exercise, you'll see how multiple specialized agents can work together s
 
 2. **Select option 1** from the menu: "Exercise 1: Local Multi-Agent Coordination"
 
-### Task 2: Observe the content creation pipeline
+### Observe the content creation pipeline
 
 The application will demonstrate a complete multi-agent workflow:
 
 **Phase 1: Research**
 ```
-🔍 Research Agent working...
+Research Agent working...
 
-📊 Research Results:
+Research Results:
 • AI agents improve efficiency by automating repetitive tasks
 • Cost savings of 30-40% in business automation scenarios
 • 24/7 availability without human intervention
@@ -152,7 +152,7 @@ The application will demonstrate a complete multi-agent workflow:
 
 **Phase 2: Outline**
 ```
-📋 Outline Agent working...
+Outline Agent working...
 
 📝 Outline:
 1. Introduction to AI Agents in Business
@@ -166,16 +166,16 @@ The application will demonstrate a complete multi-agent workflow:
 
 **Phase 3: Writing**
 ```
-✍️ Writer Agent working...
+Writer Agent working...
 
-📄 Final Article:
+Final Article:
 AI agents are revolutionizing business automation by providing
 intelligent, autonomous capabilities that transform how organizations
 operate. These digital assistants bring unprecedented efficiency...
 [complete article generated]
 ```
 
-### Task 3: Understand the coordination flow
+### Understand the coordination flow
 
 **Sequential Coordination Pattern:**
 ```python
@@ -192,13 +192,13 @@ final_content = writer_agent.run(outline)
 ```
 
 **Key Characteristics:**
-- ✅ **Simple**: Easy to understand and debug
-- ✅ **Fast**: No network latency between agents
-- ✅ **Reliable**: All agents in same process
-- ❌ **Limited Scalability**: Bound to single process
-- ❌ **No Isolation**: One agent failure affects all
+- **Simple**: Easy to understand and debug
+- **Fast**: No network latency between agents
+- **Reliable**: All agents in same process
+- **Limited Scalability**: Bound to single process
+- **No Isolation**: One agent failure affects all
 
-### Task 4: Key concepts
+### Key concepts
 
 **When to Use Local Coordination:**
 - Prototyping and development
@@ -223,7 +223,7 @@ Iterative:   A → B → C → (back to A if needed)
 
 ---
 
-## Exercise 2: Agent-to-Agent (A2A) Communication
+## Agent-to-Agent (A2A) Communication
 
 In this exercise, you'll learn about distributed agent architectures using the Agent-to-Agent protocol, where agents run as independent services.
 
@@ -247,7 +247,7 @@ In this exercise, you'll learn about distributed agent architectures using the A
 └─────────────┘ └────────────┘ └────────────┘
 ```
 
-### Task 1: Run Exercise 2
+### Run Exercise 2
 
 1. If not already running, start the application:
    ```powershell
@@ -256,7 +256,7 @@ In this exercise, you'll learn about distributed agent architectures using the A
 
 2. **Select option 2** from the menu: "Exercise 2: Agent-to-Agent (A2A) Communication"
 
-### Task 2: Understand A2A components
+### Understand A2A components
 
 The exercise explains the four key components of A2A:
 
@@ -298,7 +298,7 @@ else:
     handle_error(result['error'])
 ```
 
-### Task 3: Observe the simulation
+### Observe the simulation
 
 The application simulates a distributed workflow:
 
@@ -312,7 +312,7 @@ The application simulates a distributed workflow:
 [Coordinator] Workflow complete!
 ```
 
-### Task 4: Key concepts
+### Key concepts
 
 **A2A Benefits:**
 
@@ -326,7 +326,7 @@ The application simulates a distributed workflow:
 | **Monitoring** | Track each agent separately |
 
 **Deployment Options:**
-- **Azure Container Apps** ⭐ (Recommended - serverless containers)
+- **Azure Container Apps** (Recommended - serverless containers)
 - **Azure Kubernetes Service** (AKS - full orchestration)
 - **Azure App Service** (Simple web apps)
 - **Azure Functions** (Serverless, event-driven)
@@ -365,7 +365,7 @@ async def invoke_agent(agent_endpoint, task):
         raise
 ```
 
-### Task 5: A2A vs Local comparison
+### A2A vs Local comparison
 
 | Aspect | Local | A2A Distributed |
 |--------|-------|-----------------|
@@ -378,7 +378,7 @@ async def invoke_agent(agent_endpoint, task):
 
 ---
 
-## Exercise 3: Workflow Orchestration Concepts
+## Workflow Orchestration Concepts
 
 In this exercise, you'll learn about visual workflow orchestration and when to use code vs visual tools.
 
@@ -386,11 +386,11 @@ In this exercise, you'll learn about visual workflow orchestration and when to u
 
 **Workflow orchestration** provides visual, low-code/no-code coordination of multi-agent systems. Tools like Microsoft Foundry Workflow Designer let you drag-and-drop agents into workflows.
 
-### Task 1: Run Exercise 3
+### Run Exercise 3
 
 1. **Select option 3** from the menu: "Exercise 3: Workflow Orchestration Concepts"
 
-### Task 2: Understand visual workflows
+### Understand visual workflows
 
 The exercise displays a visual workflow canvas:
 
@@ -414,7 +414,7 @@ The exercise displays a visual workflow canvas:
 └─────────────────────────────────────────────────────┘
 ```
 
-### Task 3: Learn workflow components
+### Learn workflow components
 
 **1. Triggers**
 - Manual start button
@@ -446,7 +446,7 @@ The exercise displays a visual workflow canvas:
 - Store intermediate results
 - Aggregate final outputs
 
-### Task 4: Code vs Visual comparison
+### Code vs Visual comparison
 
 **Code-Based Orchestration:**
 ```python
@@ -488,23 +488,23 @@ else:
 }
 ```
 
-### Task 5: When to use each approach
+### When to use each approach
 
-**✅ Use Code When:**
+**Use Code When:**
 - Need fine-grained control
 - Complex custom logic required
 - Version control is critical
 - Frequent debugging expected
 - Dev team is technical
 
-**✅ Use Visual Workflows When:**
+**Use Visual Workflows When:**
 - Non-technical stakeholders involved
 - Rapid prototyping needed
 - Standard patterns apply
 - Visual documentation helps
 - Business users design workflows
 
-**🎯 Best Practice: Use Both!**
+**Best Practice: Use Both!**
 ```
 1. Prototype visually in workflow designer
 2. Export workflow to code
@@ -515,17 +515,17 @@ else:
 
 ---
 
-## Exercise 4: Interactive Content Pipeline Demo
+## Interactive Content Pipeline Demo
 
 In this exercise, you'll interact with a live multi-agent content creation pipeline.
 
-### Task 1: Run Exercise 4
+### Run Exercise 4
 
 1. **Select option 4** from the menu: "Exercise 4: Interactive Content Pipeline Demo"
 
 2. The application creates a Research + Writer agent team.
 
-### Task 2: Create content interactively
+### Create content interactively
 
 **Try these topics:**
 
@@ -542,22 +542,22 @@ In this exercise, you'll interact with a live multi-agent content creation pipel
 3. **Custom Topics:**
    - Enter your own topic of interest
 
-### Task 3: Observe the workflow
+### Observe the workflow
 
 For each topic, you'll see:
 
 ```
-📍 Creating content about: 'Your Topic'
+Creating content about: 'Your Topic'
 ══════════════════════════════════════════════════════
 
-🔍 Step 1: Research Agent working...
-   ✓ Research complete
+Step 1: Research Agent working...
+   Research complete
 
-✍️ Step 2: Writer Agent working...
-   ✓ Writing complete
+Step 2: Writer Agent working...
+   Writing complete
 
 ══════════════════════════════════════════════════════
-📄 GENERATED CONTENT
+GENERATED CONTENT
 ══════════════════════════════════════════════════════
 
 [Your generated article appears here]
@@ -565,7 +565,7 @@ For each topic, you'll see:
 ══════════════════════════════════════════════════════
 ```
 
-### Task 4: Experiment with different approaches
+### Experiment with different approaches
 
 **Sequential (Current):**
 ```
@@ -587,7 +587,7 @@ Research → Outline → Write → Review → Publish
 (Comprehensive, slower)
 ```
 
-### Task 5: Key observations
+### Key observations
 
 **Agent Collaboration:**
 - Research agent provides raw data
@@ -604,9 +604,9 @@ Research → Outline → Write → Review → Publish
 
 ---
 
-## Exercise 5: Architecture Overview
+## Architecture Overview
 
-### Task 1: View the overview
+### View the overview
 
 **Select option 5** from the menu to see the complete architecture evolution.
 
@@ -640,31 +640,31 @@ Good for: Business users, rapid prototyping, documentation
 
 ### Best practices summary
 
-**🎯 Agent Design:**
+**Agent Design:**
 - Single responsibility principle
 - Clear input/output contracts
 - Stateless when possible
 - Idempotent operations
 
-**🔄 Coordination Patterns:**
+**Coordination Patterns:**
 - Sequential: A → B → C
 - Parallel: A + B → C
 - Conditional: A → (B or C) → D
 - Loop: A → B → (repeat if needed)
 
-**🛡️ Error Handling:**
+**Error Handling:**
 - Retry with exponential backoff
 - Circuit breakers for failing agents
 - Fallback agents for critical paths
 - Dead letter queues for failed tasks
 
-**📊 Monitoring:**
+**Monitoring:**
 - Log all agent interactions
 - Track execution time per agent
 - Monitor error rates and success rates
 - Alert on workflow failures
 
-**🔐 Security:**
+**Security:**
 - Authenticate all agent-to-agent calls
 - Encrypt data in transit (HTTPS/TLS)
 - Validate all inputs (prevent injection)
@@ -721,31 +721,31 @@ Development → Testing → Staging → Production
 
 Before deploying multi-agent systems to production:
 
-- ✅ **Testing**
+- **Testing**
   - Unit test each agent independently
   - Integration test agent interactions
   - Load test expected volume
   - Chaos engineering (failure scenarios)
 
-- ✅ **Monitoring**
+- **Monitoring**
   - Application Insights or similar
   - Custom metrics per agent
   - Distributed tracing
   - Alert rules for failures
 
-- ✅ **Security**
+- **Security**
   - Managed identities for authentication
   - Network isolation (VNets)
   - Input validation on all agents
   - Audit logging
 
-- ✅ **Scalability**
+- **Scalability**
   - Auto-scaling rules
   - Load balancing
   - Rate limiting
   - Caching strategies
 
-- ✅ **Operations**
+- **Operations**
   - CI/CD pipelines
   - Blue-green deployments
   - Rollback procedures

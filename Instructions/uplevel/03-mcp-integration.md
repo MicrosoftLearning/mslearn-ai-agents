@@ -67,11 +67,11 @@ This lab demonstrates two MCP integration patterns:
 
 ---
 
-## Exercise 1: Connect to a remote MCP server
+## Connect to a remote MCP server
 
 In this exercise, you'll connect your agent to Microsoft's Learn documentation MCP server. This public server provides AI-powered search capabilities across official Microsoft documentation, making it perfect for building developer support agents.
 
-### Task 1: Set up the project
+### Set up the project
 
 1. **Open VS Code** and ensure the **Microsoft Foundry** extension is installed and signed in.
 
@@ -103,7 +103,7 @@ In this exercise, you'll connect your agent to Microsoft's Learn documentation M
     MODEL_DEPLOYMENT_NAME=gpt-4.1
     ```
 
-### Task 2: Run the unified MCP lab application
+### Run the unified MCP lab application
 
 Instead of creating multiple separate files, you'll use a single interactive application that guides you through all MCP concepts.
 
@@ -128,7 +128,7 @@ The application provides a menu-driven interface for all exercises. Here's what 
     # Returns accurate, sourced information
     ```
 
-### Task 3: Explore the results
+### Explore the results
 
 The application will show you:
 - MCP server connection details
@@ -154,11 +154,11 @@ Try modifying the queries in the code to explore different documentation topics!
 
 ---
 
-## Exercise 2: Build a custom local MCP server
+## Build a custom local MCP server
 
 While remote MCP servers are convenient, many scenarios require custom tools that access private data or implement proprietary business logic. In this exercise, you'll use a pre-built local MCP server and connect your agent to it.
 
-### Task 1: Understand the MCP server
+### Understand the MCP server
 
 The `mcp_server.py` file (provided in lab files) implements 4 custom business tools:
 
@@ -169,7 +169,7 @@ The `mcp_server.py` file (provided in lab files) implements 4 custom business to
 
 The server uses **stdio** (standard input/output) for local communication with your agent.
 
-### Task 2: Run Exercise 2 from the unified application
+### Run Exercise 2 from the unified application
 
 1. **Ensure `mcp_server.py` is in your directory**:
 
@@ -185,7 +185,7 @@ The server uses **stdio** (standard input/output) for local communication with y
 
 3. **Select Exercise 2** from the menu.
 
-### Task 3: Observe the local MCP integration
+### Observe the local MCP integration
 
 The application will automatically:
 - Start the local MCP server as a background process
@@ -218,11 +218,11 @@ Try modifying the inventory data in `mcp_server.py` to see how the agent adapts!
 
 ---
 
-## Exercise 3: Advanced MCP patterns
+## Advanced MCP patterns
 
 Now that you've connected to both remote and local MCP servers, let's explore advanced patterns for production use.
 
-### Task 1: Interactive MCP agent
+### Interactive MCP agent
 
 Create an interactive agent that lets users ask questions and automatically routes to the appropriate MCP tools.
 
@@ -284,7 +284,7 @@ Create an interactive agent that lets users ask questions and automatically rout
             tools=[remote_mcp, local_mcp]
         )
         
-        print(f"✅ Created hybrid agent: {agent.name}")
+        print(f"Created hybrid agent: {agent.name}")
         print(f"   • Remote MCP: Microsoft Learn Documentation")
         print(f"   • Local MCP: Business Operations Tools\n")
         
@@ -358,7 +358,7 @@ Create an interactive agent that lets users ask questions and automatically rout
    - Business: "Show me inventory recommendations"
    - Mixed: "What time is it in our Tokyo office, and do they have any technical docs on Azure Functions?"
 
-### Task 2: MCP error handling and best practices
+### MCP error handling and best practices
 
 Create a robust MCP agent with comprehensive error handling.
 
@@ -392,7 +392,7 @@ Create a robust MCP agent with comprehensive error handling.
                 credential=credential
             )
             
-            print("✅ Connected to Microsoft Foundry")
+            print("Connected to Microsoft Foundry")
             
             # Configure MCP with validation
             try:
@@ -401,9 +401,9 @@ Create a robust MCP agent with comprehensive error handling.
                     command="python",
                     args=["mcp_server.py"]
                 )
-                print("✅ Configured local MCP server")
+                print("Configured local MCP server")
             except Exception as e:
-                print(f"❌ Failed to configure MCP server: {e}")
+                print(f"Failed to configure MCP server: {e}")
                 raise
             
             # Create agent with error handling instructions
@@ -423,15 +423,15 @@ Create a robust MCP agent with comprehensive error handling.
                     handle any issues that arise.""",
                     tools=[mcp_tool]
                 )
-                print(f"✅ Created agent: {agent.name} (ID: {agent.id})")
+                print(f"Created agent: {agent.name} (ID: {agent.id})")
                 return agents_client, agent
                 
             except Exception as e:
-                print(f"❌ Failed to create agent: {e}")
+                print(f"Failed to create agent: {e}")
                 raise
                 
         except Exception as e:
-            print(f"❌ Initialization failed: {e}")
+            print(f"Initialization failed: {e}")
             raise
     
     def query_agent_safely(agents_client, agent, thread, query, max_retries=3):
@@ -477,7 +477,7 @@ Create a robust MCP agent with comprehensive error handling.
                     return "No response generated"
                 
                 elif run.status == "failed":
-                    print(f"⚠️  Run failed: {run.last_error}")
+                    print(f"Run failed: {run.last_error}")
                     if attempt < max_retries - 1:
                         print(f"   Retrying... ({attempt + 2}/{max_retries})")
                         continue
@@ -485,11 +485,11 @@ Create a robust MCP agent with comprehensive error handling.
                         return f"Agent failed after {max_retries} attempts: {run.last_error}"
                 
                 elif elapsed >= timeout:
-                    print("⚠️  Request timed out")
+                    print("Request timed out")
                     return "Request timed out. Please try again with a simpler query."
                 
             except Exception as e:
-                print(f"⚠️  Error during query: {e}")
+                print(f"Error during query: {e}")
                 if attempt < max_retries - 1:
                     print(f"   Retrying... ({attempt + 2}/{max_retries})")
                     continue
@@ -507,7 +507,7 @@ Create a robust MCP agent with comprehensive error handling.
             
             # Create thread
             thread = agents_client.create_thread()
-            print(f"✅ Created conversation thread\n")
+            print(f"Created conversation thread\n")
             
             # Test queries with error handling
             test_queries = [
@@ -536,10 +536,10 @@ Create a robust MCP agent with comprehensive error handling.
             
             # Cleanup
             agents_client.delete_agent(agent.id)
-            print("✅ Agent deleted. Exercise complete!")
+            print("Agent deleted. Exercise complete!")
             
         except Exception as e:
-            print(f"\n❌ Fatal error: {e}")
+            print(f"\nFatal error: {e}")
             print("Please check your configuration and try again.")
     
     if __name__ == "__main__":
@@ -562,28 +562,28 @@ Create a robust MCP agent with comprehensive error handling.
 **MCP Production Checklist**:
 
 1. **Error Handling**
-   - ✅ Implement retry logic for transient failures
-   - ✅ Validate tool inputs before calling
-   - ✅ Provide graceful degradation when tools fail
-   - ✅ Log errors for debugging
+   - Implement retry logic for transient failures
+   - Validate tool inputs before calling
+   - Provide graceful degradation when tools fail
+   - Log errors for debugging
 
 2. **Performance**
-   - ✅ Set appropriate timeouts
-   - ✅ Cache MCP tool discoveries
-   - ✅ Use async patterns for concurrent tool calls
-   - ✅ Monitor MCP server health
+   - Set appropriate timeouts
+   - Cache MCP tool discoveries
+   - Use async patterns for concurrent tool calls
+   - Monitor MCP server health
 
 3. **Security**
-   - ✅ Authenticate MCP connections
-   - ✅ Validate all tool parameters
-   - ✅ Limit tool execution scope
-   - ✅ Audit tool usage
+   - Authenticate MCP connections
+   - Validate all tool parameters
+   - Limit tool execution scope
+   - Audit tool usage
 
 4. **Testing**
-   - ✅ Test with valid and invalid inputs
-   - ✅ Simulate server failures
-   - ✅ Verify error messages
-   - ✅ Load test with multiple concurrent requests
+   - Test with valid and invalid inputs
+   - Simulate server failures
+   - Verify error messages
+   - Load test with multiple concurrent requests
 
 ---
 
