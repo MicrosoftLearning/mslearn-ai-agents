@@ -192,7 +192,7 @@ In this step, you'll deploy a real AI agent to Azure using the automated deploym
 
 The deployment creates:
 - **Azure AI Foundry Project** - Hosts your agent
-- **Azure OpenAI** - GPT-4o model deployment
+- **Azure OpenAI** - GPT-4.1 model deployment
 - **Container Registry** - Stores agent container images
 - **Application Insights** - Monitoring and logs
 - **Resource Group** - Contains all resources
@@ -209,7 +209,7 @@ description: Enterprise AI agent with document search
 
 model:
   type: azure_openai
-  deployment_name: gpt-4o
+  deployment_name: gpt-4.1
   temperature: 0.7
 
 instructions: |

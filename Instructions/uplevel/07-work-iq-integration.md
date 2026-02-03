@@ -27,11 +27,7 @@ By the end of this lab, you'll be able to:
 
 Before starting this lab, ensure you have:
 
-## Prerequisites
-
-Before starting this lab, ensure you have:
-
-- Familiarity with agents, MCP, and Foundry project setup
+- Basic understanding of AI agents and the Model Context Protocol (MCP)
 - **Microsoft 365 with Copilot License**
 - IT admin approval for Work IQ (organizational accounts only)
 - Node.js 18 or higher installed
@@ -161,10 +157,10 @@ This lab demonstrates Work IQ integration with AI agents:
 
    ```env
    PROJECT_ENDPOINT=https://your-project.services.ai.azure.com/api/projects/your-id
-   MODEL_DEPLOYMENT_NAME=gpt-4o
+   MODEL_DEPLOYMENT_NAME=gpt-4.1
    ```
 
-   > **Tip:** This should be the same `.env` you used in Labs 1-4. To get your endpoint: In VS Code, open the **Microsoft Foundry** extension, right-click on your active project, and select **Copy Endpoint**.
+   > **Tip:** To get your endpoint: In VS Code, open the **Microsoft Foundry** extension, right-click on your active project, and select **Copy Endpoint**.
 
 ### Verify setup
 
@@ -273,7 +269,7 @@ This scenario extracts your open tasks from various sources.
 
 This scenario demonstrates using **both** Work IQ (workplace data) and Foundry IQ (knowledge base) together.
 
-> **Note:** This scenario requires Azure AI Search configured in your Foundry project (from Lab 6 or similar setup).
+> **Note:** This scenario requires Azure AI Search configured in your Foundry project with an indexed knowledge base.
 
 1. From the main menu, select **4 - Combined Intelligence**.
 
