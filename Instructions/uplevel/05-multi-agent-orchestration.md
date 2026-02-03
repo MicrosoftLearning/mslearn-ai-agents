@@ -68,7 +68,7 @@ Menu Options:
 
 2. Open the lab folder:
    ```
-   C:\repos\mslearn-ai-agents\Labfiles\uplevel\04-multi-agent-orchestration\Python
+   C:\repos\mslearn-ai-agents\Labfiles\uplevel\05-multi-agent-orchestration\Python
    ```
    
    Use **File > Open Folder** in VS Code.
@@ -674,7 +674,7 @@ Good for: Business users, rapid prototyping, documentation
 
 ## Summary
 
-Congratulations! You've completed Lab 4 and mastered multi-agent orchestration patterns.
+Congratulations! You've completed Lab 5 and mastered multi-agent orchestration patterns.
 
 ### What You've Learned
 
@@ -767,9 +767,9 @@ Before deploying multi-agent systems to production:
 
 ### Next Steps
 
-In **Lab 5: M365 & Teams Integration**, you'll learn how to deploy your agents to production environments, integrate with Microsoft 365, and create Teams-based agent experiences.
+In **Lab 6: M365 & Teams Integration**, you'll learn how to deploy your agents to production environments, integrate with Microsoft 365, and create Teams-based agent experiences.
 
-**Continue to**: [Lab 5 - M365 & Teams Integration](./05-m365-teams-integration.md)
+**Continue to**: [Lab 6 - M365 & Teams Integration](./06-m365-teams-integration.md)
 
 ---
 

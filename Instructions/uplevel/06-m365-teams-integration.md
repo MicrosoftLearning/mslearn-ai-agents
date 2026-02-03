@@ -78,7 +78,7 @@ Before deploying, you need to install and verify all required tools.
 
 2. Open the lab folder:
    ```
-   C:\repos\mslearn-ai-agents\Labfiles\uplevel\05-m365-teams-integration\Python
+   C:\repos\mslearn-ai-agents\Labfiles\uplevel\06-m365-teams-integration\Python
    ```
    
    Use **File > Open Folder** in VS Code.
@@ -863,7 +863,7 @@ az group delete --name rg-lab5-xyz --yes --no-wait
 
 ## Lab Summary
 
-**Congratulations!** 🎉 You've completed Lab 5!
+**Congratulations!** 🎉 You've completed Lab 6!
 
 ### What You Accomplished
 

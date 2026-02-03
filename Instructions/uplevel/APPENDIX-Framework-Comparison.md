@@ -477,8 +477,9 @@ Here's what you learned in the upleveled labs using Azure AI Projects SDK:
 | **Lab 1** | Agent creation (portal + code), custom functions, FunctionTool |
 | **Lab 2** | CodeInterpreter, async functions, file operations, data analysis |
 | **Lab 3** | MCP integration (remote + local servers), external tool integration |
-| **Lab 4** | Multi-agent coordination, A2A protocol, visual workflows |
-| **Lab 5** | Foundry IQ, Teams deployment, M365 Graph API, production patterns |
+| **Lab 4** | Foundry IQ knowledge search with Azure AI Search |
+| **Lab 5** | Multi-agent coordination, A2A protocol, visual workflows |
+| **Lab 6** | Teams deployment, M365 Graph API, production patterns |
 
 **Result:** You have comprehensive production-ready skills with Azure AI Projects SDK.
 

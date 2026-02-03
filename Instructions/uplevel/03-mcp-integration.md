@@ -616,9 +616,9 @@ You've learned three MCP integration patterns:
 
 ### Next steps
 
-In **Lab 4: Multi-Agent Orchestration**, you'll learn how to coordinate multiple specialized agents using local coordination, distributed A2A protocol, and visual workflow designers.
+In **Lab 5: Multi-Agent Orchestration**, you'll learn how to coordinate multiple specialized agents using local coordination, distributed A2A protocol, and visual workflow designers.
 
-**Continue to**: [Lab 4 - Multi-Agent Orchestration](./04-multi-agent-orchestration.md)
+**Continue to**: [Lab 5 - Multi-Agent Orchestration](./05-multi-agent-orchestration.md)
 
 ---
 

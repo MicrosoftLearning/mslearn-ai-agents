@@ -67,7 +67,7 @@ Now you'll configure your agent that uses Foundry IQ to search the knowledge bas
 
 Now you'll upload sample product information documents to connect to with Foundry IQ.
 
-1. Download the sample product information files by opening a new browser tab and navigating to `https://github.com/MicrosoftLearning/mslearn-ai-agents/raw/main/Labfiles/09-integrate-agent-with-foundry-iq/data/contoso-products.zip`
+1. Download the sample product information files by opening a new browser tab and navigating to `https://github.com/MicrosoftLearning/mslearn-ai-agents/raw/main/Labfiles/uplevel/04-integrate-agent-with-foundry-iq/data/contoso-products.zip`
 1. Extract the files from the zip, which should be 3 PDFs detailing the products from Contoso.
 1. In the Azure Portal tab, in the top search bar, search fo **Storage accounts** and select **Storage accounts** from the services section.
 1. Create a storage account with the following settings:
@@ -152,7 +152,7 @@ Now you'll create a Python application to interact with your agent programmatica
 1. Enter the following command to change the working directory to the folder containing the code files and list them all.
 
     ```
-   cd ai-agents/Labfiles/09-integrate-agent-with-foundry-iq/Python
+   cd ai-agents/Labfiles/uplevel/04-integrate-agent-with-foundry-iq/Python
    ls -a -l
     ```
 

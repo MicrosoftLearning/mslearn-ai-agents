@@ -4,7 +4,7 @@ lab:
     description: 'Create an AI agent using both Microsoft Foundry portal and VS Code extension with built-in tools and custom functions.'
 ---
 
-# Build AI Agents with Portal and VS Code
+# Lab 1: Build AI Agents with Portal and VS Code
 
 In this exercise, you'll build a complete AI agent solution using both the Microsoft Foundry portal and the Microsoft Foundry VS Code extension. You'll start by creating a basic agent in the portal with grounding data and built-in tools, then extend it programmatically using VS Code with custom functions.
 
@@ -91,7 +91,7 @@ Now that you have an agent created, let's configure it with instructions and add
 1. Download the IT policy document from the lab repository. Open a new browser tab and navigate to:
 
     ```
-    https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/uplevel/10-build-agent-portal-and-vscode/IT_Policy.txt
+    https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/uplevel/01-build-agent-portal-and-vscode/IT_Policy.txt
     ```
 
     Save the file to your local machine.

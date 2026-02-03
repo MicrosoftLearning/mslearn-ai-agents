@@ -126,7 +126,7 @@ This lab demonstrates Work IQ integration with AI agents:
 
 2. Navigate to the lab folder:
    ```
-   C:\repos\mslearn-ai-agents\Labfiles\uplevel\06-work-iq-integration\Python
+   C:\repos\mslearn-ai-agents\Labfiles\uplevel\07-work-iq-integration\Python
    ```
    
    Use **File > Open Folder** in VS Code.
