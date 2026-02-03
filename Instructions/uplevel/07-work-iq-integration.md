@@ -31,8 +31,8 @@ Before starting this lab, ensure you have:
 
 Before starting this lab, ensure you have:
 
-- Completed Labs 1-4 (or be familiar with agents, MCP, and Foundry project setup)
-- **Microsoft 365 with Copilot License** (~$30/month/user)
+- Familiarity with agents, MCP, and Foundry project setup
+- **Microsoft 365 with Copilot License**
 - IT admin approval for Work IQ (organizational accounts only)
 - Node.js 18 or higher installed
 - Python 3.10 or higher installed
