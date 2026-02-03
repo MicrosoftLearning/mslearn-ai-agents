@@ -1,6 +1,6 @@
 """
 Lab 2: Advanced Tool Calling - Streamlit Web UI
-Exercise 5: Interactive Web Dashboard for Sales Analytics Agent
+Task 5: Interactive Web Dashboard for Sales Analytics Agent
 
 This application provides a web-based interface for the Sales Analytics Agent,
 demonstrating how to create user-facing applications powered by AI agents.

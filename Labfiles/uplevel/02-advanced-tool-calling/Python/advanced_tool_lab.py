@@ -86,16 +86,16 @@ class AdvancedToolLab:
         print("     LAB 2: ADVANCED TOOL CALLING AND CODE INTERPRETER")
         print("=" * 70)
         print("\n📚 Choose an exercise:\n")
-        print("  1. Exercise 1: Data Analysis with Code Interpreter")
+        print("  1. Task 1: Data Analysis with Code Interpreter")
         print("     (Upload CSV, generate visualizations, statistical analysis)")
         print()
-        print("  2. Exercise 2: Advanced Async Custom Functions")
+        print("  2. Task 2: Advanced Async Custom Functions")
         print("     (Customer segmentation, forecasting, pipeline processing)")
         print()
-        print("  3. Exercise 3: File Operations and Data Transformation")
+        print("  3. Task 3: File Operations and Data Transformation")
         print("     (Load CSV, transform data, export results)")
         print()
-        print("  4. Exercise 4: Comprehensive Demo (All Tools Combined)")
+        print("  4. Task 4: Comprehensive Demo (All Tools Combined)")
         print("     (Interactive agent with all capabilities)")
         print()
         print("  5. View Architecture Overview")
@@ -104,9 +104,9 @@ class AdvancedToolLab:
         print("\n" + "=" * 70)
     
     def exercise_1_code_interpreter(self):
-        """Exercise 1: Code interpreter for data analysis."""
+        """TASK 1: Code interpreter for data analysis."""
         print("\n" + "=" * 70)
-        print("EXERCISE 1: DATA ANALYSIS WITH CODE INTERPRETER")
+        print("TASK 1: DATA ANALYSIS WITH CODE INTERPRETER")
         print("=" * 70)
         print("\nThe code interpreter tool allows agents to generate and execute")
         print("Python code dynamically for data analysis and visualization.\n")
@@ -217,14 +217,14 @@ class AdvancedToolLab:
             print("  • No need to pre-define analysis functions\n")
             
         except Exception as e:
-            print(f"❌ Error in Exercise 1: {e}")
+            print(f"❌ Error in TASK 1: {e}")
         
         input("\nPress Enter to return to menu...")
     
     def exercise_2_async_functions(self):
-        """Exercise 2: Advanced async custom functions."""
+        """TASK 2: Advanced async custom functions."""
         print("\n" + "=" * 70)
-        print("EXERCISE 2: ADVANCED ASYNC CUSTOM FUNCTIONS")
+        print("TASK 2: ADVANCED ASYNC CUSTOM FUNCTIONS")
         print("=" * 70)
         print("\nThis exercise demonstrates sophisticated function patterns:")
         print("  • Async/await for concurrent operations")
@@ -420,16 +420,16 @@ class AdvancedToolLab:
             print("  • Error handling ensures reliability\n")
             
         except Exception as e:
-            print(f"❌ Error in Exercise 2: {e}")
+            print(f"❌ Error in TASK 2: {e}")
             import traceback
             traceback.print_exc()
         
         input("\nPress Enter to return to menu...")
     
     def exercise_3_file_operations(self):
-        """Exercise 3: File operations and data transformation."""
+        """TASK 3: File operations and data transformation."""
         print("\n" + "=" * 70)
-        print("EXERCISE 3: FILE OPERATIONS AND DATA TRANSFORMATION")
+        print("TASK 3: FILE OPERATIONS AND DATA TRANSFORMATION")
         print("=" * 70)
         print("\nThis exercise demonstrates file processing capabilities:")
         print("  • Load and parse CSV files")
@@ -484,16 +484,16 @@ class AdvancedToolLab:
             print("  • Error handling ensures data integrity\n")
             
         except Exception as e:
-            print(f"❌ Error in Exercise 3: {e}")
+            print(f"❌ Error in TASK 3: {e}")
             import traceback
             traceback.print_exc()
         
         input("\nPress Enter to return to menu...")
     
     def exercise_4_comprehensive_demo(self):
-        """Exercise 4: Interactive demo combining all capabilities."""
+        """TASK 4: Interactive demo combining all capabilities."""
         print("\n" + "=" * 70)
-        print("EXERCISE 4: COMPREHENSIVE INTERACTIVE DEMO")
+        print("TASK 4: COMPREHENSIVE INTERACTIVE DEMO")
         print("=" * 70)
         print("\nThis agent combines ALL capabilities:")
         print("  📊 Code interpreter")
@@ -630,7 +630,7 @@ class AdvancedToolLab:
             print("\n✅ Exercise 4 complete! Agent deleted.\n")
             
         except Exception as e:
-            print(f"❌ Error in Exercise 4: {e}")
+            print(f"❌ Error in TASK 4: {e}")
         
         input("\nPress Enter to return to menu...")
     

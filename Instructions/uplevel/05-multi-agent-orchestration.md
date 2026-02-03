@@ -50,10 +50,10 @@ This lab uses a **unified interactive application** (`multi_agent_lab.py`) that 
 
 ```
 Menu Options:
-1. Exercise 1: Local Multi-Agent Coordination
-2. Exercise 2: Agent-to-Agent (A2A) Communication
-3. Exercise 3: Workflow Orchestration Concepts
-4. Exercise 4: Interactive Content Pipeline Demo
+1. Task 1: Local Multi-Agent Coordination
+2. Task 2: Agent-to-Agent (A2A) Communication
+3. Task 3: Workflow Orchestration Concepts
+4. Task 4: Interactive Content Pipeline Demo
 5. View Architecture Overview
 0. Exit
 ```
@@ -124,7 +124,7 @@ In this exercise, you'll see how multiple specialized agents can work together s
 └─────────────────────────────────────┘
 ```
 
-### Run Exercise 1
+### Run the application
 
 1. **Start the unified application**:
 
@@ -132,7 +132,7 @@ In this exercise, you'll see how multiple specialized agents can work together s
     python multi_agent_lab.py
     ```
 
-2. **Select option 1** from the menu: "Exercise 1: Local Multi-Agent Coordination"
+2. **Select option 1** from the menu: "Task 1: Local Multi-Agent Coordination"
 
 ### Observe the content creation pipeline
 
@@ -247,14 +247,14 @@ In this exercise, you'll learn about distributed agent architectures using the A
 └─────────────┘ └────────────┘ └────────────┘
 ```
 
-### Run Exercise 2
+### Run the application
 
 1. If not already running, start the application:
    ```powershell
    python multi_agent_lab.py
    ```
 
-2. **Select option 2** from the menu: "Exercise 2: Agent-to-Agent (A2A) Communication"
+2. **Select option 2** from the menu: "Task 2: Agent-to-Agent (A2A) Communication"
 
 ### Understand A2A components
 
@@ -386,9 +386,9 @@ In this exercise, you'll learn about visual workflow orchestration and when to u
 
 **Workflow orchestration** provides visual, low-code/no-code coordination of multi-agent systems. Tools like Microsoft Foundry Workflow Designer let you drag-and-drop agents into workflows.
 
-### Run Exercise 3
+### Run the application
 
-1. **Select option 3** from the menu: "Exercise 3: Workflow Orchestration Concepts"
+1. **Select option 3** from the menu: "Task 3: Workflow Orchestration Concepts"
 
 ### Understand visual workflows
 
@@ -519,9 +519,9 @@ else:
 
 In this exercise, you'll interact with a live multi-agent content creation pipeline.
 
-### Run Exercise 4
+### Run the application
 
-1. **Select option 4** from the menu: "Exercise 4: Interactive Content Pipeline Demo"
+1. **Select option 4** from the menu: "Task 4: Interactive Content Pipeline Demo"
 
 2. The application creates a Research + Writer agent team.
 

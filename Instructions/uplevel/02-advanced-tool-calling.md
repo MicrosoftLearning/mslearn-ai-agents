@@ -49,10 +49,10 @@ This lab uses a **unified interactive application** (`advanced_tool_lab.py`) tha
 
 ```
 Menu Options:
-1. Exercise 1: Data Analysis with Code Interpreter
-2. Exercise 2: Advanced Async Custom Functions
-3. Exercise 3: File Operations and Data Transformation
-4. Exercise 4: Comprehensive Demo (All Tools Combined)
+1. Task 1: Data Analysis with Code Interpreter
+2. Task 2: Advanced Async Custom Functions
+3. Task 3: File Operations and Data Transformation
+4. Task 4: Comprehensive Demo (All Tools Combined)
 5. View Architecture Overview
 0. Exit
 ```
@@ -117,7 +117,7 @@ The code interpreter tool allows agents to:
 
 **Key benefit**: No need to pre-define specific analysis functions - the agent adapts to any data structure and query.
 
-### Run Exercise 1
+### Run the application
 
 1. **Start the unified application**:
 
@@ -125,7 +125,7 @@ The code interpreter tool allows agents to:
     python advanced_tool_lab.py
     ```
 
-2. **Select option 1** from the menu: "Exercise 1: Data Analysis with Code Interpreter"
+2. **Select option 1** from the menu: "Task 1: Data Analysis with Code Interpreter"
 
 ### Observe code interpreter in action
 
@@ -227,14 +227,14 @@ While code interpreter is great for dynamic analysis, custom functions provide:
 - **Controlled operations** (with validation and permissions)
 - **Consistent behavior** (repeatable, testable)
 
-### Run Exercise 2
+### Run the application
 
 1. If the application isn't running, start it:
    ```powershell
    python advanced_tool_lab.py
    ```
 
-2. **Select option 2** from the menu: "Exercise 2: Advanced Async Custom Functions"
+2. **Select option 2** from the menu: "Task 2: Advanced Async Custom Functions"
 
 ### Observe advanced functions
 
@@ -389,9 +389,9 @@ File operations enable agents to:
 - Handle data validation
 - Process batch operations
 
-### Run Exercise 3
+### Run the application
 
-1. **Select option 3** from the menu: "Exercise 3: File Operations and Data Transformation"
+1. **Select option 3** from the menu: "Task 3: File Operations and Data Transformation"
 
 ### Observe file processing
 
@@ -506,9 +506,9 @@ async def load_csv_file(file_path: str) -> str:
 
 In this exercise, you'll interact with an agent that combines ALL the capabilities you've learned.
 
-### Run Exercise 4
+### Run the application
 
-1. **Select option 4** from the menu: "Exercise 4: Comprehensive Demo"
+1. **Select option 4** from the menu: "Task 4: Comprehensive Demo"
 
 2. The agent now has access to:
    - Code interpreter (dynamic analysis)

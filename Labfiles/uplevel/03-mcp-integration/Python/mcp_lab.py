@@ -62,16 +62,16 @@ class MCPLab:
         print("        LAB 3: MODEL CONTEXT PROTOCOL (MCP) INTEGRATION")
         print("=" * 70)
         print("\n📚 Choose an exercise:\n")
-        print("  1. Exercise 1: Connect to Remote MCP Server")
+        print("  1. Task 1: Connect to Remote MCP Server")
         print("     (Query Microsoft Learn documentation)")
         print()
-        print("  2. Exercise 2: Build and Use Custom Local MCP Server")
+        print("  2. Task 2: Build and Use Custom Local MCP Server")
         print("     (Inventory management & office information)")
         print()
-        print("  3. Exercise 3: Interactive Hybrid Agent")
+        print("  3. Task 3: Interactive Hybrid Agent")
         print("     (Combine remote + local MCP tools)")
         print()
-        print("  4. Exercise 4: Test Error Handling Patterns")
+        print("  4. Task 4: Test Error Handling Patterns")
         print("     (Production-ready error handling)")
         print()
         print("  5. View MCP Architecture Overview")
@@ -80,9 +80,9 @@ class MCPLab:
         print("\n" + "=" * 70)
     
     def exercise_1_remote_mcp(self):
-        """Exercise 1: Connect to remote MCP server."""
+        """TASK 1: Connect to remote MCP server."""
         print("\n" + "=" * 70)
-        print("EXERCISE 1: REMOTE MCP SERVER (Microsoft Learn Docs)")
+        print("TASK 1: REMOTE MCP SERVER (Microsoft Learn Docs)")
         print("=" * 70)
         print("\nThis exercise connects to Microsoft's public MCP server")
         print("to query official documentation.\n")
@@ -162,16 +162,16 @@ class MCPLab:
             print("\n✅ Exercise 1 complete! Agent deleted.\n")
             
         except Exception as e:
-            print(f"❌ Error in Exercise 1: {e}")
+            print(f"❌ Error in TASK 1: {e}")
             import traceback
             traceback.print_exc()
         
         input("\nPress Enter to return to menu...")
     
     def exercise_2_local_mcp(self):
-        """Exercise 2: Build and use custom local MCP server."""
+        """TASK 2: Build and use custom local MCP server."""
         print("\n" + "=" * 70)
-        print("EXERCISE 2: CUSTOM LOCAL MCP SERVER")
+        print("TASK 2: CUSTOM LOCAL MCP SERVER")
         print("=" * 70)
         print("\nThis exercise uses a local MCP server with custom business tools:")
         print("  • check_inventory - Check product stock levels")
@@ -261,7 +261,7 @@ class MCPLab:
             print("\n✅ Exercise 2 complete! Agent deleted.\n")
             
         except Exception as e:
-            print(f"❌ Error in Exercise 2: {e}")
+            print(f"❌ Error in TASK 2: {e}")
             print("\nMake sure mcp_server.py is in the current directory")
             print("and all dependencies are installed (pip install -r requirements.txt)")
             import traceback
@@ -270,9 +270,9 @@ class MCPLab:
         input("\nPress Enter to return to menu...")
     
     def exercise_3_hybrid_interactive(self):
-        """Exercise 3: Interactive hybrid agent with remote + local MCP."""
+        """TASK 3: Interactive hybrid agent with remote + local MCP."""
         print("\n" + "=" * 70)
-        print("EXERCISE 3: HYBRID INTERACTIVE AGENT")
+        print("TASK 3: HYBRID INTERACTIVE AGENT")
         print("=" * 70)
         print("\nThis agent combines BOTH remote and local MCP servers:")
         print("  🌐 Remote: Microsoft Learn documentation")
@@ -378,16 +378,16 @@ class MCPLab:
             print("\n✅ Exercise 3 complete! Agent deleted.\n")
             
         except Exception as e:
-            print(f"❌ Error in Exercise 3: {e}")
+            print(f"❌ Error in TASK 3: {e}")
             import traceback
             traceback.print_exc()
         
         input("\nPress Enter to return to menu...")
     
     def exercise_4_error_handling(self):
-        """Exercise 4: Test error handling patterns."""
+        """TASK 4: Test error handling patterns."""
         print("\n" + "=" * 70)
-        print("EXERCISE 4: ERROR HANDLING PATTERNS")
+        print("TASK 4: ERROR HANDLING PATTERNS")
         print("=" * 70)
         print("\nThis exercise demonstrates production-ready error handling:")
         print("  • Retry logic for transient failures")
@@ -454,7 +454,7 @@ class MCPLab:
             print("  • No crashes or unhandled exceptions\n")
             
         except Exception as e:
-            print(f"❌ Error in Exercise 4: {e}")
+            print(f"❌ Error in TASK 4: {e}")
             import traceback
             traceback.print_exc()
         

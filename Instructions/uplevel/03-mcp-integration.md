@@ -119,7 +119,7 @@ Instead of creating multiple separate files, you'll use a single interactive app
 
 3. **Select Exercise 1** from the menu to explore remote MCP.
 
-The application provides a menu-driven interface for all exercises. Here's what happens when you run Exercise 1:
+The application provides a menu-driven interface for all tasks. Here's what happens when you run Task 1:
 
     ```python
     # The agent connects to the remote MCP server
@@ -169,7 +169,7 @@ The `mcp_server.py` file (provided in lab files) implements 4 custom business to
 
 The server uses **stdio** (standard input/output) for local communication with your agent.
 
-### Run Exercise 2 from the unified application
+### Run the application
 
 1. **Ensure `mcp_server.py` is in your directory**:
 

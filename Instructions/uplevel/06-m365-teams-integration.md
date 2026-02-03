@@ -1011,9 +1011,9 @@ In this exercise, you'll learn how to integrate agents with Microsoft 365 servic
 One API → All M365 Services
 ```
 
-### Run Exercise 3
+### Run the application
 
-1. **Select option 3** from the menu: "Exercise 3: Microsoft 365 (Graph API) Integration"
+1. **Select option 3** from the menu: "Task 3: Microsoft 365 (Graph API) Integration"
 
 ### Understand Graph API architecture
 
@@ -1177,9 +1177,9 @@ def search_company_docs(query: str):
 
 In this exercise, you'll interact with a complete enterprise agent demonstrating all integration concepts.
 
-### Run Exercise 4
+### Run the application
 
-1. **Select option 4** from the menu: "Exercise 4: Production Enterprise Agent Demo"
+1. **Select option 4** from the menu: "Task 4: Production Enterprise Agent Demo"
 
 2. The application creates an interactive enterprise assistant.
 
