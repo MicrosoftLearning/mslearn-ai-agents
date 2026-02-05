@@ -287,7 +287,7 @@ In this section, you'll add conditional logic to route the ticket based on its c
 
 1. Select **Done** to save the node.
 
-## Run and test the workflow
+## Preview the workflow
 
 1. Select the **Save** button to save all changes to your workflow.
 
@@ -309,6 +309,201 @@ In this section, you'll add conditional logic to route the ticket based on its c
     Please ensure that your API key has the necessary permissions for invoice creation and that your request is being sent to the correct endpoint. 
     If the issue persists, try regenerating your API key and updating it in your integration to see if that resolves the problem.
     ```
+
+## Use your workflow in code
+
+Now that you've built and tested your workflow in the Foundry portal, you can also invoke it from your own code using the Azure AI Projects SDK. This allows you to integrate the workflow into your applications or automate its execution.
+
+### Prepare the environment
+
+1. Open a new browser tab (keeping the Foundry portal open in the existing tab). Then in the new tab, browse to the [Azure portal](https://portal.azure.com) at `https://portal.azure.com`; signing in with your Azure credentials if prompted.
+
+    Close any welcome notifications to see the Azure portal home page.
+
+1. Use the **[\>_]** button to the right of the search bar at the top of the page to create a new Cloud Shell in the Azure portal, selecting a ***PowerShell*** environment with no storage in your subscription.
+
+    The cloud shell provides a command-line interface in a pane at the bottom of the Azure portal. You can resize or maximize this pane to make it easier to work in.
+
+    > **Note**: If you have previously created a cloud shell that uses a *Bash* environment, switch it to ***PowerShell***.
+
+1. In the cloud shell toolbar, in the **Settings** menu, select **Go to Classic version** (this is required to use the code editor).
+
+    **<font color="red">Ensure you've switched to the classic version of the cloud shell before continuing.</font>**
+
+1. In the cloud shell pane, enter the following commands to clone the GitHub repo containing the code files for this exercise (type the command, or copy it to the clipboard and then right-click in the command line and paste as plain text):
+
+    ```
+   rm -r ai-agents -f
+   git clone https://github.com/MicrosoftLearning/mslearn-ai-agents ai-agents
+    ```
+
+    > **Tip**: As you enter commands into the cloud shell, the output may take up a large amount of the screen buffer and the cursor on the current line may be obscured. You can clear the screen by entering the `cls` command to make it easier to focus on each task.
+
+1. When the repo has been cloned, enter the following command to change the working directory to the folder containing the code files and list them all.
+
+    ```
+   cd ai-agents/Labfiles/08-build-workflow-ms-foundry/Python
+   ls -a -l
+    ```
+
+    The provided files include application code and a file for configuration settings.
+
+### Configure the application settings
+
+1. In the cloud shell command-line pane, enter the following command to install the libraries you'll use:
+
+    ```
+   python -m venv labenv
+   ./labenv/bin/Activate.ps1
+   pip install -r requirements.txt
+    ```
+
+1. Enter the following command to edit the configuration file that is provided:
+
+    ```
+   code .env
+    ```
+
+    The file is opened in a code editor.
+
+1. In the code file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project **Overview** page in the Foundry portal), and the **your_model_deployment** placeholder with the name you assigned to your gpt-4.1 model deployment (which by default is `gpt-4.1`).
+
+1. After you've replaced the placeholders, use the **CTRL+S** command to save your changes and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
+
+### Connect to the workflow and run it
+
+1. Enter the following command to edit the **workflow.py** file:
+
+    ```
+   code workflow.py
+    ```
+
+1. Review the code in the file, noting that it contains strings for each agent name and instructions.
+
+1. Find the comment **Add references** and add the following code to import the classes you'll need:
+
+    ```python
+   # Add references
+   from azure.identity import DefaultAzureCredential
+   from azure.ai.projects import AIProjectClient
+   from azure.ai.projects.models import ItemType
+    ```
+
+1. Note that code to load the project endpoint and model name from your environment variables has been provided.
+
+1. Find the comment **Connect to the agents client**, and add the following code to create an AgentsClient connected to your project:
+
+    ```python
+   # Connect to the AI Project client
+   with (
+       DefaultAzureCredential() as credential,
+       AIProjectClient(endpoint=endpoint, credential=credential) as project_client,
+       project_client.get_openai_client() as openai_client,
+   ):
+    ```
+
+    Now you'll add code that uses the AgentsClient to create multiple agents, each with a specific role to play in processing a support ticket.
+
+    > **Tip**: When adding subsequent code, be sure to maintain the right level of indentation.
+
+1. Find the comment **Specify the workflow** and the following code:
+
+    ```python
+   # Specify the workflow
+    workflow = {
+        "name": "ContosoPay-Customer-Support-Triage",
+        "version": "1",
+    }
+    ```
+
+    Be sure to use the name and version of the workflow you created in the Foundry portal.
+
+1. Find the comment **Create a conversation and run the workflow**, and add the following code to create a conversation and invoke your workflow:
+
+    ```python
+    # Create a conversation and run the workflow
+    conversation = openai_client.conversations.create()
+    print(f"Created conversation (id: {conversation.id})")
+
+    stream = openai_client.responses.create(
+        conversation=conversation.id,
+        extra_body={"agent": {"name": workflow["name"], "type": "agent_reference"}},
+        input="Start",
+        stream=True,
+        metadata={"x-ms-debug-mode-enabled": "1"},
+    )
+    ```
+
+    This code will stream the output of the workflow execution to the console, allowing you to see the flow of messages as the workflow processes each ticket.
+
+1. Find the comment **Process events from the workflow run**, and add the following code to process the streamed output and print messages to the console:
+
+    ```python
+    # Process events from the workflow run
+    for event in stream:
+        if (event.type == "response.completed"):
+            print("\nResponse completed:")
+            for message in event.response.output:
+                if message.content:
+                    for content_item in message.content:
+                        if content_item.type == 'output_text':
+                            print(content_item.text)
+        if (event.type == "response.output_item.done") and event.item.type == ItemType.WORKFLOW_ACTION:
+            print(f"item action ID '{event.item.action_id}' is '{event.item.status}' (previous action ID: '{event.item.previous_action_id}')")
+    ```
+
+1. Find the comment **Clean up resources**, and enter the following code to delete the conversation when it is longer required:
+
+    ```python
+   # Clean up resources
+   openai_client.conversations.delete(conversation_id=conversation.id)
+   print("\nConversation deleted")
+    ```
+
+1. Use the **CTRL+S** command to save your changes to the code file. You can keep it open (in case you need to edit the code to fix any errors) or use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
+
+### Sign into Azure and run the app
+
+Now you're ready to run your code and watch your AI agents collaborate.
+
+1. In the cloud shell command-line pane, enter the following command to sign into Azure.
+
+    ```
+   az login
+    ```
+
+    **<font color="red">You must sign into Azure - even though the cloud shell session is already authenticated.</font>**
+
+    > **Note**: In most scenarios, just using *az login* will be sufficient. However, if you have subscriptions in multiple tenants, you may need to specify the tenant by using the *--tenant* parameter. See [Sign into Azure interactively using the Azure CLI](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) for details.
+
+1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Foundry hub if prompted.
+
+1. After you have signed in, enter the following command to run the application:
+
+    ```
+   python workflow.py
+    ```
+
+1. Wait a moment for the workflow to process the tickets. As the workflow runs, you should see output in the console indicating the progress of the workflow, including messages generated by the agents and status updates for each action in the workflow.
+
+1. When the workflow completes, you should see some output similar to the following:
+
+    ```output
+    Created conversation (id: {id})
+    item action ID 'action-{id}' is 'completed' (previous action ID: 'trigger_id')
+    item action ID 'action-{id}' is 'completed' (previous action ID: 'action-{id}')
+    item action ID 'action-{id}' is 'completed' (previous action ID: 'action-{id}_Start')
+    ...
+
+    Response completed:
+    ...
+    Current Ticket:
+    I was charged twice for the same invoice last Friday and my customer is also seeing two receipts. Can someone fix this?
+    {"customer_issue":"I was charged twice for the same invoice last Friday and my customer is also seeing two receipts. Can someone fix this?","category":"Billing","confidence":1}
+    Escalation required
+    ```
+
+    In the output, you can see the how the workflow completes each step, including the classification of each ticket and the recommended response or escalation. Great work!
 
 ## Summary
 
