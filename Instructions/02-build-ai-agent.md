@@ -238,7 +238,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
    openai_client.conversations.delete(conversation_id=conversation.id)
    print("Conversation deleted")
 
-   project_client.agents.delete(agent_name=agent.name, agent_version=agent.version)
+   project_client.agents.delete(agent_name=agent.name)
    print("Agent deleted")
     ```
 
