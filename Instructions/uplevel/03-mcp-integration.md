@@ -1,10 +1,11 @@
 ---
 lab:
     title: 'Extend Agents with Model Context Protocol (MCP)'
-    module: 'Module 3: Advanced Agent Integration'
+    description: 'Build AI agents that integrate with external MCP servers for GitHub, filesystem access, and weather data.'
+    hidden: true
 ---
 
-# Lab 3: Extend Agents with Model Context Protocol (MCP)
+# Extend Agents with Model Context Protocol (MCP)
 
 ## Lab scenario
 

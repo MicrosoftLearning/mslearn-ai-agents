@@ -1,10 +1,11 @@
 ---
 lab:
-    title: 'Lab 6: Deploy Agents to Microsoft Teams'
+    title: 'Deploy Agents to Microsoft Teams'
     description: 'Deploy a production AI agent with Azure AI Search knowledge base and Microsoft Teams integration'
+    hidden: true
 ---
 
-# Lab 6: Deploy Agents to Microsoft Teams
+# Deploy Agents to Microsoft Teams
 
 In this lab, you'll deploy a **real AI agent** to Azure using automated tools. You'll create a production-ready agent with Azure AI Search for knowledge queries, connect it via the Foundry portal, and publish it to Microsoft Teams.
 
@@ -78,7 +79,7 @@ Before deploying, you need to install and verify all required tools.
 
 2. Open the lab folder:
    ```
-   C:\repos\mslearn-ai-agents\Labfiles\uplevel\06-m365-teams-integration\Python
+   C:\repos\mslearn-ai-agents\Labfiles\uplevel\07-m365-teams-integration\Python
    ```
    
    Use **File > Open Folder** in VS Code.
@@ -141,7 +142,7 @@ This script verifies:
 
 ```
 ============================================================
-Lab 6: Prerequisites Check
+Lab 7: Prerequisites Check
 ============================================================
 
 Prerequisites Check Results:
@@ -274,7 +275,7 @@ python validate_deployment.py
 
 ```
 ========================================
-  Lab 6: Deployment Validation
+  Lab 7: Deployment Validation
 ========================================
 
 Retrieving deployment information from azd...
@@ -863,7 +864,7 @@ az group delete --name rg-lab5-xyz --yes --no-wait
 
 ## Lab Summary
 
-**Congratulations!** 🎉 You've completed Lab 6!
+**Congratulations!** 🎉 You've completed Lab 7!
 
 ### What You Accomplished
 
@@ -1374,7 +1375,7 @@ In this exercise, you'll interact with a complete enterprise agent demonstrating
 
 ## Summary
 
-Congratulations! You've completed Lab 6 and learned production deployment patterns for AI agents.
+Congratulations! You've completed Lab 7 and learned production deployment patterns for AI agents.
 
 ### What You've Learned
 
@@ -1466,7 +1467,7 @@ You now have the skills to:
 ### Next Steps
 
 **Continue Learning:**
-- Explore Lab 6 (Agent Framework - Optional)
+- Explore Lab 7 (Agent Framework - Optional)
 - Build your own production agent
 - Join the AI agent community
 - Share your experiences

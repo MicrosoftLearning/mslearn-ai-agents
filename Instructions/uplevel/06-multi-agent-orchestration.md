@@ -1,10 +1,11 @@
 ---
 lab:
-    title: 'Lab 5: Multi-Agent Orchestration'
+    title: 'Multi-Agent Orchestration'
     description: 'Master multi-agent coordination patterns from local to distributed to visual orchestration using a unified interactive application.'
+    hidden: true
 ---
 
-# Lab 5: Multi-Agent Orchestration
+# Multi-Agent Orchestration
 
 In this lab, you'll master multi-agent coordination by exploring three different orchestration patterns: local coordination (agents in the same process), distributed coordination with Agent-to-Agent (A2A) protocol, and visual workflow orchestration. You'll build a complete content creation pipeline using specialized agents working together.
 
@@ -68,7 +69,7 @@ Menu Options:
 
 2. Open the lab folder:
    ```
-   C:\repos\mslearn-ai-agents\Labfiles\uplevel\05-multi-agent-orchestration\Python
+   C:\repos\mslearn-ai-agents\Labfiles\uplevel\06-multi-agent-orchestration\Python
    ```
    
    Use **File > Open Folder** in VS Code.
@@ -674,7 +675,7 @@ Good for: Business users, rapid prototyping, documentation
 
 ## Summary
 
-Congratulations! You've completed Lab 5 and mastered multi-agent orchestration patterns.
+Congratulations! You've completed Lab 6 and mastered multi-agent orchestration patterns.
 
 ### What You've Learned
 
@@ -767,9 +768,9 @@ Before deploying multi-agent systems to production:
 
 ### Next Steps
 
-In **Lab 6: M365 & Teams Integration**, you'll learn how to deploy your agents to production environments, integrate with Microsoft 365, and create Teams-based agent experiences.
+In **Lab 7: M365 & Teams Integration**, you'll learn how to deploy your agents to production environments, integrate with Microsoft 365, and create Teams-based agent experiences.
 
-**Continue to**: [Lab 6 - M365 & Teams Integration](./06-m365-teams-integration.md)
+**Continue to**: [Lab 7 - M365 & Teams Integration](./07-m365-teams-integration.md)
 
 ---
 
