@@ -2,9 +2,10 @@
 lab:
     title: 'Advanced Tool Calling and Code Interpreter'
     description: 'Master advanced agent capabilities with code interpreter, async functions, and data processing using a unified interactive application.'
+    hidden: true
 ---
 
-# Lab 2: Advanced Tool Calling and Code Interpreter
+# Advanced Tool Calling and Code Interpreter
 
 In this lab, you'll master advanced agent capabilities through a unified interactive application. You'll explore the code interpreter tool for dynamic data analysis, implement sophisticated async custom functions, and build production-ready file processing workflows.
 

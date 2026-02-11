@@ -1,10 +1,11 @@
 ---
 lab:
-    title: 'Lab 7: Work IQ - Workplace Intelligence for AI Agents (Optional)'
+    title: 'Work IQ - Workplace Intelligence for AI Agents (Optional)'
     description: 'Build AI agents that access Microsoft 365 workplace data using Work IQ and the Model Context Protocol for meeting prep, project tracking, and action items.'
+    hidden: true
 ---
 
-# Lab 7: Work IQ - Workplace Intelligence for AI Agents
+# Work IQ - Workplace Intelligence for AI Agents
 
 In this lab, you'll build an AI agent that accesses your Microsoft 365 workplace data using **Work IQ** - Microsoft's contextual intelligence layer built on the Model Context Protocol (MCP). You'll create a workplace intelligence agent that can prepare for meetings, track projects, extract action items, and answer workplace questions using real M365 data.
 
@@ -122,7 +123,7 @@ This lab demonstrates Work IQ integration with AI agents:
 
 2. Navigate to the lab folder:
    ```
-   C:\repos\mslearn-ai-agents\Labfiles\uplevel\07-work-iq-integration\Python
+   C:\repos\mslearn-ai-agents\Labfiles\uplevel\05-work-iq-integration\Python
    ```
    
    Use **File > Open Folder** in VS Code.
