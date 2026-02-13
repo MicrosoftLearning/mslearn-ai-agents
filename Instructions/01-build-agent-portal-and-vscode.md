@@ -1,13 +1,13 @@
 ---
 lab:
     title: 'Build AI Agents with Portal and VS Code'
-    description: 'Create an AI agent using both Microsoft Foundry portal and VS Code extension with built-in tools and custom functions.'
+    description: 'Create an AI agent using both Microsoft Foundry portal and VS Code extension with built-in tools like file search and code interpreter.'
     hidden: true
 ---
 
 # Build AI Agents with Portal and VS Code
 
-In this exercise, you'll build a complete AI agent solution using both the Microsoft Foundry portal and the Microsoft Foundry VS Code extension. You'll start by creating a basic agent in the portal with grounding data and built-in tools, then extend it programmatically using VS Code with custom functions.
+In this exercise, you'll build a complete AI agent solution using both the Microsoft Foundry portal and the Microsoft Foundry VS Code extension. You'll start by creating a basic agent in the portal with grounding data and built-in tools, then interact with it programmatically using VS Code to leverage advanced capabilities like code interpreter for data analysis.
 
 This exercise takes approximately **45** minutes.
 
@@ -20,7 +20,7 @@ By the end of this exercise, you'll be able to:
 1. Create and configure an AI agent in the Microsoft Foundry portal
 2. Add grounding data and enable built-in tools (file search, code interpreter)
 3. Use the Microsoft Foundry VS Code extension to work with agents programmatically
-4. Implement custom functions to extend agent capabilities
+4. Leverage code interpreter to analyze data and generate insights
 5. Understand when to use portal-based vs code-based approaches for agent development
 
 ## Prerequisites
@@ -38,7 +38,7 @@ You'll build an **IT Support Agent** that helps employees with common technical 
 
 - Answer questions based on IT policy documentation (grounding data)
 - Use built-in tools like file search to find relevant information
-- Execute custom functions to check system status and create support tickets
+- Analyze system performance data using code interpreter to identify trends and issues
 
 ---
 
@@ -99,11 +99,23 @@ Now that you have an agent created, let's configure it with instructions and add
 
     > **Note**: This document contains sample IT policies for password resets, software installation requests, and hardware troubleshooting.
 
-1. Return to the agent playground. In the **Tools** section, enable **File search**.
+1. Return to the agent playground. In the **Tools** section, enable both **File search** and **Code interpreter**.
 
 1. Under **File search**, select **Upload files** and upload the `IT_Policy.txt` file you just downloaded.
 
 1. Wait for the file to be indexed. You'll see a confirmation when it's ready.
+
+1. Now let's add some performance data for the code interpreter to analyze. Download the system performance data file from:
+
+    ```
+    https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/01-build-agent-portal-and-vscode/system_performance.csv
+    ```
+
+    Save this file to your local machine.
+
+1. Under **Code interpreter**, select **Upload files** and upload the `system_performance.csv` file you just downloaded.
+
+    > **Note**: This CSV file contains simulated system metrics (CPU, memory, disk usage) over time that the agent can analyze.
 
 ### Test your agent
 
@@ -125,21 +137,29 @@ Let's test the agent to see how it responds using the grounding data.
 
 1. Again, review the response and observe how the agent uses the grounding data.
 
-1. Now ask a question that isn't covered in the policy:
+1. Now test the code interpreter with a data analysis request:
 
     ```
-    What's the weather like today?
+    Can you analyze the system performance data and tell me if there are any concerning trends?
     ```
 
-1. The agent should respond appropriately, indicating this is outside its scope.
+1. The agent should use the code interpreter to analyze the CSV file and provide insights about system performance.
 
-Great! You've created a basic agent with grounding data and file search capability. In the next section, you'll extend this agent using the VS Code extension.
+1. Try asking for a visualization:
+
+    ```
+    Create a chart showing CPU usage over time from the performance data
+    ```
+
+1. The agent will use code interpreter to generate visualizations and analysis.
+
+Great! You've created an agent with grounding data, file search, and code interpreter capabilities. In the next section, you'll interact with this agent programmatically using VS Code.
 
 ---
 
-## Extend your agent with VS Code
+## Interact with your agent using VS Code
 
-Now you'll use the Microsoft Foundry VS Code extension to work with your agent programmatically and add custom functions.
+Now you'll use the Microsoft Foundry VS Code extension to work with your agent programmatically and see how to interact with it from code.
 
 ### Install and configure the VS Code extension
 
@@ -171,31 +191,27 @@ If you already have installed the extension for Foundry, you can skip this secti
 
 1. Expand your project in the Resources view and verify you can see your `it-support-agent` listed under **Agents**.
 
-### Retrieve project connection details
-
-To work with your agent programmatically, you'll need your project's connection information.
-
-1. In the Foundry extension, right-click on your project and select **View in Portal**.
-
-1. In the portal that opens, navigate to **Overview** in the left sidebar.
-
-1. Copy the following values and save them somewhere (you'll need them shortly):
-    - **Project name**
-    - **Foundry project endpoint** (the connection string)
-
-1. Also copy the **Subscription ID** and **Resource group** name from the Overview page.
-
-1. Note the **Project endpoint** URL - you'll use this to connect your Python applications to the project.
-
 ### Create a Python application
 
-Now let's create a Python application that interacts with your agent and adds custom functions.
+Now let's create a Python application that interacts with your agent programmatically.
 
-1. In VS Code, create a new folder on your local machine for this project (e.g., `C:\labs\it-support-agent`).
+1. In VS Code, open the Command Palette (**Ctrl+Shift+P** or **View > Command Palette**).
 
-1. Open this folder in VS Code (**File > Open Folder**).
+1. Type **Git: Clone** and select it from the list.
 
-1. Create a new file named `agent_with_functions.py` in the folder.
+1. Enter the repository URL:
+
+    ```
+    https://github.com/MicrosoftLearning/mslearn-ai-agents.git
+    ```
+
+1. Choose a location on your local machine to clone the repository.
+
+1. When prompted, select **Open** to open the cloned repository in VS Code.
+
+1. Once the repository opens, select **File > Open Folder** and navigate to `mslearn-ai-agents/Labfiles/01-build-agent-portal-and-vscode/Python`, then click **Select Folder**.
+
+1. In the Explorer pane, open the `agent_with_functions.py` file. You'll see it's currently empty.
 
 1. Add the following code to the file:
 
@@ -203,73 +219,23 @@ Now let's create a Python application that interacts with your agent and adds cu
     import os
     from azure.ai.projects import AIProjectClient
     from azure.identity import DefaultAzureCredential
-    import json
-    from datetime import datetime
-    
-    # System status simulator
-    def check_system_status(system_name: str) -> str:
-        """
-        Check the status of a system or service.
-        
-        Args:
-            system_name: Name of the system to check (e.g., 'email', 'vpn', 'printer')
-        
-        Returns:
-            JSON string with status information
-        """
-        # Simulate system status
-        systems = {
-            "email": {"status": "operational", "uptime": "99.9%"},
-            "vpn": {"status": "degraded", "uptime": "95.2%", "issue": "Slow connection speeds"},
-            "printer": {"status": "operational", "uptime": "98.5%"},
-            "network": {"status": "operational", "uptime": "99.7%"}
-        }
-        
-        system_lower = system_name.lower()
-        if system_lower in systems:
-            result = {
-                "system": system_name,
-                "timestamp": datetime.now().isoformat(),
-                **systems[system_lower]
-            }
-        else:
-            result = {
-                "system": system_name,
-                "timestamp": datetime.now().isoformat(),
-                "status": "unknown",
-                "message": "System not found in monitoring"
-            }
-        
-        return json.dumps(result)
+    import base64
+    from pathlib import Path
     
     
-    def create_support_ticket(issue_type: str, description: str, priority: str = "medium") -> str:
-        """
-        Create a support ticket for an IT issue.
+    def save_image(image_data, filename):
+        """Save base64 image data to a file."""
+        output_dir = Path("agent_outputs")
+        output_dir.mkdir(exist_ok=True)
         
-        Args:
-            issue_type: Type of issue (e.g., 'hardware', 'software', 'network', 'access')
-            description: Detailed description of the issue
-            priority: Priority level - 'low', 'medium', or 'high' (default: 'medium')
+        filepath = output_dir / filename
         
-        Returns:
-            JSON string with ticket information
-        """
-        # Simulate ticket creation
-        import random
-        ticket_id = f"TICKET-{random.randint(10000, 99999)}"
+        # Decode and save the image
+        image_bytes = base64.b64decode(image_data)
+        with open(filepath, 'wb') as f:
+            f.write(image_bytes)
         
-        result = {
-            "ticket_id": ticket_id,
-            "issue_type": issue_type,
-            "description": description,
-            "priority": priority,
-            "status": "open",
-            "created_at": datetime.now().isoformat(),
-            "message": f"Support ticket {ticket_id} has been created successfully"
-        }
-        
-        return json.dumps(result)
+        return str(filepath)
     
     
     def main():
@@ -301,16 +267,11 @@ Now let's create a Python application that interacts with your agent and adds cu
         conversation = openai_client.conversations.create(items=[])
         print(f"Conversation created (id: {conversation.id})")
         
-        # Function map for execution
-        function_map = {
-            "check_system_status": check_system_status,
-            "create_support_ticket": create_support_ticket
-        }
-        
         # Chat loop
         print("\n" + "="*60)
         print("IT Support Agent Ready!")
-        print("Ask questions or request help. Type 'exit' to quit.")
+        print("Ask questions, request data analysis, or get help.")
+        print("Type 'exit' to quit.")
         print("="*60 + "\n")
         
         while True:
@@ -330,57 +291,36 @@ Now let's create a Python application that interacts with your agent and adds cu
             )
             
             # Get response from agent
+            print("\n[Agent is thinking...]")
             response = openai_client.responses.create(
                 conversation=conversation.id,
                 extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
                 input=""
             )
             
-            # Handle function calls if needed
-            while True:
-                # Check if response needs function execution
-                needs_function_call = False
-                if hasattr(response, 'output') and response.output:
-                    for item in response.output:
-                        if hasattr(item, 'type') and item.type == 'function_call':
-                            needs_function_call = True
-                            function_name = item.name
-                            function_args = json.loads(item.arguments) if hasattr(item, 'arguments') else {}
-                            
-                            print(f"\n[Calling function: {function_name}]")
-                            
-                            # Execute the function
-                            if function_name in function_map:
-                                function_result = function_map[function_name](**function_args)
-                                
-                                # Add function result to conversation
-                                openai_client.conversations.items.create(
-                                    conversation_id=conversation.id,
-                                    items=[{
-                                        "type": "function_call_output",
-                                        "call_id": item.call_id if hasattr(item, 'call_id') else item.id,
-                                        "output": function_result
-                                    }]
-                                )
-                
-                # If function was called, get new response
-                if needs_function_call:
-                    response = openai_client.responses.create(
-                        conversation=conversation.id,
-                        extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
-                        input=""
-                    )
-                else:
-                    break
-            
             # Display response
             if hasattr(response, 'output_text') and response.output_text:
                 print(f"\nAgent: {response.output_text}\n")
             elif hasattr(response, 'output') and response.output:
-                # Fallback: extract text from output items
+                # Extract text from output items
+                image_count = 0
                 for item in response.output:
-                    if hasattr(item, 'text'):
+                    if hasattr(item, 'text') and item.text:
                         print(f"\nAgent: {item.text}\n")
+                    elif hasattr(item, 'type'):
+                        # Handle other output types like images from code interpreter
+                        if item.type == 'image':
+                            image_count += 1
+                            filename = f"chart_{image_count}.png"
+                            
+                            # Download and save the image
+                            if hasattr(item, 'image') and hasattr(item.image, 'data'):
+                                filepath = save_image(item.image.data, filename)
+                                print(f"\n[Agent generated a chart - saved to: {filepath}]")
+                            else:
+                                print(f"\n[Agent generated an image]")
+                        elif item.type == 'file':
+                            print(f"\n[Agent created a file]")
     
     
     if __name__ == "__main__":
@@ -389,11 +329,11 @@ Now let's create a Python application that interacts with your agent and adds cu
 
 ### Configure environment and run the application
 
-1. In the lab repository, navigate to `Labfiles/01-build-agent-portal-and-vscode/Python/` and locate the provided `.env` and `requirements.txt` files.
+1. In the Explorer pane, you'll see `.env.example` and `requirements.txt` files already present in the folder.
 
-1. Copy these files to your project folder (`C:\labs\it-support-agent`).
+1. Duplicate the `.env.example` file, and rename to `.env`.
 
-1. Open the `.env` file and replace `your_project_endpoint_here` with your actual project endpoint:
+1. In the `.env` file, replace `your_project_endpoint_here` with your actual project endpoint:
 
     ```
     PROJECT_ENDPOINT=<your_project_endpoint>
@@ -401,6 +341,8 @@ Now let's create a Python application that interacts with your agent and adds cu
     ```
     
     **To get your project endpoint:** In VS Code, open the **Microsoft Foundry** extension, right-click on your active project, and select **Copy Endpoint**.
+
+1. Save the `.env` file (**Ctrl+S** or **File > Save**).
 
 1. Open a terminal in VS Code (**Terminal > New Terminal**).
 
@@ -416,26 +358,36 @@ Now let's create a Python application that interacts with your agent and adds cu
     python agent_with_functions.py
     ```
 
-### Test the custom functions
+### Test the agent with code interpreter
 
-When the agent starts, try these prompts:
+When the agent starts, try these prompts to test different capabilities:
 
-1. Check system status:
+1. Test policy search with file search:
     ```
-    Is the email system working?
-    ```
-
-2. Create a support ticket:
-    ```
-    I need to create a ticket for a printer issue. The printer on floor 3 is not printing color documents.
+    What's the policy for password resets?
     ```
 
-3. Combined request:
+2. Request data analysis with code interpreter:
     ```
-    Check the VPN status and if there's an issue, create a high priority ticket
+    Analyze the system performance data and identify any periods where CPU usage exceeded 80%
     ```
 
-Observe how the agent uses the custom functions to fulfill your requests. Type `exit` when done testing.
+3. Request a visualization:
+    ```
+    Create a line chart showing memory usage trends over time
+    ```
+
+4. Ask for statistical analysis:
+    ```
+    What are the average, minimum, and maximum values for disk usage in the performance data?
+    ```
+
+5. Combined analysis:
+    ```
+    Find any correlation between high CPU usage and memory usage in the performance data
+    ```
+
+Observe how the agent uses both file search (for policy questions) and code interpreter (for data analysis) to fulfill your requests. The code interpreter will analyze the CSV data, perform calculations, and can even generate visualizations. Type `exit` when done testing.
 
 ---
 
@@ -452,8 +404,8 @@ Now that you've worked with both approaches, here's guidance on when to use each
 
 ### Use VS Code / SDK when:
 - Building production applications
-- Implementing custom functions and complex logic
-- Integrating with existing code and systems
+- Integrating agents with existing code and systems
+- Managing conversations and responses programmatically
 - Version control and CI/CD pipelines
 - Advanced orchestration and multi-agent scenarios
 - Programmatic agent management at scale
@@ -485,8 +437,8 @@ To avoid unnecessary Azure charges, delete the resources you created:
 **Issue**: "Agent not found"
 - **Solution**: Make sure you set the correct project as active in the VS Code extension.
 
-**Issue**: "Function not executing"
-- **Solution**: Verify the function schema matches the implementation and check that required parameters are provided.
+**Issue**: "Code interpreter not generating visualizations"
+- **Solution**: Ensure the CSV file was properly uploaded to the agent and that code interpreter is enabled in the agent settings.
 
 ---
 
@@ -495,9 +447,10 @@ To avoid unnecessary Azure charges, delete the resources you created:
 In this exercise, you:
 
 Created an AI agent in the Microsoft Foundry portal with grounding data  
-Enabled built-in tools like file search  
+Enabled built-in tools like file search and code interpreter  
 Connected to your project using the VS Code extension  
-Implemented custom functions programmatically  
+Interacted with the agent programmatically using Python  
+Leveraged code interpreter for data analysis and visualization  
 Learned when to use portal vs code-based approaches  
 
 You now have the foundational skills to build AI agents using both visual and code-based workflows!
@@ -506,7 +459,7 @@ You now have the foundational skills to build AI agents using both visual and co
 
 Ready to take your agent development skills to the next level? Continue with:
 
-- **Lab 2: Advanced Tool Calling and Code Interpreter** - Learn to use code interpreter for dynamic data analysis, implement advanced async function patterns, and master file operations with batch processing.
+- **Lab 2: Advanced Tool Calling** - Learn to use advanced tool calling for dynamic data processing, implement advanced async function patterns, and master file operations with batch processing.
 
 ### Additional Resources
 
