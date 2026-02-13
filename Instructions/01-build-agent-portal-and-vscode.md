@@ -92,7 +92,7 @@ Now that you have an agent created, let's configure it with instructions and add
 1. Download the IT policy document from the lab repository. Open a new browser tab and navigate to:
 
     ```
-    https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/uplevel/01-build-agent-portal-and-vscode/IT_Policy.txt
+    https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/01-build-agent-portal-and-vscode/IT_Policy.txt
     ```
 
     Save the file to your local machine.
@@ -389,7 +389,7 @@ Now let's create a Python application that interacts with your agent and adds cu
 
 ### Configure environment and run the application
 
-1. In the lab repository, navigate to `Labfiles/uplevel/01-build-agent-portal-and-vscode/Python/` and locate the provided `.env` and `requirements.txt` files.
+1. In the lab repository, navigate to `Labfiles/01-build-agent-portal-and-vscode/Python/` and locate the provided `.env` and `requirements.txt` files.
 
 1. Copy these files to your project folder (`C:\labs\it-support-agent`).
 
