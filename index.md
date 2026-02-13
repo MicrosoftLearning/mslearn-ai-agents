@@ -12,11 +12,13 @@ The following exercises are designed to provide you with a hands-on learning exp
 
 {% assign labs = site.pages | where_exp:"page", "page.url contains '/Instructions'" %}
 {% for activity in labs  %}
+{% unless activity.lab.hidden %}
 <hr>
 ### [{{ activity.lab.title }}]({{ site.github.url }}{{ activity.url }})
 
 {{activity.lab.description}}
 
+{% endunless %}
 {% endfor %}
 
 <hr>
