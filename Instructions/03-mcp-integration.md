@@ -89,7 +89,7 @@ In this task, you'll deploy a model from the Model Catalog to use with your agen
 
 1. Right-click the name project deployment and select **Copy Project Endpoint**. You'll need this URL to connect your agent to the Foundry project in the next steps.
 
-   ![Screenshot of copying the project endpoint in the Foundry VS Code extension.](Media/vs-code-endpoint.png)
+   <img src="Media/vs-code-endpoint.png" alt="Screenshot of copying the project endpoint in the Foundry VS Code extension." width="400">
 
 ## Clone the starter code repository
 
