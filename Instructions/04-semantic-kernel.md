@@ -138,7 +138,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
     ```python
    # Create a tool function for the email functionality
-   def send_email(
+   def show_claim(
     to: Annotated[str, Field(description="Who to send the email to")],
     subject: Annotated[str, Field(description="The subject of the email.")],
     body: Annotated[str, Field(description="The text body of the email.")]):
@@ -163,7 +163,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
            instructions="""You are an AI assistant for expense claim submission.
                            When a user submits expenses data and requests an expense claim, use the plug-in function to send an email to expenses@contoso.com with the subject 'Expense Claim`and a body that contains itemized expenses with a total.
                            Then confirm to the user that you've done so.""",
-           tools=send_email,
+           tools=show_claim,
        ) as agent,
    ):
     ```
