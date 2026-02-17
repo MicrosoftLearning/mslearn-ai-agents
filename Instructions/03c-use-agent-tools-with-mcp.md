@@ -20,38 +20,37 @@ Let's start by creating a Foundry project.
 
 1. In a web browser, open the [Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Foundry** logo at the top left to navigate to the home page, which looks similar to the following image (close the **Help** pane if it's open):
 
-    ![Screenshot of Foundry portal.](./Media/ai-foundry-home.png)
+    ![Screenshot of Foundry portal.](./Media/ai-foundry-home-new.png)
 
-    > **Important**: Make sure the **New Foundry** toggle is *Off* for this lab.
+    > **Important**: For this lab, you're using the **New** Foundry experience.
 
-1. In the home page, select **Create an agent**.
-1. When prompted to create a project, enter a valid name for your project and expand **Advanced options**.
-1. Confirm the following settings for your project:
+1. In the top banner, select **Start building** to try the new Microsoft Foundry Experience.
+
+1. When prompted, select **Create a new project** and enter a valid name for your project.
+
+1. Expand **Advanced options** and specify the following settings:
     - **Foundry resource**: *A valid name for your Foundry resource*
     - **Subscription**: *Your Azure subscription*
-    - **Resource group**: *Create or select a resource group*
-    - **Region**: *Select any of the following supported locations:* \*
-      * West US 2
-      * West US
-      * Norway East
-      * Switzerland North
-      * UAE North
-      * South India
+    - **Resource group**: *Select your resource group, or create a new one*
+    - **Region**: *Select any **AI Foundry recommended***\**
 
     > \* Some Azure AI resources are constrained by regional model quotas. In the event of a quota limit being exceeded later in the exercise, there's a possibility you may need to create another resource in a different region.
 
 1. Select **Create** and wait for your project to be created.
-1. If prompted, deploy a **gpt-4o** model using either the *Global Standard* or *Standard* deployment option (depending on your quota availability).
 
-    >**Note**: If quota is available, a GPT-4o base model may be deployed automatically when creating your Agent and project.
+1. After your project is created, select **Build** from the navigation bar.
 
-1. When your project is created, the Agents playground will be opened.
+1. Select **Models** from the left-hand menu, and then select **Deploy a base model**.
 
-1. In the navigation pane on the left, select **Overview** to see the main page for your project; which looks like this:
+1. Enter **gpt-4.1** in the search box, and then select the **gpt-4.1** model from the search results.
 
-    ![Screenshot of a Foundry project overview page.](./Media/ai-foundry-project.png)
+1. Select **Deploy** with the default settings to create a deployment of the model.
 
-1. Copy the **Foundry project endpoint** value. You'll use it to connect to your project in a client application.
+    After the model is deployed, the playground for the model is displayed.
+
+1. In the navigation bar on the left, select **Microsoft Foundry** to return to the Foundry home page.
+
+1. Copy the **Project endpoint** value to a notepad, as you'll use them to connect to your project in a client application.
 
 ## Develop an agent that uses MCP function tools
 
@@ -96,7 +95,7 @@ Now that you've created your project in AI Foundry, let's develop an app that in
     ```
    python -m venv labenv
    ./labenv/bin/Activate.ps1
-   pip install -r requirements.txt --pre azure-ai-projects azure-ai-agents mcp
+   pip install -r requirements.txt
     ```
 
     >**Note:** You can ignore any warning or error messages displayed during the library installation.
@@ -109,7 +108,7 @@ Now that you've created your project in AI Foundry, let's develop an app that in
 
     The file is opened in a code editor.
 
-1. In the code file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project **Overview** page in the Foundry portal) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name (which should be *gpt-4o*).
+1. In the code file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project **Overview** page in the Foundry portal) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name (which should be *gpt-4.1*).
 
 1. After you've replaced the placeholder, use the **CTRL+S** command to save your changes and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
 
@@ -130,95 +129,114 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
     ```python
    # Add references
    from azure.identity import DefaultAzureCredential
-   from azure.ai.agents import AgentsClient
-   from azure.ai.agents.models import McpTool, ToolSet, ListSortOrder
+   from azure.ai.projects import AIProjectClient
+   from azure.ai.projects.models import PromptAgentDefinition, MCPTool
+   from openai.types.responses.response_input_param import McpApprovalResponse, ResponseInputParam
     ```
 
 1. Find the comment **Connect to the agents client** and add the following code to connect to the Azure AI project using the current Azure credentials.
 
     ```python
    # Connect to the agents client
-   agents_client = AgentsClient(
-        endpoint=project_endpoint,
-        credential=DefaultAzureCredential(
-            exclude_environment_credential=True,
-            exclude_managed_identity_credential=True
-        )
-   )
+   with (
+       DefaultAzureCredential(
+           exclude_environment_credential=True,
+           exclude_managed_identity_credential=True) as credential,
+       AIProjectClient(endpoint=project_endpoint, credential=credential) as project_client,
+       project_client.get_openai_client() as openai_client,
+    ):
     ```
 
 1. Under the comment **Initialize agent MCP tool**, add the following code:
 
     ```python
    # Initialize agent MCP tool
-   mcp_tool = McpTool(
-        server_label=mcp_server_label,
-        server_url=mcp_server_url,
+   mcp_tool = MCPTool(
+       server_label="api-specs",
+       server_url="https://learn.microsoft.com/api/mcp",
+       require_approval="always",
    )
-    
-   mcp_tool.set_approval_mode("never")
-    
-   toolset = ToolSet()
-   toolset.add(mcp_tool)
     ```
 
     This code will connect to the Microsft Learn Docs remote MCP server. This is a cloud-hosted service that enables clients to access trusted and up-to-date information directly from Microsoft's official documentation.
 
-1. Under the comment **Create a new agent** and add the following code:
+1. Under the comment **Create a new agent with the MCP tool** and add the following code:
 
     ```python
-   # Create a new agent
-   agent = agents_client.create_agent(
-        model=model_deployment,
-        name="my-mcp-agent",
-        instructions="""
-        You have access to an MCP server called `microsoft.docs.mcp` - this tool allows you to 
-        search through Microsoft's latest official documentation. Use the available MCP tools 
-        to answer questions and perform tasks."""
+   # Create a new agent with the MCP tool
+   agent = project_client.agents.create_version(
+       agent_name="MyAgent",
+       definition=PromptAgentDefinition(
+           model=model_deployment,
+           instructions="You are a helpful agent that can use MCP tools to assist users. Use the available MCP tools to answer questions and perform tasks.",
+           tools=[mcp_tool],
+       ),
+   )
+   print(f"Agent created (id: {agent.id}, name: {agent.name}, version: {agent.version})")
+    ```
+
+    In this code, you provide instructions for the agent and provide it with the MCP tool definitions.
+
+1. Find the comment **Create a conversation thread** and add the following code:
+
+    ```python
+   # Create a conversation thread
+   conversation = openai_client.conversations.create()
+   print(f"Created conversation (id: {conversation.id})")
+    ```
+
+1. Find the comment **Send initial request that will trigger the MCP tool** and add the following code:
+
+    ```python
+   # Send initial request that will trigger the MCP tool
+   response = openai_client.responses.create(
+       conversation=conversation.id,
+       input="Give me the Azure CLI commands to create an Azure Container App with a managed identity.",
+       extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
    )
     ```
 
-    In this code, you provide instructions for the agent and provide it with the MCO tool definitions.
-
-1. Find the comment **Create thread for communication** and add the following code:
+1. Find the comment **Process any MCP approval requests that were generated** and add the following code:
 
     ```python
-   # Create thread for communication
-   thread = agents_client.threads.create()
-   print(f"Created thread, ID: {thread.id}")
+   # Process any MCP approval requests that were generated
+   input_list: ResponseInputParam = []
+   for item in response.output:
+       if item.type == "mcp_approval_request":
+           if item.server_label == "api-specs" and item.id:
+               # Automatically approve the MCP request to allow the agent to proceed
+               input_list.append(
+                   McpApprovalResponse(
+                       type="mcp_approval_response",
+                       approve=True,
+                       approval_request_id=item.id,
+                   )
+               )
+
+   print("Final input:")
+   print(input_list)
     ```
 
-1. Find the comment **Create a message on the thread** and add the following code:
+1. Find the comment **Send the approval response back and retrieve a response** and add the following code:
 
     ```python
-   # Create a message on the thread
-   prompt = input("\nHow can I help?: ")
-   message = agents_client.messages.create(
-        thread_id=thread.id,
-        role="user",
-        content=prompt,
+   # Send the approval response back and retrieve a response
+   response = openai_client.responses.create(
+       input=input_list,
+       previous_response_id=response.id,
+       extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
    )
-   print(f"Created message, ID: {message.id}")
+
+   print(f"\nAgent response: {response.output_text}")
     ```
 
-1. Find the comment **Set approval mode** and add the following code:
+1. Find the comment **Clean up resources by deleting the agent version** and add the following code:
 
     ```python
-    # Set approval mode
-    mcp_tool.set_approval_mode("never")
+   # Clean up resources by deleting the agent version
+   project_client.agents.delete_version(agent_name=agent.name, agent_version=agent.version)
+   print("Agent deleted")
     ```
-
-    This allows the agent to automatically invoke the MCP tools without requiring user approval. If you want to require approval, you must supply a header value using `mcp_tool.update_headers`.
-
-1. Find the comment **Create and process agent run in thread with MCP tools** and add the following code:
-
-    ```python
-   # Create and process agent run in thread with MCP tools
-   run = agents_client.runs.create_and_process(thread_id=thread.id, agent_id=agent.id, toolset=toolset)
-   print(f"Created run, ID: {run.id}")
-    ```
-    
-    The AI Agent automatically invokes the connected MCP tools to process the prompt request. To illustrate this process, the code provided under the comment **Display run steps and tool calls** will output any invoked tools from the MCP server.
 
 1. Save the code file (*CTRL+S*) when you have finished. You can also close the code editor (*CTRL+Q*); though you may want to keep it open in case you need to make any edits to the code you added. In either case, keep the cloud shell command-line pane open.
 
@@ -242,54 +260,34 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
    python client.py
     ```
 
-1. When prompted, enter a request for technical information such as:
+1. Wait for the agent to process the prompt, using the MCP server to find a suitable tool to retrieve the requested information. You should see some output similar to the following:
 
     ```
-    Give me the Azure CLI commands to create an Azure Container App with a managed identity.
+    Agent created (id: MyAgent:2, name: MyAgent, version: 2)
+    Created conversation (id: conv_086911ecabcbc05700BBHIeNRoPSO5tKPHiXRkgHuStYzy27BS)
+    Final input:
+    [{'type': 'mcp_approval_response', 'approve': True, 'approval_request_id': '{approval_request_id}'}]
+
+    Agent response: Here are Azure CLI commands to create an Azure Container App with a managed identity:
+
+    **1. For a System-assigned Managed Identity**
+    ```sh
+    az containerapp create \
+    --name <CONTAINERAPP_NAME> \
+    --resource-group <RESOURCE_GROUP> \
+    --environment <CONTAINERAPPS_ENVIRONMENT> \
+    --image <CONTAINER_IMAGE> \
+    --identity 'system'
     ```
 
-1. Wait for the agent to process your prompt, using the MCP server to find a suitable tool to retrieve the requested information. You should see some output similar to the following:
+    [continued...]
 
-    ```
-    Created agent, ID: <<agent-id>>
-    MCP Server: mslearn at https://learn.microsoft.com/api/mcp
-    Created thread, ID: <<thread-id>>
-    Created message, ID: <<message-id>>
-    Created run, ID: <<run-id>>
-    Run completed with status: RunStatus.COMPLETED
-    Step <<step1-id>> status: completed
-
-    Step <<step2-id>> status: completed
-    MCP Tool calls:
-        Tool Call ID: <<tool-call-id>>
-        Type: mcp
-        Type: microsoft_code_sample_search
-
-
-    Conversation:
-    --------------------------------------------------
-    ASSISTANT: You can use Azure CLI to create an Azure Container App with a managed identity (either system-assigned or user-assigned). Below are the relevant commands and workflow:
-
-    ---
-
-    ### **1. Create a Resource Group**
-    '''azurecli
-    az group create --name myResourceGroup --location eastus
-    '''
-    
-
-    {{continued...}}
-
-    By following these steps, you can deploy an Azure Container App with either system-assigned or user-assigned managed identities to integrate seamlessly with other Azure services.
-    --------------------------------------------------
-    USER: Give me the Azure CLI commands to create an Azure Container App with a managed identity.
-    --------------------------------------------------
-    Deleted agent
+    Agent deleted
     ```
 
-    Notice that the agent was able to invoke the MCP tool `microsoft_code_sample_search` automatically to fulfill the request.
+    Notice that the agent was able to invoke the MCP tool to automatically fulfill the request.
 
-1. You can run the app again (using the command `python client.py`) to ask for different information, In each case, the agent will attempt to find technical documentation by using the MCP tool.
+1. You can update the input in the request to ask for different information. In each case, the agent will attempt to find technical documentation by using the MCP tool.
 
 ## Clean up
 

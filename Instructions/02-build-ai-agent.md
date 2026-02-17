@@ -94,7 +94,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
     ```
    python -m venv labenv
    ./labenv/bin/Activate.ps1
-   pip install -r requirements.txt azure-ai-agents
+   pip install -r requirements.txt
     ```
 
 1. Enter the following command to edit the configuration file that has been provided:
@@ -238,7 +238,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
    openai_client.conversations.delete(conversation_id=conversation.id)
    print("Conversation deleted")
 
-   project_client.agents.delete(agent_name=agent.name, agent_version=agent.version)
+   project_client.agents.delete_version(agent_name=agent.name, agent_version=agent.version)
    print("Agent deleted")
     ```
 
