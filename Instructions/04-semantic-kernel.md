@@ -128,7 +128,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
     ```python
    # Add references
    from agent_framework import tool, Agent
-   from agent_framework.azure import AzureAIAgentClient
+   from agent_framework.azure import AzureOpenAIResponsesClient
    from azure.identity.aio import AzureCliCredential
    from pydantic import Field
    from typing import Annotated
@@ -167,7 +167,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
             instructions="""You are an AI assistant for expense claim submission.
                         At the user's request, create an expense claim and use the plug-in function to send an email to expenses@contoso.com with the subject 'Expense Claim`and a body that contains itemized expenses with a total.
                         Then confirm to the user that you've done so. Don't ask for any more information from the user, just use the data provided to create the email.""",
-            tools=[submit_claim],
+            tools=[send_email],
         ) as agent,
     ):
     ```
