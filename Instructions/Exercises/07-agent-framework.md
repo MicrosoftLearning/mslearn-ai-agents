@@ -71,7 +71,7 @@ In this task, you'll deploy a model from the Model Catalog to use with your agen
 
 1. In the Model Catalog, locate the **gpt-4.1** model (you can use the search bar to find it quickly).
 
-    ![Screenshot of the Model Catalog in the Foundry VS Code extension.](Media/vs-code-model.png)
+    ![Screenshot of the Model Catalog in the Foundry VS Code extension.](../Media/vs-code-model.png)
 
 1. Select **Deploy** next to the gpt-4.1 model.
 
@@ -89,7 +89,7 @@ In this task, you'll deploy a model from the Model Catalog to use with your agen
 
 1. Right-click the name project deployment and select **Copy Project Endpoint**. You'll need this URL to connect your agent to the Foundry project in the next steps.
 
-   <img src="Media/vs-code-endpoint.png" alt="Screenshot of copying the project endpoint in the Foundry VS Code extension." width="550">
+   <img src="../Media/vs-code-endpoint.png" alt="Screenshot of copying the project endpoint in the Foundry VS Code extension." width="550">
 
 ## Clone the starter code repository
 
@@ -227,6 +227,18 @@ In this exercise, you used the Microsoft Agent Framework SDK to create an agent 
 
 If you've finished exploring Azure AI Agent Service, you should delete the resources you have created in this exercise to avoid incurring unnecessary Azure costs.
 
-1. Return to the browser tab containing the Azure portal (or re-open the [Azure portal](https://portal.azure.com) at `https://portal.azure.com` in a new browser tab) and view the contents of the resource group where you deployed the resources used in this exercise.
-1. On the toolbar, select **Delete resource group**.
-1. Enter the resource group name and confirm that you want to delete it.
+### Delete your model
+
+1. In VS Code, refresh the **Azure Resources** view.
+
+1. Expand the **Models** subsection.
+
+1. Right-click on your deployed model and select **Delete**.
+
+### Delete the resource group
+
+1. Open the [Azure portal](https://portal.azure.com).
+
+1. Navigate to the resource group containing your AI Foundry resources.
+
+1. Select **Delete resource group** and confirm the deletion.
