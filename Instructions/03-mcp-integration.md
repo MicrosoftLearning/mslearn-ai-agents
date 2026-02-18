@@ -69,14 +69,14 @@ In this task, you'll deploy a model from the Model Catalog to use with your agen
 
    > **Tip**: You can also access the Model Catalog by selecting the **+** icon next to **Models** in the Resources section, or by pressing **F1** and running the command **Microsoft Foundry: Open Model Catalog**.
 
-1. In the Model Catalog, locate the **gpt-4** model (you can use the search bar to find it quickly).
+1. In the Model Catalog, locate the **gpt-4.1** model (you can use the search bar to find it quickly).
 
     ![Screenshot of the Model Catalog in the Foundry VS Code extension.](Media/vs-code-model.png)
 
-1. Select **Deploy** next to the gpt-4 model.
+1. Select **Deploy** next to the gpt-4.1 model.
 
 1. Configure the deployment settings:
-   - **Deployment name**: Enter a name like "gpt-4"
+   - **Deployment name**: Enter a name like "gpt-4.1"
    - **Deployment type**: Select **Global Standard** (or **Standard** if Global Standard is not available)
    - **Model version**: Leave as default
    - **Tokens per minute**: Leave as default
