@@ -93,7 +93,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
     ```
    python -m venv labenv
    ./labenv/bin/Activate.ps1
-   pip install agent-framework==1.0.0b260128 --pre
+   pip install agent-framework==1.0.0b260212 --pre
     ```
 
 1. Enter the following command to edit the configuration file that has been provided:
@@ -127,7 +127,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
     ```python
    # Add references
-   from agent_framework import AgentThread, ChatAgent
+   from agent_framework import tool, Agent
    from agent_framework.azure import AzureAIAgentClient
    from azure.identity.aio import AzureCliCredential
    from pydantic import Field
@@ -138,6 +138,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
     ```python
    # Create a tool function for the email functionality
+   @tool(approval_mode="never_require")
    def send_email(
     to: Annotated[str, Field(description="Who to send the email to")],
     subject: Annotated[str, Field(description="The subject of the email.")],
@@ -149,26 +150,29 @@ Now you're ready to create a client app that defines an agent and a custom funct
 
     > **Note**: The function *simulates* sending an email by printing it to the console. In a real application, you'd use an SMTP service or similar to actually send the email!
 
-1. Back up above the **send_email** code, in the **process_expenses_data** function, find the comment **Create a chat agent**, and add the following code to create a  **ChatAgent** object with the tools and instructions.
+1. Back up above the **send_email** code, in the **process_expenses_data** function, find the comment **Create a client and initialize an agent with the tool and instructions**, and add the following code:
 
     (Be sure to maintain the indentation level)
 
     ```python
-   # Create a chat agent
+   # Create a client and initialize an agent with the tool and instructions
    async with (
-       AzureCliCredential() as credential,
-       ChatAgent(
-           chat_client=AzureAIAgentClient(credential=credential),
-           name="expenses_agent",
-           instructions="""You are an AI assistant for expense claim submission.
-                           When a user submits expenses data and requests an expense claim, use the plug-in function to send an email to expenses@contoso.com with the subject 'Expense Claim`and a body that contains itemized expenses with a total.
-                           Then confirm to the user that you've done so.""",
-           tools=send_email,
-       ) as agent,
-   ):
+        AzureCliCredential() as credential,
+        Agent(
+            client=AzureOpenAIResponsesClient(
+                credential=credential,
+                deployment_name=os.getenv("AZURE_AI_MODEL_DEPLOYMENT_NAME"),
+                project_endpoint=os.getenv("AZURE_AI_PROJECT_ENDPOINT"),
+            ),
+            instructions="""You are an AI assistant for expense claim submission.
+                        At the user's request, create an expense claim and use the plug-in function to send an email to expenses@contoso.com with the subject 'Expense Claim`and a body that contains itemized expenses with a total.
+                        Then confirm to the user that you've done so. Don't ask for any more information from the user, just use the data provided to create the email.""",
+            tools=[submit_claim],
+        ) as agent,
+    ):
     ```
 
-    Note that the **AzureCliCredential** object will allow your code to authenticate to your Azure account. The **AzureAIAgentClient** object will automatically include the Foundry project settings from the .env configuration.
+    Note that the **AzureCliCredential** object will allow your code to authenticate to your Azure account. The **AzureOpenAIResponsesClient** object includes the Foundry project settings from the .env configuration. The **Agent** object is initialized with the client, instructions for the agent, and the tool function you defined to send emails.
 
 1. Find the comment **Use the agent to process the expenses data**, and add the following code to create a thread for your agent to run on, and then invoke it with a chat message.
 

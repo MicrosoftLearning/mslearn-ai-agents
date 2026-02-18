@@ -152,34 +152,29 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
 
     > **Note**: The function *simulates* sending an email by printing it to the console. In a real application, you'd use an SMTP service or similar to actually send the email!
 
-1. Back up above the **send_email** code, in the **process_expenses_data** function, find the comment **Create an Azure OpenAI client**, and add the following code to create a client that can connect to your Azure OpenAI model deployment.
+1. Back up above the **send_email** code, in the **process_expenses_data** function, find the comment **Create a client and initialize an agent with the tool and instructions**, and add the following code:
 
     (Be sure to maintain the indentation level)
 
     ```python
-   # Create an Azure OpenAI client
-   credential = AzureCliCredential()
-   client = AzureOpenAIResponsesClient(
-       project_endpoint=os.getenv("PROJECT_ENDPOINT"),
-       deployment_name=os.getenv("MODEL_DEPLOYMENT_NAME"),
-       credential=credential,
-   )
+   # Create a client and initialize an agent with the tool and instructions
+   async with (
+        AzureCliCredential() as credential,
+        Agent(
+            client=AzureOpenAIResponsesClient(
+                credential=credential,
+                deployment_name=os.getenv("AZURE_AI_MODEL_DEPLOYMENT_NAME"),
+                project_endpoint=os.getenv("AZURE_AI_PROJECT_ENDPOINT"),
+            ),
+            instructions="""You are an AI assistant for expense claim submission.
+                        At the user's request, create an expense claim and use the plug-in function to send an email to expenses@contoso.com with the subject 'Expense Claim`and a body that contains itemized expenses with a total.
+                        Then confirm to the user that you've done so. Don't ask for any more information from the user, just use the data provided to create the email.""",
+            tools=[submit_claim],
+        ) as agent,
+    ):
     ```
 
-    Note that the **AzureCliCredential** object will allow your code to authenticate to your Azure account. The **AzureOpenAIResponsesClient** object will include the Foundry project settings from the .env configuration.
-
-1. Find the comment **Create an agent with the tool and instructions**, and add the following code to create an agent, connect it to your model deployment, and give it the ability to use the email tool you defined earlier. The instructions define how the agent should use the tool when responding to user prompts.
-
-    ```python
-   # Create an agent with the tool and instructions
-   agent = client.as_agent(
-       name="expenses_agent",
-       instructions="""You are an AI assistant for expense claim submission.
-                       At the user's request, create an expense claim and use the plug-in function to send an email to expenses@contoso.com with the subject 'Expense Claim`and a body that contains itemized expenses with a total.
-                       Then confirm to the user that you've done so. Don't ask for any more information from the user, just use the data provided to create the email.""",
-       tools=[submit_claim],
-   ) 
-    ```
+    Note that the **AzureCliCredential** object will allow your code to authenticate to your Azure account. The **AzureOpenAIResponsesClient** object includes the Foundry project settings from the .env configuration. The **Agent** object is initialized with the client, instructions for the agent, and the tool function you defined to send emails.
 
 1. Find the comment **Use the agent to process the expenses data**, and add the following code to create a thread for your agent to run on, and then invoke it with a chat message.
 
