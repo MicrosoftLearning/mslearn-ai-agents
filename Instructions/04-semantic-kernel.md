@@ -161,8 +161,8 @@ Now you're ready to create a client app that defines an agent and a custom funct
         Agent(
             client=AzureOpenAIResponsesClient(
                 credential=credential,
-                deployment_name=os.getenv("AZURE_AI_MODEL_DEPLOYMENT_NAME"),
-                project_endpoint=os.getenv("AZURE_AI_PROJECT_ENDPOINT"),
+                deployment_name=os.getenv("MODEL_DEPLOYMENT_NAME"),
+                project_endpoint=os.getenv("PROJECT_ENDPOINT"),
             ),
             instructions="""You are an AI assistant for expense claim submission.
                         At the user's request, create an expense claim and use the plug-in function to send an email to expenses@contoso.com with the subject 'Expense Claim`and a body that contains itemized expenses with a total.
