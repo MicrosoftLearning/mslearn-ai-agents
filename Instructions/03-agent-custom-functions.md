@@ -148,7 +148,7 @@ Now that you've created your project in AI Foundry, let's develop an app that im
        ticket_number = str(uuid.uuid4()).replace('-', '')[:6]
        file_name = f"ticket-{ticket_number}.txt"
        file_path = script_dir / file_name
-       text = f"Support ticket: {ticket_number}\nSubmitted by: {email_address}\nDescription:\n{description}"
+       text = f"Support ticket: {ticket_number}\nSubmitted by: {email_address}\nDescription: {description}"
        file_path.write_text(text)
 
        message_json = json.dumps({"message": f"Support ticket {ticket_number} submitted. The ticket file is saved as {file_name}"})
