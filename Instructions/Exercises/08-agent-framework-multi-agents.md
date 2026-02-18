@@ -99,7 +99,7 @@ In this task, you'll deploy a model from the Model Catalog to use with your agen
 
 ## Clone the starter code repository
 
-For this exercise, you'll use starter code that will help you connect to your Foundry project and create an agent that can process expenses data. You'll clone this code from a GitHub repository.
+For this exercise, you'll use starter code that will help you connect to your Foundry project and create a multi-agent solution that can process customer feedback. You'll clone this code from a GitHub repository.
 
 1. Navigate to the **Welcome** tab in VS Code (you can open it by selecting **Help > Welcome** from the menu bar).
 
@@ -118,8 +118,6 @@ For this exercise, you'll use starter code that will help you connect to your Fo
     ```
 
 1. Open the **.env** file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project deployment resource in the Microsoft Foundry extension) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name. Use **Ctrl+S** to save the file after making these changes.
-
-Now you're ready to create an AI agent that uses a custom tool to process expenses data.
 
 ## Create AI agents
 
@@ -222,7 +220,7 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 
     This code formats and displays the messages from the workflow outputs you collected from the orchestration.
 
-1. Use the **CTRL+S** command to save your changes to the code file. You can keep it open (in case you need to edit the code to fix any errors) or use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
+1. Use the **CTRL+S** command to save your changes to the code file.
 
 ## Run the app
 

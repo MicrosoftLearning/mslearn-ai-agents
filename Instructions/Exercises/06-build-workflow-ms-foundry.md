@@ -314,69 +314,112 @@ In this section, you'll add conditional logic to route the ticket based on its c
 
 Now that you've built and tested your workflow in the Foundry portal, you can also invoke it from your own code using the Azure AI Projects SDK. This allows you to integrate the workflow into your applications or automate its execution.
 
-### Prepare the environment
+### Prerequisites
 
-1. Open a new browser tab (keeping the Foundry portal open in the existing tab). Then in the new tab, browse to the [Azure portal](https://portal.azure.com) at `https://portal.azure.com`; signing in with your Azure credentials if prompted.
+Before starting this exercise, ensure you have:
+- Visual Studio Code installed
+- An active Azure subscription
+- Python version 3.10 or higher installed
 
-    Close any welcome notifications to see the Azure portal home page.
+### Install the Microsoft Foundry VS Code extension
 
-1. Use the **[\>_]** button to the right of the search bar at the top of the page to create a new Cloud Shell in the Azure portal, selecting a ***PowerShell*** environment with no storage in your subscription.
+Let's start by installing and setting up the VS Code extension.
 
-    The cloud shell provides a command-line interface in a pane at the bottom of the Azure portal. You can resize or maximize this pane to make it easier to work in.
+1. Open Visual Studio Code.
 
-    > **Note**: If you have previously created a cloud shell that uses a *Bash* environment, switch it to ***PowerShell***.
+1. Select **Extensions** from the left pane (or press **Ctrl+Shift+X**).
 
-1. In the cloud shell toolbar, in the **Settings** menu, select **Go to Classic version** (this is required to use the code editor).
+1. In the search bar, type **Microsoft Foundry** and press Enter.
 
-    **<font color="red">Ensure you've switched to the classic version of the cloud shell before continuing.</font>**
+1. Select the **Microsoft Foundry** extension from Microsoft and click **Install**.
 
-1. In the cloud shell pane, enter the following commands to clone the GitHub repo containing the code files for this exercise (type the command, or copy it to the clipboard and then right-click in the command line and paste as plain text):
+1. After installation is complete, verify the extension appears in the primary navigation bar on the left side of Visual Studio Code.
+
+### Sign in to Azure and create a project
+
+Now you'll connect to your Azure resources and create a new AI Foundry project.
+
+1. In the VS Code sidebar, select the **Microsoft Foundry** extension icon.
+
+1. In the Resources view, select **Sign in to Azure...** and follow the authentication prompts.
+
+   > **Note**: You won't see this option if you're already signed in.
+
+1. Create a new Foundry project by selecting the **+** (plus) icon next to **Resources** in the Foundry Extension view.
+
+1. Select your Azure subscription from the dropdown.
+
+1. Choose whether to create a new resource group or use an existing one:
+   
+   **To create a new resource group:**
+   - Select **Create new resource group** and press Enter
+   - Enter a name for your resource group (e.g., "rg-ai-agents-lab") and press Enter
+   - Select a location from the available options and press Enter
+   
+   **To use an existing resource group:**
+   - Select the resource group you want to use from the list and press Enter
+
+1. Enter a name for your Foundry project (e.g., "ai-agents-project") in the textbox and press Enter.
+
+1. Wait for the project deployment to complete. A popup will appear with the message "Project deployed successfully."
+
+### Deploy a model
+
+In this task, you'll deploy a model from the Model Catalog to use with your agent.
+
+1. When the "Project deployed successfully" popup appears, select the **Deploy a model** button. This opens the Model Catalog.
+
+   > **Tip**: You can also access the Model Catalog by selecting the **+** icon next to **Models** in the Resources section, or by pressing **F1** and running the command **Microsoft Foundry: Open Model Catalog**.
+
+1. In the Model Catalog, locate the **gpt-4.1** model (you can use the search bar to find it quickly).
+
+    ![Screenshot of the Model Catalog in the Foundry VS Code extension.](../Media/vs-code-model.png)
+
+1. Select **Deploy** next to the gpt-4.1 model.
+
+1. Configure the deployment settings:
+   - **Deployment name**: Enter a name like "gpt-4.1"
+   - **Deployment type**: Select **Global Standard** (or **Standard** if Global Standard is not available)
+   - **Model version**: Leave as default
+   - **Tokens per minute**: Leave as default
+
+1. Select **Deploy in Microsoft Foundry** in the bottom-left corner.
+
+1. In the confirmation dialog, select **Deploy** to deploy the model.
+
+1. Wait for the deployment to complete. Your deployed model will appear under the **Models** section in the Resources view.
+
+1. Right-click the name project deployment and select **Copy Project Endpoint**. You'll need this URL to connect your agent to the Foundry project in the next steps.
+
+   <img src="../Media/vs-code-endpoint.png" alt="Screenshot of copying the project endpoint in the Foundry VS Code extension." width="550">
+
+### Clone the starter code repository
+
+For this exercise, you'll use starter code that will help you connect to your Foundry project and invoke a workflow.
+
+1. Navigate to the **Welcome** tab in VS Code (you can open it by selecting **Help > Welcome** from the menu bar).
+
+1. Select **Clone git repository** and enter the URL of the starter code repository: `https://github.com/MicrosoftLearning/mslearn-ai-agents.git`
+
+1. Create a new folder and choose **Select as Repository Destination**, then open the cloned repository when prompted.
+
+1. In the Explorer view, navigate to the **Labfiles/08-build-workflow-ms-foundry/Python** folder to find the starter code for this exercise.
+
+1. Right-click on the **requirements.txt** file and select **Open in Integrated Terminal**.
+
+1. In the terminal, enter the following command to install the required Python packages:
 
     ```
-   rm -r ai-agents -f
-   git clone https://github.com/MicrosoftLearning/mslearn-ai-agents ai-agents
+    pip install -r requirements.txt
     ```
 
-    > **Tip**: As you enter commands into the cloud shell, the output may take up a large amount of the screen buffer and the cursor on the current line may be obscured. You can clear the screen by entering the `cls` command to make it easier to focus on each task.
-
-1. When the repo has been cloned, enter the following command to change the working directory to the folder containing the code files and list them all.
-
-    ```
-   cd ai-agents/Labfiles/08-build-workflow-ms-foundry/Python
-   ls -a -l
-    ```
-
-    The provided files include application code and a file for configuration settings.
-
-### Configure the application settings
-
-1. In the cloud shell command-line pane, enter the following command to install the libraries you'll use:
-
-    ```
-   python -m venv labenv
-   ./labenv/bin/Activate.ps1
-   pip install -r requirements.txt
-    ```
-
-1. Enter the following command to edit the configuration file that is provided:
-
-    ```
-   code .env
-    ```
-
-    The file is opened in a code editor.
-
-1. In the code file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project **Overview** page in the Foundry portal), and the **your_model_deployment** placeholder with the name you assigned to your gpt-4.1 model deployment (which by default is `gpt-4.1`).
-
-1. After you've replaced the placeholders, use the **CTRL+S** command to save your changes and then use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
+1. Open the **.env** file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project deployment resource in the Microsoft Foundry extension) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name. Use **Ctrl+S** to save the file after making these changes.
 
 ### Connect to the workflow and run it
 
-1. Enter the following command to edit the **workflow.py** file:
+Now you're ready to create a project that invokes a workflow. Let's get started!
 
-    ```
-   code workflow.py
-    ```
+1. Open the **workflow.py** file in the code editor. 
 
 1. Review the code in the file, noting that it contains strings for each agent name and instructions.
 
@@ -460,25 +503,13 @@ Now that you've built and tested your workflow in the Foundry portal, you can al
    print("\nConversation deleted")
     ```
 
-1. Use the **CTRL+S** command to save your changes to the code file. You can keep it open (in case you need to edit the code to fix any errors) or use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
+1. Use the **CTRL+S** command to save your changes to the code file. 
 
 ### Sign into Azure and run the app
 
 Now you're ready to run your code and watch your AI agents collaborate.
 
-1. In the cloud shell command-line pane, enter the following command to sign into Azure.
-
-    ```
-   az login
-    ```
-
-    **<font color="red">You must sign into Azure - even though the cloud shell session is already authenticated.</font>**
-
-    > **Note**: In most scenarios, just using *az login* will be sufficient. However, if you have subscriptions in multiple tenants, you may need to specify the tenant by using the *--tenant* parameter. See [Sign into Azure interactively using the Azure CLI](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) for details.
-
-1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Foundry hub if prompted.
-
-1. After you have signed in, enter the following command to run the application:
+1 In the integrated terminal, run the following command:
 
     ```
    python workflow.py
