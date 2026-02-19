@@ -2,6 +2,8 @@
 lab:
     title: 'Build a workflow in Microsoft Foundry'
     description: 'Use the Microsoft Foundry portal to create workflows for AI agents.'
+    level: 300
+    duration: 45
 ---
 
 # Build a workflow in Microsoft Foundry

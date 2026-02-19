@@ -1,0 +1,115 @@
+Remote Work Policy - Contoso Corporation
+
+Effective Date: January 1, 2026
+
+========================================
+ELIGIBILITY
+========================================
+
+Eligible Employees:
+- Must have been employed for at least 6 months
+- Must have satisfactory performance reviews
+- Position must be suitable for remote work
+- Must have reliable internet connection (minimum 25 Mbps)
+
+========================================
+REMOTE WORK ARRANGEMENTS
+========================================
+
+Full-Time Remote:
+- Work from home 5 days per week
+- Requires manager and HR approval
+- Must attend quarterly in-person meetings
+- Subject to annual review
+
+Hybrid Schedule:
+- Combination of office and remote work
+- Minimum 2 days per week in office recommended
+- Must be available during core hours (9 AM - 3 PM local time)
+
+========================================
+WORK HOURS AND AVAILABILITY
+========================================
+
+Core Hours:
+All remote employees must be available during:
+- Monday-Friday: 9:00 AM - 3:00 PM (employee's local time zone)
+- Must attend all scheduled meetings
+- Respond to emails within 4 hours during core hours
+- Answer calls/messages on Teams within 30 minutes
+
+========================================
+EQUIPMENT AND TECHNOLOGY
+========================================
+
+Company-Provided Equipment:
+- Laptop computer
+- Monitor (if needed)
+- Docking station
+- Headset for video calls
+- VPN access credentials
+
+Employee Responsibilities:
+- Maintain secure home office environment
+- Protect company equipment from damage or theft
+- Use company-approved software only
+- Ensure adequate internet connectivity
+
+========================================
+COMMUNICATION EXPECTATIONS
+========================================
+
+Required Tools:
+- Microsoft Teams (primary communication)
+- Outlook email
+- SharePoint for document sharing
+
+Daily Communication:
+- Start of day message to team/manager
+- Active presence on Teams during work hours
+- Respond to messages promptly
+- End of day status update
+
+Meetings:
+- Camera on for all video meetings
+- Professional appearance and background
+- Be on time (join 2 minutes early)
+
+========================================
+HOME OFFICE REQUIREMENTS
+========================================
+
+Workspace Standards:
+- Dedicated workspace separate from living areas
+- Ergonomic chair and proper desk height
+- Adequate lighting
+- Quiet environment for calls
+
+Expenses:
+Company will reimburse:
+- Internet costs (up to $50/month with receipts)
+- One-time home office setup (up to $500)
+
+========================================
+SECURITY AND CONFIDENTIALITY
+========================================
+
+Data Protection:
+- Use VPN for all company network access
+- Lock computer when stepping away
+- No public Wi-Fi without VPN
+- Report security incidents immediately
+
+Password Management:
+- Change passwords every 90 days
+- Use multi-factor authentication
+- Never share credentials
+
+========================================
+QUESTIONS AND SUPPORT
+========================================
+
+Policy Questions: hr@contoso.com or (555) 123-4567
+Technical Issues: itsupport@contoso.com or (555) 123-4580
+
+Last Updated: January 2026

@@ -1,0 +1,374 @@
+IT Security Policy - Contoso Corporation
+
+Effective: January 2026
+Policy Owner: Information Security Team
+
+========================================
+LAPTOP SECURITY REQUIREMENTS
+========================================
+
+PHYSICAL SECURITY
+
+Device Protection:
+- Never leave laptop unattended in public spaces
+- Use cable lock when working in shared office spaces
+- Store in secure location when not in use
+- Report theft or loss immediately to IT Security
+- Keep laptop in carry-on luggage during travel (never check)
+
+Screen Privacy:
+- Use privacy screen in public locations
+- Lock screen when stepping away (Windows+L)
+- Auto-lock after 5 minutes of inactivity
+- Position screen away from public view
+
+ENCRYPTION
+
+Full Disk Encryption:
+- BitLocker required on all company laptops
+- Automatically enabled by IT during setup
+- Recovery key stored in company system
+- Never disable encryption without IT approval
+
+File-Level Encryption:
+- Encrypt sensitive documents before sharing
+- Use company-approved encryption tools
+- Required for files marked "Confidential" or higher
+- Encryption passwords stored in password manager
+
+PASSWORD SECURITY
+
+Device Password Requirements:
+- Minimum 12 characters
+- Must include: uppercase, lowercase, numbers, special characters
+- Change every 90 days
+- Cannot reuse last 5 passwords
+- No dictionary words or common patterns
+
+Best Practices:
+- Use unique password for work device
+- Enable Windows Hello (facial recognition or fingerprint)
+- Never share your password
+- Don't write passwords down
+- Use company password manager for other accounts
+
+Password Manager:
+- 1Password provided by company
+- Required for all work-related passwords
+- Auto-generates strong passwords
+- Syncs across devices
+- Enable two-factor authentication
+
+MULTI-FACTOR AUTHENTICATION (MFA)
+
+Required for All Systems:
+- Microsoft 365 (email, Teams, SharePoint)
+- VPN access
+- Cloud applications
+- Admin accounts
+- Financial systems
+
+MFA Methods:
+- Microsoft Authenticator app (recommended)
+- SMS text message (backup)
+- Security key (for high-privilege accounts)
+- Phone call (alternative)
+
+Setup Instructions:
+- Install Microsoft Authenticator on mobile device
+- Log into account.microsoft.com
+- Follow MFA enrollment wizard
+- Register at least 2 authentication methods
+- Keep backup codes in safe location
+
+SOFTWARE AND UPDATES
+
+Operating System:
+- Windows 11 Pro required
+- Automatic updates enabled
+- Security patches install within 7 days
+- No skipping or delaying updates
+- Monthly update verification by IT
+
+Applications:
+- Only install company-approved software
+- Request new software through IT Portal
+- No pirated or unlicensed software
+- Uninstall prohibited applications immediately
+- Keep all software up to date
+
+Antivirus/Endpoint Protection:
+- Microsoft Defender for Endpoint enabled
+- Real-time scanning active at all times
+- Weekly full system scans
+- Automatic threat remediation
+- Report any detected threats to IT
+
+VPN AND NETWORK SECURITY
+
+VPN Usage:
+Required when:
+- Working from home or remote location
+- Using public Wi-Fi
+- Accessing company network resources
+- Working with sensitive data
+- Connecting to cloud applications
+
+VPN Configuration:
+- Install Cisco AnyConnect VPN client
+- Connect before starting work
+- Stay connected during work hours
+- Disconnect only when ending work
+- Report connection issues to IT
+
+Wi-Fi Security:
+Approved Networks:
+- Company office Wi-Fi
+- Home Wi-Fi with WPA2/WPA3 encryption
+- VPN-protected connections
+
+Prohibited Networks:
+- Public Wi-Fi without VPN (coffee shops, airports, hotels)
+- Open/unsecured networks
+- Unknown networks
+- Hotel ethernet without VPN
+
+EMAIL AND WEB SECURITY
+
+Email Best Practices:
+- Verify sender before opening attachments
+- Hover over links before clicking
+- Report phishing emails to security@contoso.com
+- Don't share sensitive data via email without encryption
+- Use encrypted email for confidential information
+
+Phishing Warning Signs:
+- Unexpected requests for passwords/credentials
+- Urgent requests for money or information
+- Suspicious sender addresses
+- Generic greetings ("Dear User")
+- Poor grammar or spelling
+- Mismatched or suspicious links
+
+Web Browsing:
+- Use company-approved browsers (Chrome, Edge)
+- Keep browser updated
+- Enable pop-up blocker
+- Don't bypass security warnings
+- Avoid downloading from untrusted sites
+- Clear cache/cookies monthly
+
+CLOUD STORAGE AND FILE SHARING
+
+Approved Cloud Services:
+- OneDrive for Business (primary)
+- SharePoint Online
+- Microsoft Teams file sharing
+
+Prohibited Services:
+- Personal Dropbox, Google Drive, iCloud
+- File sharing sites (WeTransfer, SendSpace)
+- Personal email for work files
+- USB drives (unless encrypted and approved)
+
+File Sharing Rules:
+- Share via OneDrive/SharePoint links only
+- Set expiration dates on shared links
+- Use password protection for sensitive files
+- Never email files marked "Confidential"
+- Verify recipient before sharing
+- Review and revoke old shares quarterly
+
+DATA CLASSIFICATION
+
+Company Data Levels:
+
+PUBLIC:
+- Marketing materials
+- Public website content
+- Press releases
+- No special handling required
+
+INTERNAL:
+- General business documents
+- Internal memos
+- Standard operating procedures
+- Shared within company only
+
+CONFIDENTIAL:
+- Customer data
+- Financial records
+- Personnel information
+- Encryption required
+- Access logging enabled
+
+RESTRICTED:
+- Trade secrets
+- Unreleased products
+- Legal documents
+- Need-to-know access only
+- Additional approval required
+
+BACKUP AND DATA PROTECTION
+
+Automatic Backups:
+- OneDrive syncs files automatically
+- Folder redirection for Documents/Desktop
+- Daily incremental backups
+- 30-day version history
+- Deleted file recovery (30 days)
+
+Personal Responsibility:
+- Verify OneDrive sync status daily
+- Don't save critical files only locally
+- Test file recovery periodically
+- Report sync issues immediately
+
+MOBILE DEVICE SECURITY
+
+Company-Owned Devices:
+- Same security policies as laptops
+- Mobile Device Management (MDM) enrolled
+- Remote wipe capability enabled
+- Biometric unlock required
+- Auto-lock after 2 minutes
+
+BYOD (Bring Your Own Device):
+- Must install Microsoft Intune app
+- Work data separated from personal
+- Company can wipe work data only
+- Must meet minimum security requirements
+- Regular compliance checks
+
+Mobile App Restrictions:
+Approved:
+- Microsoft 365 apps
+- Microsoft Teams
+- Outlook mobile
+- Authenticator
+- Company-approved apps only
+
+Prohibited:
+- Syncing work email to personal apps
+- Saving work files to personal cloud
+- Taking screenshots of sensitive data
+- Using personal messaging for work
+
+INCIDENT REPORTING
+
+Report Immediately:
+- Lost or stolen device
+- Suspected malware infection
+- Phishing attempt
+- Data breach or exposure
+- Security policy violation
+- Suspicious activity
+- Password compromise
+
+How to Report:
+- Call: (555) 123-4599 (24/7 Security Hotline)
+- Email: security@contoso.com
+- IT Portal: Incident Report form
+- In person: IT Security Office (Building A, Room 301)
+
+No Blame Policy:
+- Prompt reporting encouraged
+- Focus on resolution, not punishment
+- Quick response prevents larger issues
+
+REMOTE WORK SECURITY
+
+Home Office Requirements:
+- Secure Wi-Fi with strong password
+- Router firmware up to date
+- Separate work area from living space
+- Secure laptop when not working
+- No family/guest access to work devices
+
+Video Conference Security:
+- Don't join meetings from public locations
+- Use virtual background for home office
+- Mute when not speaking
+- Lock meeting room for sensitive discussions
+- End meetings properly (don't leave running)
+
+TRAVEL SECURITY
+
+Before Travel:
+- Notify IT of international travel
+- Enable international roaming for MFA
+- Backup critical files to cloud
+- Update all software
+- Install VPN on mobile devices
+
+During Travel:
+- Use hotel safe for laptop when out
+- Assume public Wi-Fi is monitored
+- Always use VPN
+- Be aware of shoulder surfing
+- Keep devices with you (don't leave in hotel)
+
+After Travel:
+- Run full antivirus scan
+- Change passwords if device left unattended
+- Report any suspicious incidents
+- Update IT if device was inspected by customs
+
+COMPLIANCE AND CONSEQUENCES
+
+Training Requirements:
+- Annual security awareness training
+- Phishing simulation tests (quarterly)
+- Policy acknowledgment (annual)
+- Role-specific security training
+
+Policy Violations:
+First Violation:
+- Written warning
+- Mandatory retraining
+- Manager notification
+
+Second Violation:
+- Final written warning
+- Suspension of remote work privileges
+- Security review
+
+Third Violation:
+- Termination of employment
+- Legal action if warranted
+
+Immediate Termination:
+- Intentional data theft
+- Installing malware
+- Bypassing security controls
+- Sharing credentials
+- Violating confidentiality
+
+CONTACT INFORMATION
+
+IT Security Team:
+- Email: security@contoso.com
+- Phone: (555) 123-4599
+- Office: Building A, Room 301
+
+IT Helpdesk:
+- Email: itsupport@contoso.com
+- Phone: (555) 123-4580
+- Hours: Monday-Friday 7 AM - 7 PM
+
+Emergency (After Hours):
+- Call: (555) 123-4599
+- Page: On-call security engineer
+- Available 24/7/365
+
+========================================
+ACKNOWLEDGMENT
+========================================
+
+All employees must review and acknowledge this policy annually.
+
+I acknowledge that I have read, understood, and agree to comply with Contoso Corporation's IT Security Policy.
+
+Policy Version: 4.2
+Last Updated: January 2026
+Next Review: January 2027

@@ -2,6 +2,8 @@
 lab:
     title: 'Extend agents with Model Context Protocol (MCP) tools'
     description: 'Extend agent capabilities by integrating Model Context Protocol (MCP) server tools.'
+    level: 300
+    duration: 60
 ---
 
 # Develop an AI agent with Model Context Protocol (MCP) tools
