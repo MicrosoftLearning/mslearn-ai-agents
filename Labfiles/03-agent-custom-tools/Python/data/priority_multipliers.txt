@@ -1,0 +1,4 @@
+low|1.00
+normal|1.25
+high|1.75
+urgent|2.50
