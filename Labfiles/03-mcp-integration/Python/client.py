@@ -63,6 +63,9 @@ async def chat_loop(session):
         # Create a thread for the chat session
         conversation = openai_client.conversations.create()
 
+        # Create an input list to hold function call outputs to send back to the model
+        input_list: ResponseInputParam = []
+
         while True:
             user_input = input("Enter a prompt for the inventory agent. Use 'quit' to exit.\nUSER: ").strip()
             if user_input.lower() == "quit":
@@ -79,14 +82,12 @@ async def chat_loop(session):
             response = openai_client.responses.create(
                 conversation=conversation.id,
                 extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
-                input="",
+                input=input_list,
             )
 
             # Check the run status for failures
             if response.status == "failed":
                 print(f"Response failed: {response.error}")
-            
-            input_list: ResponseInputParam = []
 
             # Process function calls
 
