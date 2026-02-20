@@ -49,11 +49,11 @@ Let's start by creating a Foundry project.
 
 1. Ensure the **New Foundry** toggle is set to *On*.
 
-    <img src="./Media/ai-foundry-toggle.png" alt="Screenshot of the New Foundry toggle" width="300">
+    <img src="../Media/ai-foundry-toggle.png" alt="Screenshot of the New Foundry toggle" width="300">
 
 1. You may be prompted to create a new project before continuing to the New Foundry experience. Select **Create a new project**.
 
-    <img src="./Media/ai-foundry-new-project.png" alt="Screenshot of the Create project pane." width="600">
+    <img src="../Media/ai-foundry-new-project.png" alt="Screenshot of the Create project pane." width="600">
 
     If you're not prompted, select the projects drop down menu on the upper left, and then select **Create new project**.
 
@@ -83,7 +83,7 @@ In this section, you'll create a workflow that helps triage and respond to custo
 
 1. In the **Set variable** node editor, create a new variable by selecting **Create new variable**. Enter a name such as *SupportTickets*.
 
-    <img src="./Media/node-new-variable.png" alt="Screenshot of creating a new variable in the Set variable node." width="500">
+    <img src="../Media/node-new-variable.png" alt="Screenshot of creating a new variable in the Set variable node." width="500">
 
     The new variable should appear as `Local.SupportTickets`.
 
@@ -122,7 +122,7 @@ In this section, you'll create a workflow that helps triage and respond to custo
 
 1. In the editor, under **Details**, select the **Parameters** button near the model name.
 
-    <img src="./Media/agent-parameters.png" alt="Screenshot of the Parameters button in the agent editor." width="400">
+    <img src="../Media/agent-parameters.png" alt="Screenshot of the Parameters button in the agent editor." width="400">
 
 1. In the **Parameters** pane, next to **Text format**, select **JSON Schema**.
 
