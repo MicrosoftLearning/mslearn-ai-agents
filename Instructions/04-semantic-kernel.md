@@ -128,7 +128,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
     ```python
    # Add references
    from agent_framework import tool, Agent
-   from agent_framework.azure import AzureAIAgentClient
+   from agent_framework.azure import AzureOpenAIResponsesClient
    from azure.identity.aio import AzureCliCredential
    from pydantic import Field
    from typing import Annotated
