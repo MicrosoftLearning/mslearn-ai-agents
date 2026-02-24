@@ -234,7 +234,7 @@ Now you're ready to run your code and watch your AI agents collaborate.
 1. In the integrated terminal, enter the following command to run the application:
 
     ```
-   python agent-framework.py
+   python agents.py
     ```
 
 1.   You should see some output similar to the following:
