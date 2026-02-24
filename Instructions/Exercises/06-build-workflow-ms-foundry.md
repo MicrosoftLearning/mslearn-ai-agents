@@ -409,9 +409,11 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. Right-click on the **requirements.txt** file and select **Open in Integrated Terminal**.
 
-1. In the terminal, enter the following command to install the required Python packages:
+1. In the terminal, enter the following command to install the required Python packages in a virtual environment:
 
     ```
+    python -m venv labenv
+    .\labenv\Scripts\Activate.ps1
     pip install -r requirements.txt
     ```
 
@@ -537,6 +539,8 @@ Now you're ready to run your code and watch your AI agents collaborate.
     ```
 
     In the output, you can see the how the workflow completes each step, including the classification of each ticket and the recommended response or escalation. Great work!
+
+1. When you're finished, enter `deactivate` in the terminal to exit the Python virtual environment.
 
 ## Summary
 

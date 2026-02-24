@@ -24,10 +24,7 @@ async def main():
     
 async def process_expenses_data(prompt, expenses_data):
 
-    # Create an Azure OpenAI client
-
-
-    # Create an agent with the tool and instructions
+    # Create a client and initialize an agent with the tool and instructions
     
 
     # Use the agent to process the expenses data    

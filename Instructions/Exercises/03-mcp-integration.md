@@ -107,9 +107,11 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. Right-click on the **requirements.txt** file and select **Open in Integrated Terminal**.
 
-1. In the terminal, enter the following command to install the required Python packages:
+1. In the terminal, enter the following command to install the required Python packages in a virtual environment:
 
     ```
+    python -m venv labenv
+    .\labenv\Scripts\Activate.ps1
     pip install -r requirements.txt
     ```
 
@@ -532,7 +534,9 @@ In this task, you'll connect the MCP server tools to your agent so that it can c
    What are the best sellers this week?
     ```
 
-    Enter `quit` when you're done.
+1. Enter `quit` to exit the application.
+
+    You can also use `deactivate` to exit the Python virtual environment in the terminal.
 
 ## Summary
 

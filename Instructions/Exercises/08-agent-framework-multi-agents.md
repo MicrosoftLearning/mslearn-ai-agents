@@ -113,9 +113,11 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. Right-click on the **requirements.txt** file and select **Open in Integrated Terminal**.
 
-1. In the terminal, enter the following command to install the required Python packages:
+1. In the terminal, enter the following command to install the required Python packages in a virtual environment:
 
     ```
+    python -m venv labenv
+    .\labenv\Scripts\Activate.ps1
     pip install -r requirements.txt
     ```
 
@@ -263,6 +265,8 @@ Now you're ready to run your code and watch your AI agents collaborate.
     ```output
     I reached out to your customer support yesterday because I couldn't access my account. The representative responded almost immediately, was polite and professional, and fixed the issue within minutes. Honestly, it was one of the best support experiences I've ever had.
     ```
+
+ 1. When you're finished, enter `deactivate` in the terminal to exit the Python virtual environment.   
 
 ## Summary
 

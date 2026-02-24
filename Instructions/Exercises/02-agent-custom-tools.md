@@ -107,9 +107,11 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. Right-click on the **requirements.txt** file and select **Open in Integrated Terminal**.
 
-1. In the terminal, enter the following command to install the required Python packages:
+1. In the terminal, enter the following command to install the required Python packages in a virtual environment:
 
     ```
+    python -m venv labenv
+    .\labenv\Scripts\Activate.ps1
     pip install -r requirements.txt
     ```
 
@@ -456,6 +458,8 @@ Now that you've created the agent with the function tools, you can send messages
     In the file explorer, you can see that a new file named `report-<event-type>.txt` has been created, which contains the generated report. You can open this file to view the contents of the report.
 
 1. Enter `quit` to exit the application.
+
+    You can also use `deactivate` to exit the Python virtual environment in the terminal.
 
 ## Summary
 

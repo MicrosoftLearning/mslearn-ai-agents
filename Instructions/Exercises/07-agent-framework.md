@@ -107,9 +107,11 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. Right-click on the **requirements.txt** file and select **Open in Integrated Terminal**.
 
-1. In the terminal, enter the following command to install the required Python packages:
+1. In the terminal, enter the following command to install the required Python packages in a virtual environment:
 
     ```
+    python -m venv labenv
+    .\labenv\Scripts\Activate.ps1
     pip install -r requirements.txt
     ```
 
@@ -143,13 +145,14 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
 
     ```python
    # Create a tool function for the email functionality
-   def send_email(
-   to: Annotated[str, Field(description="Who to send the email to")],
-   subject: Annotated[str, Field(description="The subject of the email.")],
-   body: Annotated[str, Field(description="The text body of the email.")]):
-       print("\nTo:", to)
-       print("Subject:", subject)
-       print(body, "\n")
+   @tool(approval_mode="never_require")
+   def submit_claim(
+       to: Annotated[str, Field(description="Who to send the email to")],
+       subject: Annotated[str, Field(description="The subject of the email.")],
+       body: Annotated[str, Field(description="The text body of the email.")]):
+           print("\nTo:", to)
+           print("Subject:", subject)
+           print(body, "\n")
     ```
 
     > **Note**: The function *simulates* sending an email by printing it to the console. In a real application, you'd use an SMTP service or similar to actually send the email!
@@ -177,6 +180,8 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
     ```
 
     Note that the **AzureCliCredential** object will allow your code to authenticate to your Azure account. The **AzureOpenAIResponsesClient** object includes the Foundry project settings from the .env configuration. The **Agent** object is initialized with the client, instructions for the agent, and the tool function you defined to send emails.
+
+1.
 
 1. Find the comment **Use the agent to process the expenses data**, and add the following code to create a thread for your agent to run on, and then invoke it with a chat message.
 
@@ -215,6 +220,8 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
 1. When the application has finished, review the output. The agent should have composed an email for an expenses claim based on the data that was provided.
 
     > **Tip**: If the app fails because the rate limit is exceeded. Wait a few seconds and try again. If there is insufficient quota available in your subscription, the model may not be able to respond.
+
+1. When you're finished, enter `deactivate` in the terminal to exit the Python virtual environment.
 
 ## Summary
 

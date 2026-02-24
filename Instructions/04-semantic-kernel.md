@@ -139,13 +139,13 @@ Now you're ready to create a client app that defines an agent and a custom funct
     ```python
    # Create a tool function for the email functionality
    @tool(approval_mode="never_require")
-   def send_email(
-    to: Annotated[str, Field(description="Who to send the email to")],
-    subject: Annotated[str, Field(description="The subject of the email.")],
-    body: Annotated[str, Field(description="The text body of the email.")]):
-        print("\nTo:", to)
-        print("Subject:", subject)
-        print(body, "\n")
+   def submit_claim(
+   to: Annotated[str, Field(description="Who to send the email to")],
+   subject: Annotated[str, Field(description="The subject of the email.")],
+   body: Annotated[str, Field(description="The text body of the email.")]):
+       print("\nTo:", to)
+       print("Subject:", subject)
+       print(body, "\n")
     ```
 
     > **Note**: The function *simulates* sending an email by printing it to the console. In a real application, you'd use an SMTP service or similar to actually send the email!
