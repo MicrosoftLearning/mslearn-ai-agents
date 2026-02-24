@@ -135,8 +135,9 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
    # Add references
    import asyncio
    from typing import cast
-   from agent_framework import ChatMessage, Role, SequentialBuilder, WorkflowOutputEvent
+   from agent_framework import Message
    from agent_framework.azure import AzureAIAgentClient
+   from agent_framework.orchestrations import SequentialBuilder
    from azure.identity import AzureCliCredential
     ```
 
@@ -204,10 +205,10 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 
     ```python
    # Run and collect outputs
-   outputs: list[list[ChatMessage]] = []
+   outputs: list[list[Message]] = []
    async for event in workflow.run_stream(f"Customer feedback: {feedback}"):
-       if isinstance(event, WorkflowOutputEvent):
-           outputs.append(cast(list[ChatMessage], event.data))
+       if event.type == "output":
+           outputs.append(cast(list[Message], event.data))
     ```
 
     This code runs the orchestration and collects the output from each of the participating agents.
@@ -218,7 +219,7 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
    # Display outputs
    if outputs:
        for i, msg in enumerate(outputs[-1], start=1):
-           name = msg.author_name or ("assistant" if msg.role == Role.ASSISTANT else "user")
+           name = msg.author_name or ("assistant" if msg.role == "assistant" else "user")
            print(f"{'-' * 60}\n{i:02d} [{name}]\n{msg.text}")
     ```
 
