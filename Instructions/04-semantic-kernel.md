@@ -93,7 +93,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
     ```
    python -m venv labenv
    ./labenv/bin/Activate.ps1
-   pip install agent-framework==1.0.0b260212 --pre
+   pip install agent-framework==1.0.0b260212 opentelemetry-semantic-conventions-ai==0.4.13 --pre
     ```
 
 1. Enter the following command to edit the configuration file that has been provided:
