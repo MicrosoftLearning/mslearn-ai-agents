@@ -528,7 +528,7 @@ Consider building your own workplace intelligence solutions:
 ## Additional Resources
 
 * [Model Context Protocol Specification](https://modelcontextprotocol.io/)
-* [Azure AI Foundry Agents Documentation](https://learn.microsoft.com/azure/ai-foundry/agents/)
+* [Microsoft Foundry Agents Documentation](https://learn.microsoft.com/azure/ai-foundry/agents/)
 * [Work IQ on npm](https://www.npmjs.com/package/@microsoft/workiq)
 * [Microsoft 365 Copilot](https://www.microsoft.com/microsoft-365/copilot)
 * [Microsoft Graph API](https://learn.microsoft.com/graph/) (alternative approach)

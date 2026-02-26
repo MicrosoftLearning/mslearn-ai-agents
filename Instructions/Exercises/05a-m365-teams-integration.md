@@ -629,7 +629,7 @@ To build on this lab:
 **Microsoft Documentation:**
 - [Publish agents to Teams](https://learn.microsoft.com/azure/ai-services/agents/how-to/publish-to-teams)
 - [Copilot extensibility](https://learn.microsoft.com/microsoft-365-copilot/extensibility/)
-- [Azure AI Foundry](https://learn.microsoft.com/azure/ai-foundry/)
+- [Microsoft Foundry](https://learn.microsoft.com/azure/ai-foundry/)
 
 **Tools:**
 - [Foundry Portal](https://ai.azure.com)
