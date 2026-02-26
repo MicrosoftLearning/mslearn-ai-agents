@@ -73,7 +73,7 @@ In this task, you'll deploy a model from the Model Catalog to use with your agen
 
 1. In the Model Catalog, locate the **gpt-4.1** model (you can use the search bar to find it quickly).
 
-    ![Screenshot of the Model Catalog in the Foundry VS Code extension.](Media/vs-code-model.png)
+    ![Screenshot of the Model Catalog in the Foundry VS Code extension.](../Media/vs-code-model.png)
 
 1. Select **Deploy** next to the gpt-4.1 model.
 
@@ -91,7 +91,7 @@ In this task, you'll deploy a model from the Model Catalog to use with your agen
 
 1. Right-click the name project deployment and select **Copy Project Endpoint**. You'll need this URL to connect your agent to the Foundry project in the next steps.
 
-   <img src="Media/vs-code-endpoint.png" alt="Screenshot of copying the project endpoint in the Foundry VS Code extension." width="550">
+   <img src="../Media/vs-code-endpoint.png" alt="Screenshot of copying the project endpoint in the Foundry VS Code extension." width="550">
 
 ## Clone the starter code repository
 
