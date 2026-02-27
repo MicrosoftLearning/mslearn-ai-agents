@@ -1,10 +1,10 @@
 ---
 lab:
-    title: 'Explore AI Agent development'
+    title: 'Explore AI Agent development (deprecated)'
     description: 'Take your first steps in developing AI agents by exploring the Azure AI Agent service in the Microsoft Foundry portal.'
 ---
 
-# Explore AI Agent development
+# Explore AI Agent development (deprecated)
 
 In this exercise, you use the Azure AI Agent service in the Microsoft Foundry portal to create a simple AI agent that assists employees with expense claims.
 

@@ -1,10 +1,10 @@
 ---
 lab:
-    title: 'Use a custom function in an AI agent'
+    title: 'Use a custom function in an AI agent (deprecated)'
     description: 'Learn how to use functions to add custom capabilities to your agents.'
 ---
 
-# Use a custom function in an AI agent
+# Use a custom function in an AI agent (deprecated)
 
 In this exercise you'll explore creating an agent that can use custom functions as a tool to complete tasks. You'll build a simple technical support agent that can collect details of a technical problem and generate a support ticket.
 

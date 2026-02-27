@@ -1,10 +1,10 @@
 ---
 lab:
-    title: 'Develop an Azure AI agent with the Microsoft Agent Framework SDK'
+    title: 'Develop an Azure AI agent with the Microsoft Agent Framework SDK (deprecated)'
     description: 'Learn how to use the Microsoft Agent Framework SDK to create and use an Azure AI chat agent.'
 ---
 
-# Develop an Azure AI chat agent with the Microsoft Agent Framework SDK
+# Develop an Azure AI chat agent with the Microsoft Agent Framework SDK (deprecated)
 
 In this exercise, you'll use Azure AI Agent Service and Microsoft Agent Framework to create an AI agent that processes expense claims.
 

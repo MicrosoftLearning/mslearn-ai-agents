@@ -1,10 +1,10 @@
 ---
 lab:
-    title: 'Develop an AI agent with VS Code extension'
+    title: 'Develop an AI agent with VS Code extension (deprecated)'
     description: 'Use the Microsoft Foundry VS Code extension to create an AI agent.'
 ---
 
-# Develop an AI agent with VS Code extension
+# Develop an AI agent with VS Code extension (deprecated)
 
 In this exercise, you'll use the Microsoft Foundry VS Code extension to create an agent that can use Model Context Protocol (MCP) server tools to access external data sources and APIs. The agent will be able to retrieve up-to-date information and interact with various services through MCP tools.
 

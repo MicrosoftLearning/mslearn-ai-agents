@@ -1,10 +1,10 @@
 ---
 lab:
-    title: 'Develop a multi-agent solution with Microsoft Foundry'
+    title: 'Develop a multi-agent solution with Microsoft Foundry (deprecated)'
     description: 'Learn to configure multiple agents to collaborate using Microsoft Foundry Agent Service'
 ---
 
-# Develop a multi-agent solution
+# Develop a multi-agent solution (deprecated)
 
 In this exercise, you'll create a project that orchestrates multiple AI agents using Microsoft Foundry Agent Service. You'll design an AI solution that assists with ticket triage. The connected agents will assess the ticket's priority, suggest a team assignment, and determine the level of effort required to complete the ticket. Let's get started!
 

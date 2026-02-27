@@ -1,10 +1,10 @@
 ---
 lab:
-    title: 'Integrate an AI agent with Foundry IQ'
+    title: 'Integrate an AI agent with Foundry IQ (deprecated)'
     description: 'Use Azure AI Agent Service to develop an agent that uses Foundry IQ to search knowledge bases.'
 ---
 
-# Integrate an AI agent with Foundry IQ
+# Integrate an AI agent with Foundry IQ (deprecated)
 
 In this exercise, you'll use Azure AI Foundry portal to create an agent that integrates with Foundry IQ to search and retrieve information from knowledge bases. You'll create a search resource, configure a knowledge base with sample data, build an agent in the portal, and then connect to it from Visual Studio Code to interact programmatically.
 

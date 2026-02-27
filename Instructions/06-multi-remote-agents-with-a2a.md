@@ -1,10 +1,10 @@
 ---
 lab:
-    title: 'Connect to remote agents with A2A protocol'
+    title: 'Connect to remote agents with A2A protocol (deprecated)'
     description: 'Use the A2A protocol to collaborate with remote agents.'
 ---
 
-# Connect to remote agents with A2A protocol
+# Connect to remote agents with A2A protocol (deprecated)
 
 In this exercise, you'll use Azure AI Agent Service with the A2A protocol to create simple remote agents that interact with one another. These agents will assist technical writers with preparing their developer blog posts. A title agent will generate a headline, and an outline agent will use the title to develop a concise outline for the article. Let's get started
 

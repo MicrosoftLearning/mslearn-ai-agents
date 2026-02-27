@@ -1,10 +1,10 @@
 ---
 lab:
-    title: 'Build a workflow in Microsoft Foundry'
+    title: 'Build a workflow in Microsoft Foundry (deprecated)'
     description: 'Use the Microsoft Foundry portal to create workflows for AI agents.'
 ---
 
-# Build a workflow in Microsoft Foundry
+# Build a workflow in Microsoft Foundry (deprecated)
 
 In this exercise, you'll use the Microsoft Foundry portal to create a workflow. Workflows are UI-based tools that allow you to define sequences of actions involving AI agents. For this exercise, you'll create a workflow that helps resolve customer support requests.
 

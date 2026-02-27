@@ -1,10 +1,10 @@
 ---
 lab:
-    title: 'Connect AI Agents to a remote MCP server'
+    title: 'Connect AI Agents to a remote MCP server (deprecated)'
     description: 'Learn how to integrate Model Context Protocol tools with AI agents'
 ---
 
-# Connect AI agents to tools using Model Context Protocol (MCP)
+# Connect AI agents to tools using Model Context Protocol (MCP) (deprecated)
 
 In this exercise, you'll build an agent that connects to a cloud-hosted MCP server. The agent will use AI-powered search to help developers find accurate, real-time answers from Microsoft's official documentation. This is useful for building assistants that support developers with up-to-date guidance on tools like Azure, .NET, and Microsoft 365. The agent will use the available MCP tools to query the documentation and return relevant results.
 

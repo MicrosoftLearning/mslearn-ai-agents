@@ -1,10 +1,10 @@
 ---
 lab:
-    title: 'Develop an AI agent'
+    title: 'Develop an AI agent (deprecated)'
     description: 'Use the Azure AI Agent Service to develop an agent that uses built-in tools.'
 ---
 
-# Develop an AI agent
+# Develop an AI agent (deprecated)
 
 In this exercise, you'll use Azure AI Agent Service to create a simple agent that analyzes data and creates charts. The agent can use the built-in *Code Interpreter* tool to dynamically generate any code required to analyze data.
 
