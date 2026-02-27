@@ -1,12 +1,12 @@
 ---
 lab:
-    title: 'Deploy Agents to Microsoft Teams and Copilot'
+    title: 'Deploy agents to Microsoft Teams and Copilot'
     description: 'Publish AI agents to Microsoft Teams and Microsoft 365 Copilot for enterprise access'
     level: 300
     duration: 40
 ---
 
-# Deploy Agents to Microsoft Teams and Copilot
+# Deploy agents to Microsoft Teams and Copilot
 
 In this lab, you'll learn how to publish AI agents to **Microsoft Teams** and **Microsoft 365 Copilot** so employees can access them where they already work. You'll create a simple agent in the Foundry portal, add knowledge grounding, then deploy it to both platforms.
 
