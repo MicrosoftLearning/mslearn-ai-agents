@@ -10,6 +10,8 @@ The following exercises are designed to provide you with a hands-on learning exp
 
 ## Exercises
 
+<hr>
+
 {% assign labs = site.pages | where_exp:"page", "page.url contains '/Instructions/Exercises'" %}
 {% for activity in labs  %}
 
@@ -18,9 +20,8 @@ The following exercises are designed to provide you with a hands-on learning exp
 **Level:** {{ activity.lab.level }} | **Duration:** {{ activity.lab.duration }} minutes
 
 *{{activity.lab.description}}*
-
+<hr>
 {% endfor %}
 
-<hr>
 
 > **Note**: While you can complete these exercises on their own, they're designed to complement modules on [Microsoft Learn](https://learn.microsoft.com/training/paths/develop-ai-agents-on-azure/); in which you'll find a deeper dive into some of the underlying concepts on which these exercises are based.
