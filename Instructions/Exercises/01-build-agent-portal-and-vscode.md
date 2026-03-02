@@ -28,9 +28,10 @@ By the end of this exercise, you'll be able to:
 
 Before starting this exercise, ensure you have:
 
-- An Azure subscription with sufficient permissions and quota to provision Azure AI resources
-- Visual Studio Code installed on your local machine
-- Python 3.12 or later installed
+- An [Azure subscription](https://azure.microsoft.com/free/) with sufficient permissions and quota to provision Azure AI resources
+- [Visual Studio Code](https://code.visualstudio.com/) installed on your local machine
+- [Python 3.13](https://www.python.org/downloads/) or later installed
+- [Git](https://git-scm.com/downloads) installed on your local machine
 - Basic familiarity with Azure AI services and Python programming
 
 ## Scenario

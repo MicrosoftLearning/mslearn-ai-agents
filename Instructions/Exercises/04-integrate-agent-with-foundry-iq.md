@@ -16,6 +16,16 @@ This exercise should take approximately **45** minutes to complete.
 
 > **Note**: Some of the technologies used in this exercise are in preview or in active development. You may experience some unexpected behavior, warnings, or errors.
 
+## Prerequisites
+
+Before starting this exercise, ensure you have:
+
+- An [Azure subscription](https://azure.microsoft.com/free/) with permissions to create AI resources
+- [Visual Studio Code](https://code.visualstudio.com/) installed on your local machine
+- [Python 3.13](https://www.python.org/downloads/) or later installed
+- [Git](https://git-scm.com/downloads) installed on your local machine
+- Basic familiarity with the Microsoft Foundry portal and Python programming
+
 ## Create a Foundry project
 
 Let's start by creating a Foundry project with the new Foundry experience.

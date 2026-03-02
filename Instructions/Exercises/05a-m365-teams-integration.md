@@ -31,7 +31,7 @@ By the end of this lab, you'll be able to:
 
 Before starting this lab, ensure you have:
 
-- **Azure subscription** with permissions to create AI resources
+- An [Azure subscription](https://azure.microsoft.com/free/) with permissions to create AI resources
 - **Microsoft 365 account** with Teams access
 - **Microsoft 365 Copilot license** (optional, for Copilot deployment)
 - Basic familiarity with the Microsoft Foundry portal
