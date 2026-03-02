@@ -2,6 +2,8 @@
 lab:
     title: 'Use a custom function in an AI agent'
     description: 'Learn how to use functions to add custom capabilities to your agents.'
+    level: 300
+    duration: 50
 ---
 
 # Use a custom function in an AI agent
@@ -10,7 +12,7 @@ In this exercise you'll explore creating an agent that can use custom functions 
 
 > **Tip**: The code used in this exercise is based on the for Microsoft Foundry SDK for Python. You can develop similar solutions using the SDKs for Microsoft .NET, JavaScript, and Java. Refer to [Microsoft Foundry SDK client libraries](https://learn.microsoft.com/azure/ai-foundry/how-to/develop/sdk-overview) for details.
 
-This exercise should take approximately **60** minutes to complete.
+This exercise should take approximately **50** minutes to complete.
 
 > **Note**: Some of the technologies used in this exercise are in preview or in active development. You may experience some unexpected behavior, warnings, or errors.
 
