@@ -17,7 +17,7 @@ The following exercises are designed to provide you with a hands-on learning exp
 
 ### [{{ activity.lab.title }}]({{ site.github.url }}{{ activity.url }})
 
-**Level:** {{ activity.lab.level }} | **Duration:** {{ activity.lab.duration }} minutes
+{% if activity.lab.level %}**Level**: {{activity.lab.level}} \| {% endif %}{% if activity.lab.duration %}**Duration**: {{activity.lab.duration}} minutes{% endif %}
 
 *{{activity.lab.description}}*
 <hr>
