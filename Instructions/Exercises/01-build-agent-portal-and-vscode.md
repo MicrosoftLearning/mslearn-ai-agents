@@ -192,7 +192,23 @@ If you already have installed the extension for Foundry, you can skip this secti
 
 1. Right-click on your project and select **Set as active project**.
 
-1. Expand your project in the Resources view and verify you can see your `it-support-agent` listed under **Agents**.
+1. Expand your project in the Resources view and verify you can see your `it-support-agent` listed under **Declarative gents**.
+
+### Test your agent in VS Code
+
+Before writing any code, you can interact with your agent directly in the extension interface.
+
+1. In the Resources view, expand **Declarative agents** under your project and double-click **it-support-agent** to open it in the VS Code agent playground.
+
+1. In the chat pane, type a question such as:
+
+    ```
+    What is the policy for reporting a lost or stolen device?
+    ```
+
+1. Review the agent's response. It should use the grounding data you uploaded earlier to provide relevant IT policy information.
+
+    > **Tip**: You can use this built-in playground to quickly test your agent's instructions and knowledge without writing any code.
 
 ### Create a Python application
 
