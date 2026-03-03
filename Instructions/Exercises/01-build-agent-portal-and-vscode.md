@@ -60,9 +60,10 @@ Let's start by creating a Foundry project and a basic agent using the portal.
 
 1. Expand **Advanced options** and specify the following settings:
     - **Microsoft Foundry resource**: *A valid name for your Foundry resource*
+    - **Region**: *Select one available near you*\**
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Select your resource group, or create a new one*
-    - **Region**: *Select any **AI Foundry recommended***\**
+    
 
     > \* Some Azure AI resources are constrained by regional model quotas. In the event of a quota limit being exceeded later in the exercise, there's a possibility you may need to create another resource in a different region.
 

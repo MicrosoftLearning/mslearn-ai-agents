@@ -40,7 +40,7 @@ Let's start by installing and setting up the VS Code extension.
 
 ## Sign in to Azure and create a project
 
-Now you'll connect to your Azure resources and create a new AI Foundry project.
+Now you'll connect to your Azure resources and create a new Microsoft Foundry project.
 
 1. In the VS Code sidebar, select the **Microsoft Foundry** extension icon.
 
@@ -230,7 +230,7 @@ In this task, you create the title agent that helps writers create trendy headli
     ```python
    # Create agent card
    agent_card = AgentCard(
-       name='AI Foundry Title Agent',
+       name='Microsoft Foundry Title Agent',
        description='An intelligent title generator agent powered by Foundry. '
        'I can help you generate catchy titles for your articles.',
        url=f'http://{host}:{port}/',

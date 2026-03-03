@@ -79,7 +79,7 @@ Now you'll configure your agent that uses Foundry IQ to search the knowledge bas
 
 Now you'll upload sample product information documents to connect to with Foundry IQ.
 
-1. Download the sample product information files by opening a new browser tab and navigating to `https://github.com/MicrosoftLearning/mslearn-ai-agents/raw/main/Labfiles/09-integrate-agent-with-foundry-iq/data/contoso-products.zip`
+1. Download the sample product information files by opening a new browser tab and navigating to `https://github.com/MicrosoftLearning/mslearn-ai-agents/raw/main/Labfiles/04-integrate-agent-with-foundry-iq/data/contoso-products.zip`
 1. Extract the files from the zip, which should be 3 PDFs detailing the products from Contoso.
 1. In the Azure Portal tab, in the top search bar, search fo **Storage accounts** and select **Storage accounts** from the services section.
 1. Create a storage account with the following settings:
@@ -149,13 +149,13 @@ Now let's use Visual Studio Code to develop an app. The code files for your app 
 
     > **Note**: If you are prompted to install required assets to build and debug, select **Not Now**.
 
-1. In the **Explorer** pane, expand the **Labfiles/09-integrate-agent-with-foundry-iq/Python** folder.
+1. In the **Explorer** pane, expand the **Labfiles/04-integrate-agent-with-foundry-iq/Python** folder.
 
     The provided files include application code, configuration settings, and the agent client starter code.
 
 ### Configure the application settings
 
-1. In Visual Studio Code, in the **Labfiles/09-integrate-agent-with-foundry-iq/Python** folder, open the **.env** configuration file.
+1. In Visual Studio Code, in the **Labfiles/04-integrate-agent-with-foundry-iq/Python** folder, open the **.env** configuration file.
 1. In the code file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project **Overview** page in the Foundry portal) and ensure that the AGENT_NAME variable is set to your agent name (which should be *product-expert-agent*).
 1. After you've replaced the placeholder, save the file.
 
@@ -163,7 +163,7 @@ Now let's use Visual Studio Code to develop an app. The code files for your app 
 
 > **Tip**: As you add code, be sure to maintain the correct indentation. Use the comment indentation levels as a guide.
 
-1. In Visual Studio Code, in the **Labfiles/09-integrate-agent-with-foundry-iq/Python** folder, open the **agent_client.py** code file.
+1. In Visual Studio Code, in the **Labfiles/04-integrate-agent-with-foundry-iq/Python** folder, open the **agent_client.py** code file.
 1. Review the starter code that has been provided, including:
     - Import statements and configuration loading
     - The `send_message_to_agent()` function structure
@@ -292,7 +292,7 @@ Now let's use Visual Studio Code to develop an app. The code files for your app 
 
 Now you'll run your application and test the agent's ability to retrieve information from the knowledge base.
 
-1. In Visual Studio Code, open an integrated terminal for the **Labfiles/09-integrate-agent-with-foundry-iq/Python** folder by right-clicking the folder and selecting **Open in Integrated Terminal**.
+1. In Visual Studio Code, open an integrated terminal for the **Labfiles/04-integrate-agent-with-foundry-iq/Python** folder by right-clicking the folder and selecting **Open in Integrated Terminal**.
 1. In the terminal pane, enter the following command to sign into Azure.
 
     ```

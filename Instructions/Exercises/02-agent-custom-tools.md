@@ -40,7 +40,7 @@ Let's start by installing and setting up the VS Code extension.
 
 ## Sign in to Azure and create a project
 
-Now you'll connect to your Azure resources and create a new AI Foundry project.
+Now you'll connect to your Azure resources and create a new Microsoft Foundry project.
 
 1. In the VS Code sidebar, select the **Microsoft Foundry** extension icon.
 
@@ -484,6 +484,6 @@ When you've finished exploring the Foundry VS Code extension, you should clean u
 
 1. Open the [Azure portal](https://portal.azure.com).
 
-1. Navigate to the resource group containing your AI Foundry resources.
+1. Navigate to the resource group containing your Microsoft Foundry resources.
 
 1. Select **Delete resource group** and confirm the deletion.
