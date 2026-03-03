@@ -215,7 +215,7 @@ Now let's use Visual Studio Code to develop an app. The code files for your app 
     # Create a response using the agent
     response = openai_client.responses.create(
         conversation=conversation.id,
-        extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
+        extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
         input=""
     )
 
@@ -271,7 +271,7 @@ Now let's use Visual Studio Code to develop an app. The code files for your app 
         # Get the actual response after approval/denial
         response = openai_client.responses.create(
             conversation=conversation.id,
-            extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
+            extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
             input=""
         )
     
@@ -293,6 +293,14 @@ Now let's use Visual Studio Code to develop an app. The code files for your app 
 Now you'll run your application and test the agent's ability to retrieve information from the knowledge base.
 
 1. In Visual Studio Code, open an integrated terminal for the **Labfiles/04-integrate-agent-with-foundry-iq/Python** folder by right-clicking the folder and selecting **Open in Integrated Terminal**.
+1. First, create a virtual environment and install dependencies.
+
+    ```
+   python -m venv labenv
+   ./labenv/Scripts/activate
+   pip install -r requirements.txt
+    ```
+    
 1. In the terminal pane, enter the following command to sign into Azure.
 
     ```
@@ -302,14 +310,6 @@ Now you'll run your application and test the agent's ability to retrieve informa
     > **Note**: In most scenarios, just using *az login* will be sufficient. However, if you have subscriptions in multiple tenants, you may need to specify the tenant by using the *--tenant* parameter. See [Sign into Azure interactively using the Azure CLI](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) for details.
 
 1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Foundry resource if prompted.
-
-1. In the terminal pane, enter the following command to install the libraries you'll use:
-
-    ```
-   pip install -r requirements.txt
-    ```
-
-    > **Note**: You can ignore any warning or error messages displayed during the library installation.
 
 1. In the terminal pane, run your application:
 
