@@ -130,7 +130,7 @@ Before connecting from code, test your agent in the portal playground.
 
 1. In the agent details page, locate and copy the following information to a notepad (you'll need these later):
     - **Agent name**: This is the name you created (`product-expert-agent`)
-    - **Project endpoint**: Found in the project settings or overview page
+    - **Project endpoint**: Found in the project settings or home page
 
 ## Connect to your agent from an app
 
@@ -156,7 +156,7 @@ Now let's use Visual Studio Code to develop an app. The code files for your app 
 ### Configure the application settings
 
 1. In Visual Studio Code, in the **Labfiles/04-integrate-agent-with-foundry-iq/Python** folder, open the **.env** configuration file.
-1. In the code file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project **Overview** page in the Foundry portal) and ensure that the AGENT_NAME variable is set to your agent name (which should be *product-expert-agent*).
+1. In the code file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project **Home** page in the Foundry portal) and ensure that the AGENT_NAME variable is set to your agent name (which should be *product-expert-agent*).
 1. After you've replaced the placeholder, save the file.
 
 ### Complete the agent client code
