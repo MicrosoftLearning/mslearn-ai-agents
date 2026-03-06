@@ -302,7 +302,7 @@ In addition to connecting to remote MCP servers, you can also create your own cu
 
     ```python
    # Create an MCP server
-   mcp = FastMCP(server_label="Inventory")
+   mcp = FastMCP(name="Inventory")
     ```
 
     This code initializes a new MCP server with the label "Inventory".

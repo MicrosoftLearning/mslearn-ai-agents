@@ -136,10 +136,13 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
    # Add references
    import asyncio
    from typing import cast
+   from dotenv import load_dotenv
    from agent_framework import Message
    from agent_framework.azure import AzureAIAgentClient
    from agent_framework.orchestrations import SequentialBuilder
    from azure.identity import AzureCliCredential
+
+   load_dotenv()
     ```
 
 1. In the **main** function, take a moment to review the agent instructions. These instructions define the behavior of each agent in the orchestration.
@@ -197,7 +200,7 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 
     ```python
    # Build sequential orchestration
-   workflow = SequentialBuilder().participants([summarizer, classifier, action]).build()
+   workflow = SequentialBuilder(participants=[summarizer, classifier, action]).build()
     ```
 
     The agents will process the feedback in the order they are added to the orchestration.
@@ -207,7 +210,7 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
     ```python
    # Run and collect outputs
    outputs: list[list[Message]] = []
-   async for event in workflow.run_stream(f"Customer feedback: {feedback}"):
+   async for event in workflow.run(f"Customer feedback: {feedback}", stream=True):
        if event.type == "output":
            outputs.append(cast(list[Message], event.data))
     ```
