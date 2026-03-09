@@ -135,7 +135,7 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
 
     ```python
    # Add references
-   from agent_framework import tool
+   from agent_framework import tool, Agent
    from agent_framework.azure import AzureOpenAIResponsesClient
    from azure.identity import AzureCliCredential
    from pydantic import Field
@@ -164,8 +164,8 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
 
     ```python
    # Create a client and initialize an agent with the tool and instructions
+   credential = AzureCliCredential()
    async with (
-        AzureCliCredential() as credential,
         Agent(
             client=AzureOpenAIResponsesClient(
                 credential=credential,
