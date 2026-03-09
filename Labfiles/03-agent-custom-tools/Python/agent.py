@@ -32,7 +32,7 @@ def main():
         # Create a thread for the chat session
         
 
-        # Create a list to hold function call outputs that will be sent back as input to the agent
+        # Create an input list to hold function call outputs that will be sent back as input to the agent
         
         
         while True:

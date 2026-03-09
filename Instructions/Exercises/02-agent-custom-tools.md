@@ -10,7 +10,7 @@ lab:
 
 In this exercise you'll explore creating an agent that can use custom functions as a tool to complete tasks. The agent will act as an astronomy assistant that can provide information about astronomical events and calculate the cost of telescope rentals based on user inputs. You'll define the function tools and implement the logic to process function calls made by the agent.
 
-> **Tip**: The code used in this exercise is based on the for Microsoft Foundry SDK for Python. You can develop similar solutions using the SDKs for Microsoft .NET, JavaScript, and Java. Refer to [Microsoft Foundry SDK client libraries](https://learn.microsoft.com/azure/ai-foundry/how-to/develop/sdk-overview) for details.
+> **Tip**: The code used in this exercise is based on the Microsoft Foundry SDK for Python. You can develop similar solutions using the SDKs for Microsoft .NET, JavaScript, and Java. Refer to [Microsoft Foundry SDK client libraries](https://learn.microsoft.com/azure/ai-foundry/how-to/develop/sdk-overview) for details.
 
 This exercise should take approximately **50** minutes to complete.
 
@@ -106,7 +106,7 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. Create a new folder and choose **Select as Repository Destination**, then open the cloned repository when prompted.
 
-1. In the Explorer view, navigate to the **Labfiles/02-agent-custom-tools/Python** folder to find the starter code for this exercise.
+1. In the Explorer view, navigate to the **Labfiles/03-agent-custom-tools/Python** folder to find the starter code for this exercise.
 
 1. Right-click on the **requirements.txt** file and select **Open in Integrated Terminal**.
 
@@ -313,7 +313,7 @@ Now that you've created the agent with the function tools, you can send messages
 1. Find the comment **Create an input list to hold function call outputs to send back to the model** and add the following code:
 
     ```python
-   # Create a list to hold function call outputs that will be sent back as input to the agent
+   # Create a input list to hold function call outputs that will be sent back as input to the agent
    input_list: ResponseInputParam = []
    ```
 
