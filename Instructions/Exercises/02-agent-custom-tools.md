@@ -381,7 +381,7 @@ Now that you've created the agent with the function tools, you can send messages
    if input_list:
        response = openai_client.responses.create(
            input=input_list,
-           previous_response_id=response.id,
+           conversation=conversation.id,
            extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
        )
    # Display the agent's response
