@@ -106,7 +106,7 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. Create a new folder and choose **Select as Repository Destination**, then open the cloned repository when prompted.
 
-1. In the Explorer view, navigate to the **Labfiles/02-agent-custom-tools/Python** folder to find the starter code for this exercise.
+1. In the Explorer view, navigate to the **Labfiles/03-agent-custom-tools/Python** folder to find the starter code for this exercise.
 
 1. Right-click on the **requirements.txt** file and select **Open in Integrated Terminal**.
 
@@ -313,7 +313,7 @@ Now that you've created the agent with the function tools, you can send messages
 1. Find the comment **Create an input list to hold function call outputs to send back to the model** and add the following code:
 
     ```python
-   # Create a list to hold function call outputs that will be sent back as input to the agent
+   # Create a input list to hold function call outputs that will be sent back as input to the agent
    input_list: ResponseInputParam = []
    ```
 
