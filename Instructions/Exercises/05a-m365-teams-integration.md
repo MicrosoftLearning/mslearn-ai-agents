@@ -51,27 +51,33 @@ You'll deploy an **Enterprise Knowledge Agent** that:
 
 First, you'll quickly create an agent using the Microsoft Foundry portal. This takes about 5 minutes.
 
+> **Important**: Make sure the **New Foundry** toggle is *On* for this lab to use the updated user interface.
+
 ### Open the Foundry portal
 
-1. Open your browser and navigate to the Foundry portal at `https://ai.azure.com`
+1. Open your browser and navigate to the Foundry portal at `https://ai.azure.com` and sign in, if not already.
+1. Once you toggle to the **New Foundry**, you'll be asked to select a project. In the dropdown, select **Create a new project**.
+1. In the **Create a project** dialog, enter a valid name for your project (for example, *m365-lab*).
+1. Confirm or configure the following settings for your project:
+    - **Foundry resource**: *Create a new Foundry resource or select an existing one*
+    - **Subscription**: *Your Azure subscription*
+    - **Resource group**: *Create or select a resource group*
+    - **Location**: *Select any available region*\*
 
-2. Sign in with your Azure credentials
+    > \* Some Azure AI resources are constrained by regional model quotas. In the event of a quota limit being exceeded later in the exercise, there's a possibility you may need to create another resource in a different region.
 
-3. If prompted, select your subscription and create or select a project
+1. Select **Create** and wait for your project to be created. This may take a few minutes.
+1. When your project is created, you'll see the project home page.
 
 ### Create a new agent
 
-1. In the Foundry portal, select **Build** from the left navigation
+1. On the home page, under **Start building**, select **Create an agent**.
+1. Give your agent a name, such as `enterprise-knowledge-agent`.
+1. Select **Create**.
 
-2. Select **Agents**
+When creating an agent, it will deploy the default model (like `gpt-4.1`). Once your agent is created, you'll see the agent playground with that default model automatically selected for you.
 
-3. Click **+ New agent**
-
-4. Configure the agent:
-   - **Name**: `enterprise-knowledge-agent`
-   - **Description**: Enterprise assistant for company policies and information
-
-5. Set the **Instructions** to:
+1. Set the **Instructions** to:
 
     ```
     You are an Enterprise Knowledge Assistant for Contoso Corporation.
@@ -84,10 +90,7 @@ First, you'll quickly create an agent using the Microsoft Foundry portal. This t
     
     Always cite your sources when referencing specific policies.
     ```
-
-6. Click **Create**
-
-Your agent is now created! You'll see the agent playground where you can test it.
+1. Select **Save** to save your current agent configuration.
 
 ### Quick test
 
@@ -108,17 +111,7 @@ Now you'll add company documents so the agent can answer questions with real inf
 
 ### Enable file search
 
-1. In your agent's configuration, scroll to the **Tools** section
-
-2. Enable **File search**
-
-3. Click **Save**
-
-### Upload company documents
-
-1. Under **File search**, click **Upload files**
-
-2. Download the sample policy documents. Open new browser tabs and save each file:
+1. Let's start by downloading the sample policy documents. Open new browser tabs and save each file:
 
     **IT Security Policy:**
     ```
@@ -128,11 +121,14 @@ Now you'll add company documents so the agent can answer questions with real inf
     **Remote Work Policy:**
     ```
     https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/05a-m365-teams-integration/Python/sample_documents/remote_work_policy.txt
-    ```
 
-3. Return to the Foundry portal and upload both files
+1. Back to your agent's configuration, scroll to the **Tools** section
 
-4. Wait for the files to be indexed (you'll see a confirmation for each)
+1. Select **Add** and then **Browse all tools** and **Add tool**.
+
+1. A pop up to attach files will show up, attach the files previously downloaded.
+
+1. Once they complete, select **Attach**.
 
 ### Test with knowledge queries
 
@@ -158,6 +154,8 @@ Now you'll add company documents so the agent can answer questions with real inf
 6. Notice how the agent finds the right document and provides accurate answers about BitLocker requirements
 
 **Your agent now has knowledge grounding!** It can answer questions based on your company documents.
+
+1. Select **Save**.
 
 ---
 
@@ -208,7 +206,7 @@ You'll need two icons for the Teams app:
 
 2. Click the **Publish** button at the top of the page
 
-3. Select **Microsoft Teams** as the deployment target
+3. Select **Publish to Teams and Microsoft 365 Copilot**.
 
 4. Click **Continue**
 
@@ -248,12 +246,12 @@ This option publishes directly to Teams without manually uploading a package:
 1. When the package is ready, select **Continue the in-product publishing flow**
 
 2. Choose your publish scope:
-   - **Shared scope**: Agent appears under "Your agents" in the Teams agent store. No admin approval required. Best for personal testing.
-   - **Organization scope**: Agent appears under "Built by your org" for all users. Requires admin approval.
+   - **Individual scope**: Agent appears under "Your agents" in the Teams agent store. No admin approval required. Best for personal testing.
+   - **Organization (tenant) scope**: Agent appears under "Built by your org" for all users. Requires admin approval.
 
-3. For this lab, select **Shared scope**
+3. For this lab, select **Individual scope**
 
-4. Click **Publish**
+4. Click **Submit**
 
 5. Wait for publishing to complete (you'll see a success message)
 
@@ -263,7 +261,7 @@ This option publishes directly to Teams without manually uploading a package:
 
 This option gives you a package to upload manually, useful for testing or when direct publishing isn't available:
 
-1. When the package is ready, click **Download the package**
+1. When the package is ready, click **Download zip**
 
 2. Save the `manifest.zip` file to your computer
 
