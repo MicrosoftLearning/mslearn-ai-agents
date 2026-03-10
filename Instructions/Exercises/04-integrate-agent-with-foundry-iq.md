@@ -94,7 +94,7 @@ Now you'll upload sample product information documents to connect to with Foundr
 1. In the **Upload blob** blade, create a new container named `contosoproducts`.
 1. Browse for the files extracted from the zip file, select all 3 PDF files, and select **Upload**.
 1. Once your files are uploaded, close the Azure Portal tab and navigate back to the Foundry IQ page in Microsoft Foundry and refresh the page.
-1. Select your search service, and click **Connect**.
+1. Select your search service and select **API key** for Auth Type, and click **Connect**.
 1. On the Foundry IQ page, select **Create a knowledge base**, choosing **Azure Blob Storage** as your knowledge source, then select **Connect**.
 1. Configure your knowledge source with the following settings:
     - **Name**: `ks-contosoproducts`
