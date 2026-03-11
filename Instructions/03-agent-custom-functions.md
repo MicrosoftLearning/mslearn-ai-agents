@@ -1,7 +1,10 @@
 ---
 lab:
-    title: 'Use a custom function in an AI agent (deprecated)'
-    description: 'Learn how to use functions to add custom capabilities to your agents.'
+  title: Use a custom function in an AI agent (deprecated)
+  description: Learn how to use functions to add custom capabilities to your agents.
+  duration: 30 minutes
+  level: 400
+  islab: true
 ---
 
 # Use a custom function in an AI agent (deprecated)
