@@ -1,7 +1,10 @@
 ---
 lab:
-    title: 'Connect to remote agents with A2A protocol (deprecated)'
-    description: 'Use the A2A protocol to collaborate with remote agents.'
+  title: Connect to remote agents with A2A protocol (deprecated)
+  description: Use the A2A protocol to collaborate with remote agents.
+  duration: 30 minutes
+  level: 400
+  islab: true
 ---
 
 # Connect to remote agents with A2A protocol (deprecated)
