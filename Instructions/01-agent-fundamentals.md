@@ -1,7 +1,13 @@
 ---
 lab:
-    title: 'Explore AI Agent development (deprecated)'
-    description: 'Take your first steps in developing AI agents by exploring the Azure AI Agent service in the Microsoft Foundry portal.'
+  title: Explore AI Agent development (deprecated)
+  description: Take your first steps in developing AI agents by exploring the Azure AI Agent service in the Microsoft Foundry portal.
+  duration: 30 minutes
+  level: 200
+  islab: true
+  primarytopics:
+    - Azure
+    - Microsoft Foundry
 ---
 
 # Explore AI Agent development (deprecated)
