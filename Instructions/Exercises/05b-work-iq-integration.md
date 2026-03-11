@@ -1,9 +1,12 @@
 ---
 lab:
-    title: 'Work IQ - Workplace intelligence for AI agents (optional)'
-    description: 'Build AI agents that access Microsoft 365 workplace data using Work IQ and the Model Context Protocol for meeting prep, project tracking, and action items.'
-    level: 300
-    duration: 40
+  title: Work IQ - Workplace intelligence for AI agents (optional)
+  description: Build AI agents that access Microsoft 365 workplace data using Work IQ and the Model Context Protocol for meeting prep, project tracking, and action items.
+  level: 300
+  duration: 40
+  islab: true
+  primarytopics:
+    - Microsoft 365
 ---
 
 # Work IQ - Workplace intelligence for AI agents
