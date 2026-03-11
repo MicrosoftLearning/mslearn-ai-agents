@@ -1,9 +1,10 @@
 ---
 lab:
-    title: 'Use a custom function in an AI agent'
-    description: 'Learn how to use functions to add custom capabilities to your agents.'
-    level: 300
-    duration: 50
+  title: Use a custom function in an AI agent
+  description: Learn how to use functions to add custom capabilities to your agents.
+  level: 300
+  duration: 50
+  islab: true
 ---
 
 # Use a custom function in an AI agent
