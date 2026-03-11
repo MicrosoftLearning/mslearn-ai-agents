@@ -1,7 +1,13 @@
 ---
 lab:
-    title: 'Develop a multi-agent solution with Microsoft Foundry (deprecated)'
-    description: 'Learn to configure multiple agents to collaborate using Microsoft Foundry Agent Service'
+  title: Develop a multi-agent solution with Microsoft Foundry (deprecated)
+  description: Learn to configure multiple agents to collaborate using Microsoft Foundry Agent Service
+  duration: 30 minutes
+  level: 400
+  islab: true
+  primarytopics:
+    - Microsoft Foundry
+    - Microsoft Foundry Agent Service
 ---
 
 # Develop a multi-agent solution (deprecated)
