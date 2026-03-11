@@ -1,7 +1,10 @@
 ---
 lab:
-    title: 'Connect AI Agents to a remote MCP server (deprecated)'
-    description: 'Learn how to integrate Model Context Protocol tools with AI agents'
+  title: Connect AI Agents to a remote MCP server (deprecated)
+  description: Learn how to integrate Model Context Protocol tools with AI agents
+  duration: 30 minutes
+  level: 300
+  islab: true
 ---
 
 # Connect AI agents to tools using Model Context Protocol (MCP) (deprecated)
