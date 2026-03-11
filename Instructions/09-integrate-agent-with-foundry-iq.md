@@ -1,7 +1,13 @@
 ---
 lab:
-    title: 'Integrate an AI agent with Foundry IQ (deprecated)'
-    description: 'Use Azure AI Agent Service to develop an agent that uses Foundry IQ to search knowledge bases.'
+  title: Integrate an AI agent with Foundry IQ (deprecated)
+  description: Use Azure AI Agent Service to develop an agent that uses Foundry IQ
+    to search knowledge bases.
+  duration: 45 minutes
+  level: 400
+  islab: true
+  primarytopics:
+  - Azure
 ---
 
 # Integrate an AI agent with Foundry IQ (deprecated)
