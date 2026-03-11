@@ -1,7 +1,12 @@
 ---
 lab:
-    title: 'Build a workflow in Microsoft Foundry (deprecated)'
-    description: 'Use the Microsoft Foundry portal to create workflows for AI agents.'
+  title: Build a workflow in Microsoft Foundry (deprecated)
+  description: Use the Microsoft Foundry portal to create workflows for AI agents.
+  duration: 30 minutes
+  level: 400
+  islab: true
+  primarytopics:
+    - Microsoft Foundry
 ---
 
 # Build a workflow in Microsoft Foundry (deprecated)

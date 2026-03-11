@@ -1,7 +1,12 @@
 ---
 lab:
-    title: 'Develop an AI agent (deprecated)'
-    description: 'Use the Azure AI Agent Service to develop an agent that uses built-in tools.'
+  title: Develop an AI agent (deprecated)
+  description: Use the Azure AI Agent Service to develop an agent that uses built-in tools.
+  duration: 30 minutes
+  level: 400
+  islab: true
+  primarytopics:
+    - Azure
 ---
 
 # Develop an AI agent (deprecated)

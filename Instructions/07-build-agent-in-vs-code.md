@@ -1,7 +1,12 @@
 ---
 lab:
-    title: 'Develop an AI agent with VS Code extension (deprecated)'
-    description: 'Use the Microsoft Foundry VS Code extension to create an AI agent.'
+  title: Develop an AI agent with VS Code extension (deprecated)
+  description: Use the Microsoft Foundry VS Code extension to create an AI agent.
+  duration: 30 minutes
+  level: 300
+  islab: true
+  primarytopics:
+    - Microsoft Foundry
 ---
 
 # Develop an AI agent with VS Code extension (deprecated)

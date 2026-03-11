@@ -1,9 +1,10 @@
 ---
 lab:
-    title: 'Connect to remote agents with A2A protocol'
-    description: 'Use the A2A protocol to collaborate with remote agents.'
-    level: 300
-    duration: 30
+  title: Connect to remote agents with A2A protocol
+  description: Use the A2A protocol to collaborate with remote agents.
+  level: 300
+  duration: 30
+  islab: true
 ---
 
 # Connect to remote agents with A2A protocol
