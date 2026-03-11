@@ -1,7 +1,11 @@
 ---
 lab:
-    title: 'Develop a multi-agent solution with Microsoft Agent Framework (deprecated)'
-    description: 'Learn to configure multiple agents to collaborate using the Microsoft Agent Framework SDK'
+  title: Develop a multi-agent solution with Microsoft Agent Framework (deprecated)
+  description: Learn to configure multiple agents to collaborate using the Microsoft
+    Agent Framework SDK
+  duration: 30 minutes
+  level: 400
+  islab: true
 ---
 
 # Develop a multi-agent solution (deprecated)
