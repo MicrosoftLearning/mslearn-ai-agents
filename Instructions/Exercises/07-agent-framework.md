@@ -1,9 +1,12 @@
 ---
 lab:
-    title: 'Develop an Azure AI agent with the Microsoft Agent Framework SDK'
-    description: 'Learn how to use the Microsoft Agent Framework SDK to create and use an Azure AI chat agent.'
-    level: 300
-    duration: 30
+  title: Develop an Azure AI agent with the Microsoft Agent Framework SDK
+  description: Learn how to use the Microsoft Agent Framework SDK to create and use an Azure AI chat agent.
+  level: 300
+  duration: 30
+  islab: true
+  primarytopics:
+    - Azure
 ---
 
 # Develop an Azure AI chat agent with the Microsoft Agent Framework SDK
