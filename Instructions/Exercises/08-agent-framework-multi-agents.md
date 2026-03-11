@@ -1,9 +1,11 @@
 ---
 lab:
-    title: 'Develop a multi-agent solution with Microsoft Agent Framework'
-    description: 'Learn to configure multiple agents to collaborate using the Microsoft Agent Framework SDK'
-    level: 300
-    duration: 30
+  title: Develop a multi-agent solution with Microsoft Agent Framework
+  description: Learn to configure multiple agents to collaborate using the Microsoft
+    Agent Framework SDK
+  level: 300
+  duration: 30
+  islab: true
 ---
 
 # Develop a multi-agent solution
