@@ -128,7 +128,7 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 Now you're ready to create the agents for your multi-agent solution! Let's get started!
 
-1. Open the **agent-framework.py** file in the code editor.
+1. Open the **agents.py** file in the code editor.
 
 1. At the top of the file under the comment **Add references**, and add the following code to reference the namespaces in the libraries you'll need to implement your agent:
 
