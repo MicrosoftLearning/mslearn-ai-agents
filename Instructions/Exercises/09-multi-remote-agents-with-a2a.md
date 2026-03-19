@@ -4,6 +4,7 @@ lab:
     description: 'Use the A2A protocol to collaborate with remote agents.'
     level: 300
     duration: 30
+    islab: true
 ---
 
 # Connect to remote agents with A2A protocol
@@ -19,6 +20,7 @@ This exercise should take approximately **30** minutes to complete.
 ## Prerequisites
 
 Before starting this exercise, ensure you have:
+
 - [Visual Studio Code](https://code.visualstudio.com/) installed on your local machine
 - An active [Azure subscription](https://azure.microsoft.com/free/)
 - [Python 3.13](https://www.python.org/downloads/) or later installed
@@ -53,12 +55,12 @@ Now you'll connect to your Azure resources and create a new Microsoft Foundry pr
 1. Select your Azure subscription from the dropdown.
 
 1. Choose whether to create a new resource group or use an existing one:
-   
+
    **To create a new resource group:**
    - Select **Create new resource group** and press Enter
    - Enter a name for your resource group (e.g., "rg-ai-agents-lab") and press Enter
    - Select a location from the available options and press Enter
-   
+
    **To use an existing resource group:**
    - Select the resource group you want to use from the list and press Enter
 
@@ -107,8 +109,9 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 1. Create a new folder and choose **Select as Repository Destination**, then open the cloned repository when prompted.
 
 1. In the Explorer view, navigate to the **Labfiles/06-build-remote-agents-with-a2a/Python** folder to find the starter code for this exercise.
-    
+
     The provided files include:
+
     ```output
     python
     ├── outline_agent/
@@ -202,9 +205,9 @@ In this task, you create the title agent that helps writers create trendy headli
    run = self.client.runs.create_and_process(thread_id=thread.id, agent_id=self.agent.id)
     ```
 
-    The code provided in the rest of the file will process and return the agent's response. 
+    The code provided in the rest of the file will process and return the agent's response.
 
-1. Save the code file (*CTRL+S*). Now you're ready to share the agent's skills and card with the A2A protocol. 
+1. Save the code file (*CTRL+S*). Now you're ready to share the agent's skills and card with the A2A protocol.
 
 1. Open the **title_agent/server.py** file in the code editor.
 
@@ -268,7 +271,7 @@ In this task, you create the title agent that helps writers create trendy headli
        agent_card=agent_card, http_handler=request_handler
    )
     ```
-    
+
     This code creates an A2A server that will share the title agent's information and handle incoming requests for this agent using the title agent executor.
 
 1. Save the code file (*CTRL+S*) when you have finished.
@@ -324,7 +327,6 @@ In this task, you use the A2A protocol to enable the routing agent to send messa
    # Send the message to the remote agent client and await the response
    send_response: SendMessageResponse = await client.send_message(message_request=message_request)
     ```
-
 
 1. Save the code file (*CTRL+S*) when you have finished. Now the routing agent is able to discover and send messages to the title agent. Let's create the agent executor code to handle those incoming messages from the routing agent.
 
@@ -393,7 +395,7 @@ In this task, you use the A2A protocol to enable the routing agent to send messa
     ```
     python run_all.py
     ```
-    
+
     The application runs using the credentials for your authenticated Azure session to connect to your project and create and run the agent. You should see some output from each server as it starts.
 
 1. Wait until the prompt for input appears, then enter a prompt such as:
@@ -404,10 +406,10 @@ In this task, you use the A2A protocol to enable the routing agent to send messa
 
     After a few moments, you should see a response from the agent with the results.
 
-1. Enter `quit` to exit the program and stop the servers. 
+1. Enter `quit` to exit the program and stop the servers.
 
     You can also use `deactivate` to exit the Python virtual environment in the terminal.
-    
+
 ## Summary
 
 In this exercise, you used the Azure AI Agent Service SDK and the A2A Python SDK to create a remote multi-agent solution. You created a discoverable A2A-compatible agent and set up a routing agent to access the agent's skills. You also implemented an agent executor to process incoming A2A messages and manage tasks. Great work!

@@ -4,6 +4,7 @@ lab:
     description: 'Build AI agents that access Microsoft 365 workplace data using Work IQ and the Model Context Protocol for meeting prep, project tracking, and action items.'
     level: 300
     duration: 40
+    islab: true
 ---
 
 # Work IQ - Workplace intelligence for AI agents
@@ -123,10 +124,11 @@ This lab demonstrates Work IQ integration with AI agents:
 1. Open Visual Studio Code.
 
 2. Navigate to the lab folder:
+
    ```
    C:\repos\mslearn-ai-agents\Labfiles\05b-work-iq-integration\Python
    ```
-   
+
    Use **File > Open Folder** in VS Code.
 
 3. Create a Python virtual environment:
@@ -138,11 +140,13 @@ This lab demonstrates Work IQ integration with AI agents:
 4. Activate the virtual environment:
 
    **Windows:**
+
    ```bash
    venv\Scripts\activate
    ```
 
    **macOS/Linux:**
+
    ```bash
    source venv/bin/activate
    ```
@@ -167,6 +171,7 @@ This lab demonstrates Work IQ integration with AI agents:
 ### Verify setup
 
 Ensure you have:
+
 - Work IQ installed and accessible (`workiq --version` works)
 - Admin consent approved (or personal M365 account with Copilot)
 - `workiq_lab.py` - Main interactive application
@@ -292,7 +297,8 @@ This scenario demonstrates using **both** Work IQ (workplace data) and Foundry I
    - Are there any contradictions?
    - Which source is more up-to-date?
 
-**Key Insight:** 
+**Key Insight:**
+
 - **Work IQ** tells you what people are actually doing and saying
 - **Foundry IQ** tells you what's officially documented
 - **Together** they provide complete context for decision-making
@@ -306,21 +312,25 @@ This scenario lets you explore your workplace data with your own questions.
 2. Try different types of workplace questions:
 
    **Email searches:**
+
    ```
    Find emails about the budget from my manager
    ```
 
    **Meeting summaries:**
+
    ```
    What was decided in yesterday's standup?
    ```
 
    **Team activity:**
+
    ```
    What did the engineering team discuss this week?
    ```
 
    **Document discovery:**
+
    ```
    Show me shared documents about security policies
    ```
@@ -361,6 +371,7 @@ Now that you've completed all scenarios, take 5-10 minutes to explore on your ow
 ### View Work IQ capabilities
 
 From the main menu, select **6 - View Work IQ Capabilities** to review:
+
 - Architecture overview
 - Data sources available
 - Security and privacy model
@@ -452,13 +463,15 @@ No Azure resources are created in this lab (Work IQ uses your M365 license), so 
 ### "Work IQ command not found"
 
 **Solution:** Install Work IQ:
+
 ```bash
 npm install -g @microsoft/workiq
 ```
 
 ### "Admin consent required"
 
-**Solution:** 
+**Solution:**
+
 1. Run `workiq mcp` to get the consent URL
 2. Send to your IT admin for approval
 3. Or use a personal M365 account with Copilot
@@ -466,6 +479,7 @@ npm install -g @microsoft/workiq
 ### "No M365 Copilot license"
 
 **Solution:** This lab requires Copilot. Either:
+
 - Purchase M365 Copilot license ($30/month)
 - Use organizational account with Copilot
 - Read through the lab to understand concepts without hands-on
@@ -473,11 +487,13 @@ npm install -g @microsoft/workiq
 ### "MCP server not responding"
 
 **Solution:** Test Work IQ directly:
+
 ```bash
 workiq ask -q "What meetings do I have?"
 ```
 
 If this fails, reinstall:
+
 ```bash
 npm install -g @microsoft/workiq
 ```
@@ -485,6 +501,7 @@ npm install -g @microsoft/workiq
 ### "No data returned"
 
 **Solution:**
+
 - Ensure your M365 account has emails, meetings, Teams activity
 - Try broader queries
 - Check if your query matches your actual data
@@ -495,12 +512,12 @@ npm install -g @microsoft/workiq
 
 In this lab, you:
 
-* Installed and configured Work IQ MCP server
-* Built an AI agent that accesses Microsoft 365 workplace data
-* Explored 5 workplace intelligence scenarios (meeting prep, project status, action items, combined intelligence, custom queries)
-* Combined Work IQ with Foundry IQ for comprehensive context
-* Learned MCP architecture and integration patterns
-* Understood security, privacy, and authentication models
+- Installed and configured Work IQ MCP server
+- Built an AI agent that accesses Microsoft 365 workplace data
+- Explored 5 workplace intelligence scenarios (meeting prep, project status, action items, combined intelligence, custom queries)
+- Combined Work IQ with Foundry IQ for comprehensive context
+- Learned MCP architecture and integration patterns
+- Understood security, privacy, and authentication models
 
 ### Key Takeaways
 
@@ -517,6 +534,7 @@ In this lab, you:
 ### Next Steps
 
 Consider building your own workplace intelligence solutions:
+
 - Specialized meeting assistant
 - Automated status reporter
 - Task tracking agent
@@ -527,8 +545,8 @@ Consider building your own workplace intelligence solutions:
 
 ## Additional Resources
 
-* [Model Context Protocol Specification](https://modelcontextprotocol.io/)
-* [Microsoft Foundry Agents Documentation](https://learn.microsoft.com/azure/ai-foundry/agents/)
-* [Work IQ on npm](https://www.npmjs.com/package/@microsoft/workiq)
-* [Microsoft 365 Copilot](https://www.microsoft.com/microsoft-365/copilot)
-* [Microsoft Graph API](https://learn.microsoft.com/graph/) (alternative approach)
+- [Model Context Protocol Specification](https://modelcontextprotocol.io/)
+- [Microsoft Foundry Agents Documentation](https://learn.microsoft.com/azure/ai-foundry/agents/)
+- [Work IQ on npm](https://www.npmjs.com/package/@microsoft/workiq)
+- [Microsoft 365 Copilot](https://www.microsoft.com/microsoft-365/copilot)
+- [Microsoft Graph API](https://learn.microsoft.com/graph/) (alternative approach)

@@ -4,6 +4,7 @@ lab:
     description: 'Create an AI agent using both Microsoft Foundry portal and VS Code extension with built-in tools like file search and code interpreter.'
     level: 300
     duration: 45
+    islab: true
 ---
 
 # Build AI agents with portal and VS Code
@@ -63,7 +64,6 @@ Let's start by creating a Foundry project and a basic agent using the portal.
     - **Region**: *Select one available near you*\**
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Select your resource group, or create a new one*
-    
 
     > \* Some Azure AI resources are constrained by regional model quotas. In the event of a quota limit being exceeded later in the exercise, there's a possibility you may need to create another resource in a different region.
 
@@ -358,7 +358,7 @@ Now let's create a Python application that interacts with your agent programmati
     PROJECT_ENDPOINT=<your_project_endpoint>
     AGENT_NAME=it-support-agent
     ```
-    
+
     **To get your project endpoint:** In VS Code, open the **Microsoft Foundry** extension, right-click on your active project, and select **Copy Endpoint**.
 
 1. Save the `.env` file (**Ctrl+S** or **File > Save**).
@@ -382,26 +382,31 @@ Now let's create a Python application that interacts with your agent programmati
 When the agent starts, try these prompts to test different capabilities:
 
 1. Test policy search with file search:
+
     ```
     What's the policy for password resets?
     ```
 
 2. Request data analysis with code interpreter:
+
     ```
     Analyze the system performance data and identify any periods where CPU usage exceeded 80%
     ```
 
 3. Request a visualization:
+
     ```
     Create a line chart showing memory usage trends over time
     ```
 
 4. Ask for statistical analysis:
+
     ```
     What are the average, minimum, and maximum values for disk usage in the performance data?
     ```
 
 5. Combined analysis:
+
     ```
     Find any correlation between high CPU usage and memory usage in the performance data
     ```
@@ -414,14 +419,16 @@ Observe how the agent uses both file search (for policy questions) and code inte
 
 Now that you've worked with both approaches, here's guidance on when to use each:
 
-### Use the Portal when:
+### Use the Portal when
+
 - Rapid prototyping and testing agent configurations
 - Quick adjustments to instructions and system prompts
 - Testing with grounding data and built-in tools
 - Demonstrating concepts to stakeholders
 - You need a quick agent without writing code
 
-### Use VS Code / SDK when:
+### Use VS Code / SDK when
+
 - Building production applications
 - Integrating agents with existing code and systems
 - Managing conversations and responses programmatically
@@ -429,7 +436,8 @@ Now that you've worked with both approaches, here's guidance on when to use each
 - Advanced orchestration and multi-agent scenarios
 - Programmatic agent management at scale
 
-### Hybrid Approach (Best Practice):
+### Hybrid Approach (Best Practice)
+
 1. **Prototype** in the portal to validate concepts
 2. **Develop** in VS Code for production implementation
 3. **Monitor and iterate** using both tools
@@ -451,12 +459,15 @@ To avoid unnecessary Azure charges, delete the resources you created:
 ### Common Issues
 
 **Issue**: "Project endpoint invalid"
+
 - **Solution**: Ensure you copied the full project endpoint from the portal. It should start with `https://` and include your project details.
 
 **Issue**: "Agent not found"
+
 - **Solution**: Make sure you set the correct project as active in the VS Code extension.
 
 **Issue**: "Code interpreter not generating visualizations"
+
 - **Solution**: Ensure the CSV file was properly uploaded to the agent and that code interpreter is enabled in the agent settings.
 
 ---

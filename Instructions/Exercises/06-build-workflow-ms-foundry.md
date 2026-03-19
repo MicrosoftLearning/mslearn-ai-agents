@@ -4,6 +4,7 @@ lab:
     description: 'Use the Microsoft Foundry portal to create workflows for AI agents.'
     level: 300
     duration: 45
+    islab: true
 ---
 
 # Build a workflow in Microsoft Foundry
@@ -13,28 +14,28 @@ In this exercise, you'll use the Microsoft Foundry portal to create a workflow. 
 **Workflow overview**
 
 - Collect incoming support tickets
-    
+
     The workflow starts with a predefined array of customer support issues. Each item in the array represents an individual support ticket submitted to ContosoPay.
 
 - Process tickets one at a time
-    
+
     A for-each loop iterates over the array, ensuring each support ticket is handled independently while using the same workflow logic.
 
 - Classify each ticket with an AI agent
-    
+
     For each ticket, the workflow invokes a Triage Agent to classify the issue as Billing, Technical, or General, along with a confidence score.
 
 - Handle uncertainty with conditional logic
-    
+
     If the confidence score is below a defined threshold, the workflow recommends additional info for that ticket.
 
 - Route based on issue category
-    
+
     Billing issues are flagged for escalation and removed from the automated resolution path.
     Technical and General issues continue through automated handling.
 
 - Generate a recommended response
-    
+
     For non-billing tickets, the workflow invokes a Resolution Agent to draft a category-appropriate support response.
 
 This exercise should take approximately **30** minutes to complete.
@@ -319,6 +320,7 @@ Now that you've built and tested your workflow in the Foundry portal, you can al
 ### Prerequisites
 
 Before starting this exercise, ensure you have:
+
 - [Visual Studio Code](https://code.visualstudio.com/) installed on your local machine
 - An active [Azure subscription](https://azure.microsoft.com/free/)
 - [Python 3.13](https://www.python.org/downloads/) or later installed
@@ -353,12 +355,12 @@ Now you'll connect to your Azure resources and create a new Microsoft Foundry pr
 1. Select your Azure subscription from the dropdown.
 
 1. Choose whether to create a new resource group or use an existing one:
-   
+
    **To create a new resource group:**
    - Select **Create new resource group** and press Enter
    - Enter a name for your resource group (e.g., "rg-ai-agents-lab") and press Enter
    - Select a location from the available options and press Enter
-   
+
    **To use an existing resource group:**
    - Select the resource group you want to use from the list and press Enter
 
@@ -424,7 +426,7 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 Now you're ready to create a project that invokes a workflow. Let's get started!
 
-1. Open the **workflow.py** file in the code editor. 
+1. Open the **workflow.py** file in the code editor.
 
 1. Review the code in the file, noting that it contains strings for each agent name and instructions.
 
@@ -508,7 +510,7 @@ Now you're ready to create a project that invokes a workflow. Let's get started!
    print("\nConversation deleted")
     ```
 
-1. Use the **CTRL+S** command to save your changes to the code file. 
+1. Use the **CTRL+S** command to save your changes to the code file.
 
 ### Sign into Azure and run the app
 

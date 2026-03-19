@@ -2,6 +2,7 @@
 lab:
     title: 'Develop an AI agent with VS Code extension (deprecated)'
     description: 'Use the Microsoft Foundry VS Code extension to create an AI agent.'
+    islab: false
 ---
 
 # Develop an AI agent with VS Code extension (deprecated)
@@ -15,6 +16,7 @@ This exercise should take approximately **30** minutes to complete.
 ## Prerequisites
 
 Before starting this exercise, ensure you have:
+
 - Visual Studio Code installed
 - An active Azure subscription
 
@@ -49,12 +51,12 @@ Now you'll connect to your Azure resources and create a new AI Foundry project.
 1. Select your Azure subscription from the dropdown.
 
 1. Choose whether to create a new resource group or use an existing one:
-   
+
    **To create a new resource group:**
    - Select **Create new resource group** and press Enter
    - Enter a name for your resource group (e.g., "rg-ai-agents-lab") and press Enter
    - Select a location from the available options and press Enter
-   
+
    **To use an existing resource group:**
    - Select the resource group you want to use from the list and press Enter
 
@@ -110,6 +112,7 @@ Now you'll create an AI agent using the visual designer interface. Rather than w
    - **Name**: Enter a descriptive name for your agent (e.g., "data-research-agent")
    - **Model**: Select your GPT-4o deployment from the dropdown
    - **Instructions**: Enter system instructions such as:
+
      ```
      You are an AI agent that helps users research information from various sources. Use the available tools to access up-to-date information and provide comprehensive responses based on external data sources.
      ```

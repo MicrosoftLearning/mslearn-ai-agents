@@ -2,6 +2,7 @@
 lab:
     title: 'Build a workflow in Microsoft Foundry (deprecated)'
     description: 'Use the Microsoft Foundry portal to create workflows for AI agents.'
+    islab: false
 ---
 
 # Build a workflow in Microsoft Foundry (deprecated)
@@ -11,28 +12,28 @@ In this exercise, you'll use the Microsoft Foundry portal to create a workflow. 
 **Workflow overview**
 
 - Collect incoming support tickets
-    
+
     The workflow starts with a predefined array of customer support issues. Each item in the array represents an individual support ticket submitted to ContosoPay.
 
 - Process tickets one at a time
-    
+
     A for-each loop iterates over the array, ensuring each support ticket is handled independently while using the same workflow logic.
 
 - Classify each ticket with an AI agent
-    
+
     For each ticket, the workflow invokes a Triage Agent to classify the issue as Billing, Technical, or General, along with a confidence score.
 
 - Handle uncertainty with conditional logic
-    
+
     If the confidence score is below a defined threshold, the workflow recommends additional info for that ticket.
 
 - Route based on issue category
-    
+
     Billing issues are flagged for escalation and removed from the automated resolution path.
     Technical and General issues continue through automated handling.
 
 - Generate a recommended response
-    
+
     For non-billing tickets, the workflow invokes a Resolution Agent to draft a category-appropriate support response.
 
 This exercise should take approximately **30** minutes to complete.

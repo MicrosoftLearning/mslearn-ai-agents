@@ -4,6 +4,7 @@ lab:
     description: 'Learn how to use functions to add custom capabilities to your agents.'
     level: 300
     duration: 50
+    islab: true
 ---
 
 # Use a custom function in an AI agent
@@ -19,6 +20,7 @@ This exercise should take approximately **50** minutes to complete.
 ## Prerequisites
 
 Before starting this exercise, ensure you have:
+
 - [Visual Studio Code](https://code.visualstudio.com/) installed on your local machine
 - An active [Azure subscription](https://azure.microsoft.com/free/)
 - [Python 3.13](https://www.python.org/downloads/) or later installed
@@ -53,12 +55,12 @@ Now you'll connect to your Azure resources and create a new Microsoft Foundry pr
 1. Select your Azure subscription from the dropdown.
 
 1. Choose whether to create a new resource group or use an existing one:
-   
+
    **To create a new resource group:**
    - Select **Create new resource group** and press Enter
    - Enter a name for your resource group (e.g., "rg-ai-agents-lab") and press Enter
    - Select a location from the available options and press Enter
-   
+
    **To use an existing resource group:**
    - Select the resource group you want to use from the list and press Enter
 
@@ -130,7 +132,7 @@ Now you're ready to create an AI agent that uses MCP server tools to access exte
 
 1. Find the comment **Determine the next visible astronomical event for a given location** and add the following code:
 
-    ```python   
+    ```python
    # Determine the next visible astronomical event for a given location
    def next_visible_event(location: str) -> str:
        """Returns the next visible astronomical event for a location."""
@@ -149,7 +151,7 @@ Now you're ready to create an AI agent that uses MCP server tools to access exte
 
 ## Connect to the Foundry project
 
-1. Open the **agent.py** file. 
+1. Open the **agent.py** file.
 
    > **Tip**: As you add code, be sure to maintain the correct indentation. Use the comment indentation levels as a guide.
 
@@ -408,7 +410,7 @@ Now that you've created the agent with the function tools, you can send messages
     - Display the agent's response
     - Delete the agent when done
 
-1. Save the code file (*CTRL+S*) when you have finished. 
+1. Save the code file (*CTRL+S*) when you have finished.
 
 ## Run the agent application
 

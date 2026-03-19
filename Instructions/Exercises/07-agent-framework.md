@@ -4,6 +4,7 @@ lab:
     description: 'Learn how to use the Microsoft Agent Framework SDK to create and use an Azure AI chat agent.'
     level: 300
     duration: 30
+    islab: true
 ---
 
 # Develop an Azure AI chat agent with the Microsoft Agent Framework SDK
@@ -17,6 +18,7 @@ This exercise should take approximately **30** minutes to complete.
 ## Prerequisites
 
 Before starting this exercise, ensure you have:
+
 - [Visual Studio Code](https://code.visualstudio.com/) installed on your local machine
 - An active [Azure subscription](https://azure.microsoft.com/free/)
 - [Python 3.13](https://www.python.org/downloads/) or later installed
@@ -51,12 +53,12 @@ Now you'll connect to your Azure resources and create a new Microsoft Foundry pr
 1. Select your Azure subscription from the dropdown.
 
 1. Choose whether to create a new resource group or use an existing one:
-   
+
    **To create a new resource group:**
    - Select **Create new resource group** and press Enter
    - Enter a name for your resource group (e.g., "rg-ai-agents-lab") and press Enter
    - Select a location from the available options and press Enter
-   
+
    **To use an existing resource group:**
    - Select the resource group you want to use from the list and press Enter
 
