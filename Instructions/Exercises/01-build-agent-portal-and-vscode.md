@@ -192,7 +192,7 @@ If you already have installed the extension for Foundry, you can skip this secti
 
 1. Right-click on your project and select **Set as active project**.
 
-1. Expand your project in the Resources view and verify you can see your `it-support-agent` listed under **Declarative gents**.
+1. Expand your project in the Resources view and verify you can see your `it-support-agent` listed under **Prompt agents**.
 
 ### Test your agent in VS Code
 
@@ -240,6 +240,7 @@ Now let's create a Python application that interacts with your agent programmati
     from azure.identity import DefaultAzureCredential
     import base64
     from pathlib import Path
+    from dotenv import load_dotenv
     
     
     def save_image(image_data, filename):
@@ -259,6 +260,7 @@ Now let's create a Python application that interacts with your agent programmati
     
     def main():
         # Initialize the project client
+        load_dotenv()
         project_endpoint = os.environ.get("PROJECT_ENDPOINT")
         agent_name = os.environ.get("AGENT_NAME", "it-support-agent")
         
@@ -313,7 +315,7 @@ Now let's create a Python application that interacts with your agent programmati
             print("\n[Agent is thinking...]")
             response = openai_client.responses.create(
                 conversation=conversation.id,
-                extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
+                extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
                 input=""
             )
             
