@@ -4,6 +4,7 @@ lab:
     description: 'Learn to configure multiple agents to collaborate using the Microsoft Agent Framework SDK'
     level: 300
     duration: 30
+    islab: true
 ---
 
 # Develop a multi-agent solution
@@ -23,6 +24,7 @@ This exercise should take approximately **30** minutes to complete.
 ## Prerequisites
 
 Before starting this exercise, ensure you have:
+
 - [Visual Studio Code](https://code.visualstudio.com/) installed on your local machine
 - An active [Azure subscription](https://azure.microsoft.com/free/)
 - [Python 3.13](https://www.python.org/downloads/) or later installed
@@ -57,12 +59,12 @@ Now you'll connect to your Azure resources and create a new Microsoft Foundry pr
 1. Select your Azure subscription from the dropdown.
 
 1. Choose whether to create a new resource group or use an existing one:
-   
+
    **To create a new resource group:**
    - Select **Create new resource group** and press Enter
    - Enter a name for your resource group (e.g., "rg-ai-agents-lab") and press Enter
    - Select a location from the available options and press Enter
-   
+
    **To use an existing resource group:**
    - Select the resource group you want to use from the list and press Enter
 
@@ -128,7 +130,7 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 Now you're ready to create the agents for your multi-agent solution! Let's get started!
 
-1. Open the **agent-framework.py** file in the code editor.
+1. Open the **agents.py** file in the code editor.
 
 1. At the top of the file under the comment **Add references**, and add the following code to reference the namespaces in the libraries you'll need to implement your agent:
 
@@ -184,7 +186,7 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 ## Create a sequential orchestration
 
 1. In the **main** function, find the comment **Initialize the current feedback** and add the following code:
-    
+
     (Be sure to maintain the indentation level)
 
     ```python
@@ -241,7 +243,7 @@ Now you're ready to run your code and watch your AI agents collaborate.
    python agents.py
     ```
 
-1.   You should see some output similar to the following:
+1. You should see some output similar to the following:
 
     ```output
     ------------------------------------------------------------
@@ -267,11 +269,12 @@ Now you're ready to run your code and watch your AI agents collaborate.
     ```output
     I use the dashboard every day to monitor metrics, and it works well overall. But when I'm working late at night, the bright screen is really harsh on my eyes. If you added a dark mode option, it would make the experience much more comfortable.
     ```
+
     ```output
     I reached out to your customer support yesterday because I couldn't access my account. The representative responded almost immediately, was polite and professional, and fixed the issue within minutes. Honestly, it was one of the best support experiences I've ever had.
     ```
 
- 1. When you're finished, enter `deactivate` in the terminal to exit the Python virtual environment.   
+1. When you're finished, enter `deactivate` in the terminal to exit the Python virtual environment.
 
 ## Summary
 

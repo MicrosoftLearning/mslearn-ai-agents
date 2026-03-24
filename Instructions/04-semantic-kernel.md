@@ -2,6 +2,7 @@
 lab:
     title: 'Develop an Azure AI agent with the Microsoft Agent Framework SDK (deprecated)'
     description: 'Learn how to use the Microsoft Agent Framework SDK to create and use an Azure AI chat agent.'
+    islab: false
 ---
 
 # Develop an Azure AI chat agent with the Microsoft Agent Framework SDK (deprecated)
@@ -13,7 +14,6 @@ This exercise should take approximately **30** minutes to complete.
 > **Note**: Some of the technologies used in this exercise are in preview or in active development. You may experience some unexpected behavior, warnings, or errors.
 
 ## Deploy a model in a Microsoft Foundry project
-
 
 Let's start by creating a Foundry project.
 
@@ -206,14 +206,14 @@ Now you're ready to create a client app that defines an agent and a custom funct
     **<font color="red">You must sign into Azure - even though the cloud shell session is already authenticated.</font>**
 
     > **Note**: In most scenarios, just using *az login* will be sufficient. However, if you have subscriptions in multiple tenants, you may need to specify the tenant by using the *--tenant* parameter. See [Sign into Azure interactively using the Azure CLI](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) for details.
-    
+
 1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Foundry hub if prompted.
 1. After you have signed in, enter the following command to run the application:
 
     ```
    python agent-framework.py
     ```
-    
+
     The application runs using the credentials for your authenticated Azure session to connect to your project and create and run the agent.
 
 1. When asked what to do with the expenses data, enter the following prompt:

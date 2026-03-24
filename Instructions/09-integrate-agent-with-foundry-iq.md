@@ -2,6 +2,7 @@
 lab:
     title: 'Integrate an AI agent with Foundry IQ (deprecated)'
     description: 'Use Azure AI Agent Service to develop an agent that uses Foundry IQ to search knowledge bases.'
+    islab: false
 ---
 
 # Integrate an AI agent with Foundry IQ (deprecated)
@@ -48,6 +49,7 @@ When creating an agent, it will deploy the default model (like `gpt-4.1`). Once 
 Now you'll configure your agent that uses Foundry IQ to search the knowledge base.
 
 1. First, give your agent the following instructions:
+
     ```
     You are a helpful AI assistant for Contoso, specializing in outdoor camping and hiking products. 
     You must ALWAYS search the knowledge base to answer questions about our products or product 
@@ -108,7 +110,7 @@ Before connecting from code, test your agent in the portal playground.
     - `What types of tents does Contoso offer?`
     - `Tell me about which backpacks are available in XL.`
     - `What camping accessories are available?`
-    
+
 1. Review the responses and notice:
     - The agent provides specific information from the knowledge base
     - Citations or references to the source documents may be included
@@ -304,7 +306,7 @@ Now you'll create a Python application to interact with your agent programmatica
     
     ```
 
-1. After you've added the code, use the **CTRL+S** command to save your changes. 
+1. After you've added the code, use the **CTRL+S** command to save your changes.
 
 1. Review the code now uses the conversations API to manage interactions with your agent, where:
     - A conversation is created and tracked by its ID
@@ -342,38 +344,43 @@ Now you'll run your application and test the agent's ability to retrieve informa
 1. When the application starts, test the agent with the following queries:
 
     **Query 1 - Product Categories:**
+
     ```
     What types of outdoor products does Contoso offer?
     ```
-    
+
     When prompted for approval, type **yes** to allow the agent to search the knowledge base. Observe how the agent retrieves information from multiple documents in the knowledge base.
 
     **Query 2 - Specific Product Details:**
+
     ```
     Tell me about the weatherproof features of your tents.
     ```
-    
+
     Approve the request and notice how the agent provides specific details from the tents catalog.
 
     **Query 3 - Product Comparisons:**
+
     ```
     What's the difference between your daypacks and expedition backpacks?
     ```
-    
+
     Approve the request and see how the agent can synthesize information from the backpacks guide.
 
     **Query 4 - Accessories and Add-ons:**
+
     ```
     What camping accessories would you recommend for a weekend hiking trip?
     ```
-    
+
     Approve the request and observe the agent's ability to provide recommendations based on the knowledge base.
 
     **Query 5 - Follow-up Question:**
+
     ```
     How much do those items typically cost?
     ```
-    
+
     Notice how the agent maintains conversation context from your previous query.
 
 1. Type `history` to view the complete conversation history.
@@ -413,4 +420,3 @@ If you've finished exploring Azure AI Agent Service and Foundry IQ, you should d
 1. Navigate to the resource group containing your Foundry resource and AI Search resources.
 1. On the toolbar, select **Delete resource group**.
 1. Enter the resource group name and confirm that you want to delete it.
-

@@ -4,6 +4,7 @@ lab:
     description: 'Extend agent capabilities by integrating Model Context Protocol (MCP) server tools.'
     level: 300
     duration: 60
+    islab: true
 ---
 
 # Develop an AI agent with Model Context Protocol (MCP) tools
@@ -17,6 +18,7 @@ This exercise should take approximately **60** minutes to complete.
 ## Prerequisites
 
 Before starting this exercise, ensure you have:
+
 - [Visual Studio Code](https://code.visualstudio.com/) installed on your local machine
 - An active [Azure subscription](https://azure.microsoft.com/free/)
 - [Python 3.13](https://www.python.org/downloads/) or later installed
@@ -51,12 +53,12 @@ Now you'll connect to your Azure resources and create a new Microsoft Foundry pr
 1. Select your Azure subscription from the dropdown.
 
 1. Choose whether to create a new resource group or use an existing one:
-   
+
    **To create a new resource group:**
    - Select **Create new resource group** and press Enter
    - Enter a name for your resource group (e.g., "rg-ai-agents-lab") and press Enter
    - Select a location from the available options and press Enter
-   
+
    **To use an existing resource group:**
    - Select the resource group you want to use from the list and press Enter
 
@@ -275,6 +277,7 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
     [continued...]
 
     Agent deleted
+
     ```
 
     Notice that the agent was able to invoke the MCP tool to automatically fulfill the request.
@@ -316,7 +319,7 @@ In addition to connecting to remote MCP servers, you can also create your own cu
       # continued...
     ```
 
-    This dictionary represents a sample inventory. The `@mcp.tool()` decorator registers the function as a tool on the MCP server, allowing the LLM to discover your function. 
+    This dictionary represents a sample inventory. The `@mcp.tool()` decorator registers the function as a tool on the MCP server, allowing the LLM to discover your function.
 
 1. Find the comment **Add a weekly sales mcp tool** and add the following decorator above the function definition:
 
@@ -406,7 +409,7 @@ In this task, you'll connect the MCP server tools to your agent so that it can c
     ```
 
     This code dynamically wraps tools available in the MCP server so that they can be called by the AI agent. Each tool is turned into an async function that the agent can invoke.
-    
+
 1. Find the comment **Create FunctionTool definitions for the agent** and add the following code:
 
     ```python
@@ -519,7 +522,7 @@ In this task, you'll connect the MCP server tools to your agent so that it can c
 
     Notice that the agent was able to call the MCP tools to retrieve inventory and sales data, and then use that information to provide a helpful response to the user.
 
-1. You can continue the conversation if you like. The thread is *stateful*, so it retains the conversation history - meaning that the agent has the full context for each response. 
+1. You can continue the conversation if you like. The thread is *stateful*, so it retains the conversation history - meaning that the agent has the full context for each response.
 
     Try entering prompts such as:
 

@@ -2,6 +2,7 @@
 lab:
     title: 'Connect to remote agents with A2A protocol (deprecated)'
     description: 'Use the A2A protocol to collaborate with remote agents.'
+    islab: false
 ---
 
 # Connect to remote agents with A2A protocol (deprecated)
@@ -89,6 +90,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
     ```
 
     The provided files include:
+
     ```output
     python
     ├── outline_agent/
@@ -197,9 +199,9 @@ In this task, you create the title agent that helps writers create trendy headli
    run = self.client.runs.create_and_process(thread_id=thread.id, agent_id=self.agent.id)
     ```
 
-    The code provided in the rest of the file will process and return the agent's response. 
+    The code provided in the rest of the file will process and return the agent's response.
 
-1. Save the code file (*CTRL+S*). Now you're ready to share the agent's skills and card with the A2A protocol. 
+1. Save the code file (*CTRL+S*). Now you're ready to share the agent's skills and card with the A2A protocol.
 
 1. Enter the following command to edit the title agent's `server.py` file  
 
@@ -267,7 +269,7 @@ In this task, you create the title agent that helps writers create trendy headli
        agent_card=agent_card, http_handler=request_handler
    )
     ```
-    
+
     This code creates an A2A server that will share the title agent's information and handle incoming requests for this agent using the title agent executor.
 
 1. Save the code file (*CTRL+S*) when you have finished.
@@ -333,7 +335,6 @@ In this task, you use the A2A protocol to enable the routing agent to send messa
    # Send the message to the remote agent client and await the response
    send_response: SendMessageResponse = await client.send_message(message_request=message_request)
     ```
-
 
 1. Save the code file (*CTRL+S*) when you have finished. Now the routing agent is able to discover and send messages to the title agent. Let's create the agent executor code to handle those incoming messages from the routing agent.
 
@@ -416,7 +417,7 @@ In this task, you use the A2A protocol to enable the routing agent to send messa
     **<font color="red">You must sign into Azure - even though the cloud shell session is already authenticated.</font>**
 
     > **Note**: In most scenarios, just using *az login* will be sufficient. However, if you have subscriptions in multiple tenants, you may need to specify the tenant by using the *--tenant* parameter. See [Sign into Azure interactively using the Azure CLI](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) for details.
-    
+
 1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Foundry hub if prompted.
 1. After you have signed in, enter the following command to run the application:
 
@@ -424,7 +425,7 @@ In this task, you use the A2A protocol to enable the routing agent to send messa
     cd ..
     python run_all.py
     ```
-    
+
     The application runs using the credentials for your authenticated Azure session to connect to your project and create and run the agent. You should see some output from each server as it starts.
 
 1. Wait until the prompt for input appears, then enter a prompt such as:
@@ -436,7 +437,7 @@ In this task, you use the A2A protocol to enable the routing agent to send messa
     After a few moments, you should see a response from the agent with the results.
 
 1. Enter `quit` to exit the program and stop the servers.
-    
+
 ## Summary
 
 In this exercise, you used the Azure AI Agent Service SDK and the A2A Python SDK to create a remote multi-agent solution. You created a discoverable A2A-compatible agent and set up a routing agent to access the agent's skills. You also implemented an agent executor to process incoming A2A messages and manage tasks. Great work!

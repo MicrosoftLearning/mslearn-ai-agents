@@ -2,6 +2,7 @@
 lab:
     title: 'Develop a multi-agent solution with Microsoft Agent Framework (deprecated)'
     description: 'Learn to configure multiple agents to collaborate using the Microsoft Agent Framework SDK'
+    islab: false
 ---
 
 # Develop a multi-agent solution (deprecated)
@@ -173,7 +174,7 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 ## Create a sequential orchestration
 
 1. In the **main** function, find the comment **Initialize the current feedback** and add the following code:
-    
+
     (Be sure to maintain the indentation level)
 
     ```python
@@ -268,6 +269,7 @@ Now you're ready to run your code and watch your AI agents collaborate.
     ```output
     I use the dashboard every day to monitor metrics, and it works well overall. But when I'm working late at night, the bright screen is really harsh on my eyes. If you added a dark mode option, it would make the experience much more comfortable.
     ```
+
     ```output
     I reached out to your customer support yesterday because I couldn't access my account. The representative responded almost immediately, was polite and professional, and fixed the issue within minutes. Honestly, it was one of the best support experiences I've ever had.
     ```

@@ -2,6 +2,7 @@
 lab:
     title: 'Use a custom function in an AI agent (deprecated)'
     description: 'Learn how to use functions to add custom capabilities to your agents.'
+    islab: false
 ---
 
 # Use a custom function in an AI agent (deprecated)
@@ -299,7 +300,6 @@ Now that you've created your project in AI Foundry, let's develop an app that im
 
     This code sends the function call results back to the agent and prints the agent's response.
 
-
 1. Find the comment **Clean up** and add the following code to delete the agent and thread when no longer needed.
 
     ```python
@@ -336,14 +336,14 @@ Now that you've created your project in AI Foundry, let's develop an app that im
     **<font color="red">You must sign into Azure - even though the cloud shell session is already authenticated.</font>**
 
     > **Note**: In most scenarios, just using *az login* will be sufficient. However, if you have subscriptions in multiple tenants, you may need to specify the tenant by using the *--tenant* parameter. See [Sign into Azure interactively using the Azure CLI](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) for details.
-    
+
 1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Foundry hub if prompted.
 1. After you have signed in, enter the following command to run the application:
 
     ```
    python agent.py
     ```
-    
+
     The application runs using the credentials for your authenticated Azure session to connect to your project and create and run the agent.
 
 1. When prompted, enter a prompt such as:

@@ -4,6 +4,7 @@ lab:
     description: 'Publish AI agents to Microsoft Teams and Microsoft 365 Copilot for enterprise access'
     level: 300
     duration: 40
+    islab: true
 ---
 
 # Deploy agents to Microsoft Teams and Copilot
@@ -90,11 +91,13 @@ When creating an agent, it will deploy the default model (like `gpt-4.1`). Once 
     
     Always cite your sources when referencing specific policies.
     ```
+
 1. Select **Save** to save your current agent configuration.
 
 ### Quick test
 
 1. In the chat panel, send a test message:
+
     ```
     Hello! What can you help me with?
     ```
@@ -114,11 +117,13 @@ Now you'll add company documents so the agent can answer questions with real inf
 1. Let's start by downloading the sample policy documents. Open new browser tabs and save each file:
 
     **IT Security Policy:**
+
     ```
     https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/05a-m365-teams-integration/Python/sample_documents/it_security_policy.txt
     ```
 
     **Remote Work Policy:**
+
     ```
     https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/05a-m365-teams-integration/Python/sample_documents/remote_work_policy.txt
 
@@ -133,6 +138,7 @@ Now you'll add company documents so the agent can answer questions with real inf
 ### Test with knowledge queries
 
 1. In the playground, ask a question about IT security:
+
     ```
     What are the password requirements for my laptop?
     ```
@@ -140,6 +146,7 @@ Now you'll add company documents so the agent can answer questions with real inf
 2. The agent should provide specific information from the IT security policy (minimum 12 characters, uppercase, lowercase, numbers, special characters, etc.)
 
 3. Try a question about remote work:
+
     ```
     What are the core hours for remote employees?
     ```
@@ -147,6 +154,7 @@ Now you'll add company documents so the agent can answer questions with real inf
 4. The agent should respond with information from the remote work policy (9 AM - 3 PM)
 
 5. Try another query:
+
     ```
     What encryption is required on company laptops?
     ```
@@ -166,6 +174,7 @@ Now you'll publish your agent to Microsoft Teams so employees can chat with it d
 ### What gets created
 
 When you publish to Teams, the Foundry portal automatically:
+
 - Creates an Azure Bot Service
 - Generates a Teams app manifest
 - Packages app icons and configuration
@@ -181,9 +190,9 @@ Before publishing, gather this information:
 | **Short Description** | AI assistant for company policies |
 | **Full Description** | Enterprise AI assistant that answers questions about company policies, IT procedures, and employee resources |
 | **Developer Name** | Your name or company name |
-| **Website URL** | https://contoso.com (placeholder is fine for lab) |
-| **Privacy Policy URL** | https://contoso.com/privacy |
-| **Terms of Use URL** | https://contoso.com/terms |
+| **Website URL** | <https://contoso.com> (placeholder is fine for lab) |
+| **Privacy Policy URL** | <https://contoso.com/privacy> |
+| **Terms of Use URL** | <https://contoso.com/terms> |
 
 ### Create app icons
 
@@ -215,21 +224,25 @@ You'll need two icons for the Teams app:
 Fill in the configuration form:
 
 **Basic Information:**
+
 - **App Name**: Enterprise Knowledge Agent
 - **Short Description**: AI assistant for company policies
 - **Full Description**: Enterprise AI assistant that answers questions about company policies, IT procedures, and employee resources
 
 **Developer Information:**
+
 - **Developer Name**: Your name
-- **Website**: https://contoso.com
-- **Privacy Policy**: https://contoso.com/privacy
-- **Terms of Use**: https://contoso.com/terms
+- **Website**: <https://contoso.com>
+- **Privacy Policy**: <https://contoso.com/privacy>
+- **Terms of Use**: <https://contoso.com/terms>
 
 **App Icons:**
+
 - Upload your **color icon** (192x192 px)
 - Upload your **outline icon** (32x32 px)
 
 **App Scope:**
+
 - Select **Personal** for individual chat access
 - Optionally select **Team** for channel access
 
@@ -265,7 +278,7 @@ This option gives you a package to upload manually, useful for testing or when d
 
 2. Save the `manifest.zip` file to your computer
 
-3. Open **Microsoft Teams** (desktop app or https://teams.microsoft.com)
+3. Open **Microsoft Teams** (desktop app or <https://teams.microsoft.com>)
 
 4. Click **Apps** in the left sidebar
 
@@ -284,16 +297,19 @@ The app will install and open automatically.
 1. The agent chat should open after installation (or find it under **Apps** → **Your agents**)
 
 2. Send a greeting:
+
     ```
     Hello! What can you help me with?
     ```
 
 3. Test a knowledge query:
+
     ```
     What are the laptop password requirements?
     ```
 
 4. Try another question:
+
     ```
     What MFA methods are supported?
     ```
@@ -305,15 +321,18 @@ The app will install and open automatically.
 ### Sharing with others
 
 **For personal use:**
+
 - The app is already installed for you
 
 **For team-wide access:**
+
 1. Go to a Team channel
 2. Click **+** to add a tab or app
 3. Search for your app name
 4. Add it to the channel
 
 **For organization-wide access:**
+
 1. Contact your Teams administrator
 2. They can publish the app to the organization's app catalog
 3. All employees can then find and install it
@@ -321,21 +340,25 @@ The app will install and open automatically.
 ### Troubleshooting Teams deployment
 
 **Can't find the agent in Teams (after direct publish):**
+
 - Check the **Apps** → **Your agents** section in Teams
 - Wait 1-2 minutes for the agent to appear after publishing
 - Verify publishing completed successfully in the Foundry portal
 
 **Can't upload the app (manual upload):**
+
 - Ensure the manifest.zip file isn't corrupted (re-download if needed)
 - Check that your Teams admin hasn't disabled custom app uploads
 - Verify the icons are the correct sizes (192x192 and 32x32)
 
 **Agent doesn't respond:**
+
 - Wait 30 seconds after installation for the bot to initialize
 - Check that the Azure Bot Service was created (shown during publishing)
 - Test the agent in the Foundry playground first
 
 **Responses are generic (no knowledge):**
+
 - Verify file search is enabled on the agent
 - Confirm documents were uploaded and indexed
 - Test knowledge queries in the Foundry playground
@@ -368,7 +391,7 @@ When you publish to Copilot, your agent becomes a **Copilot extension** (also ca
 
 ### Publish from the portal
 
-1. Return to the Foundry portal (**https://ai.azure.com**)
+1. Return to the Foundry portal (**<https://ai.azure.com>**)
 
 2. Navigate to your agent (**Build** → **Agents** → **enterprise-knowledge-agent**)
 
@@ -421,11 +444,13 @@ Once published with shared scope, your agent is immediately available:
 3. Find your agent under **Your agents** (for shared scope)
 
 4. Start a conversation:
+
     ```
     @Enterprise Knowledge Agent What are the laptop security requirements?
     ```
 
 5. Or select your agent and ask directly:
+
     ```
     What MFA methods are supported for company systems?
     ```
@@ -437,16 +462,19 @@ Once published with shared scope, your agent is immediately available:
 ### Managing your published agent
 
 **Update the agent:**
+
 1. Make changes to your agent in the Foundry portal (instructions, documents, tools)
 2. Minor changes take effect automatically
 3. Major changes may require re-publishing
 
 **Monitor usage:**
+
 1. Check analytics in the Foundry portal
 2. Review conversation logs
 3. Monitor for errors or issues
 
 **Unpublish:**
+
 1. In the Foundry portal, go to your agent's details
 2. Find the publish status section
 3. Click **Unpublish** to remove access from Teams and Copilot
@@ -471,11 +499,13 @@ After publishing, you may need to update your agent. Here's how updates work.
 ### Propagating updates
 
 **For Teams apps:**
+
 - Instruction and document changes take effect immediately
 - No need to re-upload the manifest
 - Users see updated responses in their next conversation
 
 **For Copilot extensions:**
+
 - Minor changes (instructions, documents) may take effect automatically
 - Major changes may require re-submission for approval
 - Check the publish status for any pending reviews
@@ -506,6 +536,7 @@ To avoid unnecessary charges, clean up resources when done.
 4. Confirm deletion
 
 This also removes:
+
 - The Azure Bot Service
 - Associated configurations
 - Published deployments
@@ -549,18 +580,21 @@ If you published to Copilot:
 ### Key Takeaways
 
 **Teams deployment:**
+
 - Quick to set up using the Foundry portal
 - Creates Azure Bot Service automatically
 - Users access via Teams app
 - Good for standalone chat experiences
 
 **Copilot deployment:**
+
 - Integrates with Microsoft 365 Copilot
 - Users invoke via @mention or selection
 - Requires Copilot license
 - Good for contextual assistance within Copilot
 
 **Best practices:**
+
 - Test thoroughly in playground before publishing
 - Keep documents up to date for accurate responses
 - Monitor usage and feedback
@@ -625,11 +659,13 @@ To build on this lab:
 ## Additional Resources
 
 **Microsoft Documentation:**
+
 - [Publish agents to Teams](https://learn.microsoft.com/azure/ai-services/agents/how-to/publish-to-teams)
 - [Copilot extensibility](https://learn.microsoft.com/microsoft-365-copilot/extensibility/)
 - [Microsoft Foundry](https://learn.microsoft.com/azure/ai-foundry/)
 
 **Tools:**
+
 - [Foundry Portal](https://ai.azure.com)
 - [Microsoft Teams](https://teams.microsoft.com)
 - [Microsoft 365 Copilot](https://copilot.microsoft.com)
