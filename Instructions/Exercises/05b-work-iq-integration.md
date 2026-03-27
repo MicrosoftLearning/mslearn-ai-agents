@@ -119,25 +119,39 @@ This lab demonstrates Work IQ integration with AI agents:
    - You can still read through the instructions to understand the concepts
    - Consider this lab optional and return to it when you have Copilot access
 
+### Prepare to develop an app in Visual Studio Code
+
+Now let's use Visual Studio Code to develop an app. The code files for your app have been provided in a GitHub repo.
+
+1. Start Visual Studio Code, and open a terminal window.
+   
+2. Enter the command to clone the repo to a local folder (it doesn't matter which folder):
+
+   ```bash
+   git clone https://github.com/MicrosoftLearning/mslearn-ai-agents.git
+   ```
+
+3. When the repository has been cloned, open the folder in Visual Studio Code.
+
+    > **Note**: If Visual Studio Code shows you a pop-up message prompting you to trust the code you are opening, click **Yes, I trust the authors** option to continue.
+
+4. Wait while additional files are installed to support the Python code projects in the repo (if prompted).
+
+    > **Note**: If you are prompted to install required assets to build and debug, select **Not Now**.
+
+5. In the **Explorer** pane, expand the **Labfiles/05b-work-iq-integration/Python** folder.
+
+    The provided files include application code, configuration settings, and the agent client starter code.
+
 ### Prepare the lab environment
 
-1. Open Visual Studio Code.
-
-2. Navigate to the lab folder:
-
-   ```
-   C:\repos\mslearn-ai-agents\Labfiles\05b-work-iq-integration\Python
-   ```
-
-   Use **File > Open Folder** in VS Code.
-
-3. Create a Python virtual environment:
+1. In the terminal, enter the command to create a Python virtual environment:
 
    ```bash
    python -m venv venv
    ```
 
-4. Activate the virtual environment:
+1. Activate the virtual environment:
 
    **Windows:**
 
@@ -151,13 +165,13 @@ This lab demonstrates Work IQ integration with AI agents:
    source venv/bin/activate
    ```
 
-5. Install required Python packages:
+1. Install required Python packages:
 
    ```bash
    pip install -r requirements.txt
    ```
 
-6. Configure your `.env` file:
+1. Configure your `.env` file:
 
    In the lab folder, open the `.env` file and update it with your Foundry project endpoint:
 
@@ -387,36 +401,58 @@ Let's examine the key patterns used in this lab.
 ### Pattern 1: Work IQ MCP Client Initialization
 
 ```python
-from azure.ai.projects.mcp import StdioMCPClient
+from mcp import ClientSession, StdioServerParameters
+from mcp.client.stdio import stdio_client
 
-# Connect to Work IQ MCP server
-self.workiq_client = StdioMCPClient(
+# Store server parameters for reuse
+self.workiq_server_params = StdioServerParameters(
     command="npx",
     args=["-y", "@microsoft/workiq", "mcp"]
 )
+
+# Fetch available tools from Work IQ MCP server
+async def _fetch():
+    async with stdio_client(self.workiq_server_params) as (read, write):
+        async with ClientSession(read, write) as session:
+            await session.initialize()
+            tools_result = await session.list_tools()
+            return tools_result.tools
+
+raw_tools = asyncio.run(_fetch())
 ```
 
-This launches Work IQ as an MCP server subprocess and connects via stdio (standard input/output).
+Rather than maintaining a persistent connection, a new MCP session is opened per operation. `StdioServerParameters` stores the command and arguments used to launch the Work IQ MCP server subprocess each time.
 
 ### Pattern 2: Creating Agent with Work IQ Tools
 
 ```python
-# Get Work IQ tools
-workiq_tools = [tool.model_dump() for tool in self.workiq_client.tools]
+from azure.ai.projects.models import PromptAgentDefinition, FunctionTool
 
-# Create agent using Responses API
-self.agent = self.openai_client.agents.create_version(
+# Convert MCP tools to FunctionTool objects
+workiq_tools = [
+    FunctionTool(
+        name=tool.name,
+        description=tool.description,
+        parameters=tool.inputSchema,
+    )
+    for tool in raw_tools
+]
+
+# Create agent with Work IQ tools
+self.agent = self.project_client.agents.create_version(
     agent_name="workplace-intelligence-agent",
-    definition={
-        "kind": "prompt",
-        "model": self.model_deployment,
-        "instructions": "You are a workplace intelligence assistant...",
-        "tools": workiq_tools  # Work IQ tools added here
-    }
+    definition=PromptAgentDefinition(
+        model=self.model_deployment,
+        instructions="You are a workplace intelligence assistant...",
+        tools=workiq_tools  # Work IQ tools added here
+    )
 )
+
+# Keep a map of raw tools for lookup during execution
+self.raw_tools_map = {tool.name: tool for tool in raw_tools}
 ```
 
-The agent is given all available Work IQ tools for querying M365 data.
+Each MCP tool is wrapped in a `FunctionTool` object and passed to a `PromptAgentDefinition`. The raw tools map enables efficient lookup when the agent calls a tool by name.
 
 ### Pattern 3: Executing Queries with Responses API
 
@@ -429,17 +465,56 @@ conversation = self.openai_client.conversations.create(
 # Create response with agent
 response = self.openai_client.responses.create(
     conversation=conversation.id,
-    extra_body={
-        "agent": {
-            "type": "agent_reference",
-            "name": self.agent.name,
-            "version": self.agent.version
-        }
-    }
+    extra_body={"agent_reference": {"name": self.agent.name, "type": "agent_reference"}}
 )
 ```
 
 This uses the Responses API pattern (not the old Runs/Threads pattern) for cleaner agent execution.
+
+### Pattern 4: Tool Call Loop
+
+After the initial response, the agent may request one or more Work IQ tool calls. These must be executed and fed back to continue the conversation:
+
+```python
+from openai.types.responses.response_input_param import FunctionCallOutput
+
+while True:
+    if response.status == "failed":
+        break
+
+    input_list = []
+    for item in response.output:
+        if item.type == "function_call":
+            kwargs = json.loads(item.arguments)
+
+            # Call the Work IQ tool via MCP
+            async def _execute():
+                async with stdio_client(self.workiq_server_params) as (read, write):
+                    async with ClientSession(read, write) as session:
+                        await session.initialize()
+                        return await session.call_tool(item.name, kwargs)
+
+            result = asyncio.run(_execute())
+            input_list.append(
+                FunctionCallOutput(
+                    type="function_call_output",
+                    call_id=item.call_id,
+                    output=result.content[0].text,
+                )
+            )
+
+    if input_list:
+        # Send tool results back and continue
+        response = self.openai_client.responses.create(
+            input=input_list,
+            previous_response_id=response.id,
+            extra_body={"agent_reference": {"name": self.agent.name, "type": "agent_reference"}}
+        )
+    else:
+        break  # No more tool calls - final response ready
+```
+
+The loop continues until the agent produces a response with no pending function calls, at which point `response.output_text` contains the final answer.
 
 ---
 
