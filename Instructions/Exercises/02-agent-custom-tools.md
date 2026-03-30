@@ -312,7 +312,7 @@ Now that you've created the agent with the function tools, you can send messages
 
     This code creates the chat session with the agent.
 
-1. Find the comment **Create an input list to hold function call outputs to send back to the model** and add the following code:
+1. Find the comment **Create a list to hold function call outputs that will be sent back as input to the agent** and add the following code:
 
     ```python
    # Create a list to hold function call outputs that will be sent back as input to the agent
@@ -392,7 +392,7 @@ Now that you've created the agent with the function tools, you can send messages
 
     This code checks if there are any function call outputs in the input list, and if so, it sends them back to the agent as input to retrieve an updated response. Finally, it prints the agent's response.
 
-1. Find the comment  **Delete the conversation when done** and add the following code:
+1. Find the comment  **Delete the agent when done** and add the following code:
 
     ```python
    # Delete the agent when done
