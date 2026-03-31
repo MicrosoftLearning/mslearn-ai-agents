@@ -40,7 +40,7 @@ In this exercise, you'll use the Microsoft Foundry portal to create a workflow. 
 
 This exercise should take approximately **30** minutes to complete.
 
-> **Note**: The workflow builder in Microsoft Foundry is currently in preview. You may experience some unexpected behavior, warnings, or errors.
+> **Note**: The workflow builder in Microsoft Foundry is currently in preview. You may experience some unexpected behavior, warnings, or errors. If you encounter any issues that block your progress, you may need to start over with a new project and workflow.
 
 ## Create a Foundry project
 
@@ -61,6 +61,10 @@ Let's start by creating a Foundry project.
 1. Enter a name for your Foundry project in the textbox and select **Create**.
 
     Wait a few moments for the project to be created. The new Foundry portal home page should appear with your project selected.
+
+1. Close the **Welcome to the new Microsoft Foundry** dialog if it appears.
+
+    The dialog may prompt you to create an agent which is not necessary at this time. Agents will be created in a later step.
 
 ## Create a customer support triage workflow
 
