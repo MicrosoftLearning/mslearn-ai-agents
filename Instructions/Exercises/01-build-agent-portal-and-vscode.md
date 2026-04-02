@@ -342,8 +342,37 @@ Now let's create a Python application that interacts with your agent programmati
                                 print(f"\n[Agent generated an image]")
                         elif item.type == 'file':
                             print(f"\n[Agent created a file]")
-    
-    
+
+            # Check for files in the response and download them
+            file_id = ""
+            filename = ""
+            container_id = ""
+
+            # Get the last message which should contain file citations
+            last_message = response.output[-1] 
+            if (
+                last_message.type == "message"
+                and last_message.content
+                and last_message.content[-1].type == "output_text"
+                and last_message.content[-1].annotations
+            ):
+                # Extract file information from response annotations
+                file_citation = last_message.content[-1].annotations[-1] 
+                if file_citation.type == "container_file_citation":
+                    file_id = file_citation.file_id
+                    filename = file_citation.filename
+                    container_id = file_citation.container_id
+
+            # Download the generated file if available
+            if file_id and filename:
+                file_content = openai_client.containers.files.content.retrieve(file_id=file_id, container_id=container_id)
+                output_dir = Path("agent_outputs")
+                output_dir.mkdir(exist_ok=True)
+                file_path = output_dir / filename
+                with open(file_path, "wb") as f:
+                    f.write(file_content.read())
+                print(f"File downloaded successfully: {file_path}")
+
     if __name__ == "__main__":
         main()
     ```
