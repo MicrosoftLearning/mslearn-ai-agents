@@ -1,10 +1,11 @@
 ---
 lab:
-    title: 'Integrate an AI agent with Foundry IQ'
+    title: 'Integrate an AI agent with Foundry IQ (deprecated)'
     description: 'Use Azure AI Agent Service to develop an agent that uses Foundry IQ to search knowledge bases.'
+    islab: false
 ---
 
-# Integrate an AI agent with Foundry IQ
+# Integrate an AI agent with Foundry IQ (deprecated)
 
 In this exercise, you'll use Azure AI Foundry portal to create an agent that integrates with Foundry IQ to search and retrieve information from knowledge bases. You'll create a search resource, configure a knowledge base with sample data, build an agent in the portal, and then connect to it from Visual Studio Code to interact programmatically.
 
@@ -108,7 +109,7 @@ Before connecting from code, test your agent in the portal playground.
     - `What types of tents does Contoso offer?`
     - `Tell me about which backpacks are available in XL.`
     - `What camping accessories are available?`
-    
+
 1. Review the responses and notice:
     - The agent provides specific information from the knowledge base
     - Citations or references to the source documents may be included
@@ -304,7 +305,7 @@ Now you'll create a Python application to interact with your agent programmatica
     
      ```
 
-1. After you've added the code, use the **CTRL+S** command to save your changes. 
+1. After you've added the code, use the **CTRL+S** command to save your changes.
 
 1. Review the code now uses the conversations API to manage interactions with your agent, where:
     - A conversation is created and tracked by its ID
@@ -413,4 +414,3 @@ If you've finished exploring Azure AI Agent Service and Foundry IQ, you should d
 1. Navigate to the resource group containing your Foundry resource and AI Search resources.
 1. On the toolbar, select **Delete resource group**.
 1. Enter the resource group name and confirm that you want to delete it.
-

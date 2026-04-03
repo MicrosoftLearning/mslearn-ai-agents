@@ -4,6 +4,7 @@ lab:
     description: 'Extend agent capabilities by integrating Model Context Protocol (MCP) server tools.'
     level: 300
     duration: 60
+    islab: true
 ---
 
 # Develop an AI agent with Model Context Protocol (MCP) tools
@@ -17,9 +18,11 @@ This exercise should take approximately **60** minutes to complete.
 ## Prerequisites
 
 Before starting this exercise, ensure you have:
-- Visual Studio Code installed
-- An active Azure subscription
-- Python version 3.10 or higher installed
+
+- [Visual Studio Code](https://code.visualstudio.com/) installed on your local machine
+- An active [Azure subscription](https://azure.microsoft.com/free/)
+- [Python 3.13](https://www.python.org/downloads/) or later installed
+- [Git](https://git-scm.com/downloads) installed on your local machine
 
 ## Install the Microsoft Foundry VS Code extension
 
@@ -37,7 +40,7 @@ Let's start by installing and setting up the VS Code extension.
 
 ## Sign in to Azure and create a project
 
-Now you'll connect to your Azure resources and create a new AI Foundry project.
+Now you'll connect to your Azure resources and create a new Microsoft Foundry project.
 
 1. In the VS Code sidebar, select the **Microsoft Foundry** extension icon.
 
@@ -50,12 +53,12 @@ Now you'll connect to your Azure resources and create a new AI Foundry project.
 1. Select your Azure subscription from the dropdown.
 
 1. Choose whether to create a new resource group or use an existing one:
-   
+
    **To create a new resource group:**
    - Select **Create new resource group** and press Enter
    - Enter a name for your resource group (e.g., "rg-ai-agents-lab") and press Enter
    - Select a location from the available options and press Enter
-   
+
    **To use an existing resource group:**
    - Select the resource group you want to use from the list and press Enter
 
@@ -73,7 +76,7 @@ In this task, you'll deploy a model from the Model Catalog to use with your agen
 
 1. In the Model Catalog, locate the **gpt-4.1** model (you can use the search bar to find it quickly).
 
-    ![Screenshot of the Model Catalog in the Foundry VS Code extension.](Media/vs-code-model.png)
+    ![Screenshot of the Model Catalog in the Foundry VS Code extension.](../Media/vs-code-model.png)
 
 1. Select **Deploy** next to the gpt-4.1 model.
 
@@ -91,7 +94,7 @@ In this task, you'll deploy a model from the Model Catalog to use with your agen
 
 1. Right-click the name project deployment and select **Copy Project Endpoint**. You'll need this URL to connect your agent to the Foundry project in the next steps.
 
-   <img src="Media/vs-code-endpoint.png" alt="Screenshot of copying the project endpoint in the Foundry VS Code extension." width="550">
+   <img src="../Media/vs-code-endpoint.png" alt="Screenshot of copying the project endpoint in the Foundry VS Code extension." width="550">
 
 ## Clone the starter code repository
 
@@ -107,9 +110,11 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. Right-click on the **requirements.txt** file and select **Open in Integrated Terminal**.
 
-1. In the terminal, enter the following command to install the required Python packages:
+1. In the terminal, enter the following command to install the required Python packages in a virtual environment:
 
     ```
+    python -m venv labenv
+    .\labenv\Scripts\Activate.ps1
     pip install -r requirements.txt
     ```
 
@@ -272,6 +277,7 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
     [continued...]
 
     Agent deleted
+
     ```
 
     Notice that the agent was able to invoke the MCP tool to automatically fulfill the request.
@@ -299,7 +305,7 @@ In addition to connecting to remote MCP servers, you can also create your own cu
 
     ```python
    # Create an MCP server
-   mcp = FastMCP(server_label="Inventory")
+   mcp = FastMCP(name="Inventory")
     ```
 
     This code initializes a new MCP server with the label "Inventory".
@@ -313,7 +319,7 @@ In addition to connecting to remote MCP servers, you can also create your own cu
       # continued...
     ```
 
-    This dictionary represents a sample inventory. The `@mcp.tool()` decorator registers the function as a tool on the MCP server, allowing the LLM to discover your function. 
+    This dictionary represents a sample inventory. The `@mcp.tool()` decorator registers the function as a tool on the MCP server, allowing the LLM to discover your function.
 
 1. Find the comment **Add a weekly sales mcp tool** and add the following decorator above the function definition:
 
@@ -403,7 +409,7 @@ In this task, you'll connect the MCP server tools to your agent so that it can c
     ```
 
     This code dynamically wraps tools available in the MCP server so that they can be called by the AI agent. Each tool is turned into an async function that the agent can invoke.
-    
+
 1. Find the comment **Create FunctionTool definitions for the agent** and add the following code:
 
     ```python
@@ -516,7 +522,7 @@ In this task, you'll connect the MCP server tools to your agent so that it can c
 
     Notice that the agent was able to call the MCP tools to retrieve inventory and sales data, and then use that information to provide a helpful response to the user.
 
-1. You can continue the conversation if you like. The thread is *stateful*, so it retains the conversation history - meaning that the agent has the full context for each response. 
+1. You can continue the conversation if you like. The thread is *stateful*, so it retains the conversation history - meaning that the agent has the full context for each response.
 
     Try entering prompts such as:
 
@@ -532,7 +538,9 @@ In this task, you'll connect the MCP server tools to your agent so that it can c
    What are the best sellers this week?
     ```
 
-    Enter `quit` when you're done.
+1. Enter `quit` to exit the application.
+
+    You can also use `deactivate` to exit the Python virtual environment in the terminal.
 
 ## Summary
 
@@ -554,6 +562,6 @@ When you've finished exploring the Foundry VS Code extension, you should clean u
 
 1. Open the [Azure portal](https://portal.azure.com).
 
-1. Navigate to the resource group containing your AI Foundry resources.
+1. Navigate to the resource group containing your Microsoft Foundry resources.
 
 1. Select **Delete resource group** and confirm the deletion.

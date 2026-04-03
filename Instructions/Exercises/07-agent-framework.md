@@ -4,6 +4,7 @@ lab:
     description: 'Learn how to use the Microsoft Agent Framework SDK to create and use an Azure AI chat agent.'
     level: 300
     duration: 30
+    islab: true
 ---
 
 # Develop an Azure AI chat agent with the Microsoft Agent Framework SDK
@@ -17,9 +18,11 @@ This exercise should take approximately **30** minutes to complete.
 ## Prerequisites
 
 Before starting this exercise, ensure you have:
-- Visual Studio Code installed
-- An active Azure subscription
-- Python version 3.10 or higher installed
+
+- [Visual Studio Code](https://code.visualstudio.com/) installed on your local machine
+- An active [Azure subscription](https://azure.microsoft.com/free/)
+- [Python 3.13](https://www.python.org/downloads/) or later installed
+- [Git](https://git-scm.com/downloads) installed on your local machine
 
 ## Install the Microsoft Foundry VS Code extension
 
@@ -37,7 +40,7 @@ Let's start by installing and setting up the VS Code extension.
 
 ## Sign in to Azure and create a project
 
-Now you'll connect to your Azure resources and create a new AI Foundry project.
+Now you'll connect to your Azure resources and create a new Microsoft Foundry project.
 
 1. In the VS Code sidebar, select the **Microsoft Foundry** extension icon.
 
@@ -50,12 +53,12 @@ Now you'll connect to your Azure resources and create a new AI Foundry project.
 1. Select your Azure subscription from the dropdown.
 
 1. Choose whether to create a new resource group or use an existing one:
-   
+
    **To create a new resource group:**
    - Select **Create new resource group** and press Enter
    - Enter a name for your resource group (e.g., "rg-ai-agents-lab") and press Enter
    - Select a location from the available options and press Enter
-   
+
    **To use an existing resource group:**
    - Select the resource group you want to use from the list and press Enter
 
@@ -107,9 +110,11 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. Right-click on the **requirements.txt** file and select **Open in Integrated Terminal**.
 
-1. In the terminal, enter the following command to install the required Python packages:
+1. In the terminal, enter the following command to install the required Python packages in a virtual environment:
 
     ```
+    python -m venv labenv
+    .\labenv\Scripts\Activate.ps1
     pip install -r requirements.txt
     ```
 
@@ -132,7 +137,7 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
 
     ```python
    # Add references
-   from agent_framework import tool
+   from agent_framework import tool, Agent
    from agent_framework.azure import AzureOpenAIResponsesClient
    from azure.identity import AzureCliCredential
    from pydantic import Field
@@ -143,13 +148,14 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
 
     ```python
    # Create a tool function for the email functionality
-   def send_email(
-   to: Annotated[str, Field(description="Who to send the email to")],
-   subject: Annotated[str, Field(description="The subject of the email.")],
-   body: Annotated[str, Field(description="The text body of the email.")]):
-       print("\nTo:", to)
-       print("Subject:", subject)
-       print(body, "\n")
+   @tool(approval_mode="never_require")
+   def submit_claim(
+       to: Annotated[str, Field(description="Who to send the email to")],
+       subject: Annotated[str, Field(description="The subject of the email.")],
+       body: Annotated[str, Field(description="The text body of the email.")]):
+           print("\nTo:", to)
+           print("Subject:", subject)
+           print(body, "\n")
     ```
 
     > **Note**: The function *simulates* sending an email by printing it to the console. In a real application, you'd use an SMTP service or similar to actually send the email!
@@ -160,8 +166,8 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
 
     ```python
    # Create a client and initialize an agent with the tool and instructions
+   credential = AzureCliCredential()
    async with (
-        AzureCliCredential() as credential,
         Agent(
             client=AzureOpenAIResponsesClient(
                 credential=credential,
@@ -177,6 +183,8 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
     ```
 
     Note that the **AzureCliCredential** object will allow your code to authenticate to your Azure account. The **AzureOpenAIResponsesClient** object includes the Foundry project settings from the .env configuration. The **Agent** object is initialized with the client, instructions for the agent, and the tool function you defined to send emails.
+
+1.
 
 1. Find the comment **Use the agent to process the expenses data**, and add the following code to create a thread for your agent to run on, and then invoke it with a chat message.
 
@@ -216,6 +224,8 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
 
     > **Tip**: If the app fails because the rate limit is exceeded. Wait a few seconds and try again. If there is insufficient quota available in your subscription, the model may not be able to respond.
 
+1. When you're finished, enter `deactivate` in the terminal to exit the Python virtual environment.
+
 ## Summary
 
 In this exercise, you used the Microsoft Agent Framework SDK to create an agent with a custom tool.
@@ -236,6 +246,6 @@ If you've finished exploring Azure AI Agent Service, you should delete the resou
 
 1. Open the [Azure portal](https://portal.azure.com).
 
-1. Navigate to the resource group containing your AI Foundry resources.
+1. Navigate to the resource group containing your Microsoft Foundry resources.
 
 1. Select **Delete resource group** and confirm the deletion.

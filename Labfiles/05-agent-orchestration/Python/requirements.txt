@@ -1,4 +1,4 @@
 python-dotenv
 azure-identity
-agent-framework==1.0.0b260212
+agent-framework==1.0.0rc3
 opentelemetry-semantic-conventions-ai==0.4.13

@@ -1,10 +1,11 @@
 ---
 lab:
-    title: 'Develop an AI agent'
+    title: 'Develop an AI agent (deprecated)'
     description: 'Use the Azure AI Agent Service to develop an agent that uses built-in tools.'
+    islab: false
 ---
 
-# Develop an AI agent
+# Develop an AI agent (deprecated)
 
 In this exercise, you'll use Azure AI Agent Service to create a simple agent that analyzes data and creates charts. The agent can use the built-in *Code Interpreter* tool to dynamically generate any code required to analyze data.
 
@@ -161,7 +162,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
    )
 
     ```
-    
+
 1. Find the comment **Define an agent that uses the CodeInterpreterTool** and add the following code to define an AI agent that analyzes data and can use the code interpreter tool you defined previously:
 
     ```python
@@ -183,7 +184,7 @@ Now you're ready to create a client app that uses an agent. Some code has been p
    # Create a conversation for the chat session
    conversation = openai_client.conversations.create()
     ```
-    
+
 1. Note that the next section of code sets up a loop for a user to enter a prompt, ending when the user enters "quit".
 
 1. Find the comment **Send a prompt to the agent** and add the following code to add a user message to the prompt (along with the data from the file that was loaded previously), and then run thread with the agent.
@@ -265,14 +266,14 @@ Now you're ready to create a client app that uses an agent. Some code has been p
     **<font color="red">You must sign into Azure - even though the cloud shell session is already authenticated.</font>**
 
     > **Note**: In most scenarios, just using *az login* will be sufficient. However, if you have subscriptions in multiple tenants, you may need to specify the tenant by using the *--tenant* parameter. See [Sign into Azure interactively using the Azure CLI](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) for details.
-    
+
 1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Foundry hub if prompted.
 1. After you have signed in, enter the following command to run the application:
 
     ```
     python agent.py
     ```
-    
+
     The application runs using the credentials for your authenticated Azure session to connect to your project and create and run the agent.
 
 1. When prompted, view the data that the app has loaded from the *data.txt* text file. Then enter a prompt such as:

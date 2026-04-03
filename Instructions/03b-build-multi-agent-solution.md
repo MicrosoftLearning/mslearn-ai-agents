@@ -1,10 +1,11 @@
 ---
 lab:
-    title: 'Develop a multi-agent solution with Microsoft Foundry'
+    title: 'Develop a multi-agent solution with Microsoft Foundry (deprecated)'
     description: 'Learn to configure multiple agents to collaborate using Microsoft Foundry Agent Service'
+    islab: false
 ---
 
-# Develop a multi-agent solution
+# Develop a multi-agent solution (deprecated)
 
 In this exercise, you'll create a project that orchestrates multiple AI agents using Microsoft Foundry Agent Service. You'll design an AI solution that assists with ticket triage. The connected agents will assess the ticket's priority, suggest a team assignment, and determine the level of effort required to complete the ticket. Let's get started!
 
@@ -315,7 +316,6 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
    agents_client.delete_agent(effort_agent.id)
    print("Deleted effort agent.")
     ```
-    
 
 1. Use the **CTRL+S** command to save your changes to the code file. You can keep it open (in case you need to edit the code to fix any errors) or use the **CTRL+Q** command to close the code editor while keeping the cloud shell command line open.
 

@@ -1,10 +1,11 @@
 ---
 lab:
-    title: 'Connect AI Agents to a remote MCP server'
+    title: 'Connect AI Agents to a remote MCP server (deprecated)'
     description: 'Learn how to integrate Model Context Protocol tools with AI agents'
+    islab: false
 ---
 
-# Connect AI agents to tools using Model Context Protocol (MCP)
+# Connect AI agents to tools using Model Context Protocol (MCP) (deprecated)
 
 In this exercise, you'll build an agent that connects to a cloud-hosted MCP server. The agent will use AI-powered search to help developers find accurate, real-time answers from Microsoft's official documentation. This is useful for building assistants that support developers with up-to-date guidance on tools like Azure, .NET, and Microsoft 365. The agent will use the available MCP tools to query the documentation and return relevant results.
 
@@ -251,7 +252,7 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
     **<font color="red">You must sign into Azure - even though the cloud shell session is already authenticated.</font>**
 
     > **Note**: In most scenarios, just using *az login* will be sufficient. However, if you have subscriptions in multiple tenants, you may need to specify the tenant by using the *--tenant* parameter. See [Sign into Azure interactively using the Azure CLI](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) for details.
-    
+
 1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Foundry hub if prompted.
 
 1. After you have signed in, enter the following command to run the application:
@@ -283,6 +284,7 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
     [continued...]
 
     Agent deleted
+
     ```
 
     Notice that the agent was able to invoke the MCP tool to automatically fulfill the request.

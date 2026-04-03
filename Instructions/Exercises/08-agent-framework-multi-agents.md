@@ -4,6 +4,7 @@ lab:
     description: 'Learn to configure multiple agents to collaborate using the Microsoft Agent Framework SDK'
     level: 300
     duration: 30
+    islab: true
 ---
 
 # Develop a multi-agent solution
@@ -23,9 +24,11 @@ This exercise should take approximately **30** minutes to complete.
 ## Prerequisites
 
 Before starting this exercise, ensure you have:
-- Visual Studio Code installed
-- An active Azure subscription
-- Python version 3.10 or higher installed
+
+- [Visual Studio Code](https://code.visualstudio.com/) installed on your local machine
+- An active [Azure subscription](https://azure.microsoft.com/free/)
+- [Python 3.13](https://www.python.org/downloads/) or later installed
+- [Git](https://git-scm.com/downloads) installed on your local machine
 
 ## Install the Microsoft Foundry VS Code extension
 
@@ -43,7 +46,7 @@ Let's start by installing and setting up the VS Code extension.
 
 ## Sign in to Azure and create a project
 
-Now you'll connect to your Azure resources and create a new AI Foundry project.
+Now you'll connect to your Azure resources and create a new Microsoft Foundry project.
 
 1. In the VS Code sidebar, select the **Microsoft Foundry** extension icon.
 
@@ -56,12 +59,12 @@ Now you'll connect to your Azure resources and create a new AI Foundry project.
 1. Select your Azure subscription from the dropdown.
 
 1. Choose whether to create a new resource group or use an existing one:
-   
+
    **To create a new resource group:**
    - Select **Create new resource group** and press Enter
    - Enter a name for your resource group (e.g., "rg-ai-agents-lab") and press Enter
    - Select a location from the available options and press Enter
-   
+
    **To use an existing resource group:**
    - Select the resource group you want to use from the list and press Enter
 
@@ -113,9 +116,11 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. Right-click on the **requirements.txt** file and select **Open in Integrated Terminal**.
 
-1. In the terminal, enter the following command to install the required Python packages:
+1. In the terminal, enter the following command to install the required Python packages in a virtual environment:
 
     ```
+    python -m venv labenv
+    .\labenv\Scripts\Activate.ps1
     pip install -r requirements.txt
     ```
 
@@ -125,7 +130,7 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 Now you're ready to create the agents for your multi-agent solution! Let's get started!
 
-1. Open the **agent-framework.py** file in the code editor.
+1. Open the **agents.py** file in the code editor.
 
 1. At the top of the file under the comment **Add references**, and add the following code to reference the namespaces in the libraries you'll need to implement your agent:
 
@@ -133,9 +138,13 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
    # Add references
    import asyncio
    from typing import cast
-   from agent_framework import ChatMessage, Role, SequentialBuilder, WorkflowOutputEvent
+   from dotenv import load_dotenv
+   from agent_framework import Message
    from agent_framework.azure import AzureAIAgentClient
+   from agent_framework.orchestrations import SequentialBuilder
    from azure.identity import AzureCliCredential
+
+   load_dotenv()
     ```
 
 1. In the **main** function, take a moment to review the agent instructions. These instructions define the behavior of each agent in the orchestration.
@@ -177,7 +186,7 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 ## Create a sequential orchestration
 
 1. In the **main** function, find the comment **Initialize the current feedback** and add the following code:
-    
+
     (Be sure to maintain the indentation level)
 
     ```python
@@ -193,7 +202,7 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 
     ```python
    # Build sequential orchestration
-   workflow = SequentialBuilder().participants([summarizer, classifier, action]).build()
+   workflow = SequentialBuilder(participants=[summarizer, classifier, action]).build()
     ```
 
     The agents will process the feedback in the order they are added to the orchestration.
@@ -202,10 +211,10 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 
     ```python
    # Run and collect outputs
-   outputs: list[list[ChatMessage]] = []
-   async for event in workflow.run_stream(f"Customer feedback: {feedback}"):
-       if isinstance(event, WorkflowOutputEvent):
-           outputs.append(cast(list[ChatMessage], event.data))
+   outputs: list[list[Message]] = []
+   async for event in workflow.run(f"Customer feedback: {feedback}", stream=True):
+       if event.type == "output":
+           outputs.append(cast(list[Message], event.data))
     ```
 
     This code runs the orchestration and collects the output from each of the participating agents.
@@ -216,7 +225,7 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
    # Display outputs
    if outputs:
        for i, msg in enumerate(outputs[-1], start=1):
-           name = msg.author_name or ("assistant" if msg.role == Role.ASSISTANT else "user")
+           name = msg.author_name or ("assistant" if msg.role == "assistant" else "user")
            print(f"{'-' * 60}\n{i:02d} [{name}]\n{msg.text}")
     ```
 
@@ -231,10 +240,10 @@ Now you're ready to run your code and watch your AI agents collaborate.
 1. In the integrated terminal, enter the following command to run the application:
 
     ```
-   python agent-framework.py
+   python agents.py
     ```
 
-1.   You should see some output similar to the following:
+1. You should see some output similar to the following:
 
     ```output
     ------------------------------------------------------------
@@ -260,9 +269,12 @@ Now you're ready to run your code and watch your AI agents collaborate.
     ```output
     I use the dashboard every day to monitor metrics, and it works well overall. But when I'm working late at night, the bright screen is really harsh on my eyes. If you added a dark mode option, it would make the experience much more comfortable.
     ```
+
     ```output
     I reached out to your customer support yesterday because I couldn't access my account. The representative responded almost immediately, was polite and professional, and fixed the issue within minutes. Honestly, it was one of the best support experiences I've ever had.
     ```
+
+1. When you're finished, enter `deactivate` in the terminal to exit the Python virtual environment.
 
 ## Summary
 
@@ -284,6 +296,6 @@ If you've finished exploring Azure AI Agent Service, you should delete the resou
 
 1. Open the [Azure portal](https://portal.azure.com).
 
-1. Navigate to the resource group containing your AI Foundry resources.
+1. Navigate to the resource group containing your Microsoft Foundry resources.
 
 1. Select **Delete resource group** and confirm the deletion.

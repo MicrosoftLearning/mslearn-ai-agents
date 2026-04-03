@@ -2,6 +2,9 @@
 lab:
     title: 'Use a custom function in an AI agent'
     description: 'Learn how to use functions to add custom capabilities to your agents.'
+    level: 300
+    duration: 50
+    islab: true
 ---
 
 # Use a custom function in an AI agent
@@ -10,16 +13,18 @@ In this exercise you'll explore creating an agent that can use custom functions 
 
 > **Tip**: The code used in this exercise is based on the for Microsoft Foundry SDK for Python. You can develop similar solutions using the SDKs for Microsoft .NET, JavaScript, and Java. Refer to [Microsoft Foundry SDK client libraries](https://learn.microsoft.com/azure/ai-foundry/how-to/develop/sdk-overview) for details.
 
-This exercise should take approximately **60** minutes to complete.
+This exercise should take approximately **50** minutes to complete.
 
 > **Note**: Some of the technologies used in this exercise are in preview or in active development. You may experience some unexpected behavior, warnings, or errors.
 
 ## Prerequisites
 
 Before starting this exercise, ensure you have:
-- Visual Studio Code installed
-- An active Azure subscription
-- Python version 3.10 or higher installed
+
+- [Visual Studio Code](https://code.visualstudio.com/) installed on your local machine
+- An active [Azure subscription](https://azure.microsoft.com/free/)
+- [Python 3.13](https://www.python.org/downloads/) or later installed
+- [Git](https://git-scm.com/downloads) installed on your local machine
 
 ## Install the Microsoft Foundry VS Code extension
 
@@ -37,7 +42,7 @@ Let's start by installing and setting up the VS Code extension.
 
 ## Sign in to Azure and create a project
 
-Now you'll connect to your Azure resources and create a new AI Foundry project.
+Now you'll connect to your Azure resources and create a new Microsoft Foundry project.
 
 1. In the VS Code sidebar, select the **Microsoft Foundry** extension icon.
 
@@ -50,12 +55,12 @@ Now you'll connect to your Azure resources and create a new AI Foundry project.
 1. Select your Azure subscription from the dropdown.
 
 1. Choose whether to create a new resource group or use an existing one:
-   
+
    **To create a new resource group:**
    - Select **Create new resource group** and press Enter
    - Enter a name for your resource group (e.g., "rg-ai-agents-lab") and press Enter
    - Select a location from the available options and press Enter
-   
+
    **To use an existing resource group:**
    - Select the resource group you want to use from the list and press Enter
 
@@ -73,7 +78,7 @@ In this task, you'll deploy a model from the Model Catalog to use with your agen
 
 1. In the Model Catalog, locate the **gpt-4.1** model (you can use the search bar to find it quickly).
 
-    ![Screenshot of the Model Catalog in the Foundry VS Code extension.](Media/vs-code-model.png)
+    ![Screenshot of the Model Catalog in the Foundry VS Code extension.](../Media/vs-code-model.png)
 
 1. Select **Deploy** next to the gpt-4.1 model.
 
@@ -91,7 +96,7 @@ In this task, you'll deploy a model from the Model Catalog to use with your agen
 
 1. Right-click the name project deployment and select **Copy Project Endpoint**. You'll need this URL to connect your agent to the Foundry project in the next steps.
 
-   <img src="Media/vs-code-endpoint.png" alt="Screenshot of copying the project endpoint in the Foundry VS Code extension." width="550">
+   <img src="../Media/vs-code-endpoint.png" alt="Screenshot of copying the project endpoint in the Foundry VS Code extension." width="550">
 
 ## Clone the starter code repository
 
@@ -107,9 +112,11 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. Right-click on the **requirements.txt** file and select **Open in Integrated Terminal**.
 
-1. In the terminal, enter the following command to install the required Python packages:
+1. In the terminal, enter the following command to install the required Python packages in a virtual environment:
 
     ```
+    python -m venv labenv
+    .\labenv\Scripts\Activate.ps1
     pip install -r requirements.txt
     ```
 
@@ -125,7 +132,7 @@ Now you're ready to create an AI agent that uses MCP server tools to access exte
 
 1. Find the comment **Determine the next visible astronomical event for a given location** and add the following code:
 
-    ```python   
+    ```python
    # Determine the next visible astronomical event for a given location
    def next_visible_event(location: str) -> str:
        """Returns the next visible astronomical event for a location."""
@@ -144,7 +151,7 @@ Now you're ready to create an AI agent that uses MCP server tools to access exte
 
 ## Connect to the Foundry project
 
-1. Open the **agent.py** file. 
+1. Open the **agent.py** file.
 
    > **Tip**: As you add code, be sure to maintain the correct indentation. Use the comment indentation levels as a guide.
 
@@ -305,7 +312,7 @@ Now that you've created the agent with the function tools, you can send messages
 
     This code creates the chat session with the agent.
 
-1. Find the comment **Create an input list to hold function call outputs to send back to the model** and add the following code:
+1. Find the comment **Create a list to hold function call outputs that will be sent back as input to the agent** and add the following code:
 
     ```python
    # Create a list to hold function call outputs that will be sent back as input to the agent
@@ -385,7 +392,7 @@ Now that you've created the agent with the function tools, you can send messages
 
     This code checks if there are any function call outputs in the input list, and if so, it sends them back to the agent as input to retrieve an updated response. Finally, it prints the agent's response.
 
-1. Find the comment  **Delete the conversation when done** and add the following code:
+1. Find the comment  **Delete the agent when done** and add the following code:
 
     ```python
    # Delete the agent when done
@@ -403,7 +410,7 @@ Now that you've created the agent with the function tools, you can send messages
     - Display the agent's response
     - Delete the agent when done
 
-1. Save the code file (*CTRL+S*) when you have finished. 
+1. Save the code file (*CTRL+S*) when you have finished.
 
 ## Run the agent application
 
@@ -457,6 +464,8 @@ Now that you've created the agent with the function tools, you can send messages
 
 1. Enter `quit` to exit the application.
 
+    You can also use `deactivate` to exit the Python virtual environment in the terminal.
+
 ## Summary
 
 In this exercise, you created an AI agent that uses custom function tools to retrieve information and perform calculations based on user prompts. You defined the function tools with JSON schemas to specify their parameters, and implemented the logic to process function calls made by the agent. You then ran the application and interacted with the agent to see how it used the function tools to provide helpful responses. Great work!
@@ -477,6 +486,6 @@ When you've finished exploring the Foundry VS Code extension, you should clean u
 
 1. Open the [Azure portal](https://portal.azure.com).
 
-1. Navigate to the resource group containing your AI Foundry resources.
+1. Navigate to the resource group containing your Microsoft Foundry resources.
 
 1. Select **Delete resource group** and confirm the deletion.

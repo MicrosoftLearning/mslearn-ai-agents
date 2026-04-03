@@ -1,10 +1,11 @@
 ---
 lab:
-    title: 'Develop an Azure AI agent with the Microsoft Agent Framework SDK'
+    title: 'Develop an Azure AI agent with the Microsoft Agent Framework SDK (deprecated)'
     description: 'Learn how to use the Microsoft Agent Framework SDK to create and use an Azure AI chat agent.'
+    islab: false
 ---
 
-# Develop an Azure AI chat agent with the Microsoft Agent Framework SDK
+# Develop an Azure AI chat agent with the Microsoft Agent Framework SDK (deprecated)
 
 In this exercise, you'll use Azure AI Agent Service and Microsoft Agent Framework to create an AI agent that processes expense claims.
 
@@ -13,7 +14,6 @@ This exercise should take approximately **30** minutes to complete.
 > **Note**: Some of the technologies used in this exercise are in preview or in active development. You may experience some unexpected behavior, warnings, or errors.
 
 ## Deploy a model in a Microsoft Foundry project
-
 
 Let's start by creating a Foundry project.
 
@@ -93,7 +93,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
     ```
    python -m venv labenv
    ./labenv/bin/Activate.ps1
-   pip install agent-framework==1.0.0b260212 --pre
+   pip install agent-framework==1.0.0b260212 opentelemetry-semantic-conventions-ai==0.4.13 --pre
     ```
 
 1. Enter the following command to edit the configuration file that has been provided:
@@ -128,7 +128,7 @@ Now you're ready to create a client app that defines an agent and a custom funct
     ```python
    # Add references
    from agent_framework import tool, Agent
-   from agent_framework.azure import AzureAIAgentClient
+   from agent_framework.azure import AzureOpenAIResponsesClient
    from azure.identity.aio import AzureCliCredential
    from pydantic import Field
    from typing import Annotated
@@ -139,13 +139,13 @@ Now you're ready to create a client app that defines an agent and a custom funct
     ```python
    # Create a tool function for the email functionality
    @tool(approval_mode="never_require")
-   def send_email(
-    to: Annotated[str, Field(description="Who to send the email to")],
-    subject: Annotated[str, Field(description="The subject of the email.")],
-    body: Annotated[str, Field(description="The text body of the email.")]):
-        print("\nTo:", to)
-        print("Subject:", subject)
-        print(body, "\n")
+   def submit_claim(
+   to: Annotated[str, Field(description="Who to send the email to")],
+   subject: Annotated[str, Field(description="The subject of the email.")],
+   body: Annotated[str, Field(description="The text body of the email.")]):
+       print("\nTo:", to)
+       print("Subject:", subject)
+       print(body, "\n")
     ```
 
     > **Note**: The function *simulates* sending an email by printing it to the console. In a real application, you'd use an SMTP service or similar to actually send the email!
@@ -206,14 +206,14 @@ Now you're ready to create a client app that defines an agent and a custom funct
     **<font color="red">You must sign into Azure - even though the cloud shell session is already authenticated.</font>**
 
     > **Note**: In most scenarios, just using *az login* will be sufficient. However, if you have subscriptions in multiple tenants, you may need to specify the tenant by using the *--tenant* parameter. See [Sign into Azure interactively using the Azure CLI](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) for details.
-    
+
 1. When prompted, follow the instructions to open the sign-in page in a new tab and enter the authentication code provided and your Azure credentials. Then complete the sign in process in the command line, selecting the subscription containing your Foundry hub if prompted.
 1. After you have signed in, enter the following command to run the application:
 
     ```
    python agent-framework.py
     ```
-    
+
     The application runs using the credentials for your authenticated Azure session to connect to your project and create and run the agent.
 
 1. When asked what to do with the expenses data, enter the following prompt:

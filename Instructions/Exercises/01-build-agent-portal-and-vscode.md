@@ -1,12 +1,13 @@
 ---
 lab:
-    title: 'Build AI Agents with Portal and VS Code'
+    title: 'Build AI agents with portal and VS Code'
     description: 'Create an AI agent using both Microsoft Foundry portal and VS Code extension with built-in tools like file search and code interpreter.'
     level: 300
     duration: 45
+    islab: true
 ---
 
-# Build AI Agents with Portal and VS Code
+# Build AI agents with portal and VS Code
 
 In this exercise, you'll build a complete AI agent solution using both the Microsoft Foundry portal and the Microsoft Foundry VS Code extension. You'll start by creating a basic agent in the portal with grounding data and built-in tools, then interact with it programmatically using VS Code to leverage advanced capabilities like code interpreter for data analysis.
 
@@ -28,9 +29,10 @@ By the end of this exercise, you'll be able to:
 
 Before starting this exercise, ensure you have:
 
-- An Azure subscription with sufficient permissions and quota to provision Azure AI resources
-- Visual Studio Code installed on your local machine
-- Python 3.12 or later installed
+- An [Azure subscription](https://azure.microsoft.com/free/) with sufficient permissions and quota to provision Azure AI resources
+- [Visual Studio Code](https://code.visualstudio.com/) installed on your local machine
+- [Python 3.13](https://www.python.org/downloads/) or later installed
+- [Git](https://git-scm.com/downloads) installed on your local machine
 - Basic familiarity with Azure AI services and Python programming
 
 ## Scenario
@@ -59,9 +61,9 @@ Let's start by creating a Foundry project and a basic agent using the portal.
 
 1. Expand **Advanced options** and specify the following settings:
     - **Microsoft Foundry resource**: *A valid name for your Foundry resource*
+    - **Region**: *Select one available near you*\**
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Select your resource group, or create a new one*
-    - **Region**: *Select any **AI Foundry recommended***\**
 
     > \* Some Azure AI resources are constrained by regional model quotas. In the event of a quota limit being exceeded later in the exercise, there's a possibility you may need to create another resource in a different region.
 
@@ -190,7 +192,23 @@ If you already have installed the extension for Foundry, you can skip this secti
 
 1. Right-click on your project and select **Set as active project**.
 
-1. Expand your project in the Resources view and verify you can see your `it-support-agent` listed under **Agents**.
+1. Expand your project in the Resources view and verify you can see your `it-support-agent` listed under **Prompt agents**.
+
+### Test your agent in VS Code
+
+Before writing any code, you can interact with your agent directly in the extension interface.
+
+1. In the Resources view, expand **Declarative agents** under your project and double-click **it-support-agent** to open it in the VS Code agent playground.
+
+1. In the chat pane, type a question such as:
+
+    ```
+    What is the policy for reporting a lost or stolen device?
+    ```
+
+1. Review the agent's response. It should use the grounding data you uploaded earlier to provide relevant IT policy information.
+
+    > **Tip**: You can use this built-in playground to quickly test your agent's instructions and knowledge without writing any code.
 
 ### Create a Python application
 
@@ -222,6 +240,7 @@ Now let's create a Python application that interacts with your agent programmati
     from azure.identity import DefaultAzureCredential
     import base64
     from pathlib import Path
+    from dotenv import load_dotenv
     
     
     def save_image(image_data, filename):
@@ -241,6 +260,7 @@ Now let's create a Python application that interacts with your agent programmati
     
     def main():
         # Initialize the project client
+        load_dotenv()
         project_endpoint = os.environ.get("PROJECT_ENDPOINT")
         agent_name = os.environ.get("AGENT_NAME", "it-support-agent")
         
@@ -295,7 +315,7 @@ Now let's create a Python application that interacts with your agent programmati
             print("\n[Agent is thinking...]")
             response = openai_client.responses.create(
                 conversation=conversation.id,
-                extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
+                extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
                 input=""
             )
             
@@ -322,8 +342,37 @@ Now let's create a Python application that interacts with your agent programmati
                                 print(f"\n[Agent generated an image]")
                         elif item.type == 'file':
                             print(f"\n[Agent created a file]")
-    
-    
+
+            # Check for files in the response and download them
+            file_id = ""
+            filename = ""
+            container_id = ""
+
+            # Get the last message which should contain file citations
+            last_message = response.output[-1] 
+            if (
+                last_message.type == "message"
+                and last_message.content
+                and last_message.content[-1].type == "output_text"
+                and last_message.content[-1].annotations
+            ):
+                # Extract file information from response annotations
+                file_citation = last_message.content[-1].annotations[-1] 
+                if file_citation.type == "container_file_citation":
+                    file_id = file_citation.file_id
+                    filename = file_citation.filename
+                    container_id = file_citation.container_id
+
+            # Download the generated file if available
+            if file_id and filename:
+                file_content = openai_client.containers.files.content.retrieve(file_id=file_id, container_id=container_id)
+                output_dir = Path("agent_outputs")
+                output_dir.mkdir(exist_ok=True)
+                file_path = output_dir / filename
+                with open(file_path, "wb") as f:
+                    f.write(file_content.read())
+                print(f"File downloaded successfully: {file_path}")
+
     if __name__ == "__main__":
         main()
     ```
@@ -340,7 +389,7 @@ Now let's create a Python application that interacts with your agent programmati
     PROJECT_ENDPOINT=<your_project_endpoint>
     AGENT_NAME=it-support-agent
     ```
-    
+
     **To get your project endpoint:** In VS Code, open the **Microsoft Foundry** extension, right-click on your active project, and select **Copy Endpoint**.
 
 1. Save the `.env` file (**Ctrl+S** or **File > Save**).
@@ -364,26 +413,31 @@ Now let's create a Python application that interacts with your agent programmati
 When the agent starts, try these prompts to test different capabilities:
 
 1. Test policy search with file search:
+
     ```
     What's the policy for password resets?
     ```
 
 2. Request data analysis with code interpreter:
+
     ```
     Analyze the system performance data and identify any periods where CPU usage exceeded 80%
     ```
 
 3. Request a visualization:
+
     ```
     Create a line chart showing memory usage trends over time
     ```
 
 4. Ask for statistical analysis:
+
     ```
     What are the average, minimum, and maximum values for disk usage in the performance data?
     ```
 
 5. Combined analysis:
+
     ```
     Find any correlation between high CPU usage and memory usage in the performance data
     ```
@@ -396,14 +450,16 @@ Observe how the agent uses both file search (for policy questions) and code inte
 
 Now that you've worked with both approaches, here's guidance on when to use each:
 
-### Use the Portal when:
+### Use the Portal when
+
 - Rapid prototyping and testing agent configurations
 - Quick adjustments to instructions and system prompts
 - Testing with grounding data and built-in tools
 - Demonstrating concepts to stakeholders
 - You need a quick agent without writing code
 
-### Use VS Code / SDK when:
+### Use VS Code / SDK when
+
 - Building production applications
 - Integrating agents with existing code and systems
 - Managing conversations and responses programmatically
@@ -411,7 +467,8 @@ Now that you've worked with both approaches, here's guidance on when to use each
 - Advanced orchestration and multi-agent scenarios
 - Programmatic agent management at scale
 
-### Hybrid Approach (Best Practice):
+### Hybrid Approach (Best Practice)
+
 1. **Prototype** in the portal to validate concepts
 2. **Develop** in VS Code for production implementation
 3. **Monitor and iterate** using both tools
@@ -433,12 +490,15 @@ To avoid unnecessary Azure charges, delete the resources you created:
 ### Common Issues
 
 **Issue**: "Project endpoint invalid"
+
 - **Solution**: Ensure you copied the full project endpoint from the portal. It should start with `https://` and include your project details.
 
 **Issue**: "Agent not found"
+
 - **Solution**: Make sure you set the correct project as active in the VS Code extension.
 
 **Issue**: "Code interpreter not generating visualizations"
+
 - **Solution**: Ensure the CSV file was properly uploaded to the agent and that code interpreter is enabled in the agent settings.
 
 ---

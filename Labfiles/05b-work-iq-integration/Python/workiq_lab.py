@@ -17,10 +17,14 @@ Run this single file to explore all Work IQ capabilities.
 import os
 import time
 import json
+import asyncio
 from dotenv import load_dotenv
 from azure.ai.projects import AIProjectClient
+from azure.ai.projects.models import PromptAgentDefinition, Tool, FunctionTool
 from azure.identity import DefaultAzureCredential
-from azure.ai.projects.mcp import StdioMCPClient
+from mcp import ClientSession, StdioServerParameters
+from mcp.client.stdio import stdio_client
+from openai.types.responses.response_input_param import FunctionCallOutput, ResponseInputParam
 
 # Load environment variables
 load_dotenv()
@@ -29,7 +33,7 @@ class WorkIQLab:
     def __init__(self):
         """Initialize the lab with Microsoft Foundry connection."""
         self.project_endpoint = os.getenv("PROJECT_ENDPOINT")
-        self.model_deployment = os.getenv("MODEL_DEPLOYMENT_NAME", "gpt-4o")
+        self.model_deployment = os.getenv("MODEL_DEPLOYMENT_NAME", "gpt-4.1")
         
         if not self.project_endpoint:
             print("❌ Error: PROJECT_ENDPOINT not set in .env file")
@@ -42,6 +46,7 @@ class WorkIQLab:
         self.openai_client = None
         self.workiq_client = None
         self.agent = None
+        self.workiq_server_params = None
         
     def validate_workiq_setup(self):
         """Check if Work IQ is installed and accessible."""
@@ -57,7 +62,8 @@ class WorkIQLab:
                 ["workiq", "--version"],
                 capture_output=True,
                 text=True,
-                timeout=10
+                timeout=10,
+                shell=True
             )
             
             if result.returncode == 0:
@@ -95,13 +101,13 @@ class WorkIQLab:
                 credential=self.credential,
                 endpoint=self.project_endpoint
             )
-            
+
             # Get OpenAI-compatible client for Responses API
             self.openai_client = self.project_client.get_openai_client()
             
             # Initialize Work IQ MCP client
             print("Connecting to Work IQ MCP server...")
-            self.workiq_client = StdioMCPClient(
+            self.workiq_server_params = StdioServerParameters(
                 command="npx",
                 args=["-y", "@microsoft/workiq", "mcp"]
             )
@@ -123,21 +129,48 @@ class WorkIQLab:
             print("  4. Test with: workiq ask -q 'What meetings do I have today?'")
             return False
     
+    def _get_workiq_tools(self):
+        """Fetch tools from Work IQ MCP server."""
+        async def _fetch():
+            async with stdio_client(self.workiq_server_params) as (read, write):
+                async with ClientSession(read, write) as session:
+                    await session.initialize()
+                    tools_result = await session.list_tools()
+                    return tools_result.tools
+        return asyncio.run(_fetch())
+    
+    def _call_workiq_tool(self, tool_name, kwargs):
+        """Execute a Work IQ tool via MCP and return result."""
+        async def _execute():
+            async with stdio_client(self.workiq_server_params) as (read, write):
+                async with ClientSession(read, write) as session:
+                    await session.initialize()
+                    result = await session.call_tool(tool_name, kwargs)
+                    return result
+        return asyncio.run(_execute())
+
     def _create_workplace_agent(self):
         """Create the workplace intelligence agent with Work IQ tools."""
         try:
             print("Creating workplace intelligence agent...")
             
             # Get Work IQ tools
-            workiq_tools = [tool.model_dump() for tool in self.workiq_client.tools]
-            
+            raw_tools = self._get_workiq_tools()
+            workiq_tools = [
+                FunctionTool(
+                    name=tool.name,
+                    description=tool.description,
+                    parameters=tool.inputSchema,
+                )
+                for tool in raw_tools
+            ]
+
             # Create agent using Responses API pattern
-            self.agent = self.openai_client.agents.create_version(
+            self.agent = self.project_client.agents.create_version(
                 agent_name="workplace-intelligence-agent",
-                definition={
-                    "kind": "prompt",
-                    "model": self.model_deployment,
-                    "instructions": """You are a workplace intelligence assistant with access to Microsoft 365 data through Work IQ.
+                definition=PromptAgentDefinition(
+                    model=self.model_deployment,
+                    instructions="""You are a workplace intelligence assistant with access to Microsoft 365 data through Work IQ.
 
 Your capabilities:
 - Search emails, meetings, calendar, Teams messages, and documents
@@ -150,9 +183,12 @@ Guidelines:
 - Respect user privacy and data sensitivity
 - Provide concise, actionable information
 - If you can't find information, explain what you searched and suggest alternatives""",
-                    "tools": workiq_tools
-                }
+                    tools=workiq_tools
+                )
             )
+
+            # Store raw tools map for lookup during tool execution
+            self.raw_tools_map = {tool.name: tool for tool in raw_tools}
             
             print(f"✅ Created agent: {self.agent.name} (version {self.agent.version})\n")
             
@@ -177,29 +213,59 @@ Guidelines:
             # Create response with agent
             response = self.openai_client.responses.create(
                 conversation=conversation.id,
-                extra_body={
-                    "agent": {
-                        "type": "agent_reference",
-                        "name": self.agent.name,
-                        "version": self.agent.version
-                    }
-                }
+                extra_body={"agent_reference": {"name": self.agent.name, "type": "agent_reference"}}
             )
             
-            # Extract and display response
+            # Tool call loop
+            while True:
+                # Check for failures
+                if response.status == "failed":
+                    print(f"❌ Response failed: {response.error}")
+                    return
+
+                input_list: ResponseInputParam = []
+
+                # Process function calls
+                for item in response.output:
+                    if item.type == "function_call":
+                        function_name = item.name
+                        kwargs = json.loads(item.arguments)
+                        
+                        print(f"   🔧 Calling Work IQ tool: {function_name}")
+                        
+                        # Call the tool via MCP
+                        result = self._call_workiq_tool(function_name, kwargs)
+
+                        input_list.append(
+                            FunctionCallOutput(
+                                type="function_call_output",
+                                call_id=item.call_id,
+                                output=result.content[0].text,
+                            )
+                        )
+
+                # If there were tool calls, send results back and continue loop
+                if input_list:
+                    response = self.openai_client.responses.create(
+                        input=input_list,
+                        previous_response_id=response.id,
+                        extra_body={
+                            "agent_reference": {"name": self.agent.name, "type": "agent_reference"}
+                        }
+                    )
+                else:
+                    # No tool calls - we have the final response
+                    break
+
+            # Extract and display final response
             print("\n📋 Response:")
             print("-" * 70)
-            
-            if response.output:
-                for item in response.output:
-                    if item.type == "message" and item.content:
-                        for content_item in item.content:
-                            if content_item.type == "text":
-                                print(content_item.text.value)
-                                print()
+
+            if response.output_text:
+                print(response.output_text)
             else:
                 print("No response received from agent.")
-            
+
             print("-" * 70)
             
         except Exception as e:
@@ -419,7 +485,7 @@ Label each piece of information with its source (workplace or knowledge base).""
         try:
             if self.agent:
                 print("\nCleaning up resources...")
-                self.openai_client.agents.delete_version(
+                self.project_client.agents.delete_version(
                     agent_name=self.agent.name,
                     version=self.agent.version
                 )

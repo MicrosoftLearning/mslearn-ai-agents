@@ -1,10 +1,11 @@
 ---
 lab:
-    title: 'Explore AI Agent development'
+    title: 'Explore AI Agent development (deprecated)'
     description: 'Take your first steps in developing AI agents by exploring the Azure AI Agent service in the Microsoft Foundry portal.'
+    islab: false
 ---
 
-# Explore AI Agent development
+# Explore AI Agent development (deprecated)
 
 In this exercise, you use the Azure AI Agent service in the Microsoft Foundry portal to create a simple AI agent that assists employees with expense claims.
 
@@ -93,7 +94,7 @@ After experimenting with your agent in the playground, you may want to integrate
     - Connect to your agent using the Azure AI Projects SDK
     - Send messages to the agent
     - Retrieve and process responses
-    
+
 1. Select **.env variables** to view the environment variables you need to run this code.
 1. You can use this code as a starting point for building your own client application that interacts with the agent you created.
 1. Optionally, select **Open in VS Code for the Web** to launch a preconfigured workspace with the sample code ready to run.
