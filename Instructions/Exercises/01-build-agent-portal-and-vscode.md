@@ -1,7 +1,7 @@
 ---
 lab:
     title: 'Build AI agents with portal and VS Code'
-    description: 'Create an AI agent using both Microsoft Foundry portal and VS Code extension with built-in tools like file search and code interpreter.'
+    description: 'Create an AI agent using both Microsoft Foundry portal and the AI Toolkit VS Code extension with built-in tools like file search and code interpreter.'
     level: 300
     duration: 45
     islab: true
@@ -9,21 +9,11 @@ lab:
 
 # Build AI agents with portal and VS Code
 
-In this exercise, you'll build a complete AI agent solution using both the Microsoft Foundry portal and the Microsoft Foundry VS Code extension. You'll start by creating a basic agent in the portal with grounding data and built-in tools, then interact with it programmatically using VS Code to leverage advanced capabilities like code interpreter for data analysis.
+In this exercise, you'll build a complete AI agent solution using both the Microsoft Foundry portal and the AI Toolkit VS Code extension. You'll start by creating a basic agent in the portal with grounding data and built-in tools, then interact with it programmatically using VS Code to use advanced capabilities like code interpreter for data analysis.
 
 This exercise takes approximately **45** minutes.
 
 > **Note**: Some of the technologies used in this exercise are in preview or in active development. You may experience some unexpected behavior, warnings, or errors.
-
-## Learning Objectives
-
-By the end of this exercise, you'll be able to:
-
-1. Create and configure an AI agent in the Microsoft Foundry portal
-2. Add grounding data and enable built-in tools (file search, code interpreter)
-3. Use the Microsoft Foundry VS Code extension to work with agents programmatically
-4. Leverage code interpreter to analyze data and generate insights
-5. Understand when to use portal-based vs code-based approaches for agent development
 
 ## Prerequisites
 
@@ -35,21 +25,11 @@ Before starting this exercise, ensure you have:
 - [Git](https://git-scm.com/downloads) installed on your local machine
 - Basic familiarity with Azure AI services and Python programming
 
-## Scenario
+> \* Python 3.13 is available, but some dependencies are not yet compiled for that release. The lab has been successfully tested with Python 3.13.12.
 
-You'll build an **IT Support Agent** that helps employees with common technical issues. The agent will:
+## Create a Microsoft Foundry Project
 
-- Answer questions based on IT policy documentation (grounding data)
-- Use built-in tools like file search to find relevant information
-- Analyze system performance data using code interpreter to identify trends and issues
-
----
-
-## Create an AI agent in Microsoft Foundry portal
-
-Let's start by creating a Foundry project and a basic agent using the portal.
-
-### Create a Foundry project
+Microsoft Foundry uses projects to organize models, resources, data, and other assets used to develop an AI solution.
 
 1. In a web browser, open the [Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Foundry** logo at the top left to navigate to the home page.
 
@@ -69,13 +49,15 @@ Let's start by creating a Foundry project and a basic agent using the portal.
 
 1. Select **Create** and wait for your project to be created.
 
-1. When your project is created, select **Start building**, and select **Create agent** from the drop-down menu.
+2. When your project is created, a welcome dialog may appear. Select **Next** to read through the welcome message, and then select **Create agent**.
 
-1. Set the **Agent name** to `it-support-agent` and create the agent.
+    You can also select **Start building** on the home page, and select **Create agents** from the drop-down menu.
+
+3. Set the **Agent name** to `it-support-agent` and create the agent.
 
 The playground will open for your newly created agent. You'll see that an available deployed model is already selected for you.
 
-### Configure your agent with instructions and grounding data
+## Configure your agent with instructions and grounding data
 
 Now that you have an agent created, let's configure it with instructions and add grounding data.
 
@@ -120,7 +102,7 @@ Now that you have an agent created, let's configure it with instructions and add
 
     > **Note**: This CSV file contains simulated system metrics (CPU, memory, disk usage) over time that the agent can analyze.
 
-### Test your agent
+## Test your agent
 
 Let's test the agent to see how it responds using the grounding data.
 
@@ -158,61 +140,49 @@ Let's test the agent to see how it responds using the grounding data.
 
 Great! You've created an agent with grounding data, file search, and code interpreter capabilities. In the next section, you'll interact with this agent programmatically using VS Code.
 
----
-
 ## Interact with your agent using VS Code
 
-Now you'll use the Microsoft Foundry VS Code extension to work with your agent programmatically and see how to interact with it from code.
+As a developer, you may spend some time working in the Foundry portal; but you’re also likely to spend a lot of time in Visual Studio Code. The AI Toolkit extension provides a convenient way to work with Foundry project resources without leaving the development environment.
 
 ### Install and configure the VS Code extension
 
-If you already have installed the extension for Foundry, you can skip this section.
+If you already have installed the extension for AI Toolkit, you can skip this section.
 
-1. Open Visual Studio Code on your local machine.
+1. Open Visual Studio Code.
 
-1. Select **Extensions** from the left pane (or press **Ctrl+Shift+X**).
+2. Select **Extensions** from the left pane (or press **Ctrl+Shift+X**).
 
-1. In the search bar, type **Microsoft Foundry** and press Enter.
+3. Search the extensions marketplace for the `AI Toolkit` extension from Microsoft and select **Install**.
 
-1. Select the **Microsoft Foundry** extension from Microsoft and click **Install**.
+4. After installing the extension, select its icon in the sidebar to open the AI Toolkit view. 
 
-1. After installation is complete, verify the extension appears in the primary navigation bar on the left side.
-
-### Connect to your Foundry project
-
-1. In the VS Code sidebar, select the **Microsoft Foundry** extension icon.
-
-1. In the Resources view, select **Sign in to Azure...** and follow the authentication prompts.
-
-    > **Note**: You won't see this option if you're already signed in.
-
-1. After signing in, expand your subscription in the Resources view.
-
-1. Locate and expand your Foundry resource, then find the project you created earlier (`it-support-agent-project`).
-
-1. Right-click on your project and select **Set as active project**.
-
-1. Expand your project in the Resources view and verify you can see your `it-support-agent` listed under **Prompt agents**.
+    You should be prompted to sign in to your Azure account if you haven't already.
 
 ### Test your agent in VS Code
 
 Before writing any code, you can interact with your agent directly in the extension interface.
 
-1. In the Resources view, expand **Declarative agents** under your project and double-click **it-support-agent** to open it in the VS Code agent playground.
+1. Under **Microsoft Foundry Resources** select **Set Default Project**.
 
-1. In the chat pane, type a question such as:
+    If a default project is already active, the project name will appear under **My Resources**. You can select a different project by right-clicking on the active project and selecting **Switch Default Project**.
+
+2. Expand the default project. Under **Prompt Agents**, you should see the `it-support-agent` you created in the portal. Select the agent name to open the Agent Builder interface.
+
+    The agent playground will appear in the Agent Builder interface, allowing you to interact with the agent and configure its settings without leaving VS Code.
+
+3. In the playground chat pane, type a question such as:
 
     ```
     What is the policy for reporting a lost or stolen device?
     ```
 
-1. Review the agent's response. It should use the grounding data you uploaded earlier to provide relevant IT policy information.
+4. Review the agent's response. It should use the grounding data you uploaded earlier to provide relevant IT policy information.
 
     > **Tip**: You can use this built-in playground to quickly test your agent's instructions and knowledge without writing any code.
 
-### Create a Python application
+## Create a client application to interact with your agent
 
-Now let's create a Python application that interacts with your agent programmatically.
+Now let's create a client application that interacts with your agent programmatically.
 
 1. In VS Code, open the Command Palette (**Ctrl+Shift+P** or **View > Command Palette**).
 
@@ -228,7 +198,7 @@ Now let's create a Python application that interacts with your agent programmati
 
 1. When prompted, select **Open** to open the cloned repository in VS Code.
 
-1. Once the repository opens, select **File > Open Folder** and navigate to `mslearn-ai-agents/Labfiles/01-build-agent-portal-and-vscode/Python`, then click **Select Folder**.
+1. Once the repository opens, select **File > Open Folder** and navigate to `mslearn-ai-agents/Labfiles/01-build-agent-portal-and-vscode/Python`, then choose **Select Folder**.
 
 1. In the Explorer pane, open the `agent_with_functions.py` file. You'll see it's currently empty.
 
@@ -381,7 +351,7 @@ Now let's create a Python application that interacts with your agent programmati
 
 1. In the Explorer pane, you'll see `.env.example` and `requirements.txt` files already present in the folder.
 
-1. Duplicate the `.env.example` file, and rename to `.env`.
+1. Duplicate the `.env.example` file, and rename it to `.env`.
 
 1. In the `.env` file, replace `your_project_endpoint_here` with your actual project endpoint:
 
@@ -390,7 +360,7 @@ Now let's create a Python application that interacts with your agent programmati
     AGENT_NAME=it-support-agent
     ```
 
-    **To get your project endpoint:** In VS Code, open the **Microsoft Foundry** extension, right-click on your active project, and select **Copy Endpoint**.
+    **To get your project endpoint:** In VS Code, open the **AI Toolkit** extension, right-click on your active project, and select **Copy Endpoint**.
 
 1. Save the `.env` file (**Ctrl+S** or **File > Save**).
 
@@ -408,7 +378,7 @@ Now let's create a Python application that interacts with your agent programmati
     python agent_with_functions.py
     ```
 
-### Test the agent with code interpreter
+## Test the client application
 
 When the agent starts, try these prompts to test different capabilities:
 
@@ -444,37 +414,6 @@ When the agent starts, try these prompts to test different capabilities:
 
 Observe how the agent uses both file search (for policy questions) and code interpreter (for data analysis) to fulfill your requests. The code interpreter will analyze the CSV data, perform calculations, and can even generate visualizations. Type `exit` when done testing.
 
----
-
-## Portal vs Code: When to use each approach
-
-Now that you've worked with both approaches, here's guidance on when to use each:
-
-### Use the Portal when
-
-- Rapid prototyping and testing agent configurations
-- Quick adjustments to instructions and system prompts
-- Testing with grounding data and built-in tools
-- Demonstrating concepts to stakeholders
-- You need a quick agent without writing code
-
-### Use VS Code / SDK when
-
-- Building production applications
-- Integrating agents with existing code and systems
-- Managing conversations and responses programmatically
-- Version control and CI/CD pipelines
-- Advanced orchestration and multi-agent scenarios
-- Programmatic agent management at scale
-
-### Hybrid Approach (Best Practice)
-
-1. **Prototype** in the portal to validate concepts
-2. **Develop** in VS Code for production implementation
-3. **Monitor and iterate** using both tools
-
----
-
 ## Cleanup
 
 To avoid unnecessary Azure charges, delete the resources you created:
@@ -482,48 +421,3 @@ To avoid unnecessary Azure charges, delete the resources you created:
 1. In the Foundry portal, navigate to your project
 1. Select **Settings** > **Delete project**
 1. Alternatively, delete the entire resource group from the Azure portal
-
----
-
-## Troubleshooting
-
-### Common Issues
-
-**Issue**: "Project endpoint invalid"
-
-- **Solution**: Ensure you copied the full project endpoint from the portal. It should start with `https://` and include your project details.
-
-**Issue**: "Agent not found"
-
-- **Solution**: Make sure you set the correct project as active in the VS Code extension.
-
-**Issue**: "Code interpreter not generating visualizations"
-
-- **Solution**: Ensure the CSV file was properly uploaded to the agent and that code interpreter is enabled in the agent settings.
-
----
-
-## Summary
-
-In this exercise, you:
-
-Created an AI agent in the Microsoft Foundry portal with grounding data  
-Enabled built-in tools like file search and code interpreter  
-Connected to your project using the VS Code extension  
-Interacted with the agent programmatically using Python  
-Leveraged code interpreter for data analysis and visualization  
-Learned when to use portal vs code-based approaches  
-
-You now have the foundational skills to build AI agents using both visual and code-based workflows!
-
-## Next Steps
-
-Ready to take your agent development skills to the next level? Continue with:
-
-- **Lab 2: Advanced Tool Calling** - Learn to use advanced tool calling for dynamic data processing, implement advanced async function patterns, and master file operations with batch processing.
-
-### Additional Resources
-
-- [Azure AI Agent Service Documentation](https://learn.microsoft.com/azure/ai-services/agents/)
-- [Microsoft Foundry VS Code Extension](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.vscode-ai)
-- [Azure AI Projects SDK](https://learn.microsoft.com/python/api/overview/azure/ai-projects-readme)

@@ -24,89 +24,77 @@ Before starting this exercise, ensure you have:
 - [Python 3.13](https://www.python.org/downloads/) or later installed
 - [Git](https://git-scm.com/downloads) installed on your local machine
 
-## Install the Microsoft Foundry VS Code extension
+> \* Python 3.13 is available, but some dependencies are not yet compiled for that release. The lab has been successfully tested with Python 3.13.12.
 
-Let's start by installing and setting up the VS Code extension.
+## Create a Foundry project with the AI Toolkit VS Code extension
+
+As a developer, you may spend some time working in the Foundry portal; but you’re also likely to spend a lot of time in Visual Studio Code. The AI Toolkit extension provides a convenient way to work with Foundry project resources without leaving the development environment.
 
 1. Open Visual Studio Code.
 
-1. Select **Extensions** from the left pane (or press **Ctrl+Shift+X**).
+2. Select **Extensions** from the left pane (or press **Ctrl+Shift+X**).
 
-1. In the search bar, type **Microsoft Foundry** and press Enter.
+3. Search the extensions marketplace for the `AI Toolkit` extension from Microsoft and select **Install**.
 
-1. Select the **Microsoft Foundry** extension from Microsoft and click **Install**.
+4. After installing the extension, select its icon in the sidebar to open the AI Toolkit view. 
 
-1. After installation is complete, verify the extension appears in the primary navigation bar on the left side of Visual Studio Code.
+    You should be prompted to sign in to your Azure account if you haven't already.
+   
+5. Select **Create Project** under **Microsoft Foundry Resources**.
 
-## Sign in to Azure and create a project
+    If a default project is already active, the project name will appear under **My Resources**. You can create a new project by right-clicking on the active project and selecting **Switch Default Project**.
 
-Now you'll connect to your Azure resources and create a new Microsoft Foundry project.
+6. Select your Azure subscription and resource group, then enter a name for your Foundry project to create a new project for this exercise.
 
-1. In the VS Code sidebar, select the **Microsoft Foundry** extension icon.
-
-1. In the Resources view, select **Sign in to Azure...** and follow the authentication prompts.
-
-   > **Note**: You won't see this option if you're already signed in.
-
-1. Create a new Foundry project by selecting the **+** (plus) icon next to **Resources** in the Foundry Extension view.
-
-1. Select your Azure subscription from the dropdown.
-
-1. Choose whether to create a new resource group or use an existing one:
-
-   **To create a new resource group:**
-   - Select **Create new resource group** and press Enter
-   - Enter a name for your resource group (e.g., "rg-ai-agents-lab") and press Enter
-   - Select a location from the available options and press Enter
-
-   **To use an existing resource group:**
-   - Select the resource group you want to use from the list and press Enter
-
-1. Enter a name for your Foundry project (e.g., "ai-agents-project") in the textbox and press Enter.
-
-1. Wait for the project deployment to complete. A popup will appear with the message "Project deployed successfully."
+    When the deployment is complete, you should see the project appear in the AI Toolkit pane as the default project.
 
 ## Deploy a model
 
-In this task, you'll deploy a model from the Model Catalog to use with your agent.
+At the core of any generative AI project, there’s at least one generative AI model. In this task, you'll deploy a model from the Model Catalog to use with your agent.
 
 1. When the "Project deployed successfully" popup appears, select the **Deploy a model** button. This opens the Model Catalog.
 
-   > **Tip**: You can also access the Model Catalog by selecting the **+** icon next to **Models** in the Resources section, or by pressing **F1** and running the command **Microsoft Foundry: Open Model Catalog**.
+   > **Tip**: You can also access the Model Catalog by selecting the **+** icon next to **Models** in the Resources section, or by pressing **F1** and running the command **AI Toolkit: Show model catalog**.
 
 1. In the Model Catalog, locate the **gpt-4.1** model (you can use the search bar to find it quickly).
 
-    ![Screenshot of the Model Catalog in the Foundry VS Code extension.](../Media/vs-code-model.png)
+2. Select **Deploy** next to the gpt-4.1 model.
 
-1. Select **Deploy** next to the gpt-4.1 model.
-
-1. Configure the deployment settings:
+3. Configure the deployment settings:
    - **Deployment name**: Enter a name like "gpt-4.1"
    - **Deployment type**: Select **Global Standard** (or **Standard** if Global Standard is not available)
    - **Model version**: Leave as default
    - **Tokens per minute**: Leave as default
 
-1. Select **Deploy in Microsoft Foundry** in the bottom-left corner.
+4. Select **Deploy to Microsoft Foundry** in the bottom-left corner.
 
-1. In the confirmation dialog, select **Deploy** to deploy the model.
+5. Wait for the deployment to complete. Your deployed model will appear under the **Models** section in the Resources view.
 
-1. Wait for the deployment to complete. Your deployed model will appear under the **Models** section in the Resources view.
+6. Right-click the name of the project deployment and select **Copy Project Endpoint**. You'll need this URL to connect your agent to the Foundry project in the next steps.
 
-1. Right-click the name project deployment and select **Copy Project Endpoint**. You'll need this URL to connect your agent to the Foundry project in the next steps.
-
-   <img src="../Media/vs-code-endpoint.png" alt="Screenshot of copying the project endpoint in the Foundry VS Code extension." width="550">
+    ![Screenshot of copying the project endpoint in the AI Toolkit VS Code extension.](../Media/vs-code-endpoint.png)
 
 ## Clone the starter code repository
 
 For this exercise, you'll use starter code that will help you connect to your Foundry project and create an agent that can process expenses data. You'll clone this code from a GitHub repository.
 
-1. Navigate to the **Welcome** tab in VS Code (you can open it by selecting **Help > Welcome** from the menu bar).
+1. In VS Code, open the Command Palette (**Ctrl+Shift+P** or **View > Command Palette**).
 
-1. Select **Clone git repository** and enter the URL of the starter code repository: `https://github.com/MicrosoftLearning/mslearn-ai-agents.git`
+1. Type **Git: Clone** and select it from the list.
 
-1. Create a new folder and choose **Select as Repository Destination**, then open the cloned repository when prompted.
+1. Enter the repository URL:
 
-1. In the Explorer view, navigate to the **Labfiles/07-agent-framework/Python** folder to find the starter code for this exercise.
+    ```
+    https://github.com/MicrosoftLearning/mslearn-ai-agents.git
+    ```
+
+1. Choose a location on your local machine to clone the repository.
+
+1. When prompted, select **Open** to open the cloned repository in VS Code.
+
+1. Once the repository opens, select **File > Open Folder** and navigate to `mslearn-ai-agents/Labfiles/07-agent-framework`, then choose **Select Folder**.
+
+1. In the Explorer pane, expand the **Python** folder to view the code files for this exercise. 
 
 1. Right-click on the **requirements.txt** file and select **Open in Integrated Terminal**.
 
@@ -118,11 +106,11 @@ For this exercise, you'll use starter code that will help you connect to your Fo
     pip install -r requirements.txt
     ```
 
-1. Open the **.env** file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project deployment resource in the Microsoft Foundry extension) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name. Use **Ctrl+S** to save the file after making these changes.
+1. Open the **.env** file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project deployment resource in the AI Toolkit extension) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name. Use **Ctrl+S** to save the file after making these changes.
 
 Now you're ready to create an AI agent that uses a custom tool to process expenses data.
 
-## Write code for an agent app
+## Create an agent with a custom tool
 
 > **Tip**: As you add code, be sure to maintain the correct indentation. Use the existing comments as a guide, entering the new code at the same level of indentation.
 
@@ -184,8 +172,6 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
 
     Note that the **AzureCliCredential** object will allow your code to authenticate to your Azure account. The **AzureOpenAIResponsesClient** object includes the Foundry project settings from the .env configuration. The **Agent** object is initialized with the client, instructions for the agent, and the tool function you defined to send emails.
 
-1.
-
 1. Find the comment **Use the agent to process the expenses data**, and add the following code to create a thread for your agent to run on, and then invoke it with a chat message.
 
     (Be sure to maintain the indentation level):
@@ -206,7 +192,7 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
 
 1. Review that the completed code for your agent, using the comments to help you understand what each block of code does, and then save your code changes (**CTRL+S**).
 
-## Run the app
+## Test the application
 
 1. In the integrated terminal, enter the following command to run the application:
 
@@ -225,10 +211,6 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
     > **Tip**: If the app fails because the rate limit is exceeded. Wait a few seconds and try again. If there is insufficient quota available in your subscription, the model may not be able to respond.
 
 1. When you're finished, enter `deactivate` in the terminal to exit the Python virtual environment.
-
-## Summary
-
-In this exercise, you used the Microsoft Agent Framework SDK to create an agent with a custom tool.
 
 ## Clean up
 
