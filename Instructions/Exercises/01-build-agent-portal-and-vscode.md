@@ -162,11 +162,11 @@ If you already have installed the extension for AI Toolkit, you can skip this se
 
 Before writing any code, you can interact with your agent directly in the extension interface.
 
-1. Under **Microsoft Foundry Resources** select **Set Default Project**.
+1. In **My Resources**, under **Microsoft Foundry** select the three horizontal bar icon to select your default project.
 
-    If a default project is already active, the project name will appear under **My Resources**. You can select a different project by right-clicking on the active project and selecting **Switch Default Project**.
+    If a default project is already active, the project name will appear next to the **Microsoft Foundry** section. You can select a different project by selecting the same **Select project** icon.
 
-2. Expand the default project. Under **Prompt Agents**, you should see the `it-support-agent` you created in the portal. Select the agent name to open the Agent Builder interface.
+2. Expand the **Microsoft Foundry** section. Under **Agents**, you should see the `it-support-agent` you created in the portal. Select the agent name to open the Agent Builder interface.
 
     The agent playground will appear in the Agent Builder interface, allowing you to interact with the agent and configure its settings without leaving VS Code.
 
@@ -366,10 +366,14 @@ Now let's create a client application that interacts with your agent programmati
 
 1. Open a terminal in VS Code (**Terminal > New Terminal**).
 
-1. Install the required packages:
+1. Install the required packages and login:
 
     ```bash
     pip install -r requirements.txt
+    ```
+
+    ```bash
+    az login
     ```
 
 1. Run the application:
