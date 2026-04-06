@@ -17,17 +17,6 @@ This lab takes approximately **40** minutes.
 
 > **Note**: Publishing to Microsoft 365 Copilot requires a Copilot license. The Teams deployment works with standard Microsoft 365 accounts.
 
-## Learning Objectives
-
-By the end of this lab, you'll be able to:
-
-1. Create a basic agent quickly in the Microsoft Foundry portal
-2. Add knowledge grounding using file search
-3. Publish agents to Microsoft Teams as a custom app
-4. Publish agents to Microsoft 365 Copilot as an extension
-5. Understand the differences between Teams and Copilot deployment
-6. Manage and update published agents
-
 ## Prerequisites
 
 Before starting this lab, ensure you have:
@@ -37,46 +26,39 @@ Before starting this lab, ensure you have:
 - **Microsoft 365 Copilot license** (optional, for Copilot deployment)
 - Basic familiarity with the Microsoft Foundry portal
 
-## Scenario
+## Create a Foundry project
 
-You'll deploy an **Enterprise Knowledge Agent** that:
+Microsoft Foundry uses projects to organize models, resources, data, and other assets used to develop an AI solution.
 
-- Answers questions about company policies
-- Uses uploaded documents for grounding
-- Is accessible via Microsoft Teams chat
-- Is available as a Copilot extension (optional)
+1. In a web browser, open the [Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that open the first time you sign in, and if necessary use the **Foundry** logo at the top left to navigate to the home page.
 
----
+    > **Important**: For this lab, you're using the **New** Foundry experience.
 
-## Create an Agent in the Portal
+1. In the top banner, select **Start building** to try the new Microsoft Foundry Experience.
 
-First, you'll quickly create an agent using the Microsoft Foundry portal. This takes about 5 minutes.
+1. When prompted, create a **new** project, and enter a valid name for your project (for example, *m365-lab*).
 
-> **Important**: Make sure the **New Foundry** toggle is *On* for this lab to use the updated user interface.
-
-### Open the Foundry portal
-
-1. Open your browser and navigate to the Foundry portal at `https://ai.azure.com` and sign in, if not already.
-1. Once you toggle to the **New Foundry**, you'll be asked to select a project. In the dropdown, select **Create a new project**.
-1. In the **Create a project** dialog, enter a valid name for your project (for example, *m365-lab*).
-1. Confirm or configure the following settings for your project:
+1. Expand **Advanced options** and specify the following settings:
     - **Foundry resource**: *Create a new Foundry resource or select an existing one*
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Create or select a resource group*
-    - **Location**: *Select any available region*\*
+    - **Location**: *Select any available region*\
 
     > \* Some Azure AI resources are constrained by regional model quotas. In the event of a quota limit being exceeded later in the exercise, there's a possibility you may need to create another resource in a different region.
 
-1. Select **Create** and wait for your project to be created. This may take a few minutes.
-1. When your project is created, you'll see the project home page.
+1. Select **Create** and wait for your project to be created.
 
-### Create a new agent
+2. When your project is created, a welcome dialog may appear. Select **Next** to read through the welcome message, and then select **Create agent**.
 
-1. On the home page, under **Start building**, select **Create an agent**.
-1. Give your agent a name, such as `enterprise-knowledge-agent`.
-1. Select **Create**.
+    You can also select **Start building** on the home page, and select **Create agents** from the drop-down menu.
 
-When creating an agent, it will deploy the default model (like `gpt-4.1`). Once your agent is created, you'll see the agent playground with that default model automatically selected for you.
+3. Set the **Agent name** to `enterprise-knowledge-agent` and create the agent.
+
+The playground will open for your newly created agent. You'll see that an available deployed model is already selected for you.
+
+## Configure your agent with instructions and grounding data
+
+Now that you have an agent created, let's configure it with instructions and knowledge to prepare it for publishing.
 
 1. Set the **Instructions** to:
 
@@ -92,29 +74,9 @@ When creating an agent, it will deploy the default model (like `gpt-4.1`). Once 
     Always cite your sources when referencing specific policies.
     ```
 
-1. Select **Save** to save your current agent configuration.
+2. Select **Save** to save your current agent configuration.
 
-### Quick test
-
-1. In the chat panel, send a test message:
-
-    ```
-    Hello! What can you help me with?
-    ```
-
-2. The agent should respond explaining it's an Enterprise Knowledge Assistant
-
-The agent works, but it doesn't have any company knowledge yet. Let's add that next.
-
----
-
-## Add Knowledge with File Search
-
-Now you'll add company documents so the agent can answer questions with real information.
-
-### Enable file search
-
-1. Let's start by downloading the sample policy documents. Open new browser tabs and save each file:
+3. Download the sample policy documents. Open new browser tabs and save each file:
 
     **IT Security Policy:**
 
@@ -126,16 +88,17 @@ Now you'll add company documents so the agent can answer questions with real inf
 
     ```
     https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/05a-m365-teams-integration/Python/sample_documents/remote_work_policy.txt
+    ```
 
-1. Back to your agent's configuration, scroll to the **Tools** section
+4. Return to your agent's configuration, scroll to the **Tools** section
 
-1. Select **Add** and then **Browse all tools** and **Add tool**.
+5. Select **Add** and then **Browse all tools** and **Add tool**.
 
-1. A pop up to attach files will show up, attach the files previously downloaded.
+6. A pop-up to attach files will appear. Attach the files you previously downloaded.
 
-1. Once they complete, select **Attach**.
+7. Once they complete, select **Attach**.
 
-### Test with knowledge queries
+## Test the agent in the playground
 
 1. In the playground, ask a question about IT security:
 
@@ -161,19 +124,13 @@ Now you'll add company documents so the agent can answer questions with real inf
 
 6. Notice how the agent finds the right document and provides accurate answers about BitLocker requirements
 
-**Your agent now has knowledge grounding!** It can answer questions based on your company documents.
+    Your agent now has knowledge grounding and can answer questions based on your company documents.
 
-1. Select **Save**.
-
----
+7. Select **Save**.
 
 ## Publish to Microsoft Teams
 
-Now you'll publish your agent to Microsoft Teams so employees can chat with it directly in Teams.
-
-### What gets created
-
-When you publish to Teams, the Foundry portal automatically:
+Now you'll publish your agent to Microsoft Teams so employees can chat with it directly in Teams. When you publish to Teams, the Foundry portal automatically:
 
 - Creates an Azure Bot Service
 - Generates a Teams app manifest
@@ -213,11 +170,11 @@ You'll need two icons for the Teams app:
 
 1. In the Foundry portal, open your agent (**Build** → **Agents** → **enterprise-knowledge-agent**)
 
-2. Click the **Publish** button at the top of the page
+2. Select the **Publish** button at the top of the page
 
 3. Select **Publish to Teams and Microsoft 365 Copilot**.
 
-4. Click **Continue**
+4. Select **Continue**
 
 ### Configure Teams app details
 
@@ -246,15 +203,11 @@ Fill in the configuration form:
 - Select **Personal** for individual chat access
 - Optionally select **Team** for channel access
 
-Click **Prepare Agent**
+Select **Prepare Agent**
 
 ### Deploy to Teams
 
-After the agent package is prepared (this takes 1-2 minutes), you have two options:
-
-#### Option A: Direct publish (recommended)
-
-This option publishes directly to Teams without manually uploading a package:
+After the agent package is prepared (this takes 1-2 minutes), you can deploy it to Teams:
 
 1. When the package is ready, select **Continue the in-product publishing flow**
 
@@ -264,33 +217,11 @@ This option publishes directly to Teams without manually uploading a package:
 
 3. For this lab, select **Individual scope**
 
-4. Click **Submit**
+4. Select **Submit**
 
 5. Wait for publishing to complete (you'll see a success message)
 
 6. Your agent is now available in Teams! Find it under **Apps** → **Your agents**
-
-#### Option B: Download and manually upload
-
-This option gives you a package to upload manually, useful for testing or when direct publishing isn't available:
-
-1. When the package is ready, click **Download zip**
-
-2. Save the `manifest.zip` file to your computer
-
-3. Open **Microsoft Teams** (desktop app or <https://teams.microsoft.com>)
-
-4. Click **Apps** in the left sidebar
-
-5. Click **Manage your apps** at the bottom left
-
-6. Click **Upload an app** → **Upload a custom app**
-
-7. Browse and select your downloaded `manifest.zip`
-
-8. Review the app details and click **Add**
-
-The app will install and open automatically.
 
 ### Test your agent in Teams
 
@@ -318,25 +249,6 @@ The app will install and open automatically.
 
 **🎉 Congratulations!** Your agent is now available in Microsoft Teams!
 
-### Sharing with others
-
-**For personal use:**
-
-- The app is already installed for you
-
-**For team-wide access:**
-
-1. Go to a Team channel
-2. Click **+** to add a tab or app
-3. Search for your app name
-4. Add it to the channel
-
-**For organization-wide access:**
-
-1. Contact your Teams administrator
-2. They can publish the app to the organization's app catalog
-3. All employees can then find and install it
-
 ### Troubleshooting Teams deployment
 
 **Can't find the agent in Teams (after direct publish):**
@@ -363,31 +275,15 @@ The app will install and open automatically.
 - Confirm documents were uploaded and indexed
 - Test knowledge queries in the Foundry playground
 
----
-
 ## Publish to Microsoft 365 Copilot
 
-Now you'll publish your agent as a Microsoft 365 Copilot extension, allowing users to access it directly within Copilot.
-
-> **Note**: This section requires a Microsoft 365 Copilot license. If you don't have one, you can read through the steps to understand the process.
-
-### Understanding Copilot extensions
-
-When you publish to Copilot, your agent becomes a **Copilot extension** (also called a plugin or declarative agent). Users can:
+Now you'll publish your agent as a Microsoft 365 Copilot extension, allowing users to access it directly within Copilot. When you publish to Copilot, your agent becomes a **Copilot extension** (also called a plugin or declarative agent). Users can:
 
 - Invoke your agent using @mentions in Copilot
 - Access your agent's knowledge alongside Copilot's capabilities
 - Switch between Copilot and your agent seamlessly
 
-### Differences: Teams vs Copilot
-
-| Aspect | Teams App | Copilot Extension |
-|--------|-----------|-------------------|
-| **Access** | Standalone chat in Teams | Within Microsoft 365 Copilot |
-| **Invocation** | Open the app directly | @mention or select from extensions |
-| **Context** | Isolated conversation | Can combine with Copilot's context |
-| **License** | Standard M365 | Requires Copilot license |
-| **Discovery** | Teams app store | Copilot extensions panel |
+> **Note**: This section requires a Microsoft 365 Copilot license. If you don't have one, you can read through the steps to understand the process.
 
 ### Publish from the portal
 
@@ -395,11 +291,11 @@ When you publish to Copilot, your agent becomes a **Copilot extension** (also ca
 
 2. Navigate to your agent (**Build** → **Agents** → **enterprise-knowledge-agent**)
 
-3. Click the **Publish** button
+3. Select the **Publish** button
 
 4. Select **Publish to Teams and Microsoft 365 Copilot**
 
-5. Click **Continue**
+5. Select **Continue**
 
 > **Note**: This is the same publishing flow used for Teams. The agent becomes available in both Teams and Copilot through a single publishing process.
 
@@ -425,11 +321,11 @@ For this lab, select **Shared scope** for immediate access without admin approva
 
 ### Complete publishing
 
-1. Click **Prepare Agent** and wait for packaging (1-2 minutes)
+1. Select **Prepare Agent** and wait for packaging (1-2 minutes)
 
 2. Select **Continue the in-product publishing flow**
 
-3. Confirm your scope selection and click **Publish**
+3. Confirm your scope selection and select **Publish**
 
 4. Wait for publishing to complete
 
@@ -459,68 +355,6 @@ Once published with shared scope, your agent is immediately available:
 
 > **Note**: For **organization scope**, an admin must first approve the app in the [Microsoft 365 admin center](https://admin.cloud.microsoft/?#/agents/all/requested) under **Requests**. Once approved, the agent appears under **Built by your org** for all users.
 
-### Managing your published agent
-
-**Update the agent:**
-
-1. Make changes to your agent in the Foundry portal (instructions, documents, tools)
-2. Minor changes take effect automatically
-3. Major changes may require re-publishing
-
-**Monitor usage:**
-
-1. Check analytics in the Foundry portal
-2. Review conversation logs
-3. Monitor for errors or issues
-
-**Unpublish:**
-
-1. In the Foundry portal, go to your agent's details
-2. Find the publish status section
-3. Click **Unpublish** to remove access from Teams and Copilot
-
----
-
-## Update Published Agents
-
-After publishing, you may need to update your agent. Here's how updates work.
-
-### Making changes
-
-1. In the Foundry portal, open your agent
-
-2. Make your changes:
-   - Update instructions
-   - Add or remove documents
-   - Modify tool settings
-
-3. Click **Save**
-
-### Propagating updates
-
-**For Teams apps:**
-
-- Instruction and document changes take effect immediately
-- No need to re-upload the manifest
-- Users see updated responses in their next conversation
-
-**For Copilot extensions:**
-
-- Minor changes (instructions, documents) may take effect automatically
-- Major changes may require re-submission for approval
-- Check the publish status for any pending reviews
-
-### Version management
-
-Best practices for managing agent versions:
-
-1. **Document changes**: Keep a changelog of updates
-2. **Test before publishing**: Always test in the playground first
-3. **Communicate updates**: Let users know about significant changes
-4. **Monitor after updates**: Watch for issues after deploying changes
-
----
-
 ## Cleanup
 
 To avoid unnecessary charges, clean up resources when done.
@@ -531,7 +365,7 @@ To avoid unnecessary charges, clean up resources when done.
 
 2. Find **enterprise-knowledge-agent**
 
-3. Click the **...** menu → **Delete**
+3. Select the **...** menu → **Delete**
 
 4. Confirm deletion
 
@@ -549,7 +383,7 @@ This also removes:
 
 3. Find **Enterprise Knowledge Agent**
 
-4. Click **...** → **Uninstall**
+4. Select **...** → **Uninstall**
 
 5. Confirm uninstallation
 
@@ -560,119 +394,3 @@ If you published to Copilot:
 1. The extension becomes inactive when the agent is deleted
 2. Users will see an error if they try to use it
 3. Admin may need to remove it from the organization catalog
-
----
-
-## Summary
-
-**Congratulations!** 🎉 You've completed this lab!
-
-### What You Accomplished
-
-| Task | Status |
-|------|--------|
-| Created an agent in the Foundry portal | ✅ |
-| Added knowledge with file search | ✅ |
-| Published to Microsoft Teams | ✅ |
-| Published to Microsoft 365 Copilot | ✅ |
-| Learned to update published agents | ✅ |
-
-### Key Takeaways
-
-**Teams deployment:**
-
-- Quick to set up using the Foundry portal
-- Creates Azure Bot Service automatically
-- Users access via Teams app
-- Good for standalone chat experiences
-
-**Copilot deployment:**
-
-- Integrates with Microsoft 365 Copilot
-- Users invoke via @mention or selection
-- Requires Copilot license
-- Good for contextual assistance within Copilot
-
-**Best practices:**
-
-- Test thoroughly in playground before publishing
-- Keep documents up to date for accurate responses
-- Monitor usage and feedback
-- Update instructions based on user needs
-
-### When to Use Each Platform
-
-| Use Case | Recommended Platform |
-|----------|---------------------|
-| Dedicated support chat | Teams |
-| Quick policy lookups | Copilot |
-| Team-specific assistant | Teams (channel) |
-| Organization-wide knowledge | Both |
-| Integration with M365 workflow | Copilot |
-| Standalone conversational experience | Teams |
-
-### Next Steps
-
-To build on this lab:
-
-1. **Add more documents** for comprehensive knowledge coverage
-2. **Customize instructions** for specific use cases
-3. **Add tools** like code interpreter for advanced capabilities
-4. **Implement authentication** for sensitive information
-5. **Set up monitoring** to track usage and quality
-
----
-
-## Troubleshooting Reference
-
-### Teams Issues
-
-| Issue | Solution |
-|-------|----------|
-| Can't upload custom app | Check Teams admin settings for custom app policy |
-| App won't install | Verify manifest.zip isn't corrupted; check icon sizes |
-| Agent not responding | Test in Foundry playground first; wait 30 seconds after install |
-| Generic responses | Verify file search enabled and documents indexed |
-| "Bot not found" error | Check Bot Service is running in Azure portal |
-
-### Copilot Issues
-
-| Issue | Solution |
-|-------|----------|
-| Extension not appearing | Check approval status; may be pending admin review |
-| @mention not working | Ensure extension is enabled in your Copilot settings |
-| Wrong responses | Test agent in Foundry playground; check document content |
-| "Extension unavailable" | Verify agent is running and not deleted |
-| Approval rejected | Review rejection reason; update and resubmit |
-
-### General Issues
-
-| Issue | Solution |
-|-------|----------|
-| Agent not saving | Check browser connection; try refreshing |
-| Documents not indexing | Wait a few minutes; try re-uploading |
-| Slow responses | Large documents take longer; consider chunking |
-| Incorrect citations | Review document content and formatting |
-
----
-
-## Additional Resources
-
-**Microsoft Documentation:**
-
-- [Publish agents to Teams](https://learn.microsoft.com/azure/ai-services/agents/how-to/publish-to-teams)
-- [Copilot extensibility](https://learn.microsoft.com/microsoft-365-copilot/extensibility/)
-- [Microsoft Foundry](https://learn.microsoft.com/azure/ai-foundry/)
-
-**Tools:**
-
-- [Foundry Portal](https://ai.azure.com)
-- [Microsoft Teams](https://teams.microsoft.com)
-- [Microsoft 365 Copilot](https://copilot.microsoft.com)
-- [Adaptive Cards Designer](https://adaptivecards.io/designer/)
-
----
-
-**Lab Complete!** 🎉
-
-You've successfully deployed an AI agent to both Microsoft Teams and Microsoft 365 Copilot!

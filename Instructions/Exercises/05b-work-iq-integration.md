@@ -15,17 +15,6 @@ This lab takes approximately **40** minutes.
 
 > **Note:** This is an **optional/advanced lab** that requires a Microsoft 365 Copilot license. It's designed for enterprise learners, Microsoft employees, or those with M365 Copilot access. Standard M365 accounts without Copilot will not work.
 
-## Learning Objectives
-
-By the end of this lab, you'll be able to:
-
-1. Understand Work IQ architecture and how it integrates with Microsoft 365
-2. Connect AI agents to Work IQ using the Model Context Protocol (MCP)
-3. Build workplace intelligence scenarios (meeting prep, project tracking, action items)
-4. Combine Work IQ (workplace signals) with Foundry IQ (knowledge base)
-5. Design effective queries for workplace data
-6. Handle authentication, permissions, and privacy correctly
-
 ## Prerequisites
 
 Before starting this lab, ensure you have:
@@ -40,50 +29,7 @@ Before starting this lab, ensure you have:
 
 > **Important:** Work IQ **only works** with Microsoft 365 Copilot-enabled accounts. You cannot complete this lab without Copilot.
 
-## Scenario
-
-You'll build a **Workplace Intelligence Agent** that helps you:
-
-- **Meeting Prep**: Gather context from emails, previous meetings, and shared documents
-- **Project Status**: Track updates across emails, Teams, and files
-- **Action Items**: Extract tasks from meetings, emails, and Teams mentions
-- **Combined Intelligence**: Use both workplace data (Work IQ) and knowledge base (Foundry IQ)
-- **Custom Queries**: Answer any workplace question using M365 data
-
-## Architecture
-
-This lab demonstrates Work IQ integration with AI agents:
-
-```
-┌─────────────────────────────────────────┐
-│         Your AI Agent                   │
-│   (Microsoft Foundry Project)           │
-└────────┬────────────────────────────────┘
-         │
-         │ StdioMCPClient
-         │
-┌────────▼────────────────────────────────┐
-│  Work IQ MCP Server                     │
-│  (npx @microsoft/workiq mcp)            │
-└────────┬────────────────────────────────┘
-         │
-         │ M365 APIs (Copilot license)
-         │
-┌────────▼────────────────────────────────┐
-│  Microsoft 365 Data Sources             │
-│  • Emails (Outlook)                     │
-│  • Calendar & Meetings                  │
-│  • Teams Messages & Chats               │
-│  • OneDrive & SharePoint Docs          │
-│  • People & Org Data                    │
-└─────────────────────────────────────────┘
-```
-
----
-
-## Setup
-
-### Install Work IQ
+## Install Work IQ
 
 1. Open your terminal or command prompt.
 
@@ -119,7 +65,7 @@ This lab demonstrates Work IQ integration with AI agents:
    - You can still read through the instructions to understand the concepts
    - Consider this lab optional and return to it when you have Copilot access
 
-### Prepare to develop an app in Visual Studio Code
+## Prepare to develop an app in Visual Studio Code
 
 Now let's use Visual Studio Code to develop an app. The code files for your app have been provided in a GitHub repo.
 
@@ -133,7 +79,7 @@ Now let's use Visual Studio Code to develop an app. The code files for your app 
 
 3. When the repository has been cloned, open the folder in Visual Studio Code.
 
-    > **Note**: If Visual Studio Code shows you a pop-up message prompting you to trust the code you are opening, click **Yes, I trust the authors** option to continue.
+    > **Note**: If Visual Studio Code shows you a pop-up message prompting you to trust the code you are opening, select **Yes, I trust the authors** to continue.
 
 4. Wait while additional files are installed to support the Python code projects in the repo (if prompted).
 
@@ -143,15 +89,13 @@ Now let's use Visual Studio Code to develop an app. The code files for your app 
 
     The provided files include application code, configuration settings, and the agent client starter code.
 
-### Prepare the lab environment
-
-1. In the terminal, enter the command to create a Python virtual environment:
+6. In the terminal, enter the command to create a Python virtual environment:
 
    ```bash
    python -m venv venv
    ```
 
-1. Activate the virtual environment:
+7. Activate the virtual environment:
 
    **Windows:**
 
@@ -165,13 +109,13 @@ Now let's use Visual Studio Code to develop an app. The code files for your app 
    source venv/bin/activate
    ```
 
-1. Install required Python packages:
+8. Install required Python packages:
 
    ```bash
    pip install -r requirements.txt
    ```
 
-1. Configure your `.env` file:
+9. Configure your `.env` file:
 
    In the lab folder, open the `.env` file and update it with your Foundry project endpoint:
 
@@ -180,7 +124,7 @@ Now let's use Visual Studio Code to develop an app. The code files for your app 
    MODEL_DEPLOYMENT_NAME=gpt-4.1
    ```
 
-   > **Tip:** To get your endpoint: In VS Code, open the **Microsoft Foundry** extension, right-click on your active project, and select **Copy Endpoint**.
+   > **Tip:** To get your endpoint: In VS Code, open the **AI Toolkit** extension, right-click on your active project, and select **Copy Endpoint**.
 
 ### Verify setup
 
@@ -191,8 +135,6 @@ Ensure you have:
 - `workiq_lab.py` - Main interactive application
 - `requirements.txt` - Python dependencies installed
 - `.env` file configured with your project endpoint
-
----
 
 ## Explore Workplace Intelligence Scenarios
 
@@ -360,8 +302,6 @@ This scenario lets you explore your workplace data with your own questions.
    - Including time ranges improves relevance
    - Names and keywords help narrow results
 
----
-
 ## Explore and Experiment
 
 Now that you've completed all scenarios, take 5-10 minutes to explore on your own.
@@ -391,8 +331,6 @@ From the main menu, select **6 - View Work IQ Capabilities** to review:
 - Security and privacy model
 - Work IQ vs. Foundry IQ comparison
 - Common use cases
-
----
 
 ## Understanding the Code
 
@@ -516,8 +454,6 @@ while True:
 
 The loop continues until the agent produces a response with no pending function calls, at which point `response.output_text` contains the final answer.
 
----
-
 ## Clean Up
 
 The lab automatically cleans up the agent when you exit:
@@ -530,8 +466,6 @@ self.openai_client.agents.delete_version(
 ```
 
 No Azure resources are created in this lab (Work IQ uses your M365 license), so no additional cleanup is needed.
-
----
 
 ## Troubleshooting
 
@@ -580,48 +514,3 @@ npm install -g @microsoft/workiq
 - Ensure your M365 account has emails, meetings, Teams activity
 - Try broader queries
 - Check if your query matches your actual data
-
----
-
-## Summary
-
-In this lab, you:
-
-- Installed and configured Work IQ MCP server
-- Built an AI agent that accesses Microsoft 365 workplace data
-- Explored 5 workplace intelligence scenarios (meeting prep, project status, action items, combined intelligence, custom queries)
-- Combined Work IQ with Foundry IQ for comprehensive context
-- Learned MCP architecture and integration patterns
-- Understood security, privacy, and authentication models
-
-### Key Takeaways
-
-1. **Work IQ enables workplace context** - Agents can access the rich signals in M365 data that inform real work
-
-2. **MCP provides a standard interface** - Work IQ uses the Model Context Protocol, making it easy to integrate with agents
-
-3. **Responses API simplifies agent execution** - The new pattern is cleaner than the older Runs/Threads approach
-
-4. **Combined intelligence is powerful** - Work IQ (workplace signals) + Foundry IQ (knowledge base) = complete context
-
-5. **Security is built-in** - Work IQ respects M365 permissions and requires appropriate authentication
-
-### Next Steps
-
-Consider building your own workplace intelligence solutions:
-
-- Specialized meeting assistant
-- Automated status reporter
-- Task tracking agent
-- Communication analyzer
-- Decision history tracker
-
----
-
-## Additional Resources
-
-- [Model Context Protocol Specification](https://modelcontextprotocol.io/)
-- [Microsoft Foundry Agents Documentation](https://learn.microsoft.com/azure/ai-foundry/agents/)
-- [Work IQ on npm](https://www.npmjs.com/package/@microsoft/workiq)
-- [Microsoft 365 Copilot](https://www.microsoft.com/microsoft-365/copilot)
-- [Microsoft Graph API](https://learn.microsoft.com/graph/) (alternative approach)
