@@ -194,7 +194,10 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
 
 ## Test the application
 
-1. In the integrated terminal, enter the following command to run the application:
+1. In the integrated terminal, enter the following commands to run the application:
+    ```
+    az login
+    ```
 
     ```
    python agent-framework.py

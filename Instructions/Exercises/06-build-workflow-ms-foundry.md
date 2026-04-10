@@ -462,7 +462,10 @@ Now you're ready to create a project that invokes a workflow. Let's get started!
 
 Now you're ready to run your code and watch your AI agents collaborate.
 
-1. In the integrated terminal, run the following command:
+1. In the integrated terminal, run the following commands:
+    ```
+    az login
+    ```
 
     ```
    python workflow.py

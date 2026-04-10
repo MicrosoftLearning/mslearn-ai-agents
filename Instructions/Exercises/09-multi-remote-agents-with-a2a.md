@@ -376,7 +376,10 @@ In this task, you use the A2A protocol to enable the routing agent to send messa
 
 ## Test the application
 
-1. In the integrated terminal, enter the following command to run the application:
+1. In the integrated terminal, enter the following commands to run the application:
+    ```
+    az login
+    ```
 
     ```
     python run_all.py

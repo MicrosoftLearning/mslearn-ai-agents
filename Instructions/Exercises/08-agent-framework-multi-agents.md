@@ -225,7 +225,10 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 
 Now you're ready to run your code and watch your AI agents collaborate.
 
-1. In the integrated terminal, enter the following command to run the application:
+1. In the integrated terminal, enter the following commands to run the application:
+    ```
+    az login
+    ```
 
     ```
    python agents.py

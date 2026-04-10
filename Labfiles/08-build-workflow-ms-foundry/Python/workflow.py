@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 endpoint = os.environ["PROJECT_ENDPOINT"]
-model = os.environ["MODEL_DEPLOYMENT_NAME"]
 
 # Connect to the AI Project client
 
