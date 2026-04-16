@@ -84,9 +84,9 @@ Now that you have an agent created, let's configure it with instructions and add
 
     > **Note**: This document contains sample IT policies for password resets, software installation requests, and hardware troubleshooting.
 
-1. Return to the agent playground. In the **Tools** section, enable both **File search** and **Code interpreter**.
+1. Return to the agent playground. In the **Tools** section, select **Add**, and then add both **File search** and **</> Code interpreter**.
 
-1. Under **File search**, select **Upload files** and upload the `IT_Policy.txt` file you just downloaded.
+1. To the right of **Add**, select **Upload files**. Under **Attach files**, browse to and upload the `IT_Policy.txt` file you just downloaded, and then select **Attach**.
 
 1. Wait for the file to be indexed. You'll see a confirmation when it's ready.
 
@@ -98,7 +98,7 @@ Now that you have an agent created, let's configure it with instructions and add
 
     Save this file to your local machine.
 
-1. Under **Code interpreter**, select **Upload files** and upload the `system_performance.csv` file you just downloaded.
+1. To the right of **</> Code interpreter**, select **+ Files**, and then upload the `system_performance.csv` file you just downloaded.
 
     > **Note**: This CSV file contains simulated system metrics (CPU, memory, disk usage) over time that the agent can analyze.
 
@@ -233,6 +233,8 @@ Now let's create a client application that interacts with your agent programmati
         load_dotenv()
         project_endpoint = os.environ.get("PROJECT_ENDPOINT")
         agent_name = os.environ.get("AGENT_NAME", "it-support-agent")
+
+1. Save the `agent_with_functions.py` file (**Ctrl+S** or **File > Save**).
         
         if not project_endpoint:
             print("Error: PROJECT_ENDPOINT environment variable not set")
@@ -360,7 +362,7 @@ Now let's create a client application that interacts with your agent programmati
     AGENT_NAME=it-support-agent
     ```
 
-    **To get your project endpoint:** In VS Code, open the **AI Toolkit** extension, right-click on your active project, and select **Copy Endpoint**.
+    **To get your project endpoint:** In VS Code, open the **AI Toolkit** extension, right-click on your active project, and select **Copy Endpoint**. If **Copy Endpoint** isn't available in your installed version of AI Toolkit, open the Microsoft Foundry portal, go to your project, and copy the project endpoint from the project overview page instead.
 
 1. Save the `.env` file (**Ctrl+S** or **File > Save**).
 

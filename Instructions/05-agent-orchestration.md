@@ -97,9 +97,9 @@ Now you're ready to create a client app that uses the Microsoft Agent Framework 
 1. In the cloud shell command-line pane, enter the following command to install the libraries you'll use:
 
     ```
-   python -m venv labenv
-   ./labenv/bin/Activate.ps1
-   pip install agent-framework==1.0.0b260128 --pre
+    python -m venv labenv
+    ./labenv/bin/Activate.ps1
+    pip install -r requirements.txt
     ```
 
 1. Enter the following command to edit the configuration file that is provided:
@@ -127,12 +127,16 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 1. At the top of the file under the comment **Add references**, and add the following code to reference the namespaces in the libraries you'll need to implement your agent:
 
     ```python
-   # Add references
-   import asyncio
-   from typing import cast
-   from agent_framework import ChatMessage, Role, SequentialBuilder, WorkflowOutputEvent
-   from agent_framework.azure import AzureAIAgentClient
-   from azure.identity import AzureCliCredential
+    # Add references
+    import asyncio
+    from typing import cast
+    from dotenv import load_dotenv
+    from agent_framework import Message
+    from agent_framework.azure import AzureAIAgentClient
+    from agent_framework.orchestrations import SequentialBuilder
+    from azure.identity import AzureCliCredential
+
+    load_dotenv()
     ```
 
 1. In the **main** function, take a moment to review the agent instructions. These instructions define the behavior of each agent in the orchestration.
@@ -189,8 +193,8 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 1. Under the comment **Build a sequential orchestration**, add the following code to define a sequential orchestration with the agents you defined:
 
     ```python
-   # Build sequential orchestration
-   workflow = SequentialBuilder().participants([summarizer, classifier, action]).build()
+    # Build sequential orchestration
+    workflow = SequentialBuilder(participants=[summarizer, classifier, action]).build()
     ```
 
     The agents will process the feedback in the order they are added to the orchestration.
@@ -198,11 +202,11 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 1. Add the following code under the comment **Run and collect outputs**:
 
     ```python
-   # Run and collect outputs
-   outputs: list[list[ChatMessage]] = []
-   async for event in workflow.run_stream(f"Customer feedback: {feedback}"):
-       if isinstance(event, WorkflowOutputEvent):
-           outputs.append(cast(list[ChatMessage], event.data))
+    # Run and collect outputs
+    outputs: list[list[Message]] = []
+    async for event in workflow.run(f"Customer feedback: {feedback}", stream=True):
+        if event.type == "output":
+            outputs.append(cast(list[Message], event.data))
     ```
 
     This code runs the orchestration and collects the output from each of the participating agents.
@@ -210,11 +214,11 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 1. Add the following code under the comment **Display outputs**:
 
     ```python
-   # Display outputs
-   if outputs:
-       for i, msg in enumerate(outputs[-1], start=1):
-           name = msg.author_name or ("assistant" if msg.role == Role.ASSISTANT else "user")
-           print(f"{'-' * 60}\n{i:02d} [{name}]\n{msg.text}")
+    # Display outputs
+    if outputs:
+        for i, msg in enumerate(outputs[-1], start=1):
+            name = msg.author_name or ("assistant" if msg.role == "assistant" else "user")
+            print(f"{'-' * 60}\n{i:02d} [{name}]\n{msg.text}")
     ```
 
     This code formats and displays the messages from the workflow outputs you collected from the orchestration.
