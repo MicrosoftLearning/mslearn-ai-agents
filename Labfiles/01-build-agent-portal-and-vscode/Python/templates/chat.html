@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contoso IT Support</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div class="chat-container">
+        <header class="chat-header">
+            <div class="header-content">
+                <div class="header-title">
+                    <span class="header-icon">🤖</span>
+                    <div>
+                        <h1>Contoso IT Support</h1>
+                        <span class="header-subtitle">AI Agent powered by Microsoft Foundry</span>
+                    </div>
+                </div>
+                <button id="new-chat-btn" class="new-chat-btn" title="Start new conversation">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"/>
+                    </svg>
+                    New Chat
+                </button>
+            </div>
+        </header>
+
+        <main class="chat-messages" id="chat-messages">
+            <div class="welcome-message">
+                <div class="welcome-icon">💬</div>
+                <h2>Welcome to Contoso IT Support</h2>
+                <p>Ask me about IT policies, request help with technical issues, or analyze system performance data.</p>
+                <div class="suggestion-chips">
+                    <button class="chip" data-message="What's the policy for password resets?">🔑 Password reset policy</button>
+                    <button class="chip" data-message="How do I request new software?">💿 Software requests</button>
+                    <button class="chip" data-message="Analyze the system performance data and identify any concerning trends">📊 Analyze performance data</button>
+                    <button class="chip" data-message="Create a chart showing CPU usage over time">📈 CPU usage chart</button>
+                </div>
+            </div>
+        </main>
+
+        <footer class="chat-input-area">
+            <div class="input-container">
+                <textarea
+                    id="message-input"
+                    placeholder="Type your message..."
+                    rows="1"
+                    autofocus
+                ></textarea>
+                <button id="send-btn" class="send-btn" title="Send message" disabled>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
+                </button>
+            </div>
+            <p class="disclaimer">AI-generated responses may not always be accurate. Verify important information.</p>
+        </footer>
+    </div>
+
+    <div class="error-toast" id="error-toast"></div>
+
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+</body>
+</html>

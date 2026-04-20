@@ -1,7 +1,7 @@
 ---
 lab:
     title: 'Build AI agents with portal and VS Code'
-    description: 'Create an AI agent using both Microsoft Foundry portal and the AI Toolkit VS Code extension with built-in tools like file search and code interpreter.'
+    description: 'Create an AI agent using both Microsoft Foundry portal and the AI Toolkit VS Code extension with built-in tools like file search and code interpreter, then use it in a web chat application.'
     level: 300
     duration: 45
     islab: true
@@ -9,7 +9,7 @@ lab:
 
 # Build AI agents with portal and VS Code
 
-In this exercise, you'll build a complete AI agent solution using both the Microsoft Foundry portal and the AI Toolkit VS Code extension. You'll start by creating a basic agent in the portal with grounding data and built-in tools, then interact with it programmatically using VS Code to use advanced capabilities like code interpreter for data analysis.
+In this exercise, you'll build a complete AI agent solution end to end. You'll start by creating and configuring an agent in the Microsoft Foundry portal, refine it using the AI Toolkit extension in VS Code, and then run a web chat application that lets you interact with your deployed agent through a browser-based UI.
 
 This exercise takes approximately **45** minutes.
 
@@ -27,7 +27,7 @@ Before starting this exercise, ensure you have:
 
 > \* Python 3.13 is available, but some dependencies are not yet compiled for that release. The lab has been successfully tested with Python 3.13.12.
 
-## Create a Microsoft Foundry Project
+## Create a Microsoft Foundry project
 
 Microsoft Foundry uses projects to organize models, resources, data, and other assets used to develop an AI solution.
 
@@ -102,7 +102,7 @@ Now that you have an agent created, let's configure it with instructions and add
 
     > **Note**: This CSV file contains simulated system metrics (CPU, memory, disk usage) over time that the agent can analyze.
 
-## Test your agent
+## Test your agent in the portal
 
 Let's test the agent to see how it responds using the grounding data.
 
@@ -138,15 +138,15 @@ Let's test the agent to see how it responds using the grounding data.
 
 1. The agent will use code interpreter to generate visualizations and analysis.
 
-Great! You've created an agent with grounding data, file search, and code interpreter capabilities. In the next section, you'll interact with this agent programmatically using VS Code.
+Great! You've created an agent with grounding data, file search, and code interpreter capabilities. In the next section, you'll work with this agent in VS Code.
 
-## Interact with your agent using VS Code
+## Refine your agent in VS Code
 
-As a developer, you may spend some time working in the Foundry portal; but you’re also likely to spend a lot of time in Visual Studio Code. The AI Toolkit extension provides a convenient way to work with Foundry project resources without leaving the development environment.
+As a developer, you may spend some time working in the Foundry portal; but you're also likely to spend a lot of time in Visual Studio Code. The AI Toolkit extension provides a convenient way to work with Foundry project resources without leaving the development environment.
 
-### Install and configure the VS Code extension
+### Install and configure the AI Toolkit extension
 
-If you already have installed the extension for AI Toolkit, you can skip this section.
+If you already have the AI Toolkit extension installed, you can skip this section.
 
 1. Open Visual Studio Code.
 
@@ -154,13 +154,11 @@ If you already have installed the extension for AI Toolkit, you can skip this se
 
 3. Search the extensions marketplace for the `AI Toolkit` extension from Microsoft and select **Install**.
 
-4. After installing the extension, select its icon in the sidebar to open the AI Toolkit view. 
+4. After installing the extension, select its icon in the sidebar to open the AI Toolkit view.
 
     You should be prompted to sign in to your Azure account if you haven't already.
 
-### Test your agent in VS Code
-
-Before writing any code, you can interact with your agent directly in the extension interface.
+### Test and update your agent in VS Code
 
 1. In **My Resources**, under **Microsoft Foundry** select the three horizontal bar icon to select your default project.
 
@@ -170,7 +168,7 @@ Before writing any code, you can interact with your agent directly in the extens
 
     The agent playground will appear in the Agent Builder interface, allowing you to interact with the agent and configure its settings without leaving VS Code.
 
-3. In the playground chat pane, type a question such as:
+3. In the playground chat pane, test the agent with a question:
 
     ```
     What is the policy for reporting a lost or stolen device?
@@ -178,11 +176,36 @@ Before writing any code, you can interact with your agent directly in the extens
 
 4. Review the agent's response. It should use the grounding data you uploaded earlier to provide relevant IT policy information.
 
-    > **Tip**: You can use this built-in playground to quickly test your agent's instructions and knowledge without writing any code.
+5. Now let's refine the agent's instructions. In the Agent Builder, update the **Instructions** to add response formatting guidelines:
 
-## Create a client application to interact with your agent
+    ```prompt
+    You are an IT Support Agent for Contoso Corporation.
+    You help employees with technical issues and IT policy questions.
+    
+    Guidelines:
+    - Always be professional and helpful
+    - Use the IT policy documentation to answer questions accurately
+    - If you don't know the answer, admit it and suggest contacting IT support directly
+    - When creating tickets, collect all necessary information before proceeding
+    - Format responses using markdown for readability (use headers, lists, and bold text)
+    - When analyzing data, always provide a brief summary before detailed findings
+    ```
 
-Now let's create a client application that interacts with your agent programmatically.
+6. Test the updated instructions with another question to see the improved formatting:
+
+    ```
+    Give me a complete overview of the VPN access policy
+    ```
+
+7. Notice how the response now uses markdown formatting to make the information clearer and more structured.
+
+    > **Tip**: The Agent Builder in VS Code lets you rapidly iterate on your agent's configuration. You can update instructions, manage tools, and test changes — all without switching back to the portal.
+
+## Build a web chat application
+
+Now that your agent is configured and working, let's connect it to a real web application. You'll run a Flask-based chat app that provides a browser UI for interacting with your deployed agent.
+
+### Clone the lab repository
 
 1. In VS Code, open the Command Palette (**Ctrl+Shift+P** or **View > Command Palette**).
 
@@ -200,158 +223,37 @@ Now let's create a client application that interacts with your agent programmati
 
 1. Once the repository opens, select **File > Open Folder** and navigate to `mslearn-ai-agents/Labfiles/01-build-agent-portal-and-vscode/Python`, then choose **Select Folder**.
 
-1. In the Explorer pane, open the `agent_with_functions.py` file. You'll see it's currently empty.
+### Explore the web application code
 
-1. Add the following code to the file:
+Before running the app, take a moment to understand how it works.
 
-    ```python
-    import os
-    from azure.ai.projects import AIProjectClient
-    from azure.identity import DefaultAzureCredential
-    import base64
-    from pathlib import Path
-    from dotenv import load_dotenv
-    
-    
-    def save_image(image_data, filename):
-        """Save base64 image data to a file."""
-        output_dir = Path("agent_outputs")
-        output_dir.mkdir(exist_ok=True)
-        
-        filepath = output_dir / filename
-        
-        # Decode and save the image
-        image_bytes = base64.b64decode(image_data)
-        with open(filepath, 'wb') as f:
-            f.write(image_bytes)
-        
-        return str(filepath)
-    
-    
-    def main():
-        # Initialize the project client
-        load_dotenv()
-        project_endpoint = os.environ.get("PROJECT_ENDPOINT")
-        agent_name = os.environ.get("AGENT_NAME", "it-support-agent")
-        
-        if not project_endpoint:
-            print("Error: PROJECT_ENDPOINT environment variable not set")
-            print("Please set it in your .env file or environment")
-            return
-        
-        print("Connecting to Microsoft Foundry project...")
-        credential = DefaultAzureCredential()
-        project_client = AIProjectClient(
-            credential=credential,
-            endpoint=project_endpoint
-        )
-        
-        # Get the OpenAI client for Responses API
-        openai_client = project_client.get_openai_client()
-        
-        # Get the agent created in the portal
-        print(f"Loading agent: {agent_name}")
-        agent = project_client.agents.get(agent_name=agent_name)
-        print(f"Connected to agent: {agent.name} (id: {agent.id})")
-        
-        # Create a conversation
-        conversation = openai_client.conversations.create(items=[])
-        print(f"Conversation created (id: {conversation.id})")
-        
-        # Chat loop
-        print("\n" + "="*60)
-        print("IT Support Agent Ready!")
-        print("Ask questions, request data analysis, or get help.")
-        print("Type 'exit' to quit.")
-        print("="*60 + "\n")
-        
-        while True:
-            user_input = input("You: ").strip()
-            
-            if user_input.lower() in ['exit', 'quit', 'bye']:
-                print("Goodbye!")
-                break
-            
-            if not user_input:
-                continue
-            
-            # Add user message to conversation
-            openai_client.conversations.items.create(
-                conversation_id=conversation.id,
-                items=[{"type": "message", "role": "user", "content": user_input}]
-            )
-            
-            # Get response from agent
-            print("\n[Agent is thinking...]")
-            response = openai_client.responses.create(
-                conversation=conversation.id,
-                extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
-                input=""
-            )
-            
-            # Display response
-            if hasattr(response, 'output_text') and response.output_text:
-                print(f"\nAgent: {response.output_text}\n")
-            elif hasattr(response, 'output') and response.output:
-                # Extract text from output items
-                image_count = 0
-                for item in response.output:
-                    if hasattr(item, 'text') and item.text:
-                        print(f"\nAgent: {item.text}\n")
-                    elif hasattr(item, 'type'):
-                        # Handle other output types like images from code interpreter
-                        if item.type == 'image':
-                            image_count += 1
-                            filename = f"chart_{image_count}.png"
-                            
-                            # Download and save the image
-                            if hasattr(item, 'image') and hasattr(item.image, 'data'):
-                                filepath = save_image(item.image.data, filename)
-                                print(f"\n[Agent generated a chart - saved to: {filepath}]")
-                            else:
-                                print(f"\n[Agent generated an image]")
-                        elif item.type == 'file':
-                            print(f"\n[Agent created a file]")
+1. In the Explorer pane, you'll see the following project structure:
 
-            # Check for files in the response and download them
-            file_id = ""
-            filename = ""
-            container_id = ""
+    - `app.py` — The Flask backend that connects to your Foundry agent
+    - `templates/chat.html` — The HTML template for the chat interface
+    - `static/css/style.css` — Styling for the chat UI
+    - `static/js/chat.js` — Frontend JavaScript that handles messaging
+    - `.env.example` — Template for environment configuration
+    - `requirements.txt` — Python dependencies
 
-            # Get the last message which should contain file citations
-            last_message = response.output[-1] 
-            if (
-                last_message.type == "message"
-                and last_message.content
-                and last_message.content[-1].type == "output_text"
-                and last_message.content[-1].annotations
-            ):
-                # Extract file information from response annotations
-                file_citation = last_message.content[-1].annotations[-1] 
-                if file_citation.type == "container_file_citation":
-                    file_id = file_citation.file_id
-                    filename = file_citation.filename
-                    container_id = file_citation.container_id
+1. Open `app.py` and review the key components:
 
-            # Download the generated file if available
-            if file_id and filename:
-                file_content = openai_client.containers.files.content.retrieve(file_id=file_id, container_id=container_id)
-                output_dir = Path("agent_outputs")
-                output_dir.mkdir(exist_ok=True)
-                file_path = output_dir / filename
-                with open(file_path, "wb") as f:
-                    f.write(file_content.read())
-                print(f"File downloaded successfully: {file_path}")
+    - **`get_azure_clients()`** — Lazily initializes the Azure AI Projects SDK and loads your agent. This means the app only connects to Azure when the first request comes in, making startup errors easier to diagnose.
+    - **`/api/conversation`** (POST) — Creates a new conversation session with the agent.
+    - **`/api/chat`** (POST) — Sends a user message to the agent and returns the response, including any text, citations from file search, and images generated by code interpreter.
+    - **`extract_response()`** — Parses the agent's response to extract structured content (text, source citations, and generated images).
 
-    if __name__ == "__main__":
-        main()
-    ```
+1. Open `static/js/chat.js` and notice how the frontend:
 
-### Configure environment and run the application
+    - Creates a conversation when the page loads
+    - Sends messages via the `/api/chat` endpoint
+    - Renders agent responses with markdown formatting
+    - Displays source citations when the agent references grounding data
+    - Shows generated charts and images inline
 
-1. In the Explorer pane, you'll see `.env.example` and `requirements.txt` files already present in the folder.
+### Configure and run the application
 
-1. Duplicate the `.env.example` file, and rename it to `.env`.
+1. Duplicate the `.env.example` file, and rename the copy to `.env`.
 
 1. In the `.env` file, replace `your_project_endpoint_here` with your actual project endpoint:
 
@@ -366,7 +268,7 @@ Now let's create a client application that interacts with your agent programmati
 
 1. Open a terminal in VS Code (**Terminal > New Terminal**).
 
-1. Install the required packages and login:
+1. Install the required packages and sign in to Azure:
 
     ```bash
     pip install -r requirements.txt
@@ -376,49 +278,67 @@ Now let's create a client application that interacts with your agent programmati
     az login
     ```
 
-1. Run the application:
+1. Start the web application:
 
     ```bash
-    python agent_with_functions.py
+    python app.py
     ```
 
-## Test the client application
+1. You should see output indicating the Flask server is running:
 
-When the agent starts, try these prompts to test different capabilities:
+    ```
+     * Running on http://127.0.0.1:5000
+    ```
 
-1. Test policy search with file search:
+1. Open a browser and navigate to `http://127.0.0.1:5000`. The Contoso IT Support chat interface will appear.
+
+## Test the web application
+
+With the chat app running in your browser, test the full range of agent capabilities.
+
+1. Start with a policy question to test **file search**. Type in the chat or select one of the suggestion chips:
 
     ```
     What's the policy for password resets?
     ```
 
-2. Request data analysis with code interpreter:
+    Notice that the response includes a **Sources** section at the bottom, showing which documents the agent referenced.
+
+2. Test **code interpreter** with a data analysis request:
 
     ```
     Analyze the system performance data and identify any periods where CPU usage exceeded 80%
     ```
 
-3. Request a visualization:
+3. Request a **visualization** to see inline chart rendering:
 
     ```
     Create a line chart showing memory usage trends over time
     ```
 
-4. Ask for statistical analysis:
+    The agent will generate a chart using code interpreter, and it will appear inline in the chat.
+
+4. Try a **combined query** that exercises both tools:
+
+    ```
+    Based on the IT policy, what's the escalation process for critical issues? Also, were there any critical performance spikes in the system data?
+    ```
+
+5. Start a **new conversation** by selecting the **+ New Chat** button in the header, then try:
 
     ```
     What are the average, minimum, and maximum values for disk usage in the performance data?
     ```
 
-5. Combined analysis:
+Observe how the web application provides a rich, interactive experience — rendering markdown-formatted responses, displaying source citations from grounding data, and showing generated charts inline. This is the same agent you built and tested in the portal and VS Code, now accessible through a real application.
 
-    ```
-    Find any correlation between high CPU usage and memory usage in the performance data
-    ```
+Press **Ctrl+C** in the terminal to stop the web server when you're done testing.
 
-Observe how the agent uses both file search (for policy questions) and code interpreter (for data analysis) to fulfill your requests. The code interpreter will analyze the CSV data, perform calculations, and can even generate visualizations. Type `exit` when done testing.
+## Summary
 
-## Cleanup
+In this exercise, you built an AI agent in the Microsoft Foundry portal with file search and code interpreter tools, refined it using the AI Toolkit extension in VS Code, and connected it to a Flask-based web chat application.
+
+## Clean up
 
 To avoid unnecessary Azure charges, delete the resources you created:
 
