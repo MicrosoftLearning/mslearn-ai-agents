@@ -1,45 +1,45 @@
 import os
-import base64
+import uuid
 from flask import Flask, render_template, request, jsonify
-from azure.ai.projects import AIProjectClient
-from azure.identity import DefaultAzureCredential
+from openai import OpenAI
+from azure.identity import DefaultAzureCredential, get_bearer_token_provider
 from dotenv import load_dotenv
 
 load_dotenv()
 
 app = Flask(__name__)
 
-# Lazy-initialized Azure clients
-_project_client = None
-_openai_client = None
-_agent = None
+# Lazy-initialized OpenAI client for the published agent endpoint
+_client = None
+
+# Maximum number of messages to retain per conversation to avoid
+# unbounded growth and context-window limits.
+MAX_HISTORY = 50
 
 
-def get_azure_clients():
-    """Initialize Azure clients on first use for better error handling."""
-    global _project_client, _openai_client, _agent
-    if _project_client is None:
-        project_endpoint = os.environ.get("PROJECT_ENDPOINT")
-        agent_name = os.environ.get("AGENT_NAME", "it-support-agent")
+def get_openai_client():
+    """Initialize the OpenAI client on first use for better error handling."""
+    global _client
+    if _client is None:
+        endpoint = os.environ.get("AGENT_APP_ENDPOINT")
 
-        if not project_endpoint:
+        if not endpoint:
             raise ValueError(
-                "PROJECT_ENDPOINT environment variable is not set. "
+                "AGENT_APP_ENDPOINT environment variable is not set. "
                 "Please configure your .env file."
             )
 
-        credential = DefaultAzureCredential()
-        _project_client = AIProjectClient(
-            credential=credential, endpoint=project_endpoint
-        )
-        _openai_client = _project_client.get_openai_client()
-        _agent = _project_client.agents.get(agent_name=agent_name)
+        # TODO: Create a token provider using DefaultAzureCredential with
+        # the scope "https://ai.azure.com/.default", then initialize the
+        # OpenAI client with the token provider, endpoint, and api-version.
 
-    return _project_client, _openai_client, _agent
+    return _client
 
 
-# Track valid conversation IDs server-side
-active_conversations = set()
+# Server-side conversation history: session_id -> list of messages
+# Published agents use the stateless Responses API, so the client
+# must send full conversation history with each request.
+conversations = {}
 
 
 @app.route("/")
@@ -50,10 +50,11 @@ def index():
 @app.route("/api/conversation", methods=["POST"])
 def create_conversation():
     try:
-        _, openai_client, _ = get_azure_clients()
-        conversation = openai_client.conversations.create(items=[])
-        active_conversations.add(conversation.id)
-        return jsonify({"conversation_id": conversation.id})
+        # Validate credentials eagerly so the user sees errors early
+        get_openai_client()
+        session_id = str(uuid.uuid4())
+        conversations[session_id] = []
+        return jsonify({"conversation_id": session_id})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -62,53 +63,44 @@ def create_conversation():
 def chat():
     try:
         data = request.json
-        conversation_id = data.get("conversation_id")
+        session_id = data.get("conversation_id")
         message = data.get("message")
 
-        if not conversation_id or not message:
+        if not session_id or not message:
             return jsonify({"error": "Missing conversation_id or message"}), 400
 
-        if conversation_id not in active_conversations:
+        if session_id not in conversations:
             return jsonify({
-                "error": "Invalid conversation. Please start a new chat."
+                "error": "Invalid session. Please start a new chat."
             }), 400
 
-        _, openai_client, agent = get_azure_clients()
+        client = get_openai_client()
 
-        # Add user message to the conversation
-        openai_client.conversations.items.create(
-            conversation_id=conversation_id,
-            items=[{
-                "type": "message",
-                "role": "user",
-                "content": message
-            }],
-        )
+        # Append user message to conversation history
+        conversations[session_id].append({
+            "role": "user",
+            "content": message,
+        })
 
-        # Get agent response
-        response = openai_client.responses.create(
-            conversation=conversation_id,
-            extra_body={
-                "agent_reference": {
-                    "name": agent.name,
-                    "type": "agent_reference",
-                }
-            },
-            input="",
-        )
+        # Trim history to stay within limits
+        if len(conversations[session_id]) > MAX_HISTORY:
+            conversations[session_id] = conversations[session_id][-MAX_HISTORY:]
 
-        result = extract_response(response, openai_client)
-        return jsonify(result)
+        # TODO: Use the client to call the Responses API, passing the full
+        # conversation history as the input parameter. Then extract the
+        # response and store the assistant's reply in the conversation history
+        # so future turns have context.
+
+        return jsonify({"text": "", "citations": [], "images": []})
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 
-def extract_response(response, openai_client):
-    """Extract text, citations, and images from the agent response."""
+def extract_response(response):
+    """Extract text and citations from the agent response."""
     text = ""
     citations = []
-    images = []
 
     if hasattr(response, "output") and response.output:
         for item in response.output:
@@ -122,36 +114,18 @@ def extract_response(response, openai_client):
                             if hasattr(content, "text"):
                                 text = content.text
 
-                            # Extract citations and file references
+                            # Extract citations from file search
                             if (
                                 hasattr(content, "annotations")
                                 and content.annotations
                             ):
                                 for ann in content.annotations:
-                                    ann_type = getattr(ann, "type", "")
-                                    if ann_type == "file_citation":
+                                    if getattr(ann, "type", "") == "file_citation":
                                         citations.append({
                                             "filename": getattr(
                                                 ann, "filename", "Source"
                                             ),
                                         })
-                                    elif ann_type == "container_file_citation":
-                                        file_id = getattr(
-                                            ann, "file_id", ""
-                                        )
-                                        filename = getattr(
-                                            ann, "filename", ""
-                                        )
-                                        container_id = getattr(
-                                            ann, "container_id", ""
-                                        )
-                                        _try_download_image(
-                                            openai_client,
-                                            file_id,
-                                            filename,
-                                            container_id,
-                                            images,
-                                        )
             elif hasattr(item, "text") and item.text:
                 text += item.text
 
@@ -159,34 +133,7 @@ def extract_response(response, openai_client):
     if not text and hasattr(response, "output_text") and response.output_text:
         text = response.output_text
 
-    return {"text": text, "citations": citations, "images": images}
-
-
-def _try_download_image(
-    openai_client, file_id, filename, container_id, images
-):
-    """Download a generated file and add it to the images list if it's an image."""
-    if not file_id or not container_id:
-        return
-
-    image_extensions = (".png", ".jpg", ".jpeg", ".gif", ".svg")
-    if not filename.lower().endswith(image_extensions):
-        return
-
-    try:
-        file_content = openai_client.containers.files.content.retrieve(
-            file_id=file_id, container_id=container_id
-        )
-        file_bytes = file_content.read()
-        b64 = base64.b64encode(file_bytes).decode("utf-8")
-        ext = filename.rsplit(".", 1)[-1].lower()
-        mime = f"image/{'jpeg' if ext == 'jpg' else ext}"
-        images.append({
-            "data": f"data:{mime};base64,{b64}",
-            "filename": filename,
-        })
-    except Exception:
-        pass
+    return {"text": text, "citations": citations, "images": []}
 
 
 if __name__ == "__main__":
