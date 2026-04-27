@@ -415,43 +415,6 @@ Now that you've created the agent with the function tools, you can send messages
    python agent.py
     ```
 
-## Assign permissions if needed
-
-If `python agent.py` fails with a `PermissionDenied` error that references `Microsoft.CognitiveServices/accounts/AIServices/agents/write`, the signed-in user does not have permission to create agents in the Foundry resource. In this case, `az login` has authenticated the user, but it has not granted the required data-plane role.
-
-1. If needed, select the subscription that contains your Foundry resource. Skip this step if your current Azure CLI context already points to the correct subscription.
-
-    ```powershell
-    az account set --subscription "<subscription-id>"
-    ```
-
-1. Set variables for your resource group and Foundry resource.
-
-    ```powershell
-    $RESOURCE_GROUP = "<resource-group>"
-    $FOUNDRY_RESOURCE = "<foundry-resource-name>"
-    ```
-
-1. Get the signed-in user's object ID and build the scope for the Foundry resource.
-
-    ```powershell
-    $USER_OBJECT_ID = az ad signed-in-user show --query id -o tsv
-    $SUBSCRIPTION_ID = az account show --query id -o tsv
-    $SCOPE = "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.CognitiveServices/accounts/$FOUNDRY_RESOURCE"
-    ```
-
-1. Assign the `Azure AI User` role on the Foundry resource.
-
-    ```powershell
-    az role assignment create `
-      --assignee-object-id $USER_OBJECT_ID `
-      --assignee-principal-type User `
-      --role "Azure AI User" `
-      --scope $SCOPE
-    ```
-
-1. Wait a few minutes for the role assignment to propagate, and then rerun the app.
-
 1. When prompted, enter a prompt such as:
 
     ```
