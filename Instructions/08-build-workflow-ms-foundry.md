@@ -66,7 +66,9 @@ In this section, you'll create a workflow that helps triage and respond to custo
 
 1. On the Foundry portal home page, select **Build** from the toolbar menu.
 
-1. On the left-hand menu, select **Workflows**.
+1. On the left-hand menu, select **Agents**.
+
+1. On the **Agents** page in the tab on top, look for **Workflow** tab and select it.
 
 1. In the upper right corner, select **Create** > **Blank workflow** to create a new blank workflow.
 
@@ -111,7 +113,7 @@ In this section, you'll create a workflow that helps triage and respond to custo
 
 1. Select the **+** (plus) icon within the **For each** node to add a new node that classifies the current support ticket.
 
-1. In the workflow actions menu, under **Invoke**, select **Invoke Agent** to add an agent node.
+1. In the workflow actions menu, under **Invoke**, select **Agent** to add an agent node.
 
 1. In the **Invoke agent** node editor, under **Select an agent**, select **Create new agent**.
 
@@ -178,7 +180,7 @@ In this section, you'll create a workflow that helps triage and respond to custo
     - Billing ONLY applies when money was charged, refunded, or paid incorrectly
     ```
 
-1. Select **Action settings** to configure the input and output of the agent.
+1. Select **Node settings** to configure the input and output of the agent.
 
 1. Set the **Input message** field to the  `Local.CurrentTicket` variable.
 
@@ -190,7 +192,7 @@ In this section, you'll create a workflow that helps triage and respond to custo
 
 ### Handle low-confidence classifications
 
-1. Select the **+** (plus) icon below the **Invoke agent** node to add a new node that handles low-confidence classifications.
+1. Select the **+** (plus) icon below the **Agent** node to add a new node that handles low-confidence classifications.
 
 1. In the workflow actions menu, under **Flow**, select **If/Else** to add a conditional logic node.
 
@@ -230,7 +232,7 @@ In this section, you'll add conditional logic to route the ticket based on its c
     Local.TriageOutputJson.category = "Billing"
     ```
 
-1. Select the **+** (plus) icon under the **If** branch of the **If/Else** node to add a new node that drafts a response for non-billing tickets.
+1. Select the **+** (plus) icon under the **If** branch of the **If/Else** node to add a new node that escalates billing tickets to human support.
 
 1. In the workflow actions menu, under **Basics**, select **Send message** to add a send message activity.
 
@@ -246,9 +248,9 @@ In this section, you'll add conditional logic to route the ticket based on its c
 
 1. In the visualizer, select the **+** (plus) icon under the **Else** branch of the second **If/Else** node to add a new node that drafts a response for non-billing tickets.
 
-1. In the workflow actions menu, under **Agent**, select **Invoke agent** to add an agent node.
+1. In the workflow actions menu, under **Invoke**, select **Agent** to add an agent node.
 
-1. In the **Invoke agent** node editor, select **Create new agent**.
+1. In the **Agent** node editor, select **Create new agent**.
 
 1. Enter an agent name such as *Resolution-Agent* and select **Create**.
 
@@ -280,7 +282,7 @@ In this section, you'll add conditional logic to route the ticket based on its c
     Do not include internal reasoning or analysis.
     ```
 
-1. Select **Action settings** to configure the input and output of the agent.
+1. Select **Node settings** to configure the input and output of the agent.
 
 1. Set the **Input message** field to the `Local.TriageOutputText` variable.
 
