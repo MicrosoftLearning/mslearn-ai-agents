@@ -230,7 +230,7 @@ In this section, you'll add conditional logic to route the ticket based on its c
     Local.TriageOutputJson.category = "Billing"
     ```
 
-1. Select the **+** (plus) icon under the **If** branch of the **If/Else** node to add a new node that drafts a response for non-billing tickets.
+1. Select the **+** (plus) icon under the **If** branch of the **If/Else** node to add a new node that escalates billing tickets to human support.
 
 1. In the workflow actions menu, under **Basics**, select **Send message** to add a send message activity.
 
