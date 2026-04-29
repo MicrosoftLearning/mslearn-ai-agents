@@ -90,13 +90,13 @@ Now that you have an agent created, let's configure it with instructions and kno
     https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/05a-m365-teams-integration/Python/sample_documents/remote_work_policy.txt
     ```
 
-4. Return to your agent's configuration, scroll to the **Tools** section
+4. Return to your agent's configuration, scroll to the **Tools** section.
 
-5. Select **Add** and then **Browse all tools** and **Add tool**.
+5. Select **Upload files**.
 
 6. A pop-up to attach files will appear. Attach the files you previously downloaded.
 
-7. Once they complete, select **Attach**.
+7. Once complete, select **Attach**.
 
 ## Test the agent in the playground
 
