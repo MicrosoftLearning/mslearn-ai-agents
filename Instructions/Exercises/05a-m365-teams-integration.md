@@ -221,6 +221,8 @@ After the agent package is prepared (this takes 1-2 minutes), you can deploy it 
 
 5. Wait for publishing to complete (you'll see a success message)
 
+> **Alternative if direct publishing fails**: If the publish dialog returns a **400** error, and your Microsoft 365 account has permission to publish custom apps, open the **Download & customize** tab instead.
+
 6. Your agent is now available in Teams! Find it under **Apps** → **Your agents**
 
 ### Test your agent in Teams
