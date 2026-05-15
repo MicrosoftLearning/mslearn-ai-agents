@@ -433,7 +433,7 @@ Now let's create a client application that interacts with your agent programmati
 
 1. Save the `.env` file (**Ctrl+S** or **File > Save**).
 
-1. Open a terminal in VS Code (**Terminal > New Terminal**).
+1. Open a terminal in VS Code (**Terminal > New Terminal**) and navigate to the working directory.
 
 1. Install the required packages and login:
 
