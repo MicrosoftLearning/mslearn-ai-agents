@@ -7,7 +7,7 @@ lab:
     islab: true
 ---
 
-# Develop a multi-agent solution
+# Develop a multi-agent solution with Microsoft Agent Framework
 
 In this exercise, you'll practice using the sequential orchestration pattern in the Microsoft Agent Framework SDK. You'll create a simple pipeline of three agents that work together to process customer feedback and suggest next steps. You'll create the following agents:
 
