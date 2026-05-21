@@ -440,13 +440,15 @@ Now you're ready to create a project that invokes a workflow. Let's get started!
 5. Find the comment **Process events from the workflow run**, and add the following code to process the streamed output and print messages to the console:
 
     ```python
-    # Process events from the workflow run
+   # Process events from the workflow run
    for event in stream:
-        if (event.type == "response.completed"):
-            print("\nResponse completed:")
-            response = openai_client.responses.retrieve(event.response.id)
-            print(f"{response.output_text}")
+       if (event.type == "response.completed"):
+           print("\nResponse completed:")
+           response = openai_client.responses.retrieve(event.response.id)
+           print_workflow_output(response.output_text)
     ```
+
+    This code listens for the completion of the workflow response and then retrieves and prints the final output text to the console. The `print_workflow_output` function is a helper function defined in the code file that formats the output for easier reading.
 
 6. Find the comment **Clean up resources**, and enter the following code to delete the conversation when it is no longer required:
 
