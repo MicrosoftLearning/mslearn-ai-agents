@@ -1,5 +1,0 @@
-Category,Cost
-Accommodation, 674.56
-Transportation, 2301.00
-Meals, 267.89
-Misc., 34.50
