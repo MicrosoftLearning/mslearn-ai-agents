@@ -100,7 +100,7 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. When prompted, select **Open** to open the cloned repository in VS Code.
 
-1. Once the repository opens, select **File > Open Folder** and navigate to `mslearn-ai-agents/Labfiles/05-agent-orchestration`, then choose **Select Folder**.
+1. Once the repository opens, select **File > Open Folder** and navigate to `mslearn-ai-agents/Labfiles/08-agent-orchestration`, then choose **Select Folder**.
 
 1. In the Explorer pane, expand the **Python** folder to view the code files for this exercise. 
 
