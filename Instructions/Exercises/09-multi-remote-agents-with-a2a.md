@@ -96,11 +96,11 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. When prompted, select **Open** to open the cloned repository in VS Code.
 
-1. Once the repository opens, select **File > Open Folder** and navigate to `mslearn-ai-agents/Labfiles/06-build-remote-agents-with-a2a`, then choose **Select Folder**.
+1. Once the repository opens, select **File > Open Folder** and navigate to `mslearn-ai-agents/Labfiles/09-build-remote-agents-with-a2a`, then choose **Select Folder**.
 
 1. In the Explorer pane, expand the **Python** folder to view the code files for this exercise. 
 
-1. In the Explorer view, navigate to the **Labfiles/06-build-remote-agents-with-a2a/Python** folder to find the starter code for this exercise.
+1. In the Explorer view, navigate to the **Labfiles/09-build-remote-agents-with-a2a/Python** folder to find the starter code for this exercise.
 
     The provided files include:
 
