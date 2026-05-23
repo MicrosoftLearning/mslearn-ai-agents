@@ -376,7 +376,7 @@ Now that you've created the agent with the function tools, you can send messages
        response = openai_client.responses.create(
            input=input_list,
            previous_response_id=response.id,
-           extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
+           extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
        )
    # Display the agent's response
    print(f"AGENT: {response.output_text}")
