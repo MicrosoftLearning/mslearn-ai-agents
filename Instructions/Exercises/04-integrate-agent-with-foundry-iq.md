@@ -81,21 +81,8 @@ Now you'll configure your agent that uses Foundry IQ to search the knowledge bas
 
 Now you'll upload sample product information documents to connect to with Foundry IQ.
 
-1. Download the sample product information files by opening new browser tabs and saving each of the following files:
-
-    ```
-    https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/04-integrate-agent-with-foundry-iq/data/contoso-backpacks-guide.md
-    ```
-
-    ```
-    https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/04-integrate-agent-with-foundry-iq/data/contoso-camping-accessories.md
-    ```
-
-    ```
-    https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/04-integrate-agent-with-foundry-iq/data/contoso-tents-catalog.md
-    ```
-
-    You should now have 3 Markdown files detailing the products from Contoso.
+1. Download the sample product information files by opening a new browser tab and navigating to `https://github.com/MicrosoftLearning/mslearn-ai-agents/raw/main/Labfiles/04-integrate-agent-with-foundry-iq/data/contoso-products.zip`
+1. Extract the files from the zip, which should be 3 PDFs detailing the products from Contoso.
 1. In the Azure Portal tab, in the top search bar, search fo **Storage accounts** and select **Storage accounts** from the services section.
 1. Create a storage account with the following settings:
     - **Subscription**: *Your Azure subscription*
@@ -231,7 +218,7 @@ Now let's use Visual Studio Code to develop an app. The code files for your app 
     # Create a response using the agent
     response = openai_client.responses.create(
         conversation=conversation.id,
-        extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
+        extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
         input=""
     )
 
@@ -287,7 +274,7 @@ Now let's use Visual Studio Code to develop an app. The code files for your app 
         # Get the actual response after approval/denial
         response = openai_client.responses.create(
             conversation=conversation.id,
-            extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
+            extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
             input=""
         )
     

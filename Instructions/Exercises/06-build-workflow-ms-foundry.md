@@ -248,7 +248,7 @@ In this section, you'll add conditional logic to route the ticket based on its c
 1. Set the **If Condition** to the following expression to check if the ticket category is "Billing":
 
     ```output
-    Local.TriageOutputJson.category == "Billing"
+    Local.TriageOutputJson.category = "Billing"
     ```
 
 1. Select the **+** (plus) icon under the **If** branch of the **If/Else** node to add a new node that drafts a response for non-billing tickets.
