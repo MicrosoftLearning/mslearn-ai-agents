@@ -50,9 +50,8 @@ Let's start by creating a Foundry project with the new Foundry experience.
 
 ## Create an agent
 
-1. On the home page, under **Start building**, select **Create an agent**.
-1. Give your agent a name, such as `product-expert-agent`.
-1. Select **Create**.
+1. On the home page, select the **Build** tab, then on the **Agents** tab select **Create agent**.
+1. Create your agent with a descriptive name, such as `product-expert-agent`.
 
 When creating an agent, it will deploy the default model (like `gpt-4.1`). Once your agent is created, you'll see the agent playground with that default model automatically selected for you.
 
@@ -71,54 +70,58 @@ Now you'll configure your agent that uses Foundry IQ to search the knowledge bas
 
 1. Select **Save** to save your current agent configuration.
 1. Then, in the **Knowledge** section, expand the **Add** dropdown, and select **Connect to Foundry IQ**.
-1. In the Foundry IQ setup window, select **Connect to an AI Search resource** and then **Create new resource** which should open up the Azure portal in a new tab.
-1. Create a search resource with the following settings:
+1. In the Foundry IQ setup window, select **Connect to an AI Search resource** and then **Create new resource** which should open up a dialog to create the resource.
+1. Create a search resource with the default settings:
+    - **Resource name**: *A globally unique name*
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Use the same resource group as your project*
-    - **Service name**: *A globally unique name*
-    - **Location**: *The same location as your project*
-    - **Pricing tier**: *Free* if available, otherwise choose *Basic*
+    - **Region**: *The same location as your project*
+    - **Pricing tier**: Free *if available, otherwise choose Basic*
+    - **Foundry IQ Knowledge base capabilities**: Pause til next month
 
 Now you'll upload sample product information documents to connect to with Foundry IQ.
 
 1. Download the sample product information files by opening a new browser tab and navigating to `https://github.com/MicrosoftLearning/mslearn-ai-agents/raw/main/Labfiles/04-integrate-agent-with-foundry-iq/data/contoso-products.zip`
 1. Extract the files from the zip, which should be 3 PDFs detailing the products from Contoso.
-1. In the Azure Portal tab, in the top search bar, search fo **Storage accounts** and select **Storage accounts** from the services section.
+1. Open a new tab and navigate to the Azure portal at `https://portal.azure.com`. In the top search bar, search fo **Storage accounts** and select **Storage accounts** from the services section.
 1. Create a storage account with the following settings:
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Use the same resource group as your project*
     - **Storage account name**: *A unique storage account name*
     - **Region**: *The same location as your project*
-    - **Preferred storage type**: *Azure Blob Storage or Azure Data Lake Storage Gen 2*
+    - **Primary service**: *Azure Blob Storage or Azure Data Lake Storage*
     - **Performance**: *Standard*
     - **Redundancy**: *Locally-redundant storage (LRS)*
 1. Once created, go to the storage account you created and select **Upload** from the top bar.
 1. In the **Upload blob** blade, create a new container named `contosoproducts`.
 1. Browse for the files extracted from the zip file, select all 3 PDF files, and select **Upload**.
 1. Once your files are uploaded, navigate to the search service you created.
-1. On the left pane, under **Settings** > **Keys**, select **Both** for API Access control and confirm the selection. Once complete, close the Azure Portal tab and navigate back to the Foundry IQ page in Microsoft Foundry and refresh the page.
-1. Select your search service and select **API key** for Auth Type, and click **Connect**.
-1. On the Foundry IQ page, select **Create a knowledge base**, choosing **Azure Blob Storage** as your knowledge source, then select **Connect**.
+1. On the left pane, under **Settings** > **Keys**, select **Both** for API Access control and confirm the selection. Once complete, leave the Azure Portal tab open and navigate back to the Foundry portal tab and refresh the page.
+1. Verify you are on the **Knowledge** page, select **Create a knowledge base**, choosing **Azure Blob Storage** as your knowledge source, then select **Connect**.
 1. Configure your knowledge source with the following settings:
     - **Name**: `ks-contosoproducts`
     - **Description**: `Contoso product catalog items`
     - **Storage account name**: *Select your storage account*
     - **Container name**: `contosoproducts`
-    - **Content extraction mode**: *minimal*
     - **Authentication type**: *API Key*
-    - **Include embedding model**: *Selected*
+    - **Content extraction mode**: *minimal*
     - **Embedding model**: *Select the available deployed model, likely text-embedding-3-small*
     - **Chat completions model**: *Select the available deployed model, likely gpt-4.1*
 1. Select **Create**.
-1. On the knowledge base creation page, select the `gpt-4.1` model from the **Chat completions model** dropdown, leaving the rest of the optional fields as is.
+1. On the knowledge base creation page, select the `gpt-4.1` model from the **Chat completions model** dropdown, leaving the rest of the field defaults as is.
 1. Select **Save knowledge base**, and then refresh your browser to verify the knowledge source status is *active*. If it isn't yet, wait a minute and refresh your page until it is.
-1. On the top right, expand the **Use in an agent** dropdown, and select your `product-expert-agent`.
+1. Select the back button to return to the **Knowledge** page, then select the **Manage** link next to the *Connection* drop-down.
+1. Scroll down to the **Connected resources**, where you should see your search service. Select that row, find the **Authentication** section, and select **Edit authentication**.
+1. Leaving the dialog open, return to the Azure portal tab which should still be on your search service **Keys** page. Copy one of those keys into the dialog in Foundry and select **Save**.
+
+Your Foundry IQ settings should now be complete.
 
 ## Test the Agent in the playground
 
 Before connecting from code, test your agent in the portal playground.
 
-1. In the agent page, you should see a playground tab selected and your knowledge base listed in the knowledge section.
+1. Navigate back to your agent on the **Build** > **Agents** page, and select the agent you created.
+2. In the agent page, you should see a playground tab selected. Find the knowledge section and add Foundry IQ, selecting the connection and knowledge base you created.
 1. Try the following test queries to verify the agent can retrieve information from the knowledge base:
     - `What types of tents does Contoso offer?`
     - `Tell me about which backpacks are available in XL.`
