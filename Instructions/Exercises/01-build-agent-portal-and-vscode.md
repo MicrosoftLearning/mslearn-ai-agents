@@ -49,11 +49,11 @@ Microsoft Foundry uses projects to organize models, resources, data, and other a
 
 1. Select **Create** and wait for your project to be created.
 
-2. When your project is created, a welcome dialog may appear. Select **Next** to read through the welcome message, and then select **Create agent**.
+1. When your project is created, a welcome dialog may appear. Select **Next** to read through the welcome message, and then select **Create agent**.
 
     You can also select **Start building** on the home page, and select **Create agents** from the drop-down menu.
 
-3. Set the **Agent name** to `it-support-agent` and create the agent.
+1. Set the **Agent name** to `it-support-agent` and create the agent.
 
 The playground will open for your newly created agent. You'll see that an available deployed model is already selected for you.
 
@@ -156,11 +156,11 @@ If you already have installed the Foundry Toolkit extension, you can skip this s
 
 3. Search the extensions marketplace for the `Foundry Toolkit for VS Code` extension from Microsoft and select **Install**.
 
-    Installing the Foundry Toolkit Extension will add the AI Toolkit extension to VS Code.
+    Installing the Foundry Toolkit Extension will add the Foundry Toolkit extension to VS Code.
 
     > **Note**: The extension is currently listed as **Foundry Toolkit**, but some VS Code labels, commands, or older screenshots may still refer to **AI Toolkit**. In this lab, treat those names as referring to the same extension experience.
 
-4. After installing the extension, select the AI Toolkit icon in the sidebar. 
+4. After installing the extension, select the Foundry Toolkit icon in the sidebar.
 
     You should be prompted to sign in to your Azure account if you haven't already.
 
@@ -413,7 +413,7 @@ Now let's create a client application that interacts with your agent programmati
     if __name__ == "__main__":
         main()
     ```
-    
+
 1. Save the `agent_with_functions.py` file (**Ctrl+S** or **File > Save**).
 
 ### Configure environment and run the application

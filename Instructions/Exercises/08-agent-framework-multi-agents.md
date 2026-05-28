@@ -44,15 +44,15 @@ As a developer, you may spend some time working in the Foundry portal; but youâ€
 
     > **Note**: The extension is currently listed as **Foundry Toolkit**, but some VS Code labels, commands, or older screenshots may still refer to **AI Toolkit**. In this lab, treat those names as referring to the same extension experience.
 
-4. After installing the extension, select its icon in the sidebar to open the Foundry Toolkit view. 
+4. After installing the extension, select its icon in the sidebar to open the Foundry Toolkit view.
 
     You should be prompted to sign in to your Azure account if you haven't already.
-   
-4. Select **Create Project** under **Microsoft Foundry Resources**.
+
+5. Select **Create Project** under **Microsoft Foundry Resources**.
 
     If a default project is already active, the project name will appear under **My Resources**. You can create a new project by right-clicking on the active project and selecting **Switch Default Project in Azure Extension**.
 
-5. Select your Azure subscription and resource group, then enter a name for your Foundry project to create a new project for this exercise.
+6. Select your Azure subscription and resource group, then enter a name for your Foundry project to create a new project for this exercise.
 
     When the deployment is complete, you should see the project appear in the Foundry Toolkit pane as the default project.
 
@@ -62,23 +62,23 @@ At the core of any generative AI project, thereâ€™s at least one generative AI m
 
 1. When the "Project deployed successfully" popup appears, select the **Deploy a new model** button. This opens the Model Catalog.
 
-   > **Tip**: You can also access the Model Catalog by selecting the **+** icon next to **Models** in the Resources section, or by pressing **F1** and running the command **AI Toolkit: Show model catalog**.
+   > **Tip**: You can also access the Model Catalog by selecting the **+** icon next to **Models** in the Resources section, or by pressing **F1** and running the command **Foundry Toolkit: Show model catalog**.
 
 1. In the Model Catalog, locate the **gpt-4.1** model (you can use the search bar to find it quickly).
 
-2. Select **Deploy** next to the gpt-4.1 model.
+1. Select **Deploy** next to the gpt-4.1 model.
 
-3. Configure the deployment settings:
+1. Configure the deployment settings:
    - **Deployment name**: Enter a name like "gpt-4.1"
    - **Deployment type**: Select **Global Standard** (or **Standard** if Global Standard is not available)
    - **Model version**: Leave as default
    - **Tokens per minute**: Leave as default
 
-4. Select **Deploy to Microsoft Foundry** in the bottom-left corner.
+1. Select **Deploy to Microsoft Foundry** in the bottom-left corner.
 
-5. Wait for the deployment to complete. Your deployed model will appear under the **Models** section in the Resources view.
+1. Wait for the deployment to complete. Your deployed model will appear under the **Models** section in the Resources view.
 
-6. Right-click the name of the project deployment and select **Copy Project Endpoint**. You'll need this URL to connect your agent to the Foundry project in the next steps.
+1. Right-click the name of the project deployment and select **Copy Project Endpoint**. You'll need this URL to connect your agent to the Foundry project in the next steps.
 
     ![Screenshot of copying the project endpoint in the Foundry Toolkit VS Code extension.](../Media/vs-code-endpoint.png)
 
@@ -102,7 +102,7 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. Once the repository opens, select **File > Open Folder** and navigate to `mslearn-ai-agents/Labfiles/08-agent-orchestration`, then choose **Select Folder**.
 
-1. In the Explorer pane, expand the **Python** folder to view the code files for this exercise. 
+1. In the Explorer pane, expand the **Python** folder to view the code files for this exercise.
 
 1. Right-click on the **requirements.txt** file and select **Open in Integrated Terminal**.
 
@@ -228,6 +228,7 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 Now you're ready to run your code and watch your AI agents collaborate.
 
 1. In the integrated terminal, enter the following commands to run the application:
+
     ```
     az login
     ```
