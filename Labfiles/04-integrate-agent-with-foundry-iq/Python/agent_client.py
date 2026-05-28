@@ -33,8 +33,7 @@ def send_message_to_agent(user_message):
     Send a message to the agent and handle the response using the conversations API.
     """
     try:
-        print(f"You: {user_message}\n")
-        print("Agent: ", end="", flush=True)
+        print("\nAgent: ", end="", flush=True)
         
         # TODO: Add user message to conversation and get response
         # Add your code here to:
@@ -42,13 +41,6 @@ def send_message_to_agent(user_message):
         # 2. Create a response using responses.create() with agent reference
         # 3. Extract and display the response text
         # 4. Check for and display any citations
-        
-        # Store in conversation history (client-side)
-        conversation_history.append({
-            "role": "user",
-            "content": user_message
-        })
-        
         # Your code will go here
 
 
