@@ -292,7 +292,7 @@ In addition to connecting to remote MCP servers, you can also create your own cu
 
     ```python
    # Add references
-   from mcp.server.fastmcp import FastMCP
+   from fastmcp import FastMCP
     ```
 
 1. Under the comment **Create an MCP server**, add the following code to create a new MCP server instance:

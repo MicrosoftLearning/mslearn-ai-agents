@@ -4,3 +4,4 @@ uvicorn
 azure-ai-projects==2.0.0b4
 openai
 mcp
+fastmcp
