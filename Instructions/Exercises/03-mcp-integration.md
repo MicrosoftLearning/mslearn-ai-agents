@@ -309,8 +309,7 @@ In addition to connecting to remote MCP servers, you can also create your own cu
     ```python
    # Add an inventory check mcp tool
    @mcp.tool()
-   def get_inventory_levels() -> dict:
-      # continued...
+   # continued...
     ```
 
     This dictionary represents a sample inventory. The `@mcp.tool()` decorator registers the function as a tool on the MCP server, allowing the LLM to discover your function.
@@ -320,8 +319,7 @@ In addition to connecting to remote MCP servers, you can also create your own cu
     ```python
    # Add a weekly sales mcp tool
    @mcp.tool()
-
-      # continued...
+   # continued...
     ```
 
 1. Find the comment **Run the MCP server** and add the following code to start the server:
