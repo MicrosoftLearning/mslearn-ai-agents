@@ -304,7 +304,7 @@ In addition to connecting to remote MCP servers, you can also create your own cu
 
     This code initializes a new MCP server with the label "Inventory".
 
-1. Find the comment **Add an inventory check mcp tool** and add the following decorator above the function definition:
+1. Find the comment **Add an inventory check mcp tool** and add the following decorator above the function definition, which should now look like this:
 
     ```python
    # Add an inventory check mcp tool
@@ -315,7 +315,7 @@ In addition to connecting to remote MCP servers, you can also create your own cu
 
     This dictionary represents a sample inventory. The `@mcp.tool()` decorator registers the function as a tool on the MCP server, allowing the LLM to discover your function.
 
-1. Find the comment **Add a weekly sales mcp tool** and add the following decorator above the function definition:
+1. Find the comment **Add a weekly sales mcp tool** and add the following decorator above the function definition, which should now look like this:
 
     ```python
    # Add a weekly sales mcp tool
