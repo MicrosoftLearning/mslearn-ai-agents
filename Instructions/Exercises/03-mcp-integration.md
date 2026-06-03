@@ -320,7 +320,7 @@ In addition to connecting to remote MCP servers, you can also create your own cu
     ```python
    # Add a weekly sales mcp tool
    @mcp.tool()
-   def get_weekly_sales() -> dict:
+
       # continued...
     ```
 
