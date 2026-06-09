@@ -5,6 +5,7 @@ lab:
     level: 300
     duration: 45
     islab: true
+    status: 'released'
 ---
 
 # Integrate an AI agent with Foundry IQ

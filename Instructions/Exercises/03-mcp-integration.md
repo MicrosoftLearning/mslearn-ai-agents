@@ -5,6 +5,7 @@ lab:
     level: 300
     duration: 60
     islab: true
+    status: 'released'
 ---
 
 # Extend agents with Model Context Protocol (MCP) tools

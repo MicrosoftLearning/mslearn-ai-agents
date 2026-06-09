@@ -5,6 +5,7 @@ lab:
     level: 300
     duration: 30
     islab: true
+    status: 'released'
 ---
 
 # Connect to remote agents with A2A protocol

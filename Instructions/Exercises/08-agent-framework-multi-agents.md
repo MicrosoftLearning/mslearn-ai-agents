@@ -5,6 +5,7 @@ lab:
     level: 300
     duration: 30
     islab: true
+    status: 'released'
 ---
 
 # Develop a multi-agent solution with Microsoft Agent Framework

@@ -5,6 +5,7 @@ lab:
     level: 300
     duration: 40
     islab: true
+    status: 'released'
 ---
 
 # Work IQ - Workplace intelligence for AI agents

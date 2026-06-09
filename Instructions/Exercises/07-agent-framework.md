@@ -5,6 +5,7 @@ lab:
     level: 300
     duration: 30
     islab: true
+    status: 'released'
 ---
 
 # Develop an Azure AI chat agent with the Microsoft Agent Framework SDK

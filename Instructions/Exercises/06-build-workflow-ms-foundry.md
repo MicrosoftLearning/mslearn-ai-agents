@@ -5,6 +5,7 @@ lab:
     level: 300
     duration: 45
     islab: true
+    status: 'released'
 ---
 
 # Build a workflow in Microsoft Foundry
