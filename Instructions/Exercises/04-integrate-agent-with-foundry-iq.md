@@ -166,6 +166,24 @@ Now let's use Visual Studio Code to develop an app. The code files for your app 
 1. In the code file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project **Home** page in the Foundry portal) and ensure that the AGENT_NAME variable is set to your agent name (which should be *product-expert-agent*).
 1. After you've replaced the placeholder, save the file.
 
+### Configure the agent to require approval for tool calls
+
+When you create an agent in the portal, its Foundry IQ (knowledge) tool runs **without** asking for approval by default. So that your app can review and control each knowledge base lookup, you'll change the agent to require approval before it uses tools. You'll do this with the Foundry Toolkit for VS Code extension.
+
+> **Note**: The Foundry portal doesn't currently expose a setting to change this approval behavior, so you'll configure it from the Foundry Toolkit extension instead.
+
+1. In Visual Studio Code, select **Extensions** from the left pane (or press **Ctrl+Shift+X**), then search the marketplace for the `Foundry Toolkit for VS Code` extension from Microsoft and select **Install** (if it isn't already installed).
+
+    > **Note**: The extension is currently listed as **Foundry Toolkit**, but some VS Code labels, commands, or older screenshots may still refer to **AI Toolkit**. In this lab, treat those names as referring to the same extension experience.
+
+1. Select the **Foundry Toolkit** icon in the sidebar, and sign in to your Azure account if you're prompted.
+1. Under **Microsoft Foundry Resources**, choose **Set Default Project** and select the project you created earlier.
+1. Expand the project section. Under **Prompt Agents**, select your `product-expert-agent` agent to open the **Agent Builder** window.
+1. In the **Tools** section, select the three dots (**...**) to open the tool configuration popup.
+1. In the **Require approval before using tools** dropdown, select **Ask for approval for all tools**, and save your changes if you're prompted.
+
+Your agent will now request approval each time it uses Foundry IQ to search the knowledge base, which the client app you complete next will handle.
+
 ### Complete the agent client code
 
 > **Tip**: As you add code, be sure to maintain the correct indentation. Use the comment indentation levels as a guide.
