@@ -115,7 +115,7 @@ For this exercise, you'll use starter code that will help you connect to your Fo
     pip install -r requirements.txt
     ```
 
-1. Open the **.env** file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project deployment resource in the Foundry Toolkit extension) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name. Use **Ctrl+S** to save the file after making these changes.
+1. Open the **.env** file, replace the **your_project_endpoint** placeholder for the **AZURE_AI_PROJECT_ENDPOINT** variable with the endpoint for your project (copied from the project deployment resource in the Foundry Toolkit extension) and ensure that the **AZURE_AI_MODEL_DEPLOYMENT_NAME** variable is set to your model deployment name. Use **Ctrl+S** to save the file after making these changes.
 
 ## Create AI agents
 
@@ -128,10 +128,10 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
     ```python
    # Add references
    import asyncio
-   from typing import cast
+   import os
    from dotenv import load_dotenv
    from agent_framework import Message
-   from agent_framework.azure import AzureAIAgentClient
+   from agent_framework.foundry import FoundryChatClient
    from agent_framework.orchestrations import SequentialBuilder
    from azure.identity import AzureCliCredential
 
@@ -145,16 +145,19 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
     ```python
    # Create the chat client
    credential = AzureCliCredential()
-   async with (
-       AzureAIAgentClient(credential=credential) as chat_client,
-   ):
+   project_endpoint = os.environ["AZURE_AI_PROJECT_ENDPOINT"]
+   model = os.environ["AZURE_AI_MODEL_DEPLOYMENT_NAME"]
+
+   chat_client = FoundryChatClient(
+       project_endpoint=project_endpoint,
+       credential=credential,
+       model=model,
+   )
     ```
 
-    Note that the **AzureCliCredential** object will allow your code to authenticate to your Azure account. The **AzureAIAgentClient** object will automatically include the Foundry project settings from the .env configuration.
+    Note that the **AzureCliCredential** object will allow your code to authenticate to your Azure account. The **FoundryChatClient** object connects to your Foundry project using the project endpoint and model deployment name from the .env configuration.
 
 1. Add the following code under the comment **Create agents**:
-
-    (Be sure to maintain the indentation level)
 
     ```python
    # Create agents
@@ -178,8 +181,6 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 
 1. In the **main** function, find the comment **Initialize the current feedback** and add the following code:
 
-    (Be sure to maintain the indentation level)
-
     ```python
    # Initialize the current feedback
    feedback="""
@@ -193,29 +194,33 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 
     ```python
    # Build sequential orchestration
-   workflow = SequentialBuilder(participants=[summarizer, classifier, action]).build()
+   workflow = SequentialBuilder(
+       participants=[summarizer, classifier, action],
+       output_from="all",
+   ).build()
     ```
 
-    The agents will process the feedback in the order they are added to the orchestration.
+    The agents will process the feedback in the order they are added to the orchestration. Setting `output_from="all"` surfaces the response from every participant, not just the last one.
 
 1. Add the following code under the comment **Run and collect outputs**:
 
     ```python
    # Run and collect outputs
-   outputs: list[list[Message]] = []
-   async for event in workflow.run(f"Customer feedback: {feedback}", stream=True):
-       if event.type == "output":
-           outputs.append(cast(list[Message], event.data))
+   prompt = f"Customer feedback: {feedback}"
+   result = await workflow.run(prompt)
+   outputs: list[Message] = [Message(role="user", contents=[prompt])]
+   for response in result.get_outputs():
+       outputs.extend(response.messages)
     ```
 
-    This code runs the orchestration and collects the output from each of the participating agents.
+    This code runs the orchestration and collects the output from each of the participating agents. The original customer feedback is added as the first message so it's displayed alongside the agent responses.
 
 1. Add the following code under the comment **Display outputs**:
 
     ```python
    # Display outputs
    if outputs:
-       for i, msg in enumerate(outputs[-1], start=1):
+       for i, msg in enumerate(outputs, start=1):
            name = msg.author_name or ("assistant" if msg.role == "assistant" else "user")
            print(f"{'-' * 60}\n{i:02d} [{name}]\n{msg.text}")
     ```
