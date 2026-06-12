@@ -20,7 +20,7 @@ async def main():
     user_prompt = input(f"Here is the expenses data in your file:\n\n{data}\n\nWhat would you like me to do with it?\n\n")
     
     # Run the async agent code
-    await process_expenses_data (user_prompt, data)
+    await process_expenses_data(user_prompt, data)
     
 async def process_expenses_data(prompt, expenses_data):
 
