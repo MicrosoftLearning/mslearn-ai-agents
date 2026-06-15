@@ -139,6 +139,26 @@ Before connecting from code, test your agent in the portal playground.
     - **Agent name**: This is the name you created (`product-expert-agent`)
     - **Project endpoint**: Found in the project settings or home page
 
+### Configure the agent to require approval for tool calls
+
+When you create an agent in the portal, its Foundry IQ (knowledge) tool runs **without** asking for approval by default. To ensure your app can review and control each knowledge base lookup, you'll change the agent to require approval before it uses tools with the Foundry Toolkit for VS Code extension.
+
+> **Note**: The Foundry portal doesn't currently expose a setting to change this approval behavior, so you'll configure it from the Foundry Toolkit extension instead.
+
+1. In Visual Studio Code, select **Extensions** from the left pane (or press **Ctrl+Shift+X**), then search the marketplace for the `Foundry Toolkit for VS Code` extension from Microsoft and select **Install** (if it isn't already installed).
+
+    > **Note**: The extension is currently listed as **Foundry Toolkit**, but some VS Code labels, commands, or older screenshots may still refer to **AI Toolkit**. In this lab, treat those names as referring to the same extension experience.
+
+1. Select the **Foundry Toolkit** icon in the sidebar, and sign in to your Azure account if you're prompted.
+1. Under **Microsoft Foundry Resources**, choose **Set Default Project** and select the project you created earlier.
+1. Expand the project section. Under **Prompt Agents**, select your `product-expert-agent` agent to open the **Agent Builder** window.
+1. In the **Tools** section, find the **Foundry IQ** (knowledge base) tool and select its three dots (**...**) to open the tool configuration popup.
+
+    > **Note**: The agent may list more than one tool. The Foundry portal adds a **Web search** tool to new agents by default, so be sure to select the three dots on the **Foundry IQ** knowledge base tool rather than another tool.
+1. In the **Require approval before using tools** dropdown, select **Ask for approval for all tools**, and save your changes if you're prompted.
+
+Your agent will now request approval each time it uses Foundry IQ to search the knowledge base, which the client app you complete next will handle.
+
 ## Connect to your agent from an app
 
 Now you'll create a Python application to interact with your agent programmatically. Starter files have been provided in the GitHub repository to help you get started quickly.
