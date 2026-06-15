@@ -329,10 +329,10 @@ In addition to connecting to remote MCP servers, you can also create your own cu
 
     ```python
    # Run the MCP server
-   mcp.run()
+   mcp.run(show_banner=False)
     ```
 
-    This code starts the MCP server, making your tools available for discovery and use by the agent.
+    This code starts the MCP server, making your tools available for discovery and use by the agent. Setting `show_banner=False` prevents the startup banner from being printed to stdout, which would corrupt the MCP stdio protocol.
 
 1. Save the file (*CTRL+S*).
 
