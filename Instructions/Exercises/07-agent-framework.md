@@ -129,7 +129,7 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
     ```python
    # Add references
    from agent_framework import tool, Agent
-   from agent_framework.azure import AzureOpenAIResponsesClient
+   from agent_framework.foundry import FoundryChatClient
    from azure.identity import AzureCliCredential
    from pydantic import Field
    from typing import Annotated
@@ -151,29 +151,39 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
 
     > **Note**: The function *simulates* sending an email by printing it to the console. In a real application, you'd use an SMTP service or similar to actually send the email!
 
-1. Back up above the **send_email** code, in the **process_expenses_data** function, find the comment **Create a client and initialize an agent with the tool and instructions**, and add the following code:
+1. Back up above the **send_email** code, in the **process_expenses_data** function, find the comment **Create a foundry chat client**, and add the following code:
 
     (Be sure to maintain the indentation level)
 
     ```python
-   # Create a client and initialize an agent with the tool and instructions
-   credential = AzureCliCredential()
-   async with (
-        Agent(
-            client=AzureOpenAIResponsesClient(
-                credential=credential,
-                deployment_name=os.getenv("MODEL_DEPLOYMENT_NAME"),
-                project_endpoint=os.getenv("PROJECT_ENDPOINT"),
-            ),
-            instructions="""You are an AI assistant for expense claim submission.
-                        At the user's request, create an expense claim and use the plug-in function to send an email to expenses@contoso.com with the subject 'Expense Claim`and a body that contains itemized expenses with a total.
-                        Then confirm to the user that you've done so. Don't ask for any more information from the user, just use the data provided to create the email.""",
-            tools=[submit_claim],
-        ) as agent,
-    ):
+   # Create a foundry chat client 
+   client = FoundryChatClient(
+       project_endpoint=os.getenv("PROJECT_ENDPOINT"),
+       model=os.getenv("MODEL_DEPLOYMENT_NAME"),
+       credential=AzureCliCredential()
+   )
     ```
 
-    Note that the **AzureCliCredential** object will allow your code to authenticate to your Azure account. The **AzureOpenAIResponsesClient** object includes the Foundry project settings from the .env configuration. The **Agent** object is initialized with the client, instructions for the agent, and the tool function you defined to send emails.
+    Note that the **AzureCliCredential** object will allow your code to authenticate to your Azure account. This client will be used to interact with the Foundry agent services.
+
+2. Find the comment **Initialize an agent with the tool and instructions**, and add the following code:
+
+    (Be sure to maintain the indentation level)
+
+    ```python
+   # Initialize an agent with the tool and instructions
+   async with (
+       Agent(
+           client=client,
+           name="ExpenseClaimAgent",
+           instructions="""You are an AI assistant for expense claim submission.
+                       At the user's request, create an expense claim and use the plug-in function to send an email to expenses@contoso.com with the subject 'Expense Claim`and a body that contains itemized expenses with a total.
+                       Then confirm to the user that you've done so. Don't ask for any more information from the user, just use the data provided to create the email.""",
+           tools=[submit_claim],
+       ) as agent,
+   ):
+    ```
+    In this code, the **Agent** object is initialized with the client, instructions for the agent, and the tool function you defined to send emails.
 
 1. Find the comment **Use the agent to process the expenses data**, and add the following code to create a thread for your agent to run on, and then invoke it with a chat message.
 
@@ -206,6 +216,8 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
     ```
    python agent-framework.py
     ```
+
+    `az login` allows the AzureCliCredential to authenticate to your Azure account.
 
 1. When asked what to do with the expenses data, enter the following prompt:
 
