@@ -140,7 +140,7 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
     ```python
    # Create a tool function for the email functionality
    @tool(approval_mode="never_require")
-   def submit_claim(
+   def submit_claim():
        to: Annotated[str, Field(description="Who to send the email to")],
        subject: Annotated[str, Field(description="The subject of the email.")],
        body: Annotated[str, Field(description="The text body of the email.")]):
