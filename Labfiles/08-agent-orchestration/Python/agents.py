@@ -23,21 +23,21 @@ async def main():
     """
 
     # Create the chat client
-    
 
-        # Create agents
-    
 
-        # Initialize the current feedback
-    
+    # Create agents
 
-        # Build sequential orchestration
-    
-    
-        # Run and collect outputs
-    
-    
-        # Display outputs
+
+    # Initialize the current feedback
+
+
+    # Build sequential orchestration
+
+
+    # Run and collect outputs
+
+
+    # Display outputs
     
     
     
