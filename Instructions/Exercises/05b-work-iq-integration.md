@@ -122,7 +122,7 @@ Now let's use Visual Studio Code to develop an app. The code files for your app 
 
    ```env
    PROJECT_ENDPOINT=https://your-project.services.ai.azure.com/api/projects/your-id
-   MODEL_DEPLOYMENT_NAME=gpt-4.1
+   MODEL_DEPLOYMENT_NAME=gpt-5
    ```
 
    > **Tip:** To get your endpoint: In VS Code, open the **Foundry Toolkit** extension, right-click on your active project, and select **Copy Endpoint**. The Foundry Toolkit is included in the Foundry Toolkit for VS Code extension.

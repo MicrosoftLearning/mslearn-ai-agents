@@ -54,7 +54,7 @@ Let's start by creating a Foundry project with the new Foundry experience.
 1. On the home page, select the **Build** tab, then on the **Agents** tab select **Create agent**.
 1. Create your agent with a descriptive name, such as `product-expert-agent`.
 
-When creating an agent, it will deploy the default model (like `gpt-4.1`). Once your agent is created, you'll see the agent playground with that default model automatically selected for you.
+When creating an agent, it will deploy the default model (like `gpt-5`). Once your agent is created, you'll see the agent playground with that default model automatically selected for you.
 
 ## Configure your data and Foundry IQ
 
@@ -107,9 +107,9 @@ Now you'll upload sample product information documents to connect to with Foundr
     - **Authentication type**: *API Key*
     - **Content extraction mode**: *minimal*
     - **Embedding model**: *Select the available deployed model, likely text-embedding-3-small*
-    - **Chat completions model**: *Select the available deployed model, likely gpt-4.1*
+    - **Chat completions model**: *Select the available deployed model, likely gpt-5*
 1. Select **Create**.
-1. On the knowledge base creation page, select the `gpt-4.1` model from the **Chat completions model** dropdown, leaving the rest of the field defaults as is.
+1. On the knowledge base creation page, select the `gpt-5` model from the **Chat completions model** dropdown, leaving the rest of the field defaults as is.
 1. Select **Save knowledge base**, and then refresh your browser to verify the knowledge source status is *active*. If it isn't yet, wait a minute and refresh your page until it is.
 1. Select the back button to return to the **Knowledge** page, then select the **Manage** link next to the *Connection* drop-down.
 1. Scroll down to the **Connected resources**, where you should see your search service. Select that row, find the **Authentication** section, and select **Edit authentication**.

@@ -23,7 +23,7 @@ class M365TeamsLab:
     def __init__(self):
         """Initialize the lab with Microsoft Foundry connection."""
         self.project_endpoint = os.getenv("PROJECT_ENDPOINT")
-        self.model_deployment = os.getenv("MODEL_DEPLOYMENT_NAME", "gpt-4.1")
+        self.model_deployment = os.getenv("MODEL_DEPLOYMENT_NAME", "gpt-5")
         
         if not self.project_endpoint:
             print("❌ Error: PROJECT_ENDPOINT not set in .env file")
@@ -125,7 +125,7 @@ class M365TeamsLab:
         print("       agent_name='knowledge-agent',")
         print("       definition={")
         print("           'kind': 'prompt',")
-        print("           'model': 'gpt-4.1',")
+        print("           'model': 'gpt-5',")
         print("           'instructions': 'Search and answer from knowledge base',")
         print("           'tools': [")
         print("               {'type': 'azure_ai_search', ...}")
