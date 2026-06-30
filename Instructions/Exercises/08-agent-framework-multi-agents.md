@@ -128,10 +128,11 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
     ```python
    # Add references
    import asyncio
+   import os
    from typing import cast
    from dotenv import load_dotenv
    from agent_framework import Message
-   from agent_framework.azure import AzureAIAgentClient
+   from agent_framework.foundry import FoundryChatClient
    from agent_framework.orchestrations import SequentialBuilder
    from azure.identity import AzureCliCredential
 
@@ -145,12 +146,14 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
     ```python
    # Create the chat client
    credential = AzureCliCredential()
-   async with (
-       AzureAIAgentClient(credential=credential) as chat_client,
-   ):
+   chat_client = FoundryChatClient(
+       credential=credential,
+       project_endpoint=os.getenv("AZURE_AI_PROJECT_ENDPOINT"),
+       model=os.getenv("AZURE_AI_MODEL_DEPLOYMENT_NAME"),
+   )
     ```
 
-    Note that the **AzureCliCredential** object will allow your code to authenticate to your Azure account. The **AzureAIAgentClient** object will automatically include the Foundry project settings from the .env configuration.
+    Note that the **AzureCliCredential** object will allow your code to authenticate to your Azure account. The **FoundryChatClient** object connects to your Foundry project using the endpoint and model deployment name from the .env configuration.
 
 1. Add the following code under the comment **Create agents**:
 
@@ -158,19 +161,19 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 
     ```python
    # Create agents
-   summarizer = chat_client.as_agent(
-       instructions=summarizer_instructions,
+   summarizer_agent = chat_client.as_agent(
        name="summarizer",
+       instructions=summarizer_instructions,
    )
 
-   classifier = chat_client.as_agent(
-       instructions=classifier_instructions,
+   classifier_agent = chat_client.as_agent(
        name="classifier",
+       instructions=classifier_instructions,
    )
 
-   action = chat_client.as_agent(
-       instructions=action_instructions,
+   action_agent = chat_client.as_agent(
        name="action",
+       instructions=action_instructions,
    )
     ```
 
@@ -193,19 +196,20 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 
     ```python
    # Build sequential orchestration
-   workflow = SequentialBuilder(participants=[summarizer, classifier, action]).build()
+   workflow = SequentialBuilder(
+       participants=[summarizer_agent, classifier_agent, action_agent],
+       output_from="all",
+   ).build()
     ```
 
-    The agents will process the feedback in the order they are added to the orchestration.
+    The agents will process the feedback in the order they are added to the orchestration. The `output_from="all"` parameter ensures that outputs from all agents are collected.
 
 1. Add the following code under the comment **Run and collect outputs**:
 
     ```python
    # Run and collect outputs
-   outputs: list[list[Message]] = []
-   async for event in workflow.run(f"Customer feedback: {feedback}", stream=True):
-       if event.type == "output":
-           outputs.append(cast(list[Message], event.data))
+   result = await workflow.run(f"Customer feedback: {feedback}")
+   outputs = result.get_outputs()
     ```
 
     This code runs the orchestration and collects the output from each of the participating agents.
@@ -214,10 +218,12 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 
     ```python
    # Display outputs
-   if outputs:
-       for i, msg in enumerate(outputs[-1], start=1):
+   i = 1
+   for response in outputs:
+       for msg in cast(list[Message], response.messages):
            name = msg.author_name or ("assistant" if msg.role == "assistant" else "user")
            print(f"{'-' * 60}\n{i:02d} [{name}]\n{msg.text}")
+           i += 1
     ```
 
     This code formats and displays the messages from the workflow outputs you collected from the orchestration.
