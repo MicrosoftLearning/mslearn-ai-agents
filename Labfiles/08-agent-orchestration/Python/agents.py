@@ -1,5 +1,12 @@
+import asyncio
+import os
+from typing import cast
+from dotenv import load_dotenv
+
 # Add references
 
+
+load_dotenv()
 
 async def main():
     # Agent instructions

@@ -127,16 +127,10 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 
     ```python
    # Add references
-   import asyncio
-   import os
-   from typing import cast
-   from dotenv import load_dotenv
    from agent_framework import Message
    from agent_framework.foundry import FoundryChatClient
    from agent_framework.orchestrations import SequentialBuilder
    from azure.identity import AzureCliCredential
-
-   load_dotenv()
     ```
 
 1. In the **main** function, take a moment to review the agent instructions. These instructions define the behavior of each agent in the orchestration.
@@ -247,22 +241,18 @@ Now you're ready to run your code and watch your AI agents collaborate.
 1. You should see some output similar to the following:
 
     ```output
+    User requests a dark mode option for more comfortable nighttime use.
+    Feature request
+    Log as enhancement request to add dark mode for improved user comfort during nighttime use.
     ------------------------------------------------------------
-    01 [user]
-    Customer feedback:
-        I use the dashboard every day to monitor metrics, and it works well overall.
-        But when I'm working late at night, the bright screen is really harsh on my eyes.
-        If you added a dark mode option, it would make the experience much more comfortable.
-
+    01 [summarizer]
+    User requests a dark mode option for more comfortable nighttime use.
     ------------------------------------------------------------
-    02 [summarizer]
-    User requests a dark mode for better nighttime usability.
-    ------------------------------------------------------------
-    03 [classifier]
+    02 [classifier]
     Feature request
     ------------------------------------------------------------
-    04 [action]
-    Log as enhancement request for product backlog.
+    03 [action]
+    Log as enhancement request to add dark mode for improved user comfort during nighttime use.
     ```
 
 1. Optionally, you can try running the code using different feedback inputs, such as:
