@@ -195,37 +195,41 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
 
     ```python
    # Process any MCP approval requests that were generated
-   input_list: ResponseInputParam = []
-   for item in response.output:
-       if item.type == "mcp_approval_request":
-           if item.server_label == "api-specs" and item.id:
-               # Automatically approve the MCP request to allow the agent to proceed
-               input_list.append(
-                   McpApprovalResponse(
-                       type="mcp_approval_response",
-                       approve=True,
-                       approval_request_id=item.id,
+   # The agent may issue several tool calls, each needing its own approval,
+   # so we loop until there are none left.
+   while True:
+       # Collect any MCP approval requests from the latest response
+       input_list: ResponseInputParam = []
+       for item in response.output:
+           if item.type == "mcp_approval_request":
+               if item.server_label == "api-specs" and item.id:
+                   # Automatically approve the MCP request to allow the agent to proceed
+                   input_list.append(
+                       McpApprovalResponse(
+                           type="mcp_approval_response",
+                           approve=True,
+                           approval_request_id=item.id,
+                       )
                    )
-               )
 
-   print("Final input:")
-   print(input_list)
-    ```
+       # No more approvals needed -> the agent has produced its final response
+       if not input_list:
+           break
 
-    This code listens for any MCP approval requests in the agent's response and automatically approves them.
+       print("Final input:")
+       print(input_list)
 
-1. Find the comment **Send the approval response back and retrieve a response** and add the following code:
-
-    ```python
-   # Send the approval response back and retrieve a response
-   response = openai_client.responses.create(
-       input=input_list,
-       previous_response_id=response.id,
-       extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
-   )
+       # Send the approval response back and retrieve the next response
+       response = openai_client.responses.create(
+           input=input_list,
+           previous_response_id=response.id,
+           extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
+       )
 
    print(f"\nAgent response: {response.output_text}")
     ```
+
+    This code listens for any MCP approval requests in the agent's response and automatically approves them.
 
 1. Find the comment **Clean up resources by deleting the agent version** and add the following code:
 

@@ -25,10 +25,6 @@ model_deployment = os.getenv("MODEL_DEPLOYMENT_NAME")
     
 
     # Process any MCP approval requests that were generated
-
-
-    # Send the approval response back and retrieve a response
-    
     
     # Clean up resources by deleting the agent version
     
