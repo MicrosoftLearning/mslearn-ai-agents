@@ -1,5 +1,12 @@
+import asyncio
+import os
+from typing import cast
+from dotenv import load_dotenv
+
 # Add references
 
+
+load_dotenv()
 
 async def main():
     # Agent instructions
@@ -23,21 +30,21 @@ async def main():
     """
 
     # Create the chat client
-    
 
-        # Create agents
-    
 
-        # Initialize the current feedback
-    
+    # Create agents
 
-        # Build sequential orchestration
-    
-    
-        # Run and collect outputs
-    
-    
-        # Display outputs
+
+    # Initialize the current feedback
+
+
+    # Build sequential orchestration
+
+
+    # Run and collect outputs
+
+
+    # Display outputs
     
     
     

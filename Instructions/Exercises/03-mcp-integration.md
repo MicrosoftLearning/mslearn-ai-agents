@@ -5,6 +5,7 @@ lab:
     level: 300
     duration: 60
     islab: true
+    status: 'released'
 ---
 
 # Extend agents with Model Context Protocol (MCP) tools
@@ -38,10 +39,10 @@ As a developer, you may spend some time working in the Foundry portal; but youâ€
 
     > **Note**: The extension is currently listed as **Foundry Toolkit**, but some VS Code labels, commands, or older screenshots may still refer to **AI Toolkit**. In this lab, treat those names as referring to the same extension experience.
 
-4. After installing the extension, select its icon in the sidebar to open the Foundry Toolkit view. 
+4. After installing the extension, select its icon in the sidebar to open the Foundry Toolkit view.
 
     You should be prompted to sign in to your Azure account if you haven't already.
-   
+
 5. Select **Create Project** under **Microsoft Foundry Resources**.
 
     If a default project is already active, the project name will appear under **My Resources**. You can create a new project by right-clicking on the active project and selecting **Switch Default Project in Azure Resources**.
@@ -56,23 +57,23 @@ At the core of any generative AI project, thereâ€™s at least one generative AI m
 
 1. When the "Project deployed successfully" popup appears, select the **Deploy a new model** button. This opens the Model Catalog.
 
-   > **Tip**: You can also access the Model Catalog by selecting the **+** icon next to **Models** in the Resources section, or by pressing **F1** and running the command **AI Toolkit: Show model catalog**.
+   > **Tip**: You can also access the Model Catalog by selecting the **+** icon next to **Models** in the Resources section, or by pressing **F1** and running the command **Foundry Toolkit: Show model catalog**.
 
-1. In the Model Catalog, locate the **gpt-4.1** model (you can use the search bar to find it quickly).
+1. In the Model Catalog, locate the **gpt-5** model (you can use the search bar to find it quickly).
 
-2. Select **Deploy** next to the gpt-4.1 model.
+1. Select **Deploy** next to the gpt-5 model.
 
-3. Configure the deployment settings:
-   - **Deployment name**: Enter a name like "gpt-4.1"
+1. Configure the deployment settings:
+   - **Deployment name**: Enter a name like "gpt-5"
    - **Deployment type**: Select **Global Standard** (or **Standard** if Global Standard is not available)
    - **Model version**: Leave as default
    - **Tokens per minute**: Leave as default
 
-4. Select **Deploy to Microsoft Foundry** in the bottom-left corner.
+1. Select **Deploy to Microsoft Foundry** in the bottom-left corner.
 
-5. Wait for the deployment to complete. Your deployed model will appear under the **Models** section in the Resources view.
+1. Wait for the deployment to complete. Your deployed model will appear under the **Models** section in the Resources view.
 
-6. Right-click the name of the project deployment and select **Copy Project Endpoint**. You'll need this URL to connect your agent to the Foundry project in the next steps.
+1. Right-click the name of the project deployment and select **Copy Project Endpoint**. You'll need this URL to connect your agent to the Foundry project in the next steps.
 
     ![Screenshot of copying the project endpoint in the Foundry Toolkit VS Code extension.](../Media/vs-code-endpoint.png)
 
@@ -96,7 +97,7 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. Once the repository opens, select **File > Open Folder** and navigate to `mslearn-ai-agents/Labfiles/03-mcp-integration`, then choose **Select Folder**.
 
-1. In the Explorer pane, expand the **Python** folder to view the code files for this exercise. 
+1. In the Explorer pane, expand the **Python** folder to view the code files for this exercise.
 
 1. Right-click on the **requirements.txt** file and select **Open in Integrated Terminal**.
 
@@ -186,7 +187,7 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
    response = openai_client.responses.create(
        conversation=conversation.id,
        input="Give me the Azure CLI commands to create an Azure Container App with a managed identity.",
-       extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
+      extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
    )
     ```
 
@@ -194,37 +195,38 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
 
     ```python
    # Process any MCP approval requests that were generated
-   input_list: ResponseInputParam = []
-   for item in response.output:
-       if item.type == "mcp_approval_request":
-           if item.server_label == "api-specs" and item.id:
-               # Automatically approve the MCP request to allow the agent to proceed
-               input_list.append(
-                   McpApprovalResponse(
-                       type="mcp_approval_response",
-                       approve=True,
-                       approval_request_id=item.id,
+   # The agent may issue several tool calls, each needing its own approval,
+   # so we loop until there are none left.
+   while True:
+       # Collect any MCP approval requests from the latest response
+       input_list: ResponseInputParam = []
+       for item in response.output:
+           if item.type == "mcp_approval_request":
+               if item.server_label == "api-specs" and item.id:
+                   # Automatically approve the MCP request to allow the agent to proceed
+                   input_list.append(
+                       McpApprovalResponse(
+                           type="mcp_approval_response",
+                           approve=True,
+                           approval_request_id=item.id,
+                       )
                    )
-               )
 
-   print("Final input:")
-   print(input_list)
-    ```
+       # No more approvals needed -> the agent has produced its final response
+       if not input_list:
+           break
 
-    This code listens for any MCP approval requests in the agent's response and automatically approves them.
-
-1. Find the comment **Send the approval response back and retrieve a response** and add the following code:
-
-    ```python
-   # Send the approval response back and retrieve a response
-   response = openai_client.responses.create(
-       input=input_list,
-       previous_response_id=response.id,
-       extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
-   )
+       # Send the approval response back and retrieve the next response
+       response = openai_client.responses.create(
+           input=input_list,
+           previous_response_id=response.id,
+           extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
+       )
 
    print(f"\nAgent response: {response.output_text}")
     ```
+
+    This code listens for any MCP approval requests in the agent's response and automatically approves them.
 
 1. Find the comment **Clean up resources by deleting the agent version** and add the following code:
 
@@ -241,6 +243,7 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
 Now you're ready to run the application and see how the agent uses the MCP tool to retrieve information from the Microsoft Learn Docs remote MCP server.
 
 1. In the integrated terminal, enter the following command to run the application:
+
     ```
     az login
     ```
@@ -254,9 +257,7 @@ Now you're ready to run the application and see how the agent uses the MCP tool 
     ```
     Agent created (id: MyAgent:2, name: MyAgent, version: 2)
     Created conversation (id: conv_086911ecabcbc05700BBHIeNRoPSO5tKPHiXRkgHuStYzy27BS)
-    Final input:
-    [{'type': 'mcp_approval_response', 'approve': True, 'approval_request_id': '{approval_request_id}'}]
-
+    
     Agent response: Here are Azure CLI commands to create an Azure Container App with a managed identity:
 
     **1. For a System-assigned Managed Identity**
@@ -291,7 +292,7 @@ In addition to connecting to remote MCP servers, you can also create your own cu
 
     ```python
    # Add references
-   from mcp.server.fastmcp import FastMCP
+   from fastmcp import FastMCP
     ```
 
 1. Under the comment **Create an MCP server**, add the following code to create a new MCP server instance:
@@ -303,7 +304,7 @@ In addition to connecting to remote MCP servers, you can also create your own cu
 
     This code initializes a new MCP server with the label "Inventory".
 
-1. Find the comment **Add an inventory check mcp tool** and add the following decorator above the function definition:
+1. Find the comment **Add an inventory check mcp tool** and add the following decorator above the function definition, which should now look like this:
 
     ```python
    # Add an inventory check mcp tool
@@ -314,7 +315,7 @@ In addition to connecting to remote MCP servers, you can also create your own cu
 
     This dictionary represents a sample inventory. The `@mcp.tool()` decorator registers the function as a tool on the MCP server, allowing the LLM to discover your function.
 
-1. Find the comment **Add a weekly sales mcp tool** and add the following decorator above the function definition:
+1. Find the comment **Add a weekly sales mcp tool** and add the following decorator above the function definition, which should now look like this:
 
     ```python
    # Add a weekly sales mcp tool
@@ -327,10 +328,10 @@ In addition to connecting to remote MCP servers, you can also create your own cu
 
     ```python
    # Run the MCP server
-   mcp.run()
+   mcp.run(show_banner=False)
     ```
 
-    This code starts the MCP server, making your tools available for discovery and use by the agent.
+    This code starts the MCP server, making your tools available for discovery and use by the agent. Setting `show_banner=False` prevents the startup banner from being printed to stdout, which would corrupt the MCP stdio protocol.
 
 1. Save the file (*CTRL+S*).
 
@@ -476,7 +477,7 @@ In this task, you'll connect the MCP server tools to your agent so that it can c
       response = openai_client.responses.create(
             input=input_list,
             previous_response_id=response.id,
-            extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
+            extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
       )
    print(f"Agent response: {response.output_text}")
     ```

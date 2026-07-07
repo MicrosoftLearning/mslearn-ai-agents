@@ -1,1 +1,0 @@
-Folder containing source files for exercises.

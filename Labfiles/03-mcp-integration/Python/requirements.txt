@@ -1,6 +1,7 @@
 python-dotenv
 azure-identity
 uvicorn
-azure-ai-projects==2.0.0b3
+azure-ai-projects==2.3.0
 openai
 mcp
+fastmcp

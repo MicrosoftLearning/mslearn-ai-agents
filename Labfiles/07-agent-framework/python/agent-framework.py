@@ -1,10 +1,12 @@
 import os
 import asyncio
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Add references
 
 
+load_dotenv()
 
 async def main():
     # Clear the console
@@ -20,11 +22,14 @@ async def main():
     user_prompt = input(f"Here is the expenses data in your file:\n\n{data}\n\nWhat would you like me to do with it?\n\n")
     
     # Run the async agent code
-    await process_expenses_data (user_prompt, data)
+    await process_expenses_data(user_prompt, data)
     
 async def process_expenses_data(prompt, expenses_data):
 
-    # Create a client and initialize an agent with the tool and instructions
+    # Create a foundry chat client
+    
+
+    # Initialize an agent with the tool and instructions
     
 
         # Use the agent to process the expenses data    

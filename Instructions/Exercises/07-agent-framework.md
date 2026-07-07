@@ -5,6 +5,7 @@ lab:
     level: 300
     duration: 30
     islab: true
+    status: 'released'
 ---
 
 # Develop an Azure AI chat agent with the Microsoft Agent Framework SDK
@@ -38,10 +39,10 @@ As a developer, you may spend some time working in the Foundry portal; but youâ€
 
     > **Note**: The extension is currently listed as **Foundry Toolkit**, but some VS Code labels, commands, or older screenshots may still refer to **AI Toolkit**. In this lab, treat those names as referring to the same extension experience.
 
-4. After installing the extension, select its icon in the sidebar to open the Foundry Toolkit view. 
+4. After installing the extension, select its icon in the sidebar to open the Foundry Toolkit view.
 
     You should be prompted to sign in to your Azure account if you haven't already.
-   
+
 5. Select **Create Project** under **Microsoft Foundry Resources**.
 
     If a default project is already active, the project name will appear under **My Resources**. You can create a new project by right-clicking on the active project and selecting **Switch Default Project**.
@@ -56,23 +57,23 @@ At the core of any generative AI project, thereâ€™s at least one generative AI m
 
 1. When the "Project deployed successfully" popup appears, select the **Deploy a model** button. This opens the Model Catalog.
 
-   > **Tip**: You can also access the Model Catalog by selecting the **+** icon next to **Models** in the Resources section, or by pressing **F1** and running the command **AI Toolkit: Show model catalog**.
+   > **Tip**: You can also access the Model Catalog by selecting the **+** icon next to **Models** in the Resources section, or by pressing **F1** and running the command **Foundry Toolkit: Show model catalog**.
 
-1. In the Model Catalog, locate the **gpt-4.1** model (you can use the search bar to find it quickly).
+1. In the Model Catalog, locate the **gpt-5** model (you can use the search bar to find it quickly).
 
-2. Select **Deploy** next to the gpt-4.1 model.
+1. Select **Deploy** next to the gpt-5 model.
 
-3. Configure the deployment settings:
-   - **Deployment name**: Enter a name like "gpt-4.1"
+1. Configure the deployment settings:
+   - **Deployment name**: Enter a name like "gpt-5"
    - **Deployment type**: Select **Global Standard** (or **Standard** if Global Standard is not available)
    - **Model version**: Leave as default
    - **Tokens per minute**: Leave as default
 
-4. Select **Deploy to Microsoft Foundry** in the bottom-left corner.
+1. Select **Deploy to Microsoft Foundry** in the bottom-left corner.
 
-5. Wait for the deployment to complete. Your deployed model will appear under the **Models** section in the Resources view.
+1. Wait for the deployment to complete. Your deployed model will appear under the **Models** section in the Resources view.
 
-6. Right-click the name of the project deployment and select **Copy Project Endpoint**. You'll need this URL to connect your agent to the Foundry project in the next steps.
+1. Right-click the name of the project deployment and select **Copy Project Endpoint**. You'll need this URL to connect your agent to the Foundry project in the next steps.
 
     ![Screenshot of copying the project endpoint in the Foundry Toolkit VS Code extension.](../Media/vs-code-endpoint.png)
 
@@ -96,7 +97,7 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. Once the repository opens, select **File > Open Folder** and navigate to `mslearn-ai-agents/Labfiles/07-agent-framework`, then choose **Select Folder**.
 
-1. In the Explorer pane, expand the **Python** folder to view the code files for this exercise. 
+1. In the Explorer pane, expand the **Python** folder to view the code files for this exercise.
 
 1. Right-click on the **requirements.txt** file and select **Open in Integrated Terminal**.
 
@@ -128,7 +129,7 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
     ```python
    # Add references
    from agent_framework import tool, Agent
-   from agent_framework.azure import AzureOpenAIResponsesClient
+   from agent_framework.foundry import FoundryChatClient
    from azure.identity import AzureCliCredential
    from pydantic import Field
    from typing import Annotated
@@ -150,29 +151,39 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
 
     > **Note**: The function *simulates* sending an email by printing it to the console. In a real application, you'd use an SMTP service or similar to actually send the email!
 
-1. Back up above the **send_email** code, in the **process_expenses_data** function, find the comment **Create a client and initialize an agent with the tool and instructions**, and add the following code:
+1. Back up above the **send_email** code, in the **process_expenses_data** function, find the comment **Create a foundry chat client**, and add the following code:
 
     (Be sure to maintain the indentation level)
 
     ```python
-   # Create a client and initialize an agent with the tool and instructions
-   credential = AzureCliCredential()
-   async with (
-        Agent(
-            client=AzureOpenAIResponsesClient(
-                credential=credential,
-                deployment_name=os.getenv("MODEL_DEPLOYMENT_NAME"),
-                project_endpoint=os.getenv("PROJECT_ENDPOINT"),
-            ),
-            instructions="""You are an AI assistant for expense claim submission.
-                        At the user's request, create an expense claim and use the plug-in function to send an email to expenses@contoso.com with the subject 'Expense Claim`and a body that contains itemized expenses with a total.
-                        Then confirm to the user that you've done so. Don't ask for any more information from the user, just use the data provided to create the email.""",
-            tools=[submit_claim],
-        ) as agent,
-    ):
+   # Create a foundry chat client 
+   client = FoundryChatClient(
+       project_endpoint=os.getenv("PROJECT_ENDPOINT"),
+       model=os.getenv("MODEL_DEPLOYMENT_NAME"),
+       credential=AzureCliCredential()
+   )
     ```
 
-    Note that the **AzureCliCredential** object will allow your code to authenticate to your Azure account. The **AzureOpenAIResponsesClient** object includes the Foundry project settings from the .env configuration. The **Agent** object is initialized with the client, instructions for the agent, and the tool function you defined to send emails.
+    Note that the **AzureCliCredential** object will allow your code to authenticate to your Azure account. This client will be used to interact with the Foundry agent services.
+
+2. Find the comment **Initialize an agent with the tool and instructions**, and add the following code:
+
+    (Be sure to maintain the indentation level)
+
+    ```python
+   # Initialize an agent with the tool and instructions
+   async with (
+       Agent(
+           client=client,
+           name="ExpenseClaimAgent",
+           instructions="""You are an AI assistant for expense claim submission.
+                       At the user's request, create an expense claim and use the plug-in function to send an email to expenses@contoso.com with the subject 'Expense Claim`and a body that contains itemized expenses with a total.
+                       Then confirm to the user that you've done so. Don't ask for any more information from the user, just use the data provided to create the email.""",
+           tools=[submit_claim],
+       ) as agent,
+   ):
+    ```
+    In this code, the **Agent** object is initialized with the client, instructions for the agent, and the tool function you defined to send emails.
 
 1. Find the comment **Use the agent to process the expenses data**, and add the following code to create a thread for your agent to run on, and then invoke it with a chat message.
 
@@ -197,6 +208,7 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
 ## Test the application
 
 1. In the integrated terminal, enter the following commands to run the application:
+
     ```
     az login
     ```
@@ -204,6 +216,8 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
     ```
    python agent-framework.py
     ```
+
+    `az login` allows the AzureCliCredential to authenticate to your Azure account.
 
 1. When asked what to do with the expenses data, enter the following prompt:
 

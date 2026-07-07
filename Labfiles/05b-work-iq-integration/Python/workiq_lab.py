@@ -33,7 +33,7 @@ class WorkIQLab:
     def __init__(self):
         """Initialize the lab with Microsoft Foundry connection."""
         self.project_endpoint = os.getenv("PROJECT_ENDPOINT")
-        self.model_deployment = os.getenv("MODEL_DEPLOYMENT_NAME", "gpt-4.1")
+        self.model_deployment = os.getenv("MODEL_DEPLOYMENT_NAME", "gpt-5")
         
         if not self.project_endpoint:
             print("❌ Error: PROJECT_ENDPOINT not set in .env file")

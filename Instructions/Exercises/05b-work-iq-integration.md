@@ -5,6 +5,7 @@ lab:
     level: 300
     duration: 40
     islab: true
+    status: 'released'
 ---
 
 # Work IQ - Workplace intelligence for AI agents
@@ -70,7 +71,7 @@ Before starting this lab, ensure you have:
 Now let's use Visual Studio Code to develop an app. The code files for your app have been provided in a GitHub repo.
 
 1. Start Visual Studio Code, and open a terminal window.
-   
+
 2. Enter the command to clone the repo to a local folder (it doesn't matter which folder):
 
    ```bash
@@ -121,10 +122,10 @@ Now let's use Visual Studio Code to develop an app. The code files for your app 
 
    ```env
    PROJECT_ENDPOINT=https://your-project.services.ai.azure.com/api/projects/your-id
-   MODEL_DEPLOYMENT_NAME=gpt-4.1
+   MODEL_DEPLOYMENT_NAME=gpt-5
    ```
 
-   > **Tip:** To get your endpoint: In VS Code, open the **AI Toolkit** extension, right-click on your active project, and select **Copy Endpoint**. The AI Toolkit is included in the Foundry Toolkit for VS Code extension.
+   > **Tip:** To get your endpoint: In VS Code, open the **Foundry Toolkit** extension, right-click on your active project, and select **Copy Endpoint**. The Foundry Toolkit is included in the Foundry Toolkit for VS Code extension.
 
 ### Verify setup
 

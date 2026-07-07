@@ -5,6 +5,7 @@ lab:
     level: 300
     duration: 30
     islab: true
+    status: 'released'
 ---
 
 # Develop a multi-agent solution with Microsoft Agent Framework
@@ -44,15 +45,15 @@ As a developer, you may spend some time working in the Foundry portal; but youâ€
 
     > **Note**: The extension is currently listed as **Foundry Toolkit**, but some VS Code labels, commands, or older screenshots may still refer to **AI Toolkit**. In this lab, treat those names as referring to the same extension experience.
 
-4. After installing the extension, select its icon in the sidebar to open the Foundry Toolkit view. 
+4. After installing the extension, select its icon in the sidebar to open the Foundry Toolkit view.
 
     You should be prompted to sign in to your Azure account if you haven't already.
-   
-4. Select **Create Project** under **Microsoft Foundry Resources**.
+
+5. Select **Create Project** under **Microsoft Foundry Resources**.
 
     If a default project is already active, the project name will appear under **My Resources**. You can create a new project by right-clicking on the active project and selecting **Switch Default Project in Azure Extension**.
 
-5. Select your Azure subscription and resource group, then enter a name for your Foundry project to create a new project for this exercise.
+6. Select your Azure subscription and resource group, then enter a name for your Foundry project to create a new project for this exercise.
 
     When the deployment is complete, you should see the project appear in the Foundry Toolkit pane as the default project.
 
@@ -62,23 +63,23 @@ At the core of any generative AI project, thereâ€™s at least one generative AI m
 
 1. When the "Project deployed successfully" popup appears, select the **Deploy a new model** button. This opens the Model Catalog.
 
-   > **Tip**: You can also access the Model Catalog by selecting the **+** icon next to **Models** in the Resources section, or by pressing **F1** and running the command **AI Toolkit: Show model catalog**.
+   > **Tip**: You can also access the Model Catalog by selecting the **+** icon next to **Models** in the Resources section, or by pressing **F1** and running the command **Foundry Toolkit: Show model catalog**.
 
-1. In the Model Catalog, locate the **gpt-4.1** model (you can use the search bar to find it quickly).
+1. In the Model Catalog, locate the **gpt-5** model (you can use the search bar to find it quickly).
 
-2. Select **Deploy** next to the gpt-4.1 model.
+1. Select **Deploy** next to the gpt-5 model.
 
-3. Configure the deployment settings:
-   - **Deployment name**: Enter a name like "gpt-4.1"
+1. Configure the deployment settings:
+   - **Deployment name**: Enter a name like "gpt-5"
    - **Deployment type**: Select **Global Standard** (or **Standard** if Global Standard is not available)
    - **Model version**: Leave as default
    - **Tokens per minute**: Leave as default
 
-4. Select **Deploy to Microsoft Foundry** in the bottom-left corner.
+1. Select **Deploy to Microsoft Foundry** in the bottom-left corner.
 
-5. Wait for the deployment to complete. Your deployed model will appear under the **Models** section in the Resources view.
+1. Wait for the deployment to complete. Your deployed model will appear under the **Models** section in the Resources view.
 
-6. Right-click the name of the project deployment and select **Copy Project Endpoint**. You'll need this URL to connect your agent to the Foundry project in the next steps.
+1. Right-click the name of the project deployment and select **Copy Project Endpoint**. You'll need this URL to connect your agent to the Foundry project in the next steps.
 
     ![Screenshot of copying the project endpoint in the Foundry Toolkit VS Code extension.](../Media/vs-code-endpoint.png)
 
@@ -100,9 +101,9 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. When prompted, select **Open** to open the cloned repository in VS Code.
 
-1. Once the repository opens, select **File > Open Folder** and navigate to `mslearn-ai-agents/Labfiles/05-agent-orchestration`, then choose **Select Folder**.
+1. Once the repository opens, select **File > Open Folder** and navigate to `mslearn-ai-agents/Labfiles/08-agent-orchestration`, then choose **Select Folder**.
 
-1. In the Explorer pane, expand the **Python** folder to view the code files for this exercise. 
+1. In the Explorer pane, expand the **Python** folder to view the code files for this exercise.
 
 1. Right-click on the **requirements.txt** file and select **Open in Integrated Terminal**.
 
@@ -126,15 +127,10 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 
     ```python
    # Add references
-   import asyncio
-   from typing import cast
-   from dotenv import load_dotenv
    from agent_framework import Message
-   from agent_framework.azure import AzureAIAgentClient
+   from agent_framework.foundry import FoundryChatClient
    from agent_framework.orchestrations import SequentialBuilder
    from azure.identity import AzureCliCredential
-
-   load_dotenv()
     ```
 
 1. In the **main** function, take a moment to review the agent instructions. These instructions define the behavior of each agent in the orchestration.
@@ -144,12 +140,14 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
     ```python
    # Create the chat client
    credential = AzureCliCredential()
-   async with (
-       AzureAIAgentClient(credential=credential) as chat_client,
-   ):
+   chat_client = FoundryChatClient(
+       credential=credential,
+       project_endpoint=os.getenv("AZURE_AI_PROJECT_ENDPOINT"),
+       model=os.getenv("AZURE_AI_MODEL_DEPLOYMENT_NAME"),
+   )
     ```
 
-    Note that the **AzureCliCredential** object will allow your code to authenticate to your Azure account. The **AzureAIAgentClient** object will automatically include the Foundry project settings from the .env configuration.
+    Note that the **AzureCliCredential** object will allow your code to authenticate to your Azure account. The **FoundryChatClient** object connects to your Foundry project using the endpoint and model deployment name from the .env configuration.
 
 1. Add the following code under the comment **Create agents**:
 
@@ -157,19 +155,19 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 
     ```python
    # Create agents
-   summarizer = chat_client.as_agent(
-       instructions=summarizer_instructions,
+   summarizer_agent = chat_client.as_agent(
        name="summarizer",
+       instructions=summarizer_instructions,
    )
 
-   classifier = chat_client.as_agent(
-       instructions=classifier_instructions,
+   classifier_agent = chat_client.as_agent(
        name="classifier",
+       instructions=classifier_instructions,
    )
 
-   action = chat_client.as_agent(
-       instructions=action_instructions,
+   action_agent = chat_client.as_agent(
        name="action",
+       instructions=action_instructions,
    )
     ```
 
@@ -192,19 +190,20 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 
     ```python
    # Build sequential orchestration
-   workflow = SequentialBuilder(participants=[summarizer, classifier, action]).build()
+   workflow = SequentialBuilder(
+       participants=[summarizer_agent, classifier_agent, action_agent],
+       output_from="all",
+   ).build()
     ```
 
-    The agents will process the feedback in the order they are added to the orchestration.
+    The agents will process the feedback in the order they are added to the orchestration. The `output_from="all"` parameter ensures that outputs from all agents are collected.
 
 1. Add the following code under the comment **Run and collect outputs**:
 
     ```python
    # Run and collect outputs
-   outputs: list[list[Message]] = []
-   async for event in workflow.run(f"Customer feedback: {feedback}", stream=True):
-       if event.type == "output":
-           outputs.append(cast(list[Message], event.data))
+   result = await workflow.run(f"Customer feedback: {feedback}")
+   outputs = result.get_outputs()
     ```
 
     This code runs the orchestration and collects the output from each of the participating agents.
@@ -213,10 +212,12 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 
     ```python
    # Display outputs
-   if outputs:
-       for i, msg in enumerate(outputs[-1], start=1):
+   i = 1
+   for response in outputs:
+       for msg in cast(list[Message], response.messages):
            name = msg.author_name or ("assistant" if msg.role == "assistant" else "user")
            print(f"{'-' * 60}\n{i:02d} [{name}]\n{msg.text}")
+           i += 1
     ```
 
     This code formats and displays the messages from the workflow outputs you collected from the orchestration.
@@ -228,6 +229,7 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 Now you're ready to run your code and watch your AI agents collaborate.
 
 1. In the integrated terminal, enter the following commands to run the application:
+
     ```
     az login
     ```
@@ -239,22 +241,18 @@ Now you're ready to run your code and watch your AI agents collaborate.
 1. You should see some output similar to the following:
 
     ```output
+    User requests a dark mode option for more comfortable nighttime use.
+    Feature request
+    Log as enhancement request to add dark mode for improved user comfort during nighttime use.
     ------------------------------------------------------------
-    01 [user]
-    Customer feedback:
-        I use the dashboard every day to monitor metrics, and it works well overall.
-        But when I'm working late at night, the bright screen is really harsh on my eyes.
-        If you added a dark mode option, it would make the experience much more comfortable.
-
+    01 [summarizer]
+    User requests a dark mode option for more comfortable nighttime use.
     ------------------------------------------------------------
-    02 [summarizer]
-    User requests a dark mode for better nighttime usability.
-    ------------------------------------------------------------
-    03 [classifier]
+    02 [classifier]
     Feature request
     ------------------------------------------------------------
-    04 [action]
-    Log as enhancement request for product backlog.
+    03 [action]
+    Log as enhancement request to add dark mode for improved user comfort during nighttime use.
     ```
 
 1. Optionally, you can try running the code using different feedback inputs, such as:
