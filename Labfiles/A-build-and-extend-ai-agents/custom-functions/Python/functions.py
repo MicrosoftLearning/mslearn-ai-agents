@@ -1,22 +1,22 @@
 import json
 from datetime import datetime
 
-def _load_events(file_path: str = "data/events.txt") -> list:
-    events = []
+def _load_trips(file_path: str = "data/trips.txt") -> list:
+    trips = []
     with open(file_path) as f:
         for line in f:
             parts = line.strip().split("|")
             if len(parts) == 4:
                 month, day = map(int, parts[2].split("-"))
-                events.append((
+                trips.append((
                     parts[0],                          # name
                     parts[1],                          # type
                     month * 100 + day,                 # sortable month-day int
                     parts[2],                          # month-day string
-                    set(parts[3].split(";")),          # locations as a set
+                    set(parts[3].split(";")),          # regions as a set
                 ))
-    events.sort(key=lambda e: e[2])
-    return events
+    trips.sort(key=lambda t: t[2])
+    return trips
 
 
 def _load_rates(file_path: str) -> dict:
@@ -28,77 +28,98 @@ def _load_rates(file_path: str) -> dict:
                 rates[parts[0]] = float(parts[1])
     return rates
 
-EVENTS = _load_events()
-TELESCOPE_RATES = _load_rates("data/telescope_rates.txt")
-PRIORITY_MULTIPLIERS = _load_rates("data/priority_multipliers.txt")
-
-# Determine the next visible astronomical event for a given location
+TRIPS = _load_trips()
+RENTAL_RATES = _load_rates("data/rental_rates.txt")
+SERVICE_MULTIPLIERS = _load_rates("data/service_multipliers.txt")
 
 
-# Calculate the cost of telescope observation time based on the tier, hours, and priority
-def calculate_observation_cost(telescope_tier: str, hours: float, priority: str) -> str:
-    """Calculates the cost of telescope observation time."""
-    tier = telescope_tier.lower()
-    pri = priority.lower()
+# Determine the next available guided trip for a given region
+def next_available_trip(region: str) -> str:
+    """Finds the next guided trip departing in a given region."""
+    reg = region.lower()
+    today = datetime.now()
+    today_key = today.month * 100 + today.day
 
-    if tier not in TELESCOPE_RATES:
-        return json.dumps({"error": f"Unknown telescope tier '{telescope_tier}'. Choose from: {', '.join(TELESCOPE_RATES)}"})
+    matching = [t for t in TRIPS if reg in t[4]]
+    if not matching:
+        regions = sorted({r for t in TRIPS for r in t[4]})
+        return json.dumps({"error": f"Unknown region '{region}'. Choose from: {', '.join(regions)}"})
 
-    if pri not in PRIORITY_MULTIPLIERS:
-        return json.dumps({"error": f"Unknown priority '{priority}'. Choose from: {', '.join(PRIORITY_MULTIPLIERS)}"})
+    # Trips are sorted by date; pick the next one on or after today, wrapping around the year
+    upcoming = next((t for t in matching if t[2] >= today_key), matching[0])
 
-    if hours <= 0:
-        return json.dumps({"error": "Hours must be greater than zero."})
+    return json.dumps({
+        "trip": upcoming[0],
+        "type": upcoming[1],
+        "date": upcoming[3],
+        "region": reg,
+    })
 
-    base_cost = TELESCOPE_RATES[tier] * hours
-    multiplier = PRIORITY_MULTIPLIERS[pri]
+
+# Calculate the cost of a gear rental based on the tier, days, and service level
+def calculate_rental_cost(gear_tier: str, days: float, service_level: str) -> str:
+    """Calculates the cost of a gear rental."""
+    tier = gear_tier.lower()
+    svc = service_level.lower()
+
+    if tier not in RENTAL_RATES:
+        return json.dumps({"error": f"Unknown gear tier '{gear_tier}'. Choose from: {', '.join(RENTAL_RATES)}"})
+
+    if svc not in SERVICE_MULTIPLIERS:
+        return json.dumps({"error": f"Unknown service level '{service_level}'. Choose from: {', '.join(SERVICE_MULTIPLIERS)}"})
+
+    if days <= 0:
+        return json.dumps({"error": "Days must be greater than zero."})
+
+    base_cost = RENTAL_RATES[tier] * days
+    multiplier = SERVICE_MULTIPLIERS[svc]
     total_cost = base_cost * multiplier
 
     return json.dumps({
-        "telescope_tier": tier,
-        "hours": hours,
-        "hourly_rate": TELESCOPE_RATES[tier],
-        "priority": pri,
-        "priority_multiplier": multiplier,
+        "gear_tier": tier,
+        "days": days,
+        "daily_rate": RENTAL_RATES[tier],
+        "service_level": svc,
+        "service_multiplier": multiplier,
         "base_cost": base_cost,
         "total_cost": total_cost
     })
 
-# Generate an observation report summarizing the details of an astronomical observation session
-def generate_observation_report(event_name: str, location: str, telescope_tier: str, hours: float, priority: str, observer_name: str) -> str:
+# Generate a booking report summarizing the details of a guided trip and gear rental
+def generate_booking_report(trip_name: str, region: str, gear_tier: str, days: float, service_level: str, customer_name: str) -> str:
     """
-    Generates an observation session report and saves it to a file.
+    Generates a trip booking report and saves it to a file.
 
     Returns:
         JSON string with the file path of the generated report.
     """
-    cost_result = json.loads(calculate_observation_cost(telescope_tier, hours, priority))
-    event_result = json.loads(next_visible_event(location))
+    cost_result = json.loads(calculate_rental_cost(gear_tier, days, service_level))
+    trip_result = json.loads(next_available_trip(region))
 
     if "error" in cost_result:
         return json.dumps(cost_result)
 
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
-    filename = f"report_{event_name.replace(' ', '_').lower()}_{timestamp.replace(':', '').replace(' ', '_')}.txt"
+    filename = f"report_{trip_name.replace(' ', '_').lower()}_{timestamp.replace(':', '').replace(' ', '_')}.txt"
 
     report = f"""======================================
-  CONTOSO OBSERVATORIES - SESSION REPORT
+  CONTOSO ADVENTURE WORKS - BOOKING REPORT
 ======================================
 Date:           {timestamp}
-Observer:       {observer_name}
-Event:          {event_name}
-Location:       {location}
+Customer:       {customer_name}
+Trip:           {trip_name}
+Region:         {region}
 
-NEXT VISIBLE EVENT
-  Event:        {event_result.get('event', 'N/A')}
-  Date:         {event_result.get('date', 'N/A')}
+NEXT AVAILABLE TRIP
+  Trip:         {trip_result.get('trip', 'N/A')}
+  Date:         {trip_result.get('date', 'N/A')}
 
-TELESCOPE BOOKING
-  Tier:         {cost_result['telescope_tier']}
-  Hours:        {cost_result['hours']}
-  Hourly Rate:  ${cost_result['hourly_rate']:.2f}
-  Priority:     {cost_result['priority']}
-  Multiplier:   {cost_result['priority_multiplier']}x
+GEAR RENTAL
+  Tier:         {cost_result['gear_tier']}
+  Days:         {cost_result['days']}
+  Daily Rate:   ${cost_result['daily_rate']:.2f}
+  Service:      {cost_result['service_level']}
+  Multiplier:   {cost_result['service_multiplier']}x
 
 COST SUMMARY
   Base Cost:    ${cost_result['base_cost']:.2f}

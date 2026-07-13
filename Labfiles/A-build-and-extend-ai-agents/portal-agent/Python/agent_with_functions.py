@@ -91,7 +91,7 @@ def main():
     # Initialize the project client
     load_dotenv()
     project_endpoint = os.environ.get("PROJECT_ENDPOINT")
-    agent_name = os.environ.get("AGENT_NAME", "it-support-agent")
+    agent_name = os.environ.get("AGENT_NAME", "trailhead-agent")
 
     if not project_endpoint:
         print("Error: PROJECT_ENDPOINT environment variable not set")
@@ -119,8 +119,8 @@ def main():
 
     # Chat loop
     print("\n" + "="*60)
-    print("IT Support Agent Ready!")
-    print("Ask questions, request data analysis, or get help.")
+    print("Contoso Adventure Works Assistant Ready!")
+    print("Ask about store policy, request data analysis, or get help.")
     print("Type 'exit' to quit.")
     print("="*60 + "\n")
 

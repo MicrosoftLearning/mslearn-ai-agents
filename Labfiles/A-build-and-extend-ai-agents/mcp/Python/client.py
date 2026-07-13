@@ -4,111 +4,111 @@ import json
 from dotenv import load_dotenv
 from contextlib import AsyncExitStack
 from azure.ai.projects import AIProjectClient
-from azure.ai.projects.models import FunctionTool
-from azure.identity import DefaultAzureCredential
 from azure.ai.projects.models import PromptAgentDefinition, FunctionTool
+from azure.identity import DefaultAzureCredential
 from openai.types.responses.response_input_param import FunctionCallOutput, ResponseInputParam
+from contoso_ui import run_chat_app, AgentReply
 
 # Add references
 
-
-# Clear the console
-os.system('cls' if os.name=='nt' else 'clear')
 
 # Load environment variables from .env file
 load_dotenv()
 project_endpoint = os.getenv("PROJECT_ENDPOINT")
 model_deployment = os.getenv("MODEL_DEPLOYMENT_NAME")
 
-async def connect_to_server(exit_stack: AsyncExitStack):
+# Connect to the agents client (kept open for the app's lifetime)
+credential = DefaultAzureCredential()
+project_client = AIProjectClient(endpoint=project_endpoint, credential=credential)
+openai_client = project_client.get_openai_client()
+
+# Shared state, set up once on the first message so the MCP session is created
+# on the same event loop the chat window uses.
+exit_stack = AsyncExitStack()
+session = None
+agent = None
+conversation = None
+functions_dict = {}
+
+
+async def setup():
+    """Connect to the MCP server, discover its tools, and create the agent (runs once)."""
+    global session, agent, conversation, functions_dict
+    if session is not None:
+        return
+
     server_params = StdioServerParameters(
         command="python",
         args=["server.py"],
-        env=None
+        env=None,
     )
 
-    # Start the MCP server
+    # Start the MCP server and create a client session
 
 
-    # Create an MCP client session
-    
-
-    # List available tools
-   
-
-    return session
-
-async def chat_loop(session):
-
-    # Connect to the agents client
-    with (
-        DefaultAzureCredential() as credential,
-        AIProjectClient(endpoint=project_endpoint, credential=credential) as project_client,
-        project_client.get_openai_client() as openai_client,
-    ):
-
-        # Get the mcp tools available from the server
-        response = await session.list_tools()
-        tools = response.tools
-
-        # Build a function for each tool
+    # Initialize the session and list the available tools
 
 
-        # Create FunctionTool definitions for the agent
-        
-
-        # Create the agent
+    # Build a function for each tool
 
 
-        # Create a thread for the chat session
-        conversation = openai_client.conversations.create()
-
-        # Create an input list to hold function call outputs to send back to the model
-        input_list: ResponseInputParam = []
-
-        while True:
-            user_input = input("Enter a prompt for the inventory agent. Use 'quit' to exit.\nUSER: ").strip()
-            if user_input.lower() == "quit":
-                print("Exiting chat.")
-                break
-
-            # Send a prompt to the agent
-            openai_client.conversations.items.create(
-                conversation_id=conversation.id,
-                items=[{"type": "message", "role": "user", "content": user_input}],
-            )
-
-            # Retrieve the agent's response, which may include function calls to the MCP server tools
-            response = openai_client.responses.create(
-                conversation=conversation.id,
-                extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
-                input=input_list,
-            )
-
-            # Check the run status for failures
-            if response.status == "failed":
-                print(f"Response failed: {response.error}")
-
-            # Process function calls
+    # Create FunctionTool definitions for the agent
 
 
-            # Send function call outputs back to the model and retrieve a response
-           
-           
-        # Delete the agent when done
-        print("Cleaning up agents:")
-        project_client.agents.delete_version(agent_name=agent.name, agent_version=agent.version)
-        print("Deleted inventory agent.")
+    # Create the agent
 
 
-async def main():
-    import sys
-    exit_stack = AsyncExitStack()
-    try:
-        session = await connect_to_server(exit_stack)
-        await chat_loop(session)
-    finally:
-        await exit_stack.aclose()
+    # Create a thread for the chat session
+    conversation = openai_client.conversations.create()
+
+
+async def respond(user_message):
+    """Handle one message from the chat window and return the agent's reply."""
+    await setup()
+
+    # Send the user's prompt to the agent
+    openai_client.conversations.items.create(
+        conversation_id=conversation.id,
+        items=[{"type": "message", "role": "user", "content": user_message}],
+    )
+
+    # Retrieve the agent's response, which may include function calls to the MCP server tools
+    response = openai_client.responses.create(
+        conversation=conversation.id,
+        extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
+        input=[],
+    )
+
+    if response.status == "failed":
+        return AgentReply(text=f"Response failed: {response.error}")
+
+    # Create an input list to hold function call outputs to send back to the model
+    input_list: ResponseInputParam = []
+
+    # Process function calls
+
+
+    # Send function call outputs back to the model and retrieve a response
+    if input_list:
+        response = openai_client.responses.create(
+            input=input_list,
+            previous_response_id=response.id,
+            extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
+        )
+
+    return AgentReply(text=response.output_text)
+
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        run_chat_app(
+            respond,
+            title="Contoso Adventure Works Assistant",
+            subtitle="Warehouse inventory & weekly sales",
+        )
+    finally:
+        # Delete the agent when the app closes
+        if agent is not None:
+            print("Cleaning up agents:")
+            project_client.agents.delete_version(agent_name=agent.name, agent_version=agent.version)
+            print("Deleted inventory agent.")
