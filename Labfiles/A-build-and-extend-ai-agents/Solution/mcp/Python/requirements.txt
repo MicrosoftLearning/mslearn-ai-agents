@@ -1,0 +1,8 @@
+python-dotenv
+azure-identity
+uvicorn
+azure-ai-projects==2.3.0
+openai
+mcp
+fastmcp
+gradio==6.20.0
