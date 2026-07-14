@@ -103,7 +103,7 @@ def generate_booking_report(trip_name: str, region: str, gear_tier: str, days: f
     filename = f"report_{trip_name.replace(' ', '_').lower()}_{timestamp.replace(':', '').replace(' ', '_')}.txt"
 
     report = f"""======================================
-  CONTOSO ADVENTURE WORKS - BOOKING REPORT
+  TRAILHEAD ADVENTURE WORKS - BOOKING REPORT
 ======================================
 Date:           {timestamp}
 Customer:       {customer_name}

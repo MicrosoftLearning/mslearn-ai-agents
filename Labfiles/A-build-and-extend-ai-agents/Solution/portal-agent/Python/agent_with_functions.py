@@ -7,7 +7,7 @@ from azure.identity import DefaultAzureCredential
 from dotenv import load_dotenv
 
 # The shared chat UI shell (provided – you don't edit this file)
-from contoso_ui import run_chat_app, AgentReply
+from trailhead_ui import run_chat_app, AgentReply
 
 
 OUTPUT_DIR = Path("agent_outputs")
@@ -175,6 +175,6 @@ def respond(user_message):
 # Launch the browser chat window (replaces the old console loop)
 run_chat_app(
     respond,
-    title="Contoso Adventure Works Assistant",
+    title="Trailhead Adventure Works Assistant",
     subtitle="Ask about store policy or request an analysis of the weekly sales data.",
 )

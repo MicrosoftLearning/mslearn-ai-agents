@@ -10,7 +10,7 @@ from openai.types.responses.response_input_param import FunctionCallOutput
 
 # Import the local functions the agent can call, and the shared chat UI
 from functions import next_available_trip, calculate_rental_cost, generate_booking_report
-from contoso_ui import run_chat_app, AgentReply
+from trailhead_ui import run_chat_app, AgentReply
 
 # Load environment variables from .env file
 load_dotenv()
@@ -111,7 +111,7 @@ with (
         agent_name="trip-planner-agent",
         definition=PromptAgentDefinition(
             model=model_deployment,
-            instructions="""You are a trip planning assistant for Contoso Adventure Works that helps
+            instructions="""You are a trip planning assistant for Trailhead Adventure Works that helps
                 customers find guided trips and calculate gear rental costs.
                 Use the available tools to assist users with their inquiries.""",
             tools=[trip_tool, cost_tool, report_tool],
@@ -174,7 +174,7 @@ with (
     try:
         run_chat_app(
             respond,
-            title="Contoso Adventure Works Assistant",
+            title="Trailhead Adventure Works Assistant",
             subtitle="Plan a guided trip and price your gear rental.",
         )
     finally:

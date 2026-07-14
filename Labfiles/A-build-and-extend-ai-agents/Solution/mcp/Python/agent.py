@@ -31,7 +31,7 @@ with (
         agent_name="platform-docs-agent",
         definition=PromptAgentDefinition(
             model=model_deployment,
-            instructions="You are a platform engineering assistant for Contoso Adventure Works. Use the available MCP tools to look up trusted Azure documentation and help the team build and operate the online store.",
+            instructions="You are a platform engineering assistant for Trailhead Adventure Works. Use the available MCP tools to look up trusted Azure documentation and help the team build and operate the online store.",
             tools=[mcp_tool],
         ),
     )
