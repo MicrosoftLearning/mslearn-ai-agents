@@ -13,9 +13,9 @@ lab:
 PILOT NOTE (remove before publishing):
 This is a pilot of the new lab template (Core + Optional tasks) applied to
 "Lab A" = a consolidation of the current exercises 01, 02, and 03.
-Starter code lives in Labfiles/A-build-and-extend-ai-agents/ (duplicated from the source
-labs so it can evolve independently), organized as: portal-agent/ (Task 3),
-custom-functions/ (Task 4), and mcp/ (Tasks 2 and 5).
+Starter code lives in a single folder — Labfiles/A-build-and-extend-ai-agents/Python/ —
+shared by every task (one virtual environment, one .env). The completed reference code is
+in Labfiles/A-build-and-extend-ai-agents/Solution/Python/.
 Remaining follow-up tracked in the design spec: author a shared "Getting started" setup
 page and link it instead of repeating setup here.
 -->
@@ -191,7 +191,7 @@ guessing.
 1. Download the sample store policy document. Open a new browser tab and navigate to:
 
     ```
-    https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/A-build-and-extend-ai-agents/portal-agent/Store_Policy.txt
+    https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/A-build-and-extend-ai-agents/Python/Store_Policy.txt
     ```
 
     Save the file to your local machine.
@@ -237,9 +237,9 @@ Azure documentation on demand.
     https://github.com/MicrosoftLearning/mslearn-ai-agents.git
     ```
 
-1. Open the cloned repo, then **File > Open Folder** and select `mslearn-ai-agents/Labfiles/A-build-and-extend-ai-agents/mcp`.
+1. Open the cloned repo, then **File > Open Folder** and select `mslearn-ai-agents/Labfiles/A-build-and-extend-ai-agents/Python`. This single folder holds the starter code for every task in this lab.
 
-1. Expand the **Python** folder, right-click **requirements.txt**, and choose **Open in Integrated Terminal**. Then create a virtual environment and install packages:
+1. Right-click **requirements.txt** and choose **Open in Integrated Terminal**. Then create a virtual environment and install packages:
 
     ```
     python -m venv labenv
@@ -253,7 +253,7 @@ Azure documentation on demand.
 
 ### Connect the agent to the MCP server
 
-Open **agent.py** and add code at each commented placeholder.
+Open **remote_mcp_agent.py** and add code at each commented placeholder.
 
 > **Tip**: As you add code, keep the indentation aligned with the comments.
 
@@ -373,7 +373,7 @@ Open **agent.py** and add code at each commented placeholder.
     ```
 
     ```
-    python agent.py
+    python remote_mcp_agent.py
     ```
 
 1. Watch the agent create itself, call the MCP tool (approved automatically by your loop), and answer using live documentation. You should see output similar to:
@@ -426,20 +426,15 @@ not the interface.
     a data file so there's something to analyze. Download and attach:
 
     ```
-    https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/A-build-and-extend-ai-agents/portal-agent/weekly_sales.csv
+    https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/A-build-and-extend-ai-agents/Python/weekly_sales.csv
     ```
 
     Save the agent.
 
-1. In VS Code, open the `Labfiles/A-build-and-extend-ai-agents/portal-agent/Python` folder.
-    Create a virtual environment, install requirements, then open **.env** and set
-    `PROJECT_ENDPOINT` and `AGENT_NAME` (`trailhead-agent`):
-
-    ```
-    python -m venv labenv
-    .\labenv\Scripts\Activate.ps1
-    pip install -r requirements.txt
-    ```
+1. Use the same `Labfiles/A-build-and-extend-ai-agents/Python` folder and virtual environment
+    you set up in Task 2 (if you closed the terminal, reactivate with
+    `.\labenv\Scripts\Activate.ps1`). Then open **.env** and add `AGENT_NAME=trailhead-agent`
+    alongside the `PROJECT_ENDPOINT` you already set. Save the file.
 
 > **Try it first**: The `agent_with_functions.py` file already contains a complete client
 > that launches a web chat window. Before running it, predict: which SDK call loads your
@@ -512,10 +507,10 @@ call and with *what* arguments; your code executes it and returns the result.
 
 **Set up:**
 
-1. Open the `Labfiles/A-build-and-extend-ai-agents/custom-functions/Python` folder, create
-    a virtual environment, install requirements, and set `PROJECT_ENDPOINT` and
-    `MODEL_DEPLOYMENT_NAME` in **.env**. Review **functions.py**, which contains the trip
-    planner's helper functions.
+1. Use the same `Labfiles/A-build-and-extend-ai-agents/Python` folder and virtual environment
+    you set up in Task 2 (reactivate with `.\labenv\Scripts\Activate.ps1` if needed); your
+    `PROJECT_ENDPOINT` and `MODEL_DEPLOYMENT_NAME` in **.env** are already set. Review
+    **functions.py**, which contains the trip planner's helper functions.
 
 > **Try it first**: Look at `next_available_trip(region)` in **functions.py**. How would
 > you describe its single `region` parameter to the model so it knows when and how to
@@ -524,7 +519,7 @@ call and with *what* arguments; your code executes it and returns the result.
 <details markdown="1">
 <summary>Show a solution</summary>
 
-Work through the comments in **agent.py**. Add references and connect to the project (the
+Work through the comments in **functions_agent.py**. Add references and connect to the project (the
 same pattern as Task 2). The file is structured so your agent setup runs once, then a
 `respond()` function handles each chat message and hands the reply to `run_chat_app()`:
 
@@ -607,7 +602,7 @@ same pattern as Task 2). The file is structured so your agent setup runs once, t
     return AgentReply(text=response.output_text)
     ```
 
-Run `python agent.py`. Your browser opens the chat window — try a prompt that needs **two**
+Run `python functions_agent.py`. Your browser opens the chat window — try a prompt that needs **two**
 tools at once:
 
 ```
@@ -642,8 +637,9 @@ that reads live stock and sales figures.
 
 **Set up:**
 
-1. Open the `Labfiles/A-build-and-extend-ai-agents/mcp/Python` folder (you set up its
-    virtual environment and **.env** in Task 2). You'll edit **server.py** and **client.py**.
+1. Use the same `Labfiles/A-build-and-extend-ai-agents/Python` folder and virtual environment
+    you set up in Task 2 (reactivate with `.\labenv\Scripts\Activate.ps1` if needed; your
+    **.env** is already configured). You'll edit **server.py** and **client.py**.
 
 > **Try it first**: Wire up **server.py** and **client.py** using the comments in each file.
 > As you go, consider: why must diagnostic output go to `stderr` (or be suppressed) rather
