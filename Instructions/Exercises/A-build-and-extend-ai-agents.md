@@ -58,7 +58,7 @@ The **Optional** tasks let you additionally:
 
 Complete the **Core** tasks first (about **35 minutes**) — they're self-contained and end
 with a working, tool-using agent. Then expand any **Optional** tasks that interest you.
-The full lab, including all optional tasks, takes about **1 hour 50 minutes**. Use the
+The full lab, including all optional tasks, takes about **1 hour 55 minutes**. Use the
 buttons below to auto-expand a set of tasks that match the time you have.
 
 | Section | Task | Difficulty | Time |
@@ -67,7 +67,7 @@ buttons below to auto-expand a set of tasks that match the time you have.
 | **Core** | Task 2 – Connect the agent to a remote MCP server in code | ★★☆ | ~20 min |
 | *Optional* | Task 3 – Call your agent from a client app | ★★☆ | ~20 min |
 | *Optional* | Task 4 – Add custom function tools | ★★☆ | ~25 min |
-| *Optional* | Task 5 – Build your own MCP server + client | ★★★ | ~30 min |
+| *Optional* | Task 5 – Capstone: your own MCP server + combine every tool | ★★★ | ~35 min |
 
 <!-- Lab-length picker. Works on the rendered GitHub Pages site; on GitHub.com's raw
      markdown view the buttons are inert, but every task can still be expanded manually.
@@ -76,7 +76,7 @@ buttons below to auto-expand a set of tasks that match the time you have.
   <span class="lab-length-label">Choose your lab length:</span>
   <button type="button" class="lab-btn is-active" data-tier="1">Core only · ~35 min</button>
   <button type="button" class="lab-btn" data-tier="2">Core + recommended · ~1h 20m</button>
-  <button type="button" class="lab-btn" data-tier="3">Everything · ~1h 50m</button>
+  <button type="button" class="lab-btn" data-tier="3">Everything · ~1h 55m</button>
 </div>
 
 <div class="lab-length-fallback" markdown="1">
@@ -86,7 +86,7 @@ GitHub's file preview) — expand the optional tasks that fit the time you have:
 
 - **Core only (~35 min):** do Tasks 1–2 only; leave the optional tasks collapsed.
 - **Core + recommended (~1h 20m):** also expand **Task 3** and **Task 4**.
-- **Everything (~1h 50m):** expand **Task 3**, **Task 4**, and **Task 5**.
+- **Everything (~1h 55m):** expand **Task 3**, **Task 4**, and **Task 5** (Task 5 builds on Task 4).
 
 </div>
 
@@ -399,8 +399,10 @@ When you're finished, enter `deactivate` to exit the virtual environment.
 
 # Optional
 
-These tasks are independent — expand any that interest you, in any order. Each begins with
-a **Try it first** prompt; expand **Show a solution** when you want the full walkthrough.
+Tasks 3 and 4 are independent — expand either that interests you, in any order. **Task 5 is
+the capstone**: it brings the lab together into one assistant and builds on **Task 4**, so do
+Task 4 first. Each task begins with a **Try it first** prompt; expand **Show a solution** when
+you want the full walkthrough.
 
 > **One assistant, growing capabilities**: Tasks 3–5 all run behind the same provided web
 > chat window (`trailhead_ui.py`) — the **Trailhead Adventure Works Assistant**. You focus only
@@ -626,14 +628,22 @@ deleted automatically on exit).
 </details>
 
 <details markdown="1" class="opt-task" data-tier="3">
-<summary><strong>Task 5 — Build your own MCP server</strong> &middot; ★★★ &middot; ~30 min</summary>
+<summary><strong>Task 5 — Capstone: build your own MCP server and combine everything</strong> &middot; ★★★ &middot; ~35 min</summary>
 
-**Goal**: Instead of connecting to someone else's MCP server, host your **own** tools and
-connect an agent to them. Here you'll give Trailhead Adventure Works a warehouse assistant
-that reads live stock and sales figures.
+**Goal**: Host your **own** tools on an MCP server, then bring the lab together into a single
+**Trailhead Adventure Works Assistant** — one agent that both **plans trips and prices gear**
+(the function tools from Task 4) *and* **checks live warehouse stock and sales** (the tools
+you host here).
 
 **Concept reinforced**: the MCP server/client split — a server *registers* tools; a client
-*discovers and calls* them on the agent's behalf.
+*discovers and calls* them — plus how one agent can hold **more than one kind of tool** at
+once. In `respond()` you *route* each call to the right place: local Python functions run
+in-process, MCP tools run over the server session.
+
+> **Prerequisite**: This capstone builds directly on **Task 4** — complete it first. The
+> trip-planner tools you wrote there (`next_available_trip`, `calculate_rental_cost`,
+> `generate_booking_report`) are provided ready-made in `client.py` so you can focus on the
+> new work: hosting your MCP server and *combining* both tool sets on one agent.
 
 **Set up:**
 
@@ -645,7 +655,8 @@ that reads live stock and sales figures.
 > As you go, consider: why must diagnostic output go to `stderr` (or be suppressed) rather
 > than `stdout`? *(Hint: MCP speaks JSON-RPC over stdio, so anything printed to stdout is
 > parsed as protocol messages — a stray banner corrupts the stream. That's why the server
-> starts with `show_banner=False`.)*
+> starts with `show_banner=False`.)* And: once the agent has **both** tool sets, how does
+> your code know whether a given `function_call` should run a local function or an MCP tool?
 
 <details markdown="1">
 <summary>Show a solution</summary>
@@ -671,13 +682,23 @@ def get_weekly_sales() -> dict:
 mcp.run(show_banner=False)
 ```
 
-**In `client.py`** — connect to the server, discover its tools, and register them with an
-agent. Because the chat UI runs on an async event loop, the connection code lives in an
-async `setup()` that runs once on the first message, and each message is handled by an async
-`respond()`:
+**In `client.py`** — connect to the server, discover its tools, register them **alongside**
+the trip-planner tools on one agent, then route each call in `respond()`. Because the chat UI
+runs on an async event loop, the connection code lives in an async `setup()` that runs once on
+the first message.
 
-1. Inside `setup()`, start the server over stdio and open a session, then list the available
-    tools:
+1. Add the MCP references at the top of the file:
+
+    ```python
+    from mcp import ClientSession, StdioServerParameters
+    from mcp.client.stdio import stdio_client
+    ```
+
+    The `trip_planner_tools` list and the `local_functions` dispatch dict (the Task 4 tools)
+    are already provided near the top of the file — you don't need to rewrite them.
+
+2. Inside `setup()`, start the server over stdio and open a session, then list the available
+    tools and wrap each as a callable:
 
     ```python
     stdio_transport = await exit_stack.enter_async_context(stdio_client(server_params))
@@ -685,11 +706,7 @@ async `setup()` that runs once on the first message, and each message is handled
     session = await exit_stack.enter_async_context(ClientSession(stdio, write))
     await session.initialize()
     tools = (await session.list_tools()).tools
-    ```
 
-2. Wrap each MCP tool as a callable and build `FunctionTool` definitions the agent can use:
-
-    ```python
     def make_tool_func(tool_name):
         async def tool_func(**kwargs):
             return await session.call_tool(tool_name, kwargs)
@@ -709,33 +726,48 @@ async `setup()` that runs once on the first message, and each message is handled
     ]
     ```
 
-3. Create the agent with those tools (in `setup()`), then in `respond()` run the tool-calling
-    loop (same pattern as Task 4) — but invoke the wrapped **async** MCP function for each
-    `function_call`, and return the answer to the chat window:
+3. Create the agent with **both** tool sets — the trip planner *and* the warehouse tools:
 
     ```python
     agent = project_client.agents.create_version(
-        agent_name="inventory-agent",
+        agent_name="trailhead-assistant",
         definition=PromptAgentDefinition(
             model=model_deployment,
             instructions="""
-            You are an inventory assistant. Here are some general guidelines:
+            You are the Trailhead Adventure Works assistant. You help customers plan guided
+            trips and price gear rentals, and you help warehouse staff check live stock and sales.
+
+            Trip planning and rentals:
+            - Use the trip and rental tools to find guided trips, price gear, and produce booking reports.
+
+            Warehouse inventory:
             - Recommend restock if item inventory < 10 and weekly sales > 15
             - Recommend clearance if item inventory > 20 and weekly sales < 5
             """,
-            tools=mcp_function_tools,
+            tools=[*trip_planner_tools, *mcp_function_tools],
         ),
     )
+    ```
 
+4. In `respond()`, route each `function_call` to the right executor — local functions run
+    directly (they return a string); MCP tools are awaited over the session:
+
+    ```python
     for item in response.output:
         if item.type == "function_call":
             kwargs = json.loads(item.arguments)
-            output = await functions_dict[item.name](**kwargs)
+
+            if item.name in local_functions:
+                output_text = local_functions[item.name](**kwargs)          # Task 4 function
+            else:
+                result = await functions_dict[item.name](**kwargs)          # your MCP tool
+                output_text = result.content[0].text
+
             input_list.append(
                 FunctionCallOutput(
                     type="function_call_output",
                     call_id=item.call_id,
-                    output=output.content[0].text,
+                    output=output_text,
                 )
             )
 
@@ -744,21 +776,25 @@ async `setup()` that runs once on the first message, and each message is handled
     ```
 
 Run `python client.py`. Your browser opens the chat window — the server is launched for you
-over stdio on the first message. Try:
+over stdio on the first message. Now try a prompt that exercises **both** halves of the
+assistant in one conversation:
 
 ```
-Show me the current inventory levels for all products.
+Plan me a trip: find the next available trip in Patagonia and price 5 days of premium gear at priority service.
+```
+```
+Now check the warehouse — are there any products we should restock?
 ```
 
-The agent calls your custom tools and answers from the returned data. Because the
-conversation is stateful, follow-ups like *"Are there any products that should be
-restocked?"* work too. Close the browser tab and press **Ctrl+C** in the terminal to stop
-the app.
+The first prompt calls your Task 4 trip-planner functions; the second calls your MCP
+inventory tools — all on the **same** agent, in the **same** chat. Close the browser tab and
+press **Ctrl+C** in the terminal to stop the app.
 
 </details>
 
-**Stretch**: add a third tool (for example, `get_reorder_threshold`) and watch the agent
-discover it without any other code changes.
+**Stretch**: add a third MCP tool (for example, `get_reorder_threshold`) and watch the agent
+discover it without any other client changes — the routing already handles any tool it
+doesn't recognize as a local function.
 
 </details>
 
@@ -770,7 +806,8 @@ In this exercise you:
 - **Extended an agent with a tool** by connecting it to a remote MCP server and handling
   tool-approval requests in code.
 - (Optionally) consumed an agent from a **client app**, added **custom function tools**,
-  and built your **own MCP server**.
+  and built your **own MCP server** — then combined the function tools and your MCP tools
+  into a single **capstone assistant** that routes each call to the right place.
 
 Together these show the two big levers for making agents useful: giving them the right
 **knowledge** (grounding) and the right **capabilities** (tools).
