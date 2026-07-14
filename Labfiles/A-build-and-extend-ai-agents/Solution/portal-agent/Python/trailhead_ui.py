@@ -1,5 +1,5 @@
 """
-Contoso Adventure Works – shared chat UI shell (provided).
+Trailhead Adventure Works – shared chat UI shell (provided).
 
 You don't need to edit this file. It gives every task in the lab the same simple
 web chat window so your agent feels like a real app instead of a console script.
@@ -26,7 +26,7 @@ class AgentReply:
 
 def run_chat_app(
     respond: Callable,
-    title: str = "Contoso Adventure Works Assistant",
+    title: str = "Trailhead Adventure Works Assistant",
     subtitle: str = "",
     placeholder: str = "Ask the assistant...",
     server_port: int = 7860,

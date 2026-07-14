@@ -1,4 +1,4 @@
-CONTOSO ADVENTURE WORKS
+TRAILHEAD ADVENTURE WORKS
 CUSTOMER SERVICE & STORE POLICY
 
 Effective Date: January 2026
@@ -11,7 +11,7 @@ Version: 2.0
 We want you to be confident in your gear. Most items can be returned within 60 days of purchase.
 
 Process:
-1. Start a return in your account at https://returns.contosoadventureworks.com or in any store
+1. Start a return in your account at https://returns.trailheadadventureworks.com or in any store
 2. Items must be unused, with original tags and packaging
 3. Bring your order number or receipt
 4. Refunds are issued to the original payment method within 5-7 business days
@@ -59,7 +59,7 @@ Damage and Loss:
 3. GUIDED TRIPS AND BOOKINGS
 ====================
 
-Contoso Adventure Works runs guided trips across the world's great ranges.
+Trailhead Adventure Works runs guided trips across the world's great ranges.
 
 Booking:
 - Reserve a spot online or with a store trip specialist
@@ -94,7 +94,7 @@ Shipping Options:
 
 Order Tracking:
 - Tracking is emailed when your order ships
-- Track any order at https://orders.contosoadventureworks.com
+- Track any order at https://orders.trailheadadventureworks.com
 - In-store pickup is usually ready within 2 hours
 
 Delivery Issues:
@@ -109,9 +109,9 @@ Manufacturer Warranty:
 - Most brands we carry cover defects in materials and workmanship
 - Warranty length varies by brand; check the product page or ask a specialist
 
-Contoso Trail Guarantee:
-- Contoso-brand gear is guaranteed against defects for the life of the product
-- We will repair, replace, or refund defective Contoso-brand items
+Trailhead Guarantee:
+- Trailhead-brand gear is guaranteed against defects for the life of the product
+- We will repair, replace, or refund defective Trailhead-brand items
 
 Repairs:
 - We offer in-store repair for zippers, straps, and tent poles
@@ -123,7 +123,7 @@ Repairs:
 ====================
 
 Trailblazer Rewards:
-- Free to join at https://rewards.contosoadventureworks.com
+- Free to join at https://rewards.trailheadadventureworks.com
 - Earn 1 point per dollar; 100 points = $5 in trail credit
 - Members get early access to sales and free standard shipping
 
@@ -142,8 +142,8 @@ Store Hours:
 
 Contact Methods:
 - Phone: +1-800-555-TRAIL (87245)
-- Email: support@contosoadventureworks.com
-- Portal: https://support.contosoadventureworks.com
+- Email: support@trailheadadventureworks.com
+- Portal: https://support.trailheadadventureworks.com
 - Chat: Available on our website and mobile app
 
 Response Times:

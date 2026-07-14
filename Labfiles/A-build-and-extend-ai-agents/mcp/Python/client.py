@@ -7,7 +7,7 @@ from azure.ai.projects import AIProjectClient
 from azure.ai.projects.models import PromptAgentDefinition, FunctionTool
 from azure.identity import DefaultAzureCredential
 from openai.types.responses.response_input_param import FunctionCallOutput, ResponseInputParam
-from contoso_ui import run_chat_app, AgentReply
+from trailhead_ui import run_chat_app, AgentReply
 
 # Add references
 
@@ -103,7 +103,7 @@ if __name__ == "__main__":
     try:
         run_chat_app(
             respond,
-            title="Contoso Adventure Works Assistant",
+            title="Trailhead Adventure Works Assistant",
             subtitle="Warehouse inventory & weekly sales",
         )
     finally:

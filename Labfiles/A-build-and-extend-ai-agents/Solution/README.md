@@ -16,7 +16,7 @@ Solution/
    └─ client.py               #   Task 5: MCP client that drives the agent
 ```
 
-`contoso_ui.py` (the shared Gradio chat shell) is included in each folder unchanged — it is
+`trailhead_ui.py` (the shared Gradio chat shell) is included in each folder unchanged — it is
 provided to learners and is **not** something they edit.
 
 ---

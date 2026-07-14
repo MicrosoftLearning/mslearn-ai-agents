@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 # Import the local functions the agent can call, and the shared chat UI
 from functions import next_available_trip, calculate_rental_cost, generate_booking_report
-from contoso_ui import run_chat_app, AgentReply
+from trailhead_ui import run_chat_app, AgentReply
 
 # Load environment variables from .env file
 load_dotenv()
@@ -73,7 +73,7 @@ with (
     try:
         run_chat_app(
             respond,
-            title="Contoso Adventure Works Assistant",
+            title="Trailhead Adventure Works Assistant",
             subtitle="Plan a guided trip and price your gear rental.",
         )
     finally:
