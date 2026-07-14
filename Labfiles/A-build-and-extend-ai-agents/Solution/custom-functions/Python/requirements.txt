@@ -1,5 +1,0 @@
-python-dotenv
-azure-identity
-azure-ai-projects==2.0.0b4
-openai
-gradio==6.20.0
