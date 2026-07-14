@@ -15,7 +15,7 @@ Solution/
    ├─ functions_agent.py      # Task 4 — custom function tools (web chat)
    ├─ functions.py            #   Task 4: trip-planner helper functions
    ├─ server.py               # Task 5 — your MCP server (inventory + sales tools)
-   ├─ client.py               # Task 5 — MCP client that drives the agent
+   ├─ client.py               # Task 5 — capstone: MCP client that combines Task 4 + Task 5 tools
    ├─ trailhead_ui.py         # shared Gradio chat shell (provided; not edited by learners)
    ├─ Store_Policy.txt        # Task 1 grounding doc (uploaded to the portal agent)
    ├─ weekly_sales.csv        # Task 3 code-interpreter data (uploaded to the portal agent)
@@ -57,7 +57,7 @@ The Task 3 client loads an agent **by name** that you create in the portal:
 3. For Task 3's chart demo, add the **Code interpreter** tool and upload **`weekly_sales.csv`**
    (from the same folder). Save the agent.
 
-> Tasks 4 and 5 create their own agents in code (`trip-planner-agent`, `inventory-agent`)
+> Tasks 4 and 5 create their own agents in code (`trip-planner-agent`, `trailhead-assistant`)
 > and delete them on exit — no portal work needed for those.
 
 ### 4. Set up the environment once (shared by all tasks)
@@ -80,7 +80,7 @@ All commands run from the single `Python/` folder:
 | 2 | `python remote_mcp_agent.py` | Console output: agent calls the Learn Docs MCP and answers |
 | 3 | `python agent_with_functions.py` | Browser chat at `http://localhost:7860`, charts render inline |
 | 4 | `python functions_agent.py` | Browser chat; agent calls your Python functions |
-| 5 | `python client.py` | Browser chat; agent calls tools from your own MCP server |
+| 5 | `python client.py` | Browser chat; **capstone** — one agent that plans trips (Task 4 functions) *and* checks the warehouse (your MCP server). Do Task 4 first. |
 
 For the web tasks (3–5): the browser opens automatically. **Close the tab and press Ctrl+C**
 in the terminal to stop the app. Tasks 4 and 5 delete their agent version on exit.
