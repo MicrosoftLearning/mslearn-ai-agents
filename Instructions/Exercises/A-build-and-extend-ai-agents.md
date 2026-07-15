@@ -53,6 +53,8 @@ The **Optional** tasks let you additionally:
 - Call your agent from a **client application**.
 - Give an agent **custom function tools** that run your own Python logic.
 - Build and connect your **own MCP server**.
+- Compare two ways to build the same agent: the **Foundry SDK + Responses API** (which you
+  write) and the **Microsoft Agent Framework** (a provided, ready-to-run variant).
 
 ## Lab at a glance
 
@@ -410,6 +412,28 @@ you want the full walkthrough.
 > data, planning trips, and checking warehouse stock). You don't edit `trailhead_ui.py`; you
 > just write a `respond()` function and hand it to `run_chat_app()`.
 
+## Two ways to build the same agent
+
+There's more than one way to write an agent against Microsoft Foundry, and this lab shows you
+**two**:
+
+- **The Foundry SDK with the Responses API** — the approach you'll *write* throughout this lab.
+  You create the agent with `azure-ai-projects`, describe each tool with an explicit JSON
+  schema, and drive the **tool-calling loop yourself**: read the model's response, run the
+  tool it asked for, and send the result back. This is deliberately hands-on so you can *see*
+  the mechanics every agent runtime performs under the hood.
+- **The Microsoft Agent Framework (MAF)** — a higher-level framework that hides that plumbing.
+  You decorate a plain Python function with `@tool` (the schema is generated for you) and call
+  `await agent.run(...)`, which runs the entire tool-calling loop automatically.
+
+Neither is "more correct" — they're different levels of abstraction. Seeing the raw mechanics
+first is what makes the framework's shortcuts meaningful later. To make the contrast concrete,
+**Tasks 4 and 5 each ship a ready-to-run MAF edition** of the same assistant
+(`functions_agent_maf.py` and `client_maf.py`) that you can read and run alongside your own
+version. The Microsoft Agent Framework is covered in depth in **Lab 07 (Agent Framework)** and
+**Lab 08 (multi-agent orchestration)**.
+
+
 <details markdown="1" class="opt-task" data-tier="2">
 <summary><strong>Task 3 — Call your agent from a client app</strong> &middot; ★★☆ &middot; ~20 min</summary>
 
@@ -625,6 +649,56 @@ deleted automatically on exit).
 
 **Stretch**: add a fourth function tool of your own and update the instructions to mention it.
 
+<details markdown="1">
+<summary>Compare: the same agent with the Microsoft Agent Framework</summary>
+
+You just wrote two schemas per tool and a dispatch loop that matches each `function_call` to a
+Python function. The **Microsoft Agent Framework** removes both. Open **functions_agent_maf.py**
+(provided complete) and run it with `python functions_agent_maf.py` — it produces the *same*
+trip-planner assistant.
+
+The difference is the tool definition and the loop. Instead of a hand-written `FunctionTool`
+schema, you decorate the function with `@tool` and describe each parameter inline:
+
+```python
+from agent_framework import tool, Agent
+from agent_framework.foundry import FoundryChatClient
+from azure.identity import AzureCliCredential
+from pydantic import Field
+from typing import Annotated
+
+@tool(approval_mode="never_require")
+def next_available_trip(
+    region: Annotated[str, Field(description="Region to find the next guided trip in (e.g. 'pacific_northwest', 'rockies', 'patagonia')")],
+) -> str:
+    """Get the next available guided trip in a given region."""
+    return functions.next_available_trip(region)
+```
+
+Then you create the agent with the decorated functions and let `agent.run()` handle the whole
+tool-calling loop — no reading `response.output`, no matching names, no sending outputs back:
+
+```python
+agent = Agent(
+    client=FoundryChatClient(
+        project_endpoint=os.getenv("PROJECT_ENDPOINT"),
+        model=os.getenv("MODEL_DEPLOYMENT_NAME"),
+        credential=AzureCliCredential(),
+    ),
+    name="trip-planner-agent",
+    instructions="You are a trip planning assistant for Trailhead Adventure Works...",
+    tools=[next_available_trip, calculate_rental_cost, generate_booking_report],
+)
+
+# agent.run() decides which tools to call, runs them, and returns the final answer
+result = await agent.run(user_message, session=session)
+```
+
+Same result, far less code — because the framework does the plumbing you wrote by hand above.
+Writing it yourself first is what makes it clear *what* `agent.run()` is doing for you.
+
+</details>
+
 </details>
 
 <details markdown="1" class="opt-task" data-tier="3">
@@ -795,6 +869,42 @@ press **Ctrl+C** in the terminal to stop the app.
 **Stretch**: add a third MCP tool (for example, `get_reorder_threshold`) and watch the agent
 discover it without any other client changes — the routing already handles any tool it
 doesn't recognize as a local function.
+
+<details markdown="1">
+<summary>Compare: the same capstone with the Microsoft Agent Framework</summary>
+
+In `client.py` you hand-wired the MCP client (`ClientSession`, `stdio_client`), wrapped each
+discovered tool, built `FunctionTool` schemas, and then *routed* every `function_call` yourself
+— local function or MCP tool. The **Microsoft Agent Framework** collapses all of that. Open
+**client_maf.py** (provided complete) and run it with `python client_maf.py` — same capstone,
+same two-tool-sets-on-one-agent behavior.
+
+Your `server.py` is unchanged — you still author the MCP server. What disappears is the client
+wiring and the routing loop. An `MCPStdioTool` launches the server and exposes its tools, and
+you drop it into the agent's `tools` list right next to your `@tool` functions:
+
+```python
+from agent_framework import tool, Agent, MCPStdioTool
+
+mcp_tool = MCPStdioTool(name="Inventory", command="python", args=["server.py"])
+
+agent = Agent(
+    client=FoundryChatClient(...),
+    name="trailhead-assistant",
+    instructions="You are the Trailhead Adventure Works assistant...",
+    tools=[next_available_trip, calculate_rental_cost, generate_booking_report, mcp_tool],
+)
+
+# One call handles either tool set — no manual "local vs MCP" routing
+result = await agent.run(user_message, session=session)
+```
+
+Notice there's no `if item.name in local_functions ... else ...` branch: `agent.run()` invokes
+whichever tool the model picks, whether it's one of your Python functions or a tool hosted on
+your MCP server. Having built the routing by hand first, you can see exactly which step the
+framework is taking over.
+
+</details>
 
 </details>
 

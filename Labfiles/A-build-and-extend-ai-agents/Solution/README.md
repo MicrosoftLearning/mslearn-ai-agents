@@ -13,9 +13,11 @@ Solution/
    ├─ remote_mcp_agent.py     # Task 2 — remote MCP (Microsoft Learn Docs) + approval loop
    ├─ agent_with_functions.py # Task 3 — client app (web chat + inline charts)
    ├─ functions_agent.py      # Task 4 — custom function tools (web chat)
+   ├─ functions_agent_maf.py  #   Task 4 — same agent, Microsoft Agent Framework edition
    ├─ functions.py            #   Task 4: trip-planner helper functions
    ├─ server.py               # Task 5 — your MCP server (inventory + sales tools)
    ├─ client.py               # Task 5 — capstone: MCP client that combines Task 4 + Task 5 tools
+   ├─ client_maf.py           #   Task 5 — same capstone, Microsoft Agent Framework edition
    ├─ trailhead_ui.py         # shared Gradio chat shell (provided; not edited by learners)
    ├─ Store_Policy.txt        # Task 1 grounding doc (uploaded to the portal agent)
    ├─ weekly_sales.csv        # Task 3 code-interpreter data (uploaded to the portal agent)
@@ -80,10 +82,14 @@ All commands run from the single `Python/` folder:
 | 2 | `python remote_mcp_agent.py` | Console output: agent calls the Learn Docs MCP and answers |
 | 3 | `python agent_with_functions.py` | Browser chat at `http://localhost:7860`, charts render inline |
 | 4 | `python functions_agent.py` | Browser chat; agent calls your Python functions |
+| 4 (MAF) | `python functions_agent_maf.py` | Same agent built with the Microsoft Agent Framework (`@tool` + `agent.run()`) |
 | 5 | `python client.py` | Browser chat; **capstone** — one agent that plans trips (Task 4 functions) *and* checks the warehouse (your MCP server). Do Task 4 first. |
+| 5 (MAF) | `python client_maf.py` | Same capstone built with the Microsoft Agent Framework (`MCPStdioTool` + `agent.run()`) |
 
 For the web tasks (3–5): the browser opens automatically. **Close the tab and press Ctrl+C**
-in the terminal to stop the app. Tasks 4 and 5 delete their agent version on exit.
+in the terminal to stop the app. Tasks 4 and 5 delete their agent version on exit. The `_maf.py`
+variants are provided complete as a framework comparison — see the "Two ways to build the same
+agent" section in the exercise instructions.
 
 ---
 
