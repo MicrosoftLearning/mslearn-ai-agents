@@ -1,0 +1,41 @@
+# azd configuration for the Trailhead Adventure Works lab (OPTIONAL infra path).
+#
+# This is a convenience for learners/instructors who want to provision the
+# Foundry project + model deployment with a single command instead of creating
+# them by hand in the portal. It is entirely optional — the lab's default path
+# is still to create the project in the Foundry portal during setup.
+#
+# Usage:
+#     azd auth login
+#     azd up            # provisions the resources below, then fills in Python/.env
+#
+# When you're done with the lab:
+#     azd down          # deletes everything it created
+#
+# What it provisions (see infra/main.bicep):
+#   - A Microsoft Foundry (Azure AI Services) resource
+#   - A Foundry project
+#   - One chat model deployment
+#
+# After provisioning, the postprovision hook writes PROJECT_ENDPOINT and
+# MODEL_DEPLOYMENT_NAME into Python/.env for you.
+
+name: trailhead-adventure-works-lab
+metadata:
+  template: mslearn-ai-agents/A-build-and-extend-ai-agents
+
+# This template provisions infrastructure only — there is no app for azd to
+# deploy. You run the lab's Python scripts yourself from the Python/ folder.
+
+hooks:
+  postprovision:
+    windows:
+      shell: pwsh
+      run: ./setup/write_env.ps1
+      continueOnError: false
+      interactive: false
+    posix:
+      shell: sh
+      run: ./setup/write_env.sh
+      continueOnError: false
+      interactive: false

@@ -31,6 +31,42 @@ something learners edit.
 
 ---
 
+---
+
+## Setup helpers and modular (per-task) labs
+
+This lab can be completed end to end **or one task at a time**. Two things make that possible:
+
+- **Per-task instruction pages** — `Instructions/Exercises/A0-getting-started.md` (shared setup)
+  plus `A1`–`A5` (one page per task). Each task page tells a standalone learner exactly what it
+  needs and how to fast-forward.
+- **Setup scripts** in `Labfiles/A-build-and-extend-ai-agents/setup/`:
+  - `check_env.py --task N` — preflight-checks that `.env` has the keys task *N* needs.
+  - `bootstrap_agent.py` — **fast-forwards Task 1 in code**: creates and grounds
+    `trailhead-agent` (File Search on `Store_Policy.txt` + Code Interpreter on `weekly_sales.csv`)
+    and writes `AGENT_NAME` to `.env`, so learners can start at **Task 3** without the portal.
+    Idempotent; pass `--force` to recreate.
+
+Both scripts run from the **starter** `Python/` folder and use the shared virtual environment
+and `.env`.
+
+### Optional: provision infrastructure with azd
+
+Instead of creating the project by hand, `azure.yaml` + `infra/` let you provision a Foundry
+project and model deployment with one command:
+
+```
+azd up      # create the project + model deployment, writes Python/.env
+azd down    # remove everything when you're done
+```
+
+The manual portal path (Task 1) is still the default — azd is offered as **Option B** in
+Getting started for learners who prefer infrastructure as code.
+
+> **Note**: the azd path is bicep-validated but has not been deployment-tested in this repo yet.
+
+---
+
 ## What YOU must do to run this solution (the agent can't do these for you)
 
 Everything below requires an Azure subscription and interactive sign-in, so it can't be
@@ -61,6 +97,9 @@ The Task 3 client loads an agent **by name** that you create in the portal:
 
 > Tasks 4 and 5 create their own agents in code (`trip-planner-agent`, `trailhead-assistant`)
 > and delete them on exit — no portal work needed for those.
+
+> **Shortcut**: instead of the portal steps above, run `python setup/bootstrap_agent.py` from
+> the `Python/` folder to create and ground `trailhead-agent` in code and write `AGENT_NAME`.
 
 ### 4. Set up the environment once (shared by all tasks)
 From the `Python/` folder:
