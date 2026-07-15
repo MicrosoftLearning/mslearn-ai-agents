@@ -18,7 +18,6 @@ plumbing. Labs 07 and 08 explore the Agent Framework in more depth.
 """
 
 import os
-from contextlib import AsyncExitStack
 from typing import Annotated
 
 from dotenv import load_dotenv
@@ -70,45 +69,29 @@ def generate_booking_report(
     return functions.generate_booking_report(trip_name, region, gear_tier, days, service_level, customer_name)
 
 
-# Created once on the first message, on the same event loop the chat window uses.
-exit_stack = AsyncExitStack()
-agent = None
-session = None
+# Create the Foundry chat client and the agent once, at startup. FoundryChatClient
+# wraps your model deployment; Agent adds the instructions and tools on top of it.
+client = FoundryChatClient(
+    project_endpoint=os.getenv("PROJECT_ENDPOINT"),
+    model=os.getenv("MODEL_DEPLOYMENT_NAME"),
+    credential=AzureCliCredential(),
+)
 
+agent = Agent(
+    client=client,
+    name="trip-planner-agent",
+    instructions="""You are a trip planning assistant for Trailhead Adventure Works that helps
+        customers find guided trips and calculate gear rental costs.
+        Use the available tools to assist users with their inquiries.""",
+    tools=[next_available_trip, calculate_rental_cost, generate_booking_report],
+)
 
-async def setup():
-    """Create the Foundry chat client, agent, and a conversation session (runs once)."""
-    global agent, session
-    if agent is not None:
-        return
-
-    # A Foundry chat client backed by your project and model deployment.
-    client = FoundryChatClient(
-        project_endpoint=os.getenv("PROJECT_ENDPOINT"),
-        model=os.getenv("MODEL_DEPLOYMENT_NAME"),
-        credential=AzureCliCredential(),
-    )
-
-    # One agent that owns all three tools.
-    agent = await exit_stack.enter_async_context(
-        Agent(
-            client=client,
-            name="trip-planner-agent",
-            instructions="""You are a trip planning assistant for Trailhead Adventure Works that helps
-                customers find guided trips and calculate gear rental costs.
-                Use the available tools to assist users with their inquiries.""",
-            tools=[next_available_trip, calculate_rental_cost, generate_booking_report],
-        )
-    )
-
-    # A session keeps the conversation history across messages in the chat window.
-    session = agent.create_session()
+# A session keeps the conversation history across messages in the chat window.
+session = agent.create_session()
 
 
 async def respond(user_message):
     """Handle one message from the chat window and return the agent's reply."""
-    await setup()
-
     # agent.run() runs the entire tool-calling loop for you: it decides which tools
     # to call, invokes them, feeds the results back, and returns the final answer.
     result = await agent.run(user_message, session=session)

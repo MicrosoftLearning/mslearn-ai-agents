@@ -74,16 +74,18 @@ def generate_booking_report(
 exit_stack = AsyncExitStack()
 agent = None
 session = None
+mcp_tool = None
 
 
 async def setup():
-    """Connect the MCP server as a tool and create the combined agent (runs once)."""
-    global agent, session
+    """Connect the MCP server and create the agent + session (runs once)."""
+    global agent, session, mcp_tool
     if agent is not None:
         return
 
     # MCPStdioTool launches your MCP server and exposes its tools to the agent —
-    # no ClientSession/stdio wiring and no per-tool FunctionTool schemas.
+    # no ClientSession/stdio wiring and no per-tool FunctionTool schemas. It's kept
+    # open for the app's lifetime so the same connection serves every message.
     mcp_tool = await exit_stack.enter_async_context(
         MCPStdioTool(name="Inventory", command="python", args=["server.py"])
     )
@@ -94,24 +96,22 @@ async def setup():
         credential=AzureCliCredential(),
     )
 
-    # One agent holding BOTH tool sets: the trip-planner functions and the MCP tools.
-    agent = await exit_stack.enter_async_context(
-        Agent(
-            client=client,
-            name="trailhead-assistant",
-            instructions="""
-            You are the Trailhead Adventure Works assistant. You help customers plan guided
-            trips and price gear rentals, and you help warehouse staff check live stock and sales.
+    # The agent holds the local trip-planner tools; the MCP tools are supplied per run.
+    agent = Agent(
+        client=client,
+        name="trailhead-assistant",
+        instructions="""
+        You are the Trailhead Adventure Works assistant. You help customers plan guided
+        trips and price gear rentals, and you help warehouse staff check live stock and sales.
 
-            Trip planning and rentals:
-            - Use the trip and rental tools to find guided trips, price gear, and produce booking reports.
+        Trip planning and rentals:
+        - Use the trip and rental tools to find guided trips, price gear, and produce booking reports.
 
-            Warehouse inventory:
-            - Recommend restock if item inventory < 10 and weekly sales > 15
-            - Recommend clearance if item inventory > 20 and weekly sales < 5
-            """,
-            tools=[next_available_trip, calculate_rental_cost, generate_booking_report, mcp_tool],
-        )
+        Warehouse inventory:
+        - Recommend restock if item inventory < 10 and weekly sales > 15
+        - Recommend clearance if item inventory > 20 and weekly sales < 5
+        """,
+        tools=[next_available_trip, calculate_rental_cost, generate_booking_report],
     )
 
     # A session keeps the conversation history across messages in the chat window.
@@ -122,9 +122,10 @@ async def respond(user_message):
     """Handle one message from the chat window and return the agent's reply."""
     await setup()
 
-    # agent.run() picks whichever tool the model needs — a local @tool or an MCP
-    # tool — invokes it, and returns the final answer. No manual routing.
-    result = await agent.run(user_message, session=session)
+    # Pass the MCP tools for this run alongside the agent's local tools. agent.run()
+    # invokes whichever tool the model picks — a local @tool or an MCP tool — and
+    # returns the final answer. No manual routing.
+    result = await agent.run(user_message, tools=mcp_tool, session=session)
     return AgentReply(text=result.text)
 
 

@@ -881,22 +881,21 @@ same two-tool-sets-on-one-agent behavior.
 
 Your `server.py` is unchanged — you still author the MCP server. What disappears is the client
 wiring and the routing loop. An `MCPStdioTool` launches the server and exposes its tools, and
-you drop it into the agent's `tools` list right next to your `@tool` functions:
+you hand it to `agent.run()` alongside the agent's own `@tool` functions:
 
 ```python
 from agent_framework import tool, Agent, MCPStdioTool
-
-mcp_tool = MCPStdioTool(name="Inventory", command="python", args=["server.py"])
 
 agent = Agent(
     client=FoundryChatClient(...),
     name="trailhead-assistant",
     instructions="You are the Trailhead Adventure Works assistant...",
-    tools=[next_available_trip, calculate_rental_cost, generate_booking_report, mcp_tool],
+    tools=[next_available_trip, calculate_rental_cost, generate_booking_report],
 )
 
-# One call handles either tool set — no manual "local vs MCP" routing
-result = await agent.run(user_message, session=session)
+async with MCPStdioTool(name="Inventory", command="python", args=["server.py"]) as mcp_tool:
+    # One call handles either tool set — no manual "local vs MCP" routing
+    result = await agent.run(user_message, tools=mcp_tool, session=session)
 ```
 
 Notice there's no `if item.name in local_functions ... else ...` branch: `agent.run()` invokes
