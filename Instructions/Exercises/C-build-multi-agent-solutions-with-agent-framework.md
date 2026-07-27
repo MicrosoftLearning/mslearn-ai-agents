@@ -1,0 +1,156 @@
+---
+lab:
+    title: 'Build multi-agent solutions with the Agent Framework'
+    description: 'Build Tailwind Traders operations agents with the Microsoft Agent Framework: start with a single tool-using agent, then orchestrate several agents in sequence, then connect remote agents across processes with the A2A protocol. A modular lab you can complete end to end or one task at a time.'
+    level: 300
+    concepts: 'Microsoft Agent Framework, tools, multi-agent orchestration, A2A protocol'
+    duration: 30
+    islab: true
+    status: 'draft'
+---
+
+<!--
+PILOT NOTE (remove before publishing):
+This is a pilot of the new lab template (Core + Optional tasks) applied to
+"Lab C" = a consolidation of the current exercises 07, 08, and 09.
+Starter code lives in a single folder — Labfiles/C-build-multi-agent-solutions-with-agent-framework/Python/ —
+shared by every task (one virtual environment, one .env). The completed reference code is
+in Labfiles/C-build-multi-agent-solutions-with-agent-framework/Solution/Python/.
+
+This landing page is the lab overview. Setup lives in C0-getting-started.md and each task is
+its own page (C1–C3) so it can be completed on its own. Optional provisioning scripts live in
+Labfiles/C-build-multi-agent-solutions-with-agent-framework/setup/ and infra/.
+-->
+
+# Build multi-agent solutions with the Agent Framework
+
+A single agent is useful. A *team* of agents — each one focused, and able to hand work to the
+others — is how you build real operations. In this lab you'll build up a Tailwind Traders
+multi-agent system with the **Microsoft Agent Framework (MAF)**, starting from one tool-using
+agent and growing to a set of remote agents that call each other over a protocol.
+
+<style>
+/* "Ask Anton" just-in-time concept blocks */
+details.concept { margin:.6rem 0 1rem; }
+details.concept > summary { display:inline-block; cursor:pointer; list-style:none;
+  font-size:.85em; font-weight:600; color:#6b4ba1; background:#6b4ba112;
+  border:1px solid #6b4ba133; border-radius:999px; padding:.2em .7em; }
+details.concept > summary::-webkit-details-marker { display:none; }
+details.concept > summary::before { content:"Ask Anton: "; font-weight:700;
+  padding-left:1.5em;
+  background:url("../Media/anton-avatar.png") left center / 1.25em 1.25em no-repeat; }
+details.concept > summary:hover { background:#6b4ba1; color:#fff; border-color:#6b4ba1; }
+details.concept[open] > summary { border-bottom-left-radius:0; border-bottom-right-radius:0; }
+details.concept .concept-body { border:1px solid #6b4ba133; border-top:none;
+  border-radius:0 8px 8px 8px; padding:.6rem .9rem; background:#6b4ba108; font-size:.95em; }
+</style>
+
+<details markdown="1" class="concept">
+<summary>What is the Microsoft Agent Framework?</summary>
+<div class="concept-body" markdown="1">
+
+The **Microsoft Agent Framework (MAF)** is a higher-level SDK for building agents on Microsoft
+Foundry. You decorate a plain Python function with `@tool` (the schema is generated for you) and
+call `await agent.run(...)`, which runs the entire tool-calling loop automatically. It also gives
+you building blocks for **multi-agent** solutions — orchestrations that run several agents
+together — so you don't have to wire the plumbing by hand.
+
+[Learn more →](https://learn.microsoft.com/azure/ai-foundry/agents/overview)
+
+</div>
+</details>
+
+**Your scenario:** you work at **Tailwind Traders**, an outdoor-gear retailer that also runs
+guided trips. Across this lab you'll build the automation behind Tailwind Traders operations —
+starting with a single agent that files trip-expense claims, then a pipeline of agents that
+triage customer feedback, and finally a set of specialist trip-planning agents that live in
+separate processes and collaborate over a protocol.
+
+You'll start with the **Core** task that gets you to a working, tool-using agent as quickly as
+possible. From there, a set of **Optional** tasks lets you go deeper into multi-agent patterns.
+
+> **Note**: Some of the technologies used in this exercise are in preview or in active
+> development. You may experience some unexpected behavior, warnings, or errors.
+
+## What you'll learn
+
+By completing the **Core** task of this exercise, you'll be able to:
+
+- **Build an agent with a custom tool** using the Microsoft Agent Framework — decorate a Python
+  function with `@tool`, hand it to an `Agent`, and let `agent.run()` drive the tool-calling loop.
+
+The **Optional** tasks let you additionally:
+
+- **Orchestrate multiple agents** in a sequence, passing work from one specialist agent to the
+  next and collecting every agent's output.
+- **Connect remote agents** that run in separate processes and call each other using the
+  **Agent-to-Agent (A2A)** protocol, coordinated by a routing agent.
+
+## How this lab is organized
+
+This lab is **modular**. Each task is written to be completed **on its own, starting fresh** —
+so you can pick a single task and do just that one. Every task also shares one starter folder,
+one virtual environment, and one `.env`, so if you'd rather work straight through, you can.
+
+1. **Start with [Getting started](C0-getting-started.md)** — create your Microsoft Foundry
+   project (in the portal or with one `azd up` command), get the starter code, and set up
+   your `.env`. Every task begins from here; if you're doing the whole lab in one sitting, you
+   only need to do this once.
+2. **Do any task.** Each task lists the setup it needs so you can start it independently. If
+   you're moving straight from the previous task, a short *"Continuing from a previous task?"*
+   note at the top lets you skip the repeated setup and keep going.
+
+## Lab at a glance
+
+Complete the **Core** task first (about **30 minutes**) — it ends with a working, tool-using
+agent. Then expand any **Optional** tasks that interest you. The full lab, including all
+optional tasks, takes about **1 hour 30 minutes**.
+
+| Section | Task | Difficulty | Time |
+| --- | --- | --- | --- |
+| **Core** | [Task 1 – Build an agent with a tool](C1-create-an-agent-with-a-tool.md) | ★★☆ | ~30 min |
+| *Optional* | [Task 2 – Orchestrate multiple agents in sequence](C2-orchestrate-multiple-agents.md) | ★★☆ | ~30 min |
+| *Optional* | [Task 3 – Connect remote agents with A2A](C3-connect-remote-agents-with-a2a.md) | ★★★ | ~30 min |
+
+**Choosing your path** — pick the tasks that fit the time you have:
+
+- **Core only (~30 min):** do Task 1.
+- **Core + orchestration (~1h):** also do **Task 2**.
+- **Everything (~1h 30m):** add **Task 3** (remote agents with A2A).
+
+## One framework, growing from one agent to many
+
+Every task in this lab is built on the **Microsoft Agent Framework**, so the shape of the code
+stays familiar as the solutions get more ambitious:
+
+- In **Task 1**, you build a **single** agent. You describe a tool with `@tool`, attach it to an
+  `Agent` backed by a `FoundryChatClient`, and call `agent.run(...)` — the framework runs the
+  tool-calling loop for you.
+- In **Task 2**, you keep the same client but create **several** agents and hand them to a
+  `SequentialBuilder` orchestration, which runs them in order and collects each one's output.
+- In **Task 3**, you split the agents across **separate processes** and let a routing agent
+  discover and call them using the **A2A protocol** — the same collaboration idea, now over the
+  network.
+
+Seeing the single-agent mechanics first is what makes the multi-agent patterns meaningful later.
+
+## Summary
+
+Across this lab you:
+
+- Built an **agent with a custom tool** using the Microsoft Agent Framework.
+- (Optionally) **orchestrated several agents** in a sequence to triage work step by step.
+- (Optionally) connected **remote agents** across processes with the **A2A protocol**, routed by
+  a coordinating agent.
+
+Together these show how the Agent Framework scales from a single focused agent to a coordinated
+team of them.
+
+## Clean up
+
+If you're finished, delete the resources you created to avoid unnecessary Azure costs.
+
+1. In the [Azure portal](https://portal.azure.com), navigate to the resource group that contains your Foundry resource.
+1. On the toolbar, select **Delete resource group**, enter the resource group name, and confirm.
+
+> If you provisioned with `azd`, run `azd down` instead to remove everything it created.

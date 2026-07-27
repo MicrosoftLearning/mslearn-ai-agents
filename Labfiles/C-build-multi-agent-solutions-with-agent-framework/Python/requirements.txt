@@ -1,0 +1,11 @@
+python-dotenv
+azure-identity==1.25.3
+agent-framework==1.9.0
+httpx
+uvicorn
+starlette
+sse-starlette
+fastapi
+azure-ai-projects
+azure-ai-agents
+a2a-sdk==0.3.26
