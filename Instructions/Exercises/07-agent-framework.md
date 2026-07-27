@@ -87,9 +87,9 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. Enter the repository URL:
 
-    ```
-    https://github.com/MicrosoftLearning/mslearn-ai-agents.git
-    ```
+   ```
+   https://github.com/MicrosoftLearning/mslearn-ai-agents.git
+   ```
 
 1. Choose a location on your local machine to clone the repository.
 
@@ -103,11 +103,11 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. In the terminal, enter the following command to install the required Python packages in a virtual environment:
 
-    ```
-    python -m venv labenv
-    .\labenv\Scripts\Activate.ps1
-    pip install -r requirements.txt
-    ```
+   ```
+   python -m venv labenv
+   .\labenv\Scripts\Activate.ps1
+   pip install -r requirements.txt
+   ```
 
 1. Open the **.env** file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project deployment resource in the Foundry Toolkit extension) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name. Use **Ctrl+S** to save the file after making these changes.
 
@@ -126,18 +126,18 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
 
 1. At the top of the file, after the existing **import** statement, find the comment **Add references**, and add the following code to reference the namespaces in the libraries you'll need to implement your agent:
 
-    ```python
+   ```python
    # Add references
    from agent_framework import tool, Agent
    from agent_framework.foundry import FoundryChatClient
    from azure.identity import AzureCliCredential
    from pydantic import Field
    from typing import Annotated
-    ```
+   ```
 
 1. Near the bottom of the file, find the comment **Create a tool function for the email functionality**, and add the following code to define a function that your agent will use to send email (tools are a way to add custom functionality to agents)
 
-    ```python
+   ```python
    # Create a tool function for the email functionality
    @tool(approval_mode="never_require")
    def submit_claim(
@@ -147,7 +147,7 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
            print("\nTo:", to)
            print("Subject:", subject)
            print(body, "\n")
-    ```
+   ```
 
     > **Note**: The function *simulates* sending an email by printing it to the console. In a real application, you'd use an SMTP service or similar to actually send the email!
 
@@ -155,14 +155,14 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
 
     (Be sure to maintain the indentation level)
 
-    ```python
+   ```python
    # Create a foundry chat client 
    client = FoundryChatClient(
        project_endpoint=os.getenv("PROJECT_ENDPOINT"),
        model=os.getenv("MODEL_DEPLOYMENT_NAME"),
        credential=AzureCliCredential()
    )
-    ```
+   ```
 
     Note that the **AzureCliCredential** object will allow your code to authenticate to your Azure account. This client will be used to interact with the Foundry agent services.
 
@@ -170,7 +170,7 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
 
     (Be sure to maintain the indentation level)
 
-    ```python
+   ```python
    # Initialize an agent with the tool and instructions
    async with (
        Agent(
@@ -182,14 +182,14 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
            tools=[submit_claim],
        ) as agent,
    ):
-    ```
+   ```
     In this code, the **Agent** object is initialized with the client, instructions for the agent, and the tool function you defined to send emails.
 
 1. Find the comment **Use the agent to process the expenses data**, and add the following code to create a thread for your agent to run on, and then invoke it with a chat message.
 
     (Be sure to maintain the indentation level):
 
-    ```python
+   ```python
    # Use the agent to process the expenses data
    try:
        # Add the input prompt to a list of messages to be submitted
@@ -201,7 +201,7 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
    except Exception as e:
        # Something went wrong
        print (e)
-    ```
+   ```
 
 1. Review that the completed code for your agent, using the comments to help you understand what each block of code does, and then save your code changes (**CTRL+S**).
 
@@ -209,21 +209,21 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
 
 1. In the integrated terminal, enter the following commands to run the application:
 
-    ```
-    az login
-    ```
+   ```
+   az login
+   ```
 
-    ```
+   ```
    python agent-framework.py
-    ```
+   ```
 
     `az login` allows the AzureCliCredential to authenticate to your Azure account.
 
 1. When asked what to do with the expenses data, enter the following prompt:
 
-    ```
+   ```
    Submit an expense claim
-    ```
+   ```
 
 1. When the application has finished, review the output. The agent should have composed an email for an expenses claim based on the data that was provided.
 

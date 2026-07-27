@@ -91,9 +91,9 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. Enter the repository URL:
 
-    ```
-    https://github.com/MicrosoftLearning/mslearn-ai-agents.git
-    ```
+   ```
+   https://github.com/MicrosoftLearning/mslearn-ai-agents.git
+   ```
 
 1. Choose a location on your local machine to clone the repository.
 
@@ -107,11 +107,11 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. In the terminal, enter the following command to install the required Python packages in a virtual environment:
 
-    ```
-    python -m venv labenv
-    .\labenv\Scripts\Activate.ps1
-    pip install -r requirements.txt
-    ```
+   ```
+   python -m venv labenv
+   .\labenv\Scripts\Activate.ps1
+   pip install -r requirements.txt
+   ```
 
 1. Open the **.env** file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project deployment resource in the Foundry Toolkit VS Code extension) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name. Use **Ctrl+S** to save the file after making these changes.
 
@@ -125,7 +125,7 @@ Now you're ready to create an AI agent that uses MCP server tools to access exte
 
 1. Find the comment **Determine the next visible astronomical event for a given location** and add the following code:
 
-    ```python
+   ```python
    # Determine the next visible astronomical event for a given location
    def next_visible_event(location: str) -> str:
        """Returns the next visible astronomical event for a location."""
@@ -138,7 +138,7 @@ Now you're ready to create an AI agent that uses MCP server tools to access exte
                return json.dumps({"event": name, "type": event_type, "date": date_str, "visible_from": sorted(locs)})
 
        return json.dumps({"message": f"No upcoming events found for {location}."})
-    ```
+   ```
 
     This function checks the sample events data to find the next astronomical event that is visible from a specified location, and returns the event details as a JSON string. Next, let's create an agent that can use this function.
 
@@ -150,7 +150,7 @@ Now you're ready to create an AI agent that uses MCP server tools to access exte
 
 1. Find the comment **Add references** and add the following code to import the classes you'll need to build an Azure AI agent that uses a function tool:
 
-    ```python
+   ```python
    # Add references
    from azure.ai.projects import AIProjectClient
    from azure.ai.projects.models import FunctionTool
@@ -158,20 +158,20 @@ Now you're ready to create an AI agent that uses MCP server tools to access exte
    from azure.ai.projects.models import PromptAgentDefinition, FunctionTool
    from openai.types.responses.response_input_param import FunctionCallOutput, ResponseInputParam
    from functions import next_visible_event, calculate_observation_cost, generate_observation_report
-    ```
+   ```
 
     Notice that the functions you defined in the **functions.py** file are imported so they can be used as tools for the agent.
 
 1. Find the comment **Connect to the project client** and add the following code:
 
-    ```python
-    # Connect to the project client
-    with (
-        DefaultAzureCredential() as credential,
-        AIProjectClient(endpoint=project_endpoint, credential=credential) as project_client,
-        project_client.get_openai_client() as openai_client,
-    ):
-    ```
+   ```python
+   # Connect to the project client
+   with (
+       DefaultAzureCredential() as credential,
+       AIProjectClient(endpoint=project_endpoint, credential=credential) as project_client,
+       project_client.get_openai_client() as openai_client,
+   ):
+   ```
 
 ## Define the function tools
 
@@ -179,7 +179,7 @@ In this task, you'll define each of the function tools that the agent can use. T
 
 1. Find the comment **Define the event function tool** and add the following code:
 
-    ```python
+   ```python
    # Define the event function tool
    event_tool = FunctionTool(
        name="next_visible_event",
@@ -197,11 +197,11 @@ In this task, you'll define each of the function tools that the agent can use. T
        },
        strict=True,
    )
-    ```
+   ```
 
 1. Find the comment **Define the observation cost function tool** and add the following code:
 
-    ```python
+   ```python
    # Define the observation cost function tool
    cost_tool = FunctionTool(
        name="calculate_observation_cost",
@@ -227,11 +227,11 @@ In this task, you'll define each of the function tools that the agent can use. T
        },
        strict=True,
    )
-    ```
+   ```
 
 1. Find the comment **Define the observation report generation function tool** and add the following code:
 
-    ```python
+   ```python
    # Define the observation report generation function tool
    report_tool = FunctionTool(
        name="generate_observation_report",
@@ -269,7 +269,7 @@ In this task, you'll define each of the function tools that the agent can use. T
        },
        strict=True,
    )
-    ```
+   ```
 
 ## Create the agent that uses the function tools
 
@@ -277,7 +277,7 @@ Now that you've defined the function tools, you can create an agent that can use
 
 1. Find the comment **Create a new agent with the function tools** and add the following code:
 
-    ```python
+   ```python
    # Create a new agent with the function tools
    agent = project_client.agents.create_version(
        agent_name="astronomy-agent",
@@ -290,7 +290,7 @@ Now that you've defined the function tools, you can create an agent that can use
            tools=[event_tool, cost_tool, report_tool],
        ),
    )
-    ```
+   ```
 
 ## Send a message to the agent and process the response
 
@@ -298,33 +298,33 @@ Now that you've created the agent with the function tools, you can send messages
 
 1. Find the comment **Create a thread for the chat session** and add the following code:
 
-    ```python
+   ```python
    # Create a thread for the chat session
    conversation = openai_client.conversations.create()
-    ```
+   ```
 
     This code creates the chat session with the agent.
 
 1. Find the comment **Create a list to hold function call outputs that will be sent back as input to the agent** and add the following code:
 
-    ```python
+   ```python
    # Create a list to hold function call outputs that will be sent back as input to the agent
    input_list: ResponseInputParam = []
    ```
 
 1. Find the comment **Send a prompt to the agent** and add the following code:
 
-    ```python
+   ```python
    # Send a prompt to the agent
    openai_client.conversations.items.create(
        conversation_id=conversation.id,
        items=[{"type": "message", "role": "user", "content": user_input}],
    )
-    ```
+   ```
 
 1. Find the comment **Retrieve the agent's response, which may include function calls** and add the following code:
 
-    ```python
+   ```python
    # Retrieve the agent's response, which may include function calls
    response = openai_client.responses.create(
        conversation=conversation.id,
@@ -335,7 +335,7 @@ Now that you've created the agent with the function tools, you can send messages
    # Check the run status for failures
    if response.status == "failed":
        print(f"Response failed: {response.error}")
-    ```
+   ```
 
     In this code, you send a user prompt to the agent and retrieve the response. You also check if the response indicates a failure and print the error if so.
 
@@ -343,7 +343,7 @@ Now that you've created the agent with the function tools, you can send messages
 
 1. Find the comment **Process function calls** and add the following code to handle any function calls made by the agent:
 
-    ```python
+   ```python
    # Process function calls
    for item in response.output:
        if item.type == "function_call":
@@ -356,7 +356,7 @@ Now that you've created the agent with the function tools, you can send messages
                result = calculate_observation_cost(**json.loads(item.arguments))
            elif item.name == "generate_observation_report":
                result = generate_observation_report(**json.loads(item.arguments))
-                
+
            # Append the output text
            input_list.append(
                FunctionCallOutput(
@@ -365,13 +365,13 @@ Now that you've created the agent with the function tools, you can send messages
                    output=result,
                )
            )
-    ```
+   ```
 
     This code iterates through the items in the agent's response to check for any function calls. If a function call is found, it retrieves the corresponding function tool, executes the function with the provided arguments, and appends the result to the input list that will be sent back to the agent.
 
 1. Find the comment **Send function call outputs back to the model and retrieve a response** and add the following code:
 
-    ```python
+   ```python
    # Send function call outputs back to the model and retrieve a response
    if input_list:
        response = openai_client.responses.create(
@@ -381,17 +381,17 @@ Now that you've created the agent with the function tools, you can send messages
        )
    # Display the agent's response
    print(f"AGENT: {response.output_text}")
-    ```
+   ```
 
     This code checks if there are any function call outputs in the input list, and if so, it sends them back to the agent as input to retrieve an updated response. Finally, it prints the agent's response.
 
 1. Find the comment **Delete the agent when done** and add the following code:
 
-    ```python
-    # Delete the agent when done
-    project_client.agents.delete_version(agent_name=agent.name, agent_version=agent.version)
-    print("Deleted agent.")
-    ```
+   ```python
+   # Delete the agent when done
+   project_client.agents.delete_version(agent_name=agent.name, agent_version=agent.version)
+   print("Deleted agent.")
+   ```
 
 1. Review the complete code you've added to the file. It should now include sections that:
    - Import necessary libraries
@@ -409,19 +409,19 @@ Now that you've created the agent with the function tools, you can send messages
 
 1. In the integrated terminal, enter the following command to run the application:
 
-    ```
-    az login
-    ```
+   ```
+   az login
+   ```
 
-    ```
+   ```
    python agent.py
-    ```
+   ```
 
 1. When prompted, enter a prompt such as:
 
-    ```
+   ```
    Find me the next event I can see from South America and give me the cost for 5 hours of premium telescope time at normal priority.
-    ```
+   ```
 
     Notice that this prompt asks the agent to use both of the function tools you defined: `next_visible_event` and `calculate_observation_cost`. The agent is able to invoke both functions in the same conversation turn, and use the outputs from those function calls to provide a helpful response to the user.
 
@@ -429,33 +429,33 @@ Now that you've created the agent with the function tools, you can send messages
 
     You should see some output similar to the following:
 
-    ```output
-    AGENT: The next astronomical event you can observe from South America is the Jupiter-Venus Conjunction, taking place on May 1st.
-    The cost for 5 hours of premium telescope time at normal priority for this observation will be $1,875. 
-    ```
+   ```output
+   AGENT: The next astronomical event you can observe from South America is the Jupiter-Venus Conjunction, taking place on May 1st.
+   The cost for 5 hours of premium telescope time at normal priority for this observation will be $1,875. 
+   ```
 
 1. Enter a follow-up prompt to generate an observation report, such as:
 
-    ```
-    Generate that information in a report for Bellows College.
-    ```
+   ```
+   Generate that information in a report for Bellows College.
+   ```
 
     You should see a response similar to the following:
 
-    ```output
-    AGENT: Here is your report for Bellows College:
+   ```output
+   AGENT: Here is your report for Bellows College:
 
-    - Next visible astronomical event: Jupiter-Venus Conjunction
-    - Date: May 1st
-    - Visible from: South America
-    - Observation details:
-        - Telescope tier: Premium
-        - Duration: 5 hours
-        - Priority: Normal
-    - Observation cost: $1,875
+   - Next visible astronomical event: Jupiter-Venus Conjunction
+   - Date: May 1st
+   - Visible from: South America
+   - Observation details:
+       - Telescope tier: Premium
+       - Duration: 5 hours
+       - Priority: Normal
+   - Observation cost: $1,875
 
-    A formal report has been generated for Bellows College.
-    ```
+   A formal report has been generated for Bellows College.
+   ```
 
     In the file explorer, you can see that a new file named `report-<event-type>.txt` has been created, which contains the generated report. You can open this file to view the contents of the report.
 

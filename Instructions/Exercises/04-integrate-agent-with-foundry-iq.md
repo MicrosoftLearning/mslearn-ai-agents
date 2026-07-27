@@ -62,12 +62,12 @@ Now you'll configure your agent that uses Foundry IQ to search the knowledge bas
 
 1. First, give your agent the following instructions:
 
-    ```
-    You are a helpful AI assistant for Contoso, specializing in outdoor camping and hiking products. 
-    You must ALWAYS search the knowledge base to answer questions about our products or product 
-    catalog. Provide detailed, accurate information and always cite your sources.
-    If you don't find relevant information in the knowledge base, say so clearly.
-    ```
+   ```
+   You are a helpful AI assistant for Contoso, specializing in outdoor camping and hiking products. 
+   You must ALWAYS search the knowledge base to answer questions about our products or product 
+   catalog. Provide detailed, accurate information and always cite your sources.
+   If you don't find relevant information in the knowledge base, say so clearly.
+   ```
 
 1. Select **Save** to save your current agent configuration.
 1. Then, in the **Knowledge** section, expand the **Add** dropdown, and select **Connect to Foundry IQ**.
@@ -205,108 +205,108 @@ Now let's use Visual Studio Code to develop an app. The code files for your app 
 
     > **Tip**: Be careful to maintain the correct indentation level.
 
-    ```python
-    # Connect to the project and agent
-    credential = DefaultAzureCredential(
-        exclude_environment_credential=True,
-        exclude_managed_identity_credential=True
-    )
-    project_client = AIProjectClient(
-        credential=credential,
-        endpoint=project_endpoint
-    )
+   ```python
+   # Connect to the project and agent
+   credential = DefaultAzureCredential(
+       exclude_environment_credential=True,
+       exclude_managed_identity_credential=True
+   )
+   project_client = AIProjectClient(
+       credential=credential,
+       endpoint=project_endpoint
+   )
 
-    # Get the OpenAI client
-    openai_client = project_client.get_openai_client()
+   # Get the OpenAI client
+   openai_client = project_client.get_openai_client()
 
-    # Get the agent
-    agent = project_client.agents.get(agent_name=agent_name)
-    print(f"Connected to agent: {agent.name} (id: {agent.id})\n")
+   # Get the agent
+   agent = project_client.agents.get(agent_name=agent_name)
+   print(f"Connected to agent: {agent.name} (id: {agent.id})\n")
 
-    # Create a new conversation
-    conversation = openai_client.conversations.create(items=[])
-    print(f"Created conversation (id: {conversation.id})\n")
-    ```
+   # Create a new conversation
+   conversation = openai_client.conversations.create(items=[])
+   print(f"Created conversation (id: {conversation.id})\n")
+   ```
 
 1. Find the second **TODO** comment inside the `send_message_to_agent()` function and add the following code to send messages and handle responses, including MCP approval requests:
 
-    ```python
-    # Add user message to the conversation
-    openai_client.conversations.items.create(
-        conversation_id=conversation.id,
-        items=[{"type": "message", "role": "user", "content": user_message}],
-    )
-    
-    # Store in conversation history (client-side)
-    conversation_history.append({
-        "role": "user",
-        "content": user_message
-    })
-    
-    # Create a response using the agent
-    response = openai_client.responses.create(
-        conversation=conversation.id,
-        extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
-        input=""
-    )
+   ```python
+   # Add user message to the conversation
+   openai_client.conversations.items.create(
+       conversation_id=conversation.id,
+       items=[{"type": "message", "role": "user", "content": user_message}],
+   )
 
-    # Check if the response output contains an MCP approval request
-    approval_request = None
-    if hasattr(response, 'output') and response.output:
-        for item in response.output:
-            if hasattr(item, 'type') and item.type == 'mcp_approval_request':
-                approval_request = item
-                break
-    
-    # Handle approval request if present
-    if approval_request:
-        print(f"[Approval required for: {approval_request.name}]\n")
-        print(f"Server: {approval_request.server_label}")
-        
-        # Parse and display the arguments (optional, for transparency)
-        import json
-        try:
-            args = json.loads(approval_request.arguments)
-            print(f"Arguments: {json.dumps(args, indent=2)}\n")
-        except:
-            print(f"Arguments: {approval_request.arguments}\n")
-        
-        # Prompt user for approval
-        approval_input = input("Approve this action? (yes/no): ").strip().lower()
-        
-        if approval_input in ['yes', 'y']:
-            print("Approving action...\n")
-            
-            # Create approval response item
-            approval_response = {
-                "type": "mcp_approval_response",
-                "approval_request_id": approval_request.id,
-                "approve": True
-            }
-        else:
-            print("Action denied.\n")
-            
-            # Create denial response item
-            approval_response = {
-                "type": "mcp_approval_response",
-                "approval_request_id": approval_request.id,
-                "approve": False
-            }
-        
-        # Add the approval response to the conversation
-        openai_client.conversations.items.create(
-            conversation_id=conversation.id,
-            items=[approval_response]
-        )
-        
-        # Get the actual response after approval/denial
-        response = openai_client.responses.create(
-            conversation=conversation.id,
-            extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
-            input=""
-        )
-    
-    ```
+   # Store in conversation history (client-side)
+   conversation_history.append({
+       "role": "user",
+       "content": user_message
+   })
+
+   # Create a response using the agent
+   response = openai_client.responses.create(
+       conversation=conversation.id,
+       extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
+       input=""
+   )
+
+   # Check if the response output contains an MCP approval request
+   approval_request = None
+   if hasattr(response, 'output') and response.output:
+       for item in response.output:
+           if hasattr(item, 'type') and item.type == 'mcp_approval_request':
+               approval_request = item
+               break
+
+   # Handle approval request if present
+   if approval_request:
+       print(f"[Approval required for: {approval_request.name}]\n")
+       print(f"Server: {approval_request.server_label}")
+
+       # Parse and display the arguments (optional, for transparency)
+       import json
+       try:
+           args = json.loads(approval_request.arguments)
+           print(f"Arguments: {json.dumps(args, indent=2)}\n")
+       except:
+           print(f"Arguments: {approval_request.arguments}\n")
+
+       # Prompt user for approval
+       approval_input = input("Approve this action? (yes/no): ").strip().lower()
+
+       if approval_input in ['yes', 'y']:
+           print("Approving action...\n")
+
+           # Create approval response item
+           approval_response = {
+               "type": "mcp_approval_response",
+               "approval_request_id": approval_request.id,
+               "approve": True
+           }
+       else:
+           print("Action denied.\n")
+
+           # Create denial response item
+           approval_response = {
+               "type": "mcp_approval_response",
+               "approval_request_id": approval_request.id,
+               "approve": False
+           }
+
+       # Add the approval response to the conversation
+       openai_client.conversations.items.create(
+           conversation_id=conversation.id,
+           items=[approval_response]
+       )
+
+       # Get the actual response after approval/denial
+       response = openai_client.responses.create(
+           conversation=conversation.id,
+           extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
+           input=""
+       )
+
+   ```
 
 1. After you've added the code, save the file.
 
@@ -326,17 +326,17 @@ Now you'll run your application and test the agent's ability to retrieve informa
 1. In Visual Studio Code, open an integrated terminal for the **Labfiles/04-integrate-agent-with-foundry-iq/Python** folder by right-clicking the folder and selecting **Open in Integrated Terminal**.
 1. First, create a virtual environment and install dependencies.
 
-    ```
+   ```
    python -m venv labenv
    ./labenv/Scripts/activate
    pip install -r requirements.txt
-    ```
+   ```
 
 1. In the terminal pane, enter the following command to sign into Azure.
 
-    ```
-    az login
-    ```
+   ```
+   az login
+   ```
 
     > **Note**: In most scenarios, just using *az login* will be sufficient. However, if you have subscriptions in multiple tenants, you may need to specify the tenant by using the *--tenant* parameter. See [Sign into Azure interactively using the Azure CLI](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) for details.
 
@@ -344,49 +344,49 @@ Now you'll run your application and test the agent's ability to retrieve informa
 
 1. In the terminal pane, run your application:
 
-    ```
+   ```
    python agent_client.py
-    ```
+   ```
 
 1. When the application starts, test the agent with the following queries:
 
     **Query 1 - Product Categories:**
 
-    ```
-    What types of outdoor products does Contoso offer?
-    ```
+   ```
+   What types of outdoor products does Contoso offer?
+   ```
 
     When prompted for approval, type **yes** to allow the agent to search the knowledge base. Observe how the agent retrieves information from multiple documents in the knowledge base.
 
     **Query 2 - Specific Product Details:**
 
-    ```
-    Tell me about the weatherproof features of your tents.
-    ```
+   ```
+   Tell me about the weatherproof features of your tents.
+   ```
 
     Approve the request and notice how the agent provides specific details from the tents catalog.
 
     **Query 3 - Product Comparisons:**
 
-    ```
-    What's the difference between your daypacks and expedition backpacks?
-    ```
+   ```
+   What's the difference between your daypacks and expedition backpacks?
+   ```
 
     Approve the request and see how the agent can synthesize information from the backpacks guide.
 
     **Query 4 - Accessories and Add-ons:**
 
-    ```
-    What camping accessories would you recommend for a weekend hiking trip?
-    ```
+   ```
+   What camping accessories would you recommend for a weekend hiking trip?
+   ```
 
     Approve the request and observe the agent's ability to provide recommendations based on the knowledge base.
 
     **Query 5 - Follow-up Question:**
 
-    ```
-    How much do those items typically cost?
-    ```
+   ```
+   How much do those items typically cost?
+   ```
 
     Notice how the agent maintains conversation context from your previous query.
 

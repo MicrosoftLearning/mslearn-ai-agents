@@ -89,9 +89,9 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. Enter the repository URL:
 
-    ```
-    https://github.com/MicrosoftLearning/mslearn-ai-agents.git
-    ```
+   ```
+   https://github.com/MicrosoftLearning/mslearn-ai-agents.git
+   ```
 
 1. Choose a location on your local machine to clone the repository.
 
@@ -105,22 +105,22 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
     The provided files include:
 
-    ```output
-    python
-    ├── outline_agent/
-    │   ├── agent.py
-    │   ├── agent_executor.py
-    │   └── server.py
-    ├── routing_agent/
-    │   ├── agent.py
-    │   └── server.py
-    ├── title_agent/
-    │   ├── agent.py
-    |   ├── agent_executor.py
-    │   └── server.py
-    ├── client.py
-    └── run_all.py
-    ```
+   ```output
+   python
+   ├── outline_agent/
+   │   ├── agent.py
+   │   ├── agent_executor.py
+   │   └── server.py
+   ├── routing_agent/
+   │   ├── agent.py
+   │   └── server.py
+   ├── title_agent/
+   │   ├── agent.py
+   |   ├── agent_executor.py
+   │   └── server.py
+   ├── client.py
+   └── run_all.py
+   ```
 
     Each agent folder contains the Azure AI agent code and a server to host the agent. The **routing agent** is responsible for discovering and communicating with the **title** and **outline** agents. The **client** allows users to submit prompts to the routing agent. `run_all.py` launches all the servers and runs the client.
 
@@ -128,11 +128,11 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. In the terminal, enter the following command to install the required Python packages in a virtual environment:
 
-    ```
-    python -m venv labenv
-    .\labenv\Scripts\Activate.ps1
-    pip install -r requirements.txt
-    ```
+   ```
+   python -m venv labenv
+   .\labenv\Scripts\Activate.ps1
+   pip install -r requirements.txt
+   ```
 
 1. Open the **.env** file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project deployment resource in the Foundry Toolkit extension) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name. Use **Ctrl+S** to save the file after making these changes.
 
@@ -148,7 +148,7 @@ In this task, you create the title agent that helps writers create trendy headli
 
     > **Tip**: Be careful to maintain the correct indentation level.
 
-    ```python
+   ```python
    # Create the agents client
    self.client = AgentsClient(
        endpoint=os.environ['PROJECT_ENDPOINT'],
@@ -157,11 +157,11 @@ In this task, you create the title agent that helps writers create trendy headli
            exclude_managed_identity_credential=True
        )
    )
-    ```
+   ```
 
 1. Find the comment **Create the title agent** and add the following code to create the agent:
 
-    ```python
+   ```python
    # Create the title agent
    self.agent = self.client.create_agent(
        model=os.environ['MODEL_DEPLOYMENT_NAME'],
@@ -171,28 +171,28 @@ In this task, you create the title agent that helps writers create trendy headli
        Given a topic the user wants to write about, suggest a single clear and catchy blog post title.
        """,
    )
-    ```
+   ```
 
 1. Find the comment **Create a thread for the chat session** and add the following code to create the chat thread:
 
-    ```python
+   ```python
    # Create a thread for the chat session
    thread = self.client.threads.create()
-    ```
+   ```
 
 1. Locate the comment **Send user message** and add this code to submit the user's prompt:
 
-    ```python
+   ```python
    # Send user message
    self.client.messages.create(thread_id=thread.id, role=MessageRole.USER, content=user_message)
-    ```
+   ```
 
 1. Under the comment **Create and run the agent**, add the following code to initiate the agent's response generation:
 
-    ```python
+   ```python
    # Create and run the agent
    run = self.client.runs.create_and_process(thread_id=thread.id, agent_id=self.agent.id)
-    ```
+   ```
 
     The code provided in the rest of the file will process and return the agent's response.
 
@@ -202,7 +202,7 @@ In this task, you create the title agent that helps writers create trendy headli
 
 1. Find the comment **Define agent skills** and add the following code to specify the agent’s functionality:
 
-    ```python
+   ```python
    # Define agent skills
    skills = [
        AgentSkill(
@@ -215,11 +215,11 @@ In this task, you create the title agent that helps writers create trendy headli
            ],
        ),
    ]
-    ```
+   ```
 
 1. Find the comment **Create agent card** and add this code to define the metadata that makes the agent discoverable:
 
-    ```python
+   ```python
    # Create agent card
    agent_card = AgentCard(
        name='Microsoft Foundry Title Agent',
@@ -232,34 +232,34 @@ In this task, you create the title agent that helps writers create trendy headli
        capabilities=AgentCapabilities(),
        skills=skills,
    )
-    ```
+   ```
 
 1. Locate the comment **Create agent executor** and add the following code to initialize the agent executor using the agent card:
 
-    ```python
+   ```python
    # Create agent executor
    agent_executor = create_foundry_agent_executor(agent_card)
-    ```
+   ```
 
     The agent executor will act as a wrapper for the title agent you created.
 
 1. Find the comment **Create request handler** and add the following to handle incoming requests using the executor:
 
-    ```python
+   ```python
    # Create request handler
    request_handler = DefaultRequestHandler(
        agent_executor=agent_executor, task_store=InMemoryTaskStore()
    )
-    ```
+   ```
 
 1. Under the comment **Create A2A application**, add this code to create the A2A-compatible application instance:
 
-    ```python
+   ```python
    # Create A2A application
    a2a_app = A2AStarletteApplication(
        agent_card=agent_card, http_handler=request_handler
    )
-    ```
+   ```
 
     This code creates an A2A server that will share the title agent's information and handle incoming requests for this agent using the title agent executor.
 
@@ -285,14 +285,14 @@ In this task, you use the A2A protocol to enable the routing agent to send messa
 
 1. Add the following code under the comment **Retrieve the remote agent's A2A client using the agent name**:
 
-    ```python
+   ```python
    # Retrieve the remote agent's A2A client using the agent name 
    client = self.remote_agent_connections[agent_name]
-    ```
+   ```
 
 1. Locate the comment **Construct the payload to send to the remote agent** and add the following code:
 
-    ```python
+   ```python
    # Construct the payload to send to the remote agent
    payload: dict[str, Any] = {
        'message': {
@@ -301,21 +301,21 @@ In this task, you use the A2A protocol to enable the routing agent to send messa
            'messageId': message_id,
        },
    }
-    ```
+   ```
 
 1. Find the comment **Wrap the payload in a SendMessageRequest object** and add the following code:
 
-    ```python
+   ```python
    # Wrap the payload in a SendMessageRequest object
    message_request = SendMessageRequest(id=message_id, params=MessageSendParams.model_validate(payload))
-    ```
+   ```
 
 1. Add the following code under the comment **Send the message to the remote agent client and await the response**:
 
-    ```python
+   ```python
    # Send the message to the remote agent client and await the response
    send_response: SendMessageResponse = await client.send_message(message_request=message_request)
-    ```
+   ```
 
 1. Save the code file (*CTRL+S*) when you have finished. Now the routing agent is able to discover and send messages to the title agent. Let's create the agent executor code to handle those incoming messages from the routing agent.
 
@@ -325,55 +325,55 @@ In this task, you use the A2A protocol to enable the routing agent to send messa
 
 1. In the `execute` method, add the following code under the comment **Process the request**:
 
-    ```python
+   ```python
    # Process the request
    await self._process_request(context.message.parts, context.context_id, updater)
-    ```
+   ```
 
 1. In the `_process_request` method, add the following code under the comment **Get the title agent**:
 
-    ```python
+   ```python
    # Get the title agent
    agent = await self._get_or_create_agent()
-    ```
+   ```
 
 1. Add the following code under the comment **Update the task status**:
 
-    ```python
+   ```python
    # Update the task status
    await task_updater.update_status(
        TaskState.working,
        message=new_agent_text_message('Title Agent is processing your request...', context_id=context_id),
    )
-    ```
+   ```
 
 1. Find the comment **Run the agent conversation** and add the following code:
 
-    ```python
+   ```python
    # Run the agent conversation
    responses = await agent.run_conversation(user_message)
-    ```
+   ```
 
 1. Find the comment **Update the task with the responses** and add the following code:
 
-    ```python
+   ```python
    # Update the task with the responses
    for response in responses:
        await task_updater.update_status(
            TaskState.working,
            message=new_agent_text_message(response, context_id=context_id),
        )
-    ```
+   ```
 
 1. Find the comment **Mark the task as complete** and add the following code:
 
-    ```python
+   ```python
    # Mark the task as complete
    final_message = responses[-1] if responses else 'Task completed.'
    await task_updater.complete(
        message=new_agent_text_message(final_message, context_id=context_id)
    )
-    ```
+   ```
 
     Now your title agent has been wrapped with an agent executor that the A2A protocol will use to handle messages. Great work!
 
@@ -381,21 +381,21 @@ In this task, you use the A2A protocol to enable the routing agent to send messa
 
 1. In the integrated terminal, enter the following commands to run the application:
 
-    ```
-    az login
-    ```
+   ```
+   az login
+   ```
 
-    ```
-    python run_all.py
-    ```
+   ```
+   python run_all.py
+   ```
 
     The application runs using the credentials for your authenticated Azure session to connect to your project and create and run the agent. You should see some output from each server as it starts.
 
 1. Wait until the prompt for input appears, then enter a prompt such as:
 
-    ```
+   ```
    Create a title and outline for an article about React programming.
-    ```
+   ```
 
     After a few moments, you should see a response from the agent with the results.
 
