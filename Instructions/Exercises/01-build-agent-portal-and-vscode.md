@@ -64,7 +64,7 @@ Now that you have an agent created, let's configure it with instructions and add
 
 1. In the agent playground, set the **Instructions** to:
 
-   ```prompt
+    ```prompt
    You are an IT Support Agent for Contoso Corporation.
    You help employees with technical issues and IT policy questions.
 
@@ -73,13 +73,13 @@ Now that you have an agent created, let's configure it with instructions and add
    - Use the IT policy documentation to answer questions accurately
    - If you don't know the answer, admit it and suggest contacting IT support directly
    - When creating tickets, collect all necessary information before proceeding
-   ```
+    ```
 
 1. Download the IT policy document from the lab repository. Open a new browser tab and navigate to:
 
-   ```
+    ```
    https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/01-build-agent-portal-and-vscode/IT_Policy.txt
-   ```
+    ```
 
     Save the file to your local machine.
 
@@ -93,9 +93,9 @@ Now that you have an agent created, let's configure it with instructions and add
 
 1. Now let's add some performance data for the code interpreter to analyze. Download the system performance data file from:
 
-   ```
+    ```
    https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/01-build-agent-portal-and-vscode/system_performance.csv
-   ```
+    ```
 
     Save this file to your local machine.
 
@@ -111,33 +111,33 @@ Let's test the agent to see how it responds using the grounding data.
 
 1. In the chat interface on the right side of the playground, enter the following prompt:
 
-   ```
+    ```
    What's the policy for password resets?
-   ```
+    ```
 
 1. Review the response. The agent should reference the IT policy document and provide accurate information about password reset procedures.
 
 1. Try another prompt:
 
-   ```
+    ```
    How do I request new software?
-   ```
+    ```
 
 1. Again, review the response and observe how the agent uses the grounding data.
 
 1. Now test the code interpreter with a data analysis request:
 
-   ```
+    ```
    Can you analyze the system performance data and tell me if there are any concerning trends?
-   ```
+    ```
 
 1. The agent should use the code interpreter to analyze the CSV file and provide insights about system performance.
 
 1. Try asking for a visualization:
 
-   ```
+    ```
    Create a chart showing CPU usage over time from the performance data
-   ```
+    ```
 
 1. The agent will use code interpreter to generate visualizations and analysis.
 
@@ -179,9 +179,9 @@ Before writing any code, you can interact with your agent directly in the extens
 
 3. In the playground chat pane, type a question such as:
 
-   ```
+    ```
    What is the policy for reporting a lost or stolen device?
-   ```
+    ```
 
 4. Review the agent's response. It should use the grounding data you uploaded earlier to provide relevant IT policy information.
 
@@ -197,9 +197,9 @@ Now let's create a client application that interacts with your agent programmati
 
 1. Enter the repository URL:
 
-   ```
+    ```
    https://github.com/MicrosoftLearning/mslearn-ai-agents.git
-   ```
+    ```
 
 1. Choose a location on your local machine to clone the repository.
 
@@ -211,7 +211,7 @@ Now let's create a client application that interacts with your agent programmati
 
 1. Use the following code:
 
-   ```python
+    ```python
    import base64
    import os
    from pathlib import Path
@@ -413,7 +413,7 @@ Now let's create a client application that interacts with your agent programmati
 
    if __name__ == "__main__":
        main()
-   ```
+    ```
 
 1. Save the `agent_with_functions.py` file (**Ctrl+S** or **File > Save**).
 
@@ -425,10 +425,10 @@ Now let's create a client application that interacts with your agent programmati
 
 1. In the `.env` file, replace `your_project_endpoint_here` with your actual project endpoint:
 
-   ```
+    ```
    PROJECT_ENDPOINT=<your_project_endpoint>
    AGENT_NAME=it-support-agent
-   ```
+    ```
 
     **To get your project endpoint:** In VS Code, open the **Foundry Toolkit** extension, right-click on your active project, and select **Copy Endpoint**. If **Copy Endpoint** isn't available in your installed version of Foundry Toolkit, open the Microsoft Foundry portal, go to your project, and copy the project endpoint from the project overview page instead.
 
@@ -438,21 +438,21 @@ Now let's create a client application that interacts with your agent programmati
 
 1. Install the required packages and login:
 
-   ```bash
+    ```bash
    python -m venv labenv
    .\labenv\Scripts\Activate.ps1
    pip install -r requirements.txt
-   ```
+    ```
 
-   ```bash
+    ```bash
    az login
-   ```
+    ```
 
 1. Run the application:
 
-   ```bash
+    ```bash
    python agent_with_functions.py
-   ```
+    ```
 
 ## Test the client application
 
@@ -460,35 +460,35 @@ When the agent starts, try these prompts to test different capabilities:
 
 1. Test policy search with file search:
 
-   ```
+    ```
    What's the policy for password resets?
-   ```
+    ```
 
 2. Request data analysis with code interpreter:
 
-   ```
+    ```
    Analyze the system performance data and identify any periods where CPU usage exceeded 80%
-   ```
+    ```
 
 3. Request a visualization:
 
-   ```
+    ```
    Create a line chart showing memory usage trends over time
-   ```
+    ```
 
     The application saves generated charts and cited files to the `agent_outputs` folder and prints the local file path in the terminal.
 
 4. Ask for statistical analysis:
 
-   ```
+    ```
    What are the average, minimum, and maximum values for disk usage in the performance data?
-   ```
+    ```
 
 5. Combined analysis:
 
-   ```
+    ```
    Find any correlation between high CPU usage and memory usage in the performance data
-   ```
+    ```
 
 Observe how the agent uses both file search (for policy questions) and code interpreter (for data analysis) to fulfill your requests. The code interpreter will analyze the CSV data, perform calculations, and can even generate visualizations. Type `exit` when done testing.
 

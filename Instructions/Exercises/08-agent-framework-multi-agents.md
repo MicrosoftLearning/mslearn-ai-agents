@@ -93,9 +93,9 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. Enter the repository URL:
 
-   ```
+    ```
    https://github.com/MicrosoftLearning/mslearn-ai-agents.git
-   ```
+    ```
 
 1. Choose a location on your local machine to clone the repository.
 
@@ -109,11 +109,11 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. In the terminal, enter the following command to install the required Python packages in a virtual environment:
 
-   ```
+    ```
    python -m venv labenv
    .\labenv\Scripts\Activate.ps1
    pip install -r requirements.txt
-   ```
+    ```
 
 1. Open the **.env** file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project deployment resource in the Foundry Toolkit extension) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name. Use **Ctrl+S** to save the file after making these changes.
 
@@ -125,19 +125,19 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 
 1. At the top of the file under the comment **Add references**, and add the following code to reference the namespaces in the libraries you'll need to implement your agent:
 
-   ```python
+    ```python
    # Add references
    from agent_framework import Message
    from agent_framework.foundry import FoundryChatClient
    from agent_framework.orchestrations import SequentialBuilder
    from azure.identity import AzureCliCredential
-   ```
+    ```
 
 1. In the **main** function, take a moment to review the agent instructions. These instructions define the behavior of each agent in the orchestration.
 
 1. Add the following code under the comment **Create the chat client**:
 
-   ```python
+    ```python
    # Create the chat client
    credential = AzureCliCredential()
    chat_client = FoundryChatClient(
@@ -145,7 +145,7 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
        project_endpoint=os.getenv("AZURE_AI_PROJECT_ENDPOINT"),
        model=os.getenv("AZURE_AI_MODEL_DEPLOYMENT_NAME"),
    )
-   ```
+    ```
 
     Note that the **AzureCliCredential** object will allow your code to authenticate to your Azure account. The **FoundryChatClient** object connects to your Foundry project using the endpoint and model deployment name from the .env configuration.
 
@@ -153,7 +153,7 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 
     (Be sure to maintain the indentation level)
 
-   ```python
+    ```python
    # Create agents
    summarizer_agent = chat_client.as_agent(
        name="summarizer",
@@ -169,7 +169,7 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
        name="action",
        instructions=action_instructions,
    )
-   ```
+    ```
 
 ## Create a sequential orchestration
 
@@ -177,40 +177,40 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
 
     (Be sure to maintain the indentation level)
 
-   ```python
+    ```python
    # Initialize the current feedback
    feedback="""
    I use the dashboard every day to monitor metrics, and it works well overall. 
    But when I'm working late at night, the bright screen is really harsh on my eyes. 
    If you added a dark mode option, it would make the experience much more comfortable.
    """
-   ```
+    ```
 
 1. Under the comment **Build a sequential orchestration**, add the following code to define a sequential orchestration with the agents you defined:
 
-   ```python
+    ```python
    # Build sequential orchestration
    workflow = SequentialBuilder(
        participants=[summarizer_agent, classifier_agent, action_agent],
        output_from="all",
    ).build()
-   ```
+    ```
 
     The agents will process the feedback in the order they are added to the orchestration. The `output_from="all"` parameter ensures that outputs from all agents are collected.
 
 1. Add the following code under the comment **Run and collect outputs**:
 
-   ```python
+    ```python
    # Run and collect outputs
    result = await workflow.run(f"Customer feedback: {feedback}")
    outputs = result.get_outputs()
-   ```
+    ```
 
     This code runs the orchestration and collects the output from each of the participating agents.
 
 1. Add the following code under the comment **Display outputs**:
 
-   ```python
+    ```python
    # Display outputs
    i = 1
    for response in outputs:
@@ -218,7 +218,7 @@ Now you're ready to create the agents for your multi-agent solution! Let's get s
            name = msg.author_name or ("assistant" if msg.role == "assistant" else "user")
            print(f"{'-' * 60}\n{i:02d} [{name}]\n{msg.text}")
            i += 1
-   ```
+    ```
 
     This code formats and displays the messages from the workflow outputs you collected from the orchestration.
 
@@ -230,17 +230,17 @@ Now you're ready to run your code and watch your AI agents collaborate.
 
 1. In the integrated terminal, enter the following commands to run the application:
 
-   ```
+    ```
    az login
-   ```
+    ```
 
-   ```
+    ```
    python agents.py
-   ```
+    ```
 
 1. You should see some output similar to the following:
 
-   ```output
+    ```output
    User requests a dark mode option for more comfortable nighttime use.
    Feature request
    Log as enhancement request to add dark mode for improved user comfort during nighttime use.
@@ -253,13 +253,13 @@ Now you're ready to run your code and watch your AI agents collaborate.
    ------------------------------------------------------------
    03 [action]
    Log as enhancement request to add dark mode for improved user comfort during nighttime use.
-   ```
+    ```
 
 1. Optionally, you can try running the code using different feedback inputs, such as:
 
-   ```output
+    ```output
    I reached out to your customer support yesterday because I couldn't access my account. The representative responded almost immediately, was polite and professional, and fixed the issue within minutes. Honestly, it was one of the best support experiences I've ever had.
-   ```
+    ```
 
 1. When you're finished, enter `deactivate` in the terminal to exit the Python virtual environment.
 

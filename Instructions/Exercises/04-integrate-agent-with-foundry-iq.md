@@ -62,12 +62,12 @@ Now you'll configure your agent that uses Foundry IQ to search the knowledge bas
 
 1. First, give your agent the following instructions:
 
-   ```
+    ```
    You are a helpful AI assistant for Contoso, specializing in outdoor camping and hiking products. 
    You must ALWAYS search the knowledge base to answer questions about our products or product 
    catalog. Provide detailed, accurate information and always cite your sources.
    If you don't find relevant information in the knowledge base, say so clearly.
-   ```
+    ```
 
 1. Select **Save** to save your current agent configuration.
 1. Then, in the **Knowledge** section, expand the **Add** dropdown, and select **Connect to Foundry IQ**.
@@ -205,7 +205,7 @@ Now let's use Visual Studio Code to develop an app. The code files for your app 
 
     > **Tip**: Be careful to maintain the correct indentation level.
 
-   ```python
+    ```python
    # Connect to the project and agent
    credential = DefaultAzureCredential(
        exclude_environment_credential=True,
@@ -226,11 +226,11 @@ Now let's use Visual Studio Code to develop an app. The code files for your app 
    # Create a new conversation
    conversation = openai_client.conversations.create(items=[])
    print(f"Created conversation (id: {conversation.id})\n")
-   ```
+    ```
 
 1. Find the second **TODO** comment inside the `send_message_to_agent()` function and add the following code to send messages and handle responses, including MCP approval requests:
 
-   ```python
+    ```python
    # Add user message to the conversation
    openai_client.conversations.items.create(
        conversation_id=conversation.id,
@@ -306,7 +306,7 @@ Now let's use Visual Studio Code to develop an app. The code files for your app 
            input=""
        )
 
-   ```
+    ```
 
 1. After you've added the code, save the file.
 
@@ -326,17 +326,17 @@ Now you'll run your application and test the agent's ability to retrieve informa
 1. In Visual Studio Code, open an integrated terminal for the **Labfiles/04-integrate-agent-with-foundry-iq/Python** folder by right-clicking the folder and selecting **Open in Integrated Terminal**.
 1. First, create a virtual environment and install dependencies.
 
-   ```
+    ```
    python -m venv labenv
    ./labenv/Scripts/activate
    pip install -r requirements.txt
-   ```
+    ```
 
 1. In the terminal pane, enter the following command to sign into Azure.
 
-   ```
+    ```
    az login
-   ```
+    ```
 
     > **Note**: In most scenarios, just using *az login* will be sufficient. However, if you have subscriptions in multiple tenants, you may need to specify the tenant by using the *--tenant* parameter. See [Sign into Azure interactively using the Azure CLI](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) for details.
 
@@ -344,49 +344,49 @@ Now you'll run your application and test the agent's ability to retrieve informa
 
 1. In the terminal pane, run your application:
 
-   ```
+    ```
    python agent_client.py
-   ```
+    ```
 
 1. When the application starts, test the agent with the following queries:
 
     **Query 1 - Product Categories:**
 
-   ```
+    ```
    What types of outdoor products does Contoso offer?
-   ```
+    ```
 
     When prompted for approval, type **yes** to allow the agent to search the knowledge base. Observe how the agent retrieves information from multiple documents in the knowledge base.
 
     **Query 2 - Specific Product Details:**
 
-   ```
+    ```
    Tell me about the weatherproof features of your tents.
-   ```
+    ```
 
     Approve the request and notice how the agent provides specific details from the tents catalog.
 
     **Query 3 - Product Comparisons:**
 
-   ```
+    ```
    What's the difference between your daypacks and expedition backpacks?
-   ```
+    ```
 
     Approve the request and see how the agent can synthesize information from the backpacks guide.
 
     **Query 4 - Accessories and Add-ons:**
 
-   ```
+    ```
    What camping accessories would you recommend for a weekend hiking trip?
-   ```
+    ```
 
     Approve the request and observe the agent's ability to provide recommendations based on the knowledge base.
 
     **Query 5 - Follow-up Question:**
 
-   ```
+    ```
    How much do those items typically cost?
-   ```
+    ```
 
     Notice how the agent maintains conversation context from your previous query.
 

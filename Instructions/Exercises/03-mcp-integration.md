@@ -87,9 +87,9 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. Enter the repository URL:
 
-   ```
+    ```
    https://github.com/MicrosoftLearning/mslearn-ai-agents.git
-   ```
+    ```
 
 1. Choose a location on your local machine to clone the repository.
 
@@ -103,11 +103,11 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. In the terminal, enter the following command to install the required Python packages in a virtual environment:
 
-   ```
+    ```
    python -m venv labenv
    .\labenv\Scripts\Activate.ps1
    pip install -r requirements.txt
-   ```
+    ```
 
 1. Open the **.env** file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project deployment resource in the Foundry Toolkit extension) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name. Use **Ctrl+S** to save the file after making these changes.
 
@@ -123,41 +123,41 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
 
 1. Find the comment **Add references** and add the following code to import the classes:
 
-   ```python
+    ```python
    # Add references
    from azure.identity import DefaultAzureCredential
    from azure.ai.projects import AIProjectClient
    from azure.ai.projects.models import PromptAgentDefinition, MCPTool
    from openai.types.responses.response_input_param import McpApprovalResponse, ResponseInputParam
-   ```
+    ```
 
 1. Find the comment **Connect to the agents client** and add the following code to connect to the Azure AI project using the current Azure credentials.
 
-   ```python
+    ```python
    # Connect to the agents client
    with (
        DefaultAzureCredential() as credential,
        AIProjectClient(endpoint=project_endpoint, credential=credential) as project_client,
        project_client.get_openai_client() as openai_client,
    ):
-   ```
+    ```
 
 1. Under the comment **Initialize agent MCP tool**, add the following code:
 
-   ```python
+    ```python
    # Initialize agent MCP tool
    mcp_tool = MCPTool(
        server_label="api-specs",
        server_url="https://learn.microsoft.com/api/mcp",
        require_approval="always",
    )
-   ```
+    ```
 
     This code will connect to the Microsoft Learn Docs remote MCP server. This is a cloud-hosted service that enables clients to access trusted and up-to-date information directly from Microsoft's official documentation.
 
 1. Under the comment **Create a new agent with the MCP tool** and add the following code:
 
-   ```python
+    ```python
    # Create a new agent with the MCP tool
    agent = project_client.agents.create_version(
        agent_name="MyAgent",
@@ -168,32 +168,32 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
        ),
    )
    print(f"Agent created (id: {agent.id}, name: {agent.name}, version: {agent.version})")
-   ```
+    ```
 
     In this code, you provide instructions for the agent and provide it with the MCP tool definitions.
 
 1. Find the comment **Create a conversation thread** and add the following code:
 
-   ```python
+    ```python
    # Create a conversation thread
    conversation = openai_client.conversations.create()
    print(f"Created conversation (id: {conversation.id})")
-   ```
+    ```
 
 1. Find the comment **Send initial request that will trigger the MCP tool** and add the following code:
 
-   ```python
+    ```python
    # Send initial request that will trigger the MCP tool
    response = openai_client.responses.create(
        conversation=conversation.id,
        input="Give me the Azure CLI commands to create an Azure Container App with a managed identity.",
       extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
    )
-   ```
+    ```
 
 1. Find the comment **Process any MCP approval requests that were generated** and add the following code:
 
-   ```python
+    ```python
    # Process any MCP approval requests that were generated
    # The agent may issue several tool calls, each needing its own approval,
    # so we loop until there are none left.
@@ -224,17 +224,17 @@ In this task, you'll connect to a remote MCP server, prepare the AI agent, and r
        )
 
    print(f"\nAgent response: {response.output_text}")
-   ```
+    ```
 
     This code listens for any MCP approval requests in the agent's response and automatically approves them.
 
 1. Find the comment **Clean up resources by deleting the agent version** and add the following code:
 
-   ```python
+    ```python
    # Clean up resources by deleting the agent version
    project_client.agents.delete_version(agent_name=agent.name, agent_version=agent.version)
    print("Agent deleted")
-   ```
+    ```
 
 1. Save the code file (*CTRL+S*) when you're finished.
 
@@ -244,37 +244,37 @@ Now you're ready to run the application and see how the agent uses the MCP tool 
 
 1. In the integrated terminal, enter the following command to run the application:
 
-   ```
+    ```
    az login
-   ```
+    ```
 
-   ```
+    ```
    python agent.py
-   ```
+    ```
 
 1. Wait for the agent to process the prompt, using the MCP server to find a suitable tool to retrieve the requested information. You should see some output similar to the following:
 
-   ```
+    ```
    Agent created (id: MyAgent:2, name: MyAgent, version: 2)
    Created conversation (id: conv_086911ecabcbc05700BBHIeNRoPSO5tKPHiXRkgHuStYzy27BS)
 
    Agent response: Here are Azure CLI commands to create an Azure Container App with a managed identity:
 
    **1. For a System-assigned Managed Identity**
-   ```sh
+    ```sh
     az containerapp create \
     --name <CONTAINERAPP_NAME> \
     --resource-group <RESOURCE_GROUP> \
     --environment <CONTAINERAPPS_ENVIRONMENT> \
     --image <CONTAINER_IMAGE> \
     --identity 'system'
-   ```
+    ```
 
    [continued...]
 
    Agent deleted
 
-   ```
+    ```
 
     Notice that the agent was able to invoke the MCP tool to automatically fulfill the request.
 
@@ -290,46 +290,46 @@ In addition to connecting to remote MCP servers, you can also create your own cu
 
 1. Under the comment **Add references**, add the following code:
 
-   ```python
+    ```python
    # Add references
    from fastmcp import FastMCP
-   ```
+    ```
 
 1. Under the comment **Create an MCP server**, add the following code to create a new MCP server instance:
 
-   ```python
+    ```python
    # Create an MCP server
    mcp = FastMCP(name="Inventory")
-   ```
+    ```
 
     This code initializes a new MCP server with the label "Inventory".
 
 1. Find the comment **Add an inventory check mcp tool** and add the following decorator above the function definition, which should now look like this:
 
-   ```python
+    ```python
    # Add an inventory check mcp tool
    @mcp.tool()
    def get_inventory_levels() -> dict:
       # continued...
-   ```
+    ```
 
     This dictionary represents a sample inventory. The `@mcp.tool()` decorator registers the function as a tool on the MCP server, allowing the LLM to discover your function.
 
 1. Find the comment **Add a weekly sales mcp tool** and add the following decorator above the function definition, which should now look like this:
 
-   ```python
+    ```python
    # Add a weekly sales mcp tool
    @mcp.tool()
    def get_weekly_sales() -> dict:
       # continued...
-   ```
+    ```
 
 1. Find the comment **Run the MCP server** and add the following code to start the server:
 
-   ```python
+    ```python
    # Run the MCP server
    mcp.run(show_banner=False)
-   ```
+    ```
 
     This code starts the MCP server, making your tools available for discovery and use by the agent. Setting `show_banner=False` prevents the startup banner from being printed to stdout, which would corrupt the MCP stdio protocol.
 
@@ -343,40 +343,40 @@ An MCP client is the component that connects to the MCP server to discover and c
 
 1. Find the comment **Add references** and add the following code to import the classes:
 
-   ```python
+    ```python
    # Add references
    from mcp import ClientSession, StdioServerParameters
    from mcp.client.stdio import stdio_client
-   ```
+    ```
 
 1. In the **connect_to_server** method, find the comment **Start the MCP server** and add the following code:
 
-   ```python
+    ```python
    # Start the MCP server
    stdio_transport = await exit_stack.enter_async_context(stdio_client(server_params))
    stdio, write = stdio_transport
-   ```
+    ```
 
     In a standard production setup, the server would run separately from the client. But for the sake of this lab, the client is responsible for starting the server using standard input/output transport. This creates a lightweight communication channel between the two components and simplifies the local development setup.
 
 1. Find the comment **Create an MCP client session** and add the following code:
 
-   ```python
+    ```python
    # Create an MCP client session
    session = await exit_stack.enter_async_context(ClientSession(stdio, write))
    await session.initialize()
-   ```
+    ```
 
     This creates a new client session using the input and output streams from the previous step. Calling `session.initialize` prepares the session to discover and call tools that are registered on the MCP server.
 
 1. Under the comment **List available tools**, add the following code to verify that the client has connected to the server:
 
-   ```python
+    ```python
    # List available tools
    response = await session.list_tools()
    tools = response.tools
    print("\nConnected to server with tools:", [tool.name for tool in tools]) 
-   ```
+    ```
 
     Now your client session is ready for use with your Azure AI Agent.
 
@@ -388,7 +388,7 @@ In this task, you'll connect the MCP server tools to your agent so that it can c
 
 1. In the **chat_loop** method, find the comment **Build a function for each tool** and add the following code:
 
-   ```python
+    ```python
    # Build a function for each tool
    def make_tool_func(tool_name):
        async def tool_func(**kwargs):
@@ -400,13 +400,13 @@ In this task, you'll connect the MCP server tools to your agent so that it can c
 
    # Store the functions in a dictionary for easy access when processing function calls
    functions_dict = {tool.name: make_tool_func(tool.name) for tool in tools}
-   ```
+    ```
 
     This code dynamically wraps tools available in the MCP server so that they can be called by the AI agent. Each tool is turned into an async function that the agent can invoke.
 
 1. Find the comment **Create FunctionTool definitions for the agent** and add the following code:
 
-   ```python
+    ```python
    # Create FunctionTool definitions for the agent
    mcp_function_tools: FunctionTool = []
    for tool in tools:
@@ -421,11 +421,11 @@ In this task, you'll connect the MCP server tools to your agent so that it can c
            strict=True
        )
        mcp_function_tools.append(function_tool)
-   ```
+    ```
 
 1. Find the comment **Create the agent** and add the following code:
 
-   ```python
+    ```python
    # Create the agent
    agent = project_client.agents.create_version(
        agent_name="inventory-agent",
@@ -439,13 +439,13 @@ In this task, you'll connect the MCP server tools to your agent so that it can c
            tools=mcp_function_tools
        ),
    )
-   ```
+    ```
 
    With these instructions and tools, the agent is able to invoke the tools to retrieve inventory and sales data, and then use that information to provide helpful responses to the user.
 
 1. Locate the comment **Process function calls** and add the following code:
 
-   ```python
+    ```python
    # Process function calls
    for item in response.output:
        if item.type == "function_call":
@@ -465,13 +465,13 @@ In this task, you'll connect the MCP server tools to your agent so that it can c
                  output=output.content[0].text,
               )
            )
-   ```
+    ```
 
     This code listens for any function calls in the agent's response, invokes the corresponding tool function, and prepares the output to be sent back to the agent.
 
 1. Find the comment **Send function call outputs back to the model and retrieve a response** and add the following code:
 
-   ```python
+    ```python
    # Send function call outputs back to the model and retrieve a response
    if input_list:
       response = openai_client.responses.create(
@@ -480,7 +480,7 @@ In this task, you'll connect the MCP server tools to your agent so that it can c
             extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
       )
    print(f"Agent response: {response.output_text}")
-   ```
+    ```
 
 1. Save the code file (*CTRL+S*) when you have finished.
 
@@ -488,21 +488,21 @@ In this task, you'll connect the MCP server tools to your agent so that it can c
 
 1. In the integrated terminal, enter the following command to run the application:
 
-   ```
+    ```
    python client.py
-   ```
+    ```
 
 1. When prompted, enter a prompt such as:
 
-   ```
+    ```
    Show me the current inventory levels for all products.
-   ```
+    ```
 
     > **Tip**: If the app fails because the rate limit is exceeded. Wait a few seconds and try again. If there is insufficient quota available in your subscription, the model may not be able to respond.
 
     You should see some output similar to the following:
 
-   ```
+    ```
     MessageRole.AGENT:
     Agent response: Here are the current inventory levels for all items:
 
@@ -512,7 +512,7 @@ In this task, you'll connect the MCP server tools to your agent so that it can c
    [continued ...]
 
    Would you like recommendations for restocking or clearance? If so, I can check the weekly sales to advise accordingly.
-   ```
+    ```
 
     Notice that the agent was able to call the MCP tools to retrieve inventory and sales data, and then use that information to provide a helpful response to the user.
 
@@ -520,17 +520,17 @@ In this task, you'll connect the MCP server tools to your agent so that it can c
 
     Try entering prompts such as:
 
-   ```
+    ```
    Are there any products that should be restocked?
-   ```
+    ```
 
-   ```
+    ```
    Which products would you recommend for clearance?
-   ```
+    ```
 
-   ```
+    ```
    What are the best sellers this week?
-   ```
+    ```
 
 1. Enter `quit` to exit the application.
 

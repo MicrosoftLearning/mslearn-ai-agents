@@ -106,12 +106,12 @@ In this section, you'll create a workflow that helps triage and respond to custo
 
 3. In the **To value** field, enter the following array that contains sample support tickets:
 
-   ```output
+    ```output
    [ 
     "The API returns a 403 error when creating invoices, but our API key hasn't changed.", 
     "Is there a way to export all invoices as a CSV?", 
     "I was charged twice for the same invoice last Friday and my customer is also seeing two receipts. Can someone fix this?"]
-   ```
+    ```
 
 4. Select **Done** to save the node.
 
@@ -145,7 +145,7 @@ In this section, you'll create a workflow that helps triage and respond to custo
 
 3. In the **Add response format** pane, enter the following definition and select **Save**:
 
-   ```json
+    ```json
    {
    "name": "category_response",
    "schema": {
@@ -170,11 +170,11 @@ In this section, you'll create a workflow that helps triage and respond to custo
    },
    "strict": true
    }
-   ```
+    ```
 
 4. In the Agent Details pane, set the **Instructions** field to the following prompt:
 
-   ```output
+    ```output
    Classify the user's problem description into exactly ONE category from the list below. Provide a confidence score from 0 to 1.
 
    Billing
@@ -194,7 +194,7 @@ In this section, you'll create a workflow that helps triage and respond to custo
    Important rules
    - Questions about exporting, viewing, or downloading invoices are General, not Billing
    - Billing ONLY applies when money was charged, refunded, or paid incorrectly
-   ```
+    ```
 
 5. Select **Node settings** to configure the input and output of the agent.
 
@@ -216,9 +216,9 @@ In this section, you'll create a workflow that helps triage and respond to custo
 
 1. Set the **Condition** field to the following expression to check if the confidence score is above 0.6:
 
-   ```output
+    ```output
    Local.TriageOutputJson.confidence > 0.6
-   ```
+    ```
 
 1. Select **Done** to save the node.
 
@@ -230,9 +230,9 @@ In this section, you'll create a workflow that helps triage and respond to custo
 
 1. In the **Deliver a message** node editor, set the **Message to send** field to the following response:
 
-   ```output
+    ```output
    The support ticket classification has low confidence. Requesting more details about the issue: "{Local.CurrentTicket}"
-   ```
+    ```
 
 1. Select **Done** to save the node.
 
@@ -248,9 +248,9 @@ In this section, you'll add conditional logic to route the ticket based on its c
 
 1. Set the **If Condition** to the following expression to check if the ticket category is "Billing":
 
-   ```output
+    ```output
    Local.TriageOutputJson.category = "Billing"
-   ```
+    ```
 
 1. Select the **+** (plus) icon under the **If** branch of the **If/Else** node to add a new node that drafts a response for non-billing tickets.
 
@@ -258,9 +258,9 @@ In this section, you'll add conditional logic to route the ticket based on its c
 
 1. In the **Deliver a message** node editor, set the **Message to send** to the following response:
 
-   ```output
+    ```output
    Escalate billing issue to human support team.
-   ```
+    ```
 
 1. Select **Done** to save the node.
 
@@ -276,7 +276,7 @@ In this section, you'll add conditional logic to route the ticket based on its c
 
 5. In the agent editor, set the **Instructions** field to the following prompt:
 
-   ```output
+    ```output
    You are a customer support resolution assistant for ContosoPay, a B2B payments and invoicing platform.
 
    Your task is to draft a clear, professional, and friendly support response based on the issue category and customer message.
@@ -300,7 +300,7 @@ In this section, you'll add conditional logic to route the ticket based on its c
    Output:
    Return only the drafted response text.
    Do not include internal reasoning or analysis.
-   ```
+    ```
 
 6. Select **Node settings** to configure the input and output of the agent.
 
@@ -322,7 +322,7 @@ In this section, you'll add conditional logic to route the ticket based on its c
 
     You should see some output indicating that billing issues are being escalated, while technical and general issues receive drafted responses. For example:
 
-   ```output
+    ```output
    Current Ticket:
    The API returns a 403 error when creating invoices, but our API key hasn't changed.
 
@@ -331,7 +331,7 @@ In this section, you'll add conditional logic to route the ticket based on its c
    Thank you for reaching out about the 403 error when creating invoices. This error typically indicates a permissions or access issue. 
    Please ensure that your API key has the necessary permissions for invoice creation and that your request is being sent to the correct endpoint. 
    If the issue persists, try regenerating your API key and updating it in your integration to see if that resolves the problem.
-   ```
+    ```
 
 ## Use your workflow in a client application
 
@@ -347,9 +347,9 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. Enter the repository URL:
 
-   ```
+    ```
    https://github.com/MicrosoftLearning/mslearn-ai-agents.git
-   ```
+    ```
 
 1. Choose a location on your local machine to clone the repository.
 
@@ -371,11 +371,11 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 5. In the terminal, enter the following command to install the required Python packages in a virtual environment:
 
-   ```
+    ```
    python -m venv labenv
    .\labenv\Scripts\Activate.ps1
    pip install -r requirements.txt
-   ```
+    ```
 
 6. Open the **.env** file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the code tab of the workflow visualizer). Use **Ctrl+S** to save the file after making these changes.
 
@@ -389,22 +389,22 @@ Now you're ready to create a project that invokes a workflow. Let's get started!
 
 1. Find the comment **Add references** and add the following code to import the classes you'll need:
 
-   ```python
+    ```python
    # Add references
    from azure.identity import DefaultAzureCredential
    from azure.ai.projects import AIProjectClient
-   ```
+    ```
 
 2. Find the comment **Connect to the agents client**, and add the following code to create an AgentsClient connected to your project:
 
-   ```python
+    ```python
    # Connect to the AI Project client
    with (
        DefaultAzureCredential() as credential,
        AIProjectClient(endpoint=endpoint, credential=credential) as project_client,
        project_client.get_openai_client() as openai_client,
    ):
-   ```
+    ```
 
     Now you'll add code that uses the AgentsClient to create multiple agents, each with a specific role to play in processing a support ticket.
 
@@ -412,18 +412,18 @@ Now you're ready to create a project that invokes a workflow. Let's get started!
 
 3. Find the comment **Specify the workflow** and add the following code:
 
-   ```python
+    ```python
    # Specify the workflow
     workflow = {
         "name": "ContosoPay-Customer-Support-Triage"
     }
-   ```
+    ```
 
     Be sure to use the name and version of the workflow you created in the Foundry portal.
 
 4. Find the comment **Create a conversation and run the workflow**, and add the following code to create a conversation and invoke your workflow:
 
-   ```python
+    ```python
    # Create a conversation and run the workflow
    conversation = openai_client.conversations.create()
    print(f"Created conversation (id: {conversation.id})")
@@ -434,30 +434,30 @@ Now you're ready to create a project that invokes a workflow. Let's get started!
        input="Start",
        stream=True,
    )
-   ```
+    ```
 
     This code will stream the output of the workflow execution to the console, allowing you to see the flow of messages as the workflow processes each ticket.
 
 5. Find the comment **Process events from the workflow run**, and add the following code to process the streamed output and print messages to the console:
 
-   ```python
+    ```python
    # Process events from the workflow run
    for event in stream:
        if (event.type == "response.completed"):
            print("\nResponse completed:")
            response = openai_client.responses.retrieve(event.response.id)
            print_workflow_output(response.output_text)
-   ```
+    ```
 
     This code listens for the completion of the workflow response and then retrieves and prints the final output text to the console. The `print_workflow_output` function is a helper function defined in the code file that formats the output for easier reading.
 
 6. Find the comment **Clean up resources**, and enter the following code to delete the conversation when it is no longer required:
 
-   ```python
+    ```python
    # Clean up resources
    openai_client.conversations.delete(conversation_id=conversation.id)
    print("\nConversation deleted")
-   ```
+    ```
 
 7. Use the **CTRL+S** command to save your changes to the code file.
 
@@ -466,24 +466,24 @@ Now you're ready to create a project that invokes a workflow. Let's get started!
 Now you're ready to run your code and watch your AI agents collaborate.
 
 1. In the integrated terminal, run the following commands:
-   ```
+    ```
    az login
-   ```
+    ```
 
-   ```
+    ```
    python workflow.py
-   ```
+    ```
 
 1. Wait a moment for the workflow to process the tickets. As the workflow runs, you should see output in the console indicating the progress of the workflow, including messages generated by the agents and status updates for each action in the workflow.
 
 1. When the workflow completes, you should see some output similar to the following:
 
-   ```output
+    ```output
    Response completed:
    Current Ticket:
    The API returns a 403 error when creating invoices, but our API key hasn't changed.{"customer_issue":"API returns a 403 error when creating invoices, API key unchanged.","category":"Technical","confidence":1}Thank you for contacting us about the 403 error when creating invoices with the API. This error typically relates to permission issues. Please ensure your API key has the necessary permissions for invoice creation and that the endpoint URL is correct. If the issue persists, try regenerating the API key and updating it in your application.
    ...
-   ```
+    ```
 
     In the output, you can see how the workflow completes each support ticket, including the classification of each ticket and the recommended response or escalation. Great work!
 
