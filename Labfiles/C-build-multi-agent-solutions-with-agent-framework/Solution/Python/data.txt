@@ -1,0 +1,4 @@
+date,description,amount
+07-Mar-2025,trailhead shuttle,24.00
+07-Mar-2025,guide team dinner,65.50
+07-Mar-2025,campsite permit,125.90

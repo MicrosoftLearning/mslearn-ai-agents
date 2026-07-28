@@ -6,4 +6,4 @@ mcp
 fastmcp
 uvicorn
 gradio==6.20.0
-agent-framework==1.9.0
+agent-framework==1.12.1
