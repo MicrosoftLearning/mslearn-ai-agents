@@ -16,10 +16,10 @@ lab:
 > from [Task 1](D1-classify-and-route-a-ticket.md) (Tasks 2 and 3 optional but recommended),
 > **plus** VS Code, Python, and the starter code. If you haven't built the workflow yet, do
 > [Task 1](D1-classify-and-route-a-ticket.md) first.
->
-> > **Continuing from a previous task?** Your workflow is already built and saved in the
-> > portal. You still need to get the starter code and set `PROJECT_ENDPOINT` (below), since the
-> > earlier tasks were portal-only.
+
+> **Continuing from a previous task?** Your workflow is already built and saved in the
+> portal. You still need to get the starter code and set `PROJECT_ENDPOINT` (below), since the
+> earlier tasks were portal-only.
 
 ---
 
@@ -56,6 +56,14 @@ reference the workflow **by name**, stream its events, and print the result.
 1. Copy the value of the **AZURE_EXISTING_AIPROJECT_ENDPOINT** variable — this is the endpoint URL for your Foundry project.
 
 1. In VS Code, copy **.env.example** to **.env**, then open **.env** and set `PROJECT_ENDPOINT` to the endpoint you just copied. Save the file (**Ctrl+S**).
+
+1. Confirm your environment is ready. From the same **Python** folder terminal, run:
+
+    ```
+    python ..\setup\check_env.py --task 4
+    ```
+
+    You should see `[OK ] PROJECT_ENDPOINT`. If it reports the value missing, revisit the step above.
 
 ## Invoke the workflow from code
 

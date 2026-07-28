@@ -16,9 +16,9 @@ lab:
 > [Task 1](D1-classify-and-route-a-ticket.md), open in the Foundry visual designer. Haven't
 > built it yet? Do [Task 1](D1-classify-and-route-a-ticket.md) first — it takes about 20
 > minutes and this task adds one branch to it. This task is completed entirely in the portal.
->
-> > **Continuing from a previous task?** If you just finished Task 1 in the same workflow, it's
-> > already open and saved — go straight to **Add a confidence gate** below.
+
+> **Continuing from a previous task?** If you just finished Task 1 in the same workflow, it's
+> already open and saved — go straight to **Add a confidence gate** below.
 
 ---
 

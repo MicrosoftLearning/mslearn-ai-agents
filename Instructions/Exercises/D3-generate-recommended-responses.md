@@ -17,9 +17,9 @@ lab:
 > [Task 2](D2-handle-low-confidence-tickets.md)), open in the Foundry visual designer. Haven't
 > built it yet? Do [Task 1](D1-classify-and-route-a-ticket.md) first. This task is completed
 > entirely in the portal.
->
-> > **Continuing from a previous task?** If you just finished Task 1 or Task 2 in the same
-> > workflow, it's already open and saved — go straight to **Add a resolution agent** below.
+
+> **Continuing from a previous task?** If you just finished Task 1 or Task 2 in the same
+> workflow, it's already open and saved — go straight to **Add a resolution agent** below.
 
 ---
 
