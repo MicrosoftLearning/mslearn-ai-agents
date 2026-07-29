@@ -146,54 +146,54 @@ In this section, you'll create a workflow that helps triage and respond to custo
 3. In the **Add response format** pane, enter the following definition and select **Save**:
 
     ```json
-    {
-    "name": "category_response",
-    "schema": {
-        "type": "object",
-        "properties": {
-            "customer_issue": {
-                "type": "string"
-            },
-            "category": {
-                "type": "string"
-            },
-            "confidence": {
-                "type": "number"
-            }
-        },
-        "additionalProperties": false,
-        "required": [
-            "customer_issue",
-            "category",
-            "confidence"
-        ]
-    },
-    "strict": true
-    }
+   {
+   "name": "category_response",
+   "schema": {
+       "type": "object",
+       "properties": {
+           "customer_issue": {
+               "type": "string"
+           },
+           "category": {
+               "type": "string"
+           },
+           "confidence": {
+               "type": "number"
+           }
+       },
+       "additionalProperties": false,
+       "required": [
+           "customer_issue",
+           "category",
+           "confidence"
+       ]
+   },
+   "strict": true
+   }
     ```
 
 4. In the Agent Details pane, set the **Instructions** field to the following prompt:
 
     ```output
-    Classify the user's problem description into exactly ONE category from the list below. Provide a confidence score from 0 to 1.
+   Classify the user's problem description into exactly ONE category from the list below. Provide a confidence score from 0 to 1.
 
-    Billing
-    - Charges, refunds, duplicate payments
-    - Missing or incorrect payouts
-    - Subscription pricing or invoices being charged
+   Billing
+   - Charges, refunds, duplicate payments
+   - Missing or incorrect payouts
+   - Subscription pricing or invoices being charged
 
-    Technical
-    - API errors, integrations, webhooks
-    - Platform bugs or unexpected behavior
+   Technical
+   - API errors, integrations, webhooks
+   - Platform bugs or unexpected behavior
 
-    General
-    - How-to questions
-    - Feature availability
-    - Data exports, reports, or UI navigation
+   General
+   - How-to questions
+   - Feature availability
+   - Data exports, reports, or UI navigation
 
-    Important rules
-    - Questions about exporting, viewing, or downloading invoices are General, not Billing
-    - Billing ONLY applies when money was charged, refunded, or paid incorrectly
+   Important rules
+   - Questions about exporting, viewing, or downloading invoices are General, not Billing
+   - Billing ONLY applies when money was charged, refunded, or paid incorrectly
     ```
 
 5. Select **Node settings** to configure the input and output of the agent.
@@ -249,7 +249,7 @@ In this section, you'll add conditional logic to route the ticket based on its c
 1. Set the **If Condition** to the following expression to check if the ticket category is "Billing":
 
     ```output
-    Local.TriageOutputJson.category = "Billing"
+   Local.TriageOutputJson.category = "Billing"
     ```
 
 1. Select the **+** (plus) icon under the **If** branch of the **If/Else** node to add a new node that drafts a response for non-billing tickets.
@@ -277,29 +277,29 @@ In this section, you'll add conditional logic to route the ticket based on its c
 5. In the agent editor, set the **Instructions** field to the following prompt:
 
     ```output
-    You are a customer support resolution assistant for ContosoPay, a B2B payments and invoicing platform.
+   You are a customer support resolution assistant for ContosoPay, a B2B payments and invoicing platform.
 
-    Your task is to draft a clear, professional, and friendly support response based on the issue category and customer message.
+   Your task is to draft a clear, professional, and friendly support response based on the issue category and customer message.
 
-    Guidelines:
-    If the issue category is Technical:
-    Suggest 1–2 common troubleshooting steps at a high level.
+   Guidelines:
+   If the issue category is Technical:
+   Suggest 1–2 common troubleshooting steps at a high level.
 
-    Avoid asking for logs, credentials, or sensitive data.
+   Avoid asking for logs, credentials, or sensitive data.
 
-    Do not imply fault by the customer.
-    If the issue category is General:
-    Provide a concise, helpful explanation or guidance.
-    Keep the response under 5 sentences.
+   Do not imply fault by the customer.
+   If the issue category is General:
+   Provide a concise, helpful explanation or guidance.
+   Keep the response under 5 sentences.
 
-    Tone:
-    Professional, calm, and supportive
-    Clear and concise
-    No emojis
+   Tone:
+   Professional, calm, and supportive
+   Clear and concise
+   No emojis
 
-    Output:
-    Return only the drafted response text.
-    Do not include internal reasoning or analysis.
+   Output:
+   Return only the drafted response text.
+   Do not include internal reasoning or analysis.
     ```
 
 6. Select **Node settings** to configure the input and output of the agent.
@@ -323,14 +323,14 @@ In this section, you'll add conditional logic to route the ticket based on its c
     You should see some output indicating that billing issues are being escalated, while technical and general issues receive drafted responses. For example:
 
     ```output
-    Current Ticket:
-    The API returns a 403 error when creating invoices, but our API key hasn't changed.
+   Current Ticket:
+   The API returns a 403 error when creating invoices, but our API key hasn't changed.
 
 
-    Copilot said:
-    Thank you for reaching out about the 403 error when creating invoices. This error typically indicates a permissions or access issue. 
-    Please ensure that your API key has the necessary permissions for invoice creation and that your request is being sent to the correct endpoint. 
-    If the issue persists, try regenerating your API key and updating it in your integration to see if that resolves the problem.
+   Copilot said:
+   Thank you for reaching out about the 403 error when creating invoices. This error typically indicates a permissions or access issue. 
+   Please ensure that your API key has the necessary permissions for invoice creation and that your request is being sent to the correct endpoint. 
+   If the issue persists, try regenerating your API key and updating it in your integration to see if that resolves the problem.
     ```
 
 ## Use your workflow in a client application
@@ -348,7 +348,7 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 1. Enter the repository URL:
 
     ```
-    https://github.com/MicrosoftLearning/mslearn-ai-agents.git
+   https://github.com/MicrosoftLearning/mslearn-ai-agents.git
     ```
 
 1. Choose a location on your local machine to clone the repository.
@@ -372,9 +372,9 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 5. In the terminal, enter the following command to install the required Python packages in a virtual environment:
 
     ```
-    python -m venv labenv
-    .\labenv\Scripts\Activate.ps1
-    pip install -r requirements.txt
+   python -m venv labenv
+   .\labenv\Scripts\Activate.ps1
+   pip install -r requirements.txt
     ```
 
 6. Open the **.env** file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the code tab of the workflow visualizer). Use **Ctrl+S** to save the file after making these changes.
@@ -424,16 +424,16 @@ Now you're ready to create a project that invokes a workflow. Let's get started!
 4. Find the comment **Create a conversation and run the workflow**, and add the following code to create a conversation and invoke your workflow:
 
     ```python
-    # Create a conversation and run the workflow
-    conversation = openai_client.conversations.create()
-    print(f"Created conversation (id: {conversation.id})")
+   # Create a conversation and run the workflow
+   conversation = openai_client.conversations.create()
+   print(f"Created conversation (id: {conversation.id})")
 
-    stream = openai_client.responses.create(
-        conversation=conversation.id,
-        extra_body={"agent_reference" : {"name" : workflow["name"], "type": "agent_reference"}},
-        input="Start",
-        stream=True,
-    )
+   stream = openai_client.responses.create(
+       conversation=conversation.id,
+       extra_body={"agent_reference" : {"name" : workflow["name"], "type": "agent_reference"}},
+       input="Start",
+       stream=True,
+   )
     ```
 
     This code will stream the output of the workflow execution to the console, allowing you to see the flow of messages as the workflow processes each ticket.
@@ -467,7 +467,7 @@ Now you're ready to run your code and watch your AI agents collaborate.
 
 1. In the integrated terminal, run the following commands:
     ```
-    az login
+   az login
     ```
 
     ```
@@ -479,10 +479,10 @@ Now you're ready to run your code and watch your AI agents collaborate.
 1. When the workflow completes, you should see some output similar to the following:
 
     ```output
-    Response completed:
-    Current Ticket:
-    The API returns a 403 error when creating invoices, but our API key hasn't changed.{"customer_issue":"API returns a 403 error when creating invoices, API key unchanged.","category":"Technical","confidence":1}Thank you for contacting us about the 403 error when creating invoices with the API. This error typically relates to permission issues. Please ensure your API key has the necessary permissions for invoice creation and that the endpoint URL is correct. If the issue persists, try regenerating the API key and updating it in your application.
-    ...
+   Response completed:
+   Current Ticket:
+   The API returns a 403 error when creating invoices, but our API key hasn't changed.{"customer_issue":"API returns a 403 error when creating invoices, API key unchanged.","category":"Technical","confidence":1}Thank you for contacting us about the 403 error when creating invoices with the API. This error typically relates to permission issues. Please ensure your API key has the necessary permissions for invoice creation and that the endpoint URL is correct. If the issue persists, try regenerating the API key and updating it in your application.
+   ...
     ```
 
     In the output, you can see how the workflow completes each support ticket, including the classification of each ticket and the recommended response or escalation. Great work!

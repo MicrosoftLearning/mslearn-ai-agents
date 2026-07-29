@@ -94,7 +94,7 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 1. Enter the repository URL:
 
     ```
-    https://github.com/MicrosoftLearning/mslearn-ai-agents.git
+   https://github.com/MicrosoftLearning/mslearn-ai-agents.git
     ```
 
 1. Choose a location on your local machine to clone the repository.
@@ -110,9 +110,9 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 1. In the terminal, enter the following command to install the required Python packages in a virtual environment:
 
     ```
-    python -m venv labenv
-    .\labenv\Scripts\Activate.ps1
-    pip install -r requirements.txt
+   python -m venv labenv
+   .\labenv\Scripts\Activate.ps1
+   pip install -r requirements.txt
     ```
 
 1. Open the **.env** file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project deployment resource in the Foundry Toolkit extension) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name. Use **Ctrl+S** to save the file after making these changes.
@@ -231,7 +231,7 @@ Now you're ready to run your code and watch your AI agents collaborate.
 1. In the integrated terminal, enter the following commands to run the application:
 
     ```
-    az login
+   az login
     ```
 
     ```
@@ -241,24 +241,24 @@ Now you're ready to run your code and watch your AI agents collaborate.
 1. You should see some output similar to the following:
 
     ```output
-    User requests a dark mode option for more comfortable nighttime use.
-    Feature request
-    Log as enhancement request to add dark mode for improved user comfort during nighttime use.
-    ------------------------------------------------------------
-    01 [summarizer]
-    User requests a dark mode option for more comfortable nighttime use.
-    ------------------------------------------------------------
-    02 [classifier]
-    Feature request
-    ------------------------------------------------------------
-    03 [action]
-    Log as enhancement request to add dark mode for improved user comfort during nighttime use.
+   User requests a dark mode option for more comfortable nighttime use.
+   Feature request
+   Log as enhancement request to add dark mode for improved user comfort during nighttime use.
+   ------------------------------------------------------------
+   01 [summarizer]
+   User requests a dark mode option for more comfortable nighttime use.
+   ------------------------------------------------------------
+   02 [classifier]
+   Feature request
+   ------------------------------------------------------------
+   03 [action]
+   Log as enhancement request to add dark mode for improved user comfort during nighttime use.
     ```
 
 1. Optionally, you can try running the code using different feedback inputs, such as:
 
     ```output
-    I reached out to your customer support yesterday because I couldn't access my account. The representative responded almost immediately, was polite and professional, and fixed the issue within minutes. Honestly, it was one of the best support experiences I've ever had.
+   I reached out to your customer support yesterday because I couldn't access my account. The representative responded almost immediately, was polite and professional, and fixed the issue within minutes. Honestly, it was one of the best support experiences I've ever had.
     ```
 
 1. When you're finished, enter `deactivate` in the terminal to exit the Python virtual environment.

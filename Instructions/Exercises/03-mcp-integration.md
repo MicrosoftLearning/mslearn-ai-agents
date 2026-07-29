@@ -67,7 +67,7 @@ At the core of any generative AI project, there’s at least one generative AI m
    - **Deployment name**: Enter a name like "gpt-5"
    - **Deployment type**: Select **Global Standard** (or **Standard** if Global Standard is not available)
    - **Model version**: Leave as default
-   - **Tokens per minute**: Leave as default
+   - **Tokens per minute**: Raise the Tokens per Minute limit to 150000 or higher.
 
 1. Select **Deploy to Microsoft Foundry** in the bottom-left corner.
 
@@ -88,7 +88,7 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 1. Enter the repository URL:
 
     ```
-    https://github.com/MicrosoftLearning/mslearn-ai-agents.git
+   https://github.com/MicrosoftLearning/mslearn-ai-agents.git
     ```
 
 1. Choose a location on your local machine to clone the repository.
@@ -104,9 +104,9 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 1. In the terminal, enter the following command to install the required Python packages in a virtual environment:
 
     ```
-    python -m venv labenv
-    .\labenv\Scripts\Activate.ps1
-    pip install -r requirements.txt
+   python -m venv labenv
+   .\labenv\Scripts\Activate.ps1
+   pip install -r requirements.txt
     ```
 
 1. Open the **.env** file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project deployment resource in the Foundry Toolkit extension) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name. Use **Ctrl+S** to save the file after making these changes.
@@ -245,7 +245,7 @@ Now you're ready to run the application and see how the agent uses the MCP tool 
 1. In the integrated terminal, enter the following command to run the application:
 
     ```
-    az login
+   az login
     ```
 
     ```
@@ -255,12 +255,12 @@ Now you're ready to run the application and see how the agent uses the MCP tool 
 1. Wait for the agent to process the prompt, using the MCP server to find a suitable tool to retrieve the requested information. You should see some output similar to the following:
 
     ```
-    Agent created (id: MyAgent:2, name: MyAgent, version: 2)
-    Created conversation (id: conv_086911ecabcbc05700BBHIeNRoPSO5tKPHiXRkgHuStYzy27BS)
-    
-    Agent response: Here are Azure CLI commands to create an Azure Container App with a managed identity:
+   Agent created (id: MyAgent:2, name: MyAgent, version: 2)
+   Created conversation (id: conv_086911ecabcbc05700BBHIeNRoPSO5tKPHiXRkgHuStYzy27BS)
 
-    **1. For a System-assigned Managed Identity**
+   Agent response: Here are Azure CLI commands to create an Azure Container App with a managed identity:
+
+   **1. For a System-assigned Managed Identity**
     ```sh
     az containerapp create \
     --name <CONTAINERAPP_NAME> \
@@ -270,9 +270,9 @@ Now you're ready to run the application and see how the agent uses the MCP tool 
     --identity 'system'
     ```
 
-    [continued...]
+   [continued...]
 
-    Agent deleted
+   Agent deleted
 
     ```
 
@@ -389,17 +389,17 @@ In this task, you'll connect the MCP server tools to your agent so that it can c
 1. In the **chat_loop** method, find the comment **Build a function for each tool** and add the following code:
 
     ```python
-    # Build a function for each tool
-    def make_tool_func(tool_name):
-        async def tool_func(**kwargs):
-            result = await session.call_tool(tool_name, kwargs)
-            return result
-        
-        tool_func.__name__ = tool_name
-        return tool_func
+   # Build a function for each tool
+   def make_tool_func(tool_name):
+       async def tool_func(**kwargs):
+           result = await session.call_tool(tool_name, kwargs)
+           return result
 
-    # Store the functions in a dictionary for easy access when processing function calls
-    functions_dict = {tool.name: make_tool_func(tool.name) for tool in tools}
+       tool_func.__name__ = tool_name
+       return tool_func
+
+   # Store the functions in a dictionary for easy access when processing function calls
+   functions_dict = {tool.name: make_tool_func(tool.name) for tool in tools}
     ```
 
     This code dynamically wraps tools available in the MCP server so that they can be called by the AI agent. Each tool is turned into an async function that the agent can invoke.

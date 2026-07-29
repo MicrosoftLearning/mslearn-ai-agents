@@ -15,7 +15,7 @@ from starlette.routing import Route
 load_dotenv()
 
 host = os.environ["SERVER_URL"]
-port = os.environ["TITLE_AGENT_PORT"]
+port = os.environ["OUTLINE_AGENT_PORT"]
 
 # Define agent skills
 skills = [
