@@ -124,3 +124,4 @@ Swap `1` for the task number you're about to start. That's it — head to any ta
 | Task 1 – Build an agent with a tool | [C1](C1-create-an-agent-with-a-tool.md) |
 | Task 2 – Orchestrate multiple agents in sequence | [C2](C2-orchestrate-multiple-agents.md) |
 | Task 3 – Connect remote agents with A2A | [C3](C3-connect-remote-agents-with-a2a.md) |
+| Task 4 – Classify and route a support ticket | [C4](C4-classify-and-route-a-ticket.md) |

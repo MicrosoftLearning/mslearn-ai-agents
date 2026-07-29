@@ -16,6 +16,7 @@ Tasks and what they need:
     Task 3  (code)   PROJECT_ENDPOINT, MODEL_DEPLOYMENT_NAME,
                      SERVER_URL, TITLE_AGENT_PORT, OUTLINE_AGENT_PORT,
                      ROUTING_AGENT_PORT
+    Task 4  (code)   PROJECT_ENDPOINT, MODEL_DEPLOYMENT_NAME
 """
 
 import argparse
@@ -36,6 +37,7 @@ TASK_REQUIREMENTS = {
         "OUTLINE_AGENT_PORT",
         "ROUTING_AGENT_PORT",
     ],
+    4: ["PROJECT_ENDPOINT", "MODEL_DEPLOYMENT_NAME"],
 }
 
 # Every key this lab might read, used when merging real environment variables.
@@ -130,7 +132,7 @@ def main():
         type=int,
         choices=sorted(TASK_REQUIREMENTS),
         required=True,
-        help="Which task you're about to start (1-3).",
+        help="Which task you're about to start (1-4).",
     )
     args = parser.parse_args()
 

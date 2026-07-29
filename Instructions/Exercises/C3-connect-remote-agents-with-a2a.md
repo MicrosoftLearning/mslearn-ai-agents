@@ -369,4 +369,4 @@ and let the trip-title agent receive them by completing its agent executor.
 
 ---
 
-**Next:** You've completed the optional tasks. Head back to the [lab overview](C-build-multi-agent-solutions-with-agent-framework.md) for a summary and clean-up steps.
+**Next (optional):** [Task 4 — Classify and route a support ticket](C4-classify-and-route-a-ticket.md)

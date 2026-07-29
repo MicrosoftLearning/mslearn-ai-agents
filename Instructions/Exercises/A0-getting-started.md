@@ -127,3 +127,4 @@ Swap `2` for the task number you're about to start. That's it — head to any ta
 | Task 3 – Call your agent from a client app | [A3](A3-call-your-agent-from-a-client-app.md) |
 | Task 4 – Add custom function tools | [A4](A4-add-custom-function-tools.md) |
 | Task 5 – Capstone: build your own MCP server | [A5](A5-capstone-build-your-own-mcp-server.md) |
+| Task 6 – Promote your assistant to a hosted agent | [A6](A6-promote-your-assistant-to-a-hosted-agent.md) |

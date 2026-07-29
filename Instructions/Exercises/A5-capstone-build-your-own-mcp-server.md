@@ -233,4 +233,4 @@ framework is taking over.
 
 ---
 
-**Back to the** [lab overview](A-build-and-extend-ai-agents.md).
+**Next (optional):** [Task 6 — Promote your assistant to a hosted agent](A6-promote-your-assistant-to-a-hosted-agent.md), or head **back to the** [lab overview](A-build-and-extend-ai-agents.md).
