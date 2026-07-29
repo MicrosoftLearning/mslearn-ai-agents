@@ -24,6 +24,8 @@ provisioning scripts live in Labfiles/B-integrate-agents-with-enterprise-knowled
 
 # Integrate agents with enterprise knowledge and Microsoft 365
 
+**Difficulty** ▰▰▰▱▱ **L300**  (filled bars out of 5; **L100** beginner → **L500** expert)
+
 An agent becomes genuinely useful to a business when it answers from the company's *own*
 knowledge and shows up where employees already work. In this lab you'll build a **grounded
 enterprise-knowledge agent** and then **deliver it through Microsoft 365**.
@@ -108,10 +110,10 @@ interest you. The full lab, including all optional tasks, takes about **1 hour 5
 
 | Section | Task | Difficulty | Time |
 | --- | --- | --- | --- |
-| **Core** | [Task 1 – Create a Foundry IQ knowledge agent and connect from code](B1-create-a-foundry-iq-knowledge-agent.md) | ★★☆ | ~35 min |
-| *Optional* | [Task 2 – Publish your agent to Microsoft Teams](B2-publish-to-microsoft-teams.md) | ★☆☆ | ~20 min |
-| *Optional* | [Task 3 – Publish your agent to Microsoft 365 Copilot](B3-publish-to-microsoft-365-copilot.md) | ★☆☆ | ~15 min |
-| *Optional* | [Task 4 – Work IQ: bring Microsoft 365 signals into an agent](B4-work-iq-workplace-intelligence.md) | ★★★ | ~40 min |
+| **Core** | [Task 1 – Create a Foundry IQ knowledge agent and connect from code](B1-create-a-foundry-iq-knowledge-agent.md) | ▰▰▰▱▱ L300 | ~35 min |
+| *Optional* | [Task 2 – Publish your agent to Microsoft Teams](B2-publish-to-microsoft-teams.md) | ▰▰▱▱▱ L200 | ~20 min |
+| *Optional* | [Task 3 – Publish your agent to Microsoft 365 Copilot](B3-publish-to-microsoft-365-copilot.md) | ▰▰▱▱▱ L200 | ~15 min |
+| *Optional* | [Task 4 – Work IQ: bring Microsoft 365 signals into an agent](B4-work-iq-workplace-intelligence.md) | ▰▰▰▰▱ L400 | ~40 min |
 
 **Choosing your path** — pick the tasks that fit the time you have:
 

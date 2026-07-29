@@ -24,6 +24,8 @@ Labfiles/C-build-multi-agent-solutions-with-agent-framework/setup/ and infra/.
 
 # Build multi-agent solutions with the Agent Framework
 
+**Difficulty** ▰▰▰▱▱ **L300**  (filled bars out of 5; **L100** beginner → **L500** expert)
+
 A single agent is useful. A *team* of agents — each one focused, and able to hand work to the
 others — is how you build real operations. In this lab you'll build up a Tailwind Traders
 multi-agent system with the **Microsoft Agent Framework (MAF)**, starting from one tool-using
@@ -85,6 +87,8 @@ The **Optional** tasks let you additionally:
   next and collecting every agent's output.
 - **Connect remote agents** that run in separate processes and call each other using the
   **Agent-to-Agent (A2A)** protocol, coordinated by a routing agent.
+- **Classify and route** support tickets by turning one agent's **structured output** into
+  conditional routing in your own code.
 
 ## How this lab is organized
 
@@ -104,19 +108,20 @@ one virtual environment, and one `.env`, so if you'd rather work straight throug
 
 Complete the **Core** task first (about **30 minutes**) — it ends with a working, tool-using
 agent. Then expand any **Optional** tasks that interest you. The full lab, including all
-optional tasks, takes about **1 hour 30 minutes**.
+optional tasks, takes about **2 hours**.
 
 | Section | Task | Difficulty | Time |
 | --- | --- | --- | --- |
-| **Core** | [Task 1 – Build an agent with a tool](C1-create-an-agent-with-a-tool.md) | ★★☆ | ~30 min |
-| *Optional* | [Task 2 – Orchestrate multiple agents in sequence](C2-orchestrate-multiple-agents.md) | ★★☆ | ~30 min |
-| *Optional* | [Task 3 – Connect remote agents with A2A](C3-connect-remote-agents-with-a2a.md) | ★★★ | ~30 min |
+| **Core** | [Task 1 – Build an agent with a tool](C1-create-an-agent-with-a-tool.md) | ▰▰▰▱▱ L300 | ~30 min |
+| *Optional* | [Task 2 – Orchestrate multiple agents in sequence](C2-orchestrate-multiple-agents.md) | ▰▰▰▱▱ L300 | ~30 min |
+| *Optional* | [Task 3 – Connect remote agents with A2A](C3-connect-remote-agents-with-a2a.md) | ▰▰▰▰▱ L400 | ~30 min |
+| *Optional* | [Task 4 – Classify and route a support ticket](C4-classify-and-route-a-ticket.md) | ▰▰▰▱▱ L300 | ~30 min |
 
 **Choosing your path** — pick the tasks that fit the time you have:
 
 - **Core only (~30 min):** do Task 1.
-- **Core + orchestration (~1h):** also do **Task 2**.
-- **Everything (~1h 30m):** add **Task 3** (remote agents with A2A).
+- **Core + one pattern (~1h):** add **Task 2** (sequential orchestration) or **Task 4** (classify + route).
+- **Everything (~2h):** add **Task 2**, **Task 3** (remote agents with A2A), and **Task 4**.
 
 ## One framework, growing from one agent to many
 
@@ -131,6 +136,9 @@ stays familiar as the solutions get more ambitious:
 - In **Task 3**, you split the agents across **separate processes** and let a routing agent
   discover and call them using the **A2A protocol** — the same collaboration idea, now over the
   network.
+- In **Task 4**, you come back to a **single** agent — but its **structured output** (a JSON
+  classification) drives **conditional routing** in your code, escalating or auto-handling each
+  support ticket.
 
 Seeing the single-agent mechanics first is what makes the multi-agent patterns meaningful later.
 
@@ -142,6 +150,7 @@ Across this lab you:
 - (Optionally) **orchestrated several agents** in a sequence to triage work step by step.
 - (Optionally) connected **remote agents** across processes with the **A2A protocol**, routed by
   a coordinating agent.
+- (Optionally) turned an agent's **structured classification** into **conditional routing** in code.
 
 Together these show how the Agent Framework scales from a single focused agent to a coordinated
 team of them.

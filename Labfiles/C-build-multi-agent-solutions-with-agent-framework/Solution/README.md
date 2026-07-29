@@ -17,13 +17,16 @@ Solution/
    ├─ client.py               # Task 3 — chat client that talks to the routing agent
    ├─ title_agent/            #   Task 3 — remote agent: suggests a guided-trip title
    ├─ outline_agent/          #   Task 3 — remote agent: drafts a trip itinerary outline
-   └─ routing_agent/          #   Task 3 — orchestrator that delegates to the remote agents via A2A
+   ├─ routing_agent/          #   Task 3 — orchestrator that delegates to the remote agents via A2A
+   ├─ ticket_triage.py        # Task 4 — single agent classifies a ticket; code routes on the result
+   └─ sample_tickets.json     #   Task 4 — sample Tailwind Traders support tickets
 ```
 
 The whole lab is built on the **Microsoft Agent Framework (MAF)**. Task 1 and Task 2 use the
 native MAF path — `FoundryChatClient` + `@tool` + `Agent` + `agent.create_session()` +
 `agent.run(..., session=)` -> `result.text`. Task 3 keeps the Foundry SDK inner agents and
-adds the **A2A** protocol so agents in separate processes can call each other.
+adds the **A2A** protocol so agents in separate processes can call each other. Task 4 returns to a
+single MAF agent, but uses its **structured (JSON) output** to drive **conditional routing** in code.
 
 ---
 
@@ -32,7 +35,7 @@ adds the **A2A** protocol so agents in separate processes can call each other.
 This lab can be completed end to end **or one task at a time**. Two things make that possible:
 
 - **Per-task instruction pages** — `Instructions/Exercises/C0-getting-started.md` (shared setup)
-  plus `C1`–`C3` (one page per task). Each task page tells a standalone learner exactly what it
+  plus `C1`–`C4` (one page per task). Each task page tells a standalone learner exactly what it
   needs and how to fast-forward.
 - **Setup scripts** in `Labfiles/C-build-multi-agent-solutions-with-agent-framework/setup/`:
   - `check_env.py --task N` — preflight-checks that `.env` has the keys task *N* needs.
@@ -97,6 +100,7 @@ All commands run from the single `Python/` folder:
 | 1 | `python expense_agent.py` | Console output: the agent reads `data.txt`, then calls the `submit_claim` tool to email an expense claim |
 | 2 | `python feedback_agents.py` | Console output: three agents summarize, classify, and recommend an action on customer feedback, in sequence |
 | 3 | `python run_all.py` (leave running), then in a second terminal `python client.py` | The three A2A agent servers start; the routing agent delegates your request to the trip-title and trip-itinerary agents |
+| 4 | `python ticket_triage.py` | Console output: the triage agent classifies three sample tickets; code routes each by category and confidence |
 
 For Task 3, `run_all.py` starts the `title_agent`, `outline_agent`, and `routing_agent`
 servers. Wait for all three to report ready, then run `client.py` in another terminal and chat.

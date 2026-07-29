@@ -24,6 +24,8 @@ provisioning scripts live in Labfiles/A-build-and-extend-ai-agents/setup/ and in
 
 # Build and extend AI agents
 
+**Difficulty** ▰▰▰▱▱ **L300**  (filled bars out of 5; **L100** beginner → **L500** expert)
+
 An agent becomes genuinely useful when it can *do* things — look up live information,
 call your business logic, and act on a user's behalf. In this lab you'll build a
 grounded agent and then give it capabilities using **tools**.
@@ -86,6 +88,8 @@ The **Optional** tasks let you additionally:
 - Build and connect your **own MCP server**.
 - Compare two ways to build the same agent: the **Foundry SDK + Responses API** (which you
   write) and the **Microsoft Agent Framework** (a provided, ready-to-run variant).
+- Deploy your assistant as a **hosted agent** — your own code running in a Foundry-managed
+  container, invoked by reference just like a prompt agent.
 
 ## How this lab is organized
 
@@ -105,21 +109,23 @@ one virtual environment, and one `.env`, so if you'd rather work straight throug
 
 Complete the **Core** tasks first (about **35 minutes**) — they end with a working,
 tool-using agent. Then expand any **Optional** tasks that interest you. The full lab,
-including all optional tasks, takes about **1 hour 55 minutes**.
+including all optional tasks, takes about **2 hours 25 minutes**.
 
 | Section | Task | Difficulty | Time |
 | --- | --- | --- | --- |
-| **Core** | [Task 1 – Create and ground an agent in the portal](A1-create-and-ground-an-agent.md) | ★☆☆ | ~15 min |
-| **Core** | [Task 2 – Connect the agent to a remote MCP server in code](A2-connect-a-remote-mcp-server.md) | ★★☆ | ~20 min |
-| *Optional* | [Task 3 – Call your agent from a client app](A3-call-your-agent-from-a-client-app.md) | ★★☆ | ~20 min |
-| *Optional* | [Task 4 – Add custom function tools](A4-add-custom-function-tools.md) | ★★☆ | ~25 min |
-| *Optional* | [Task 5 – Capstone: your own MCP server + combine every tool](A5-capstone-build-your-own-mcp-server.md) | ★★★ | ~35 min |
+| **Core** | [Task 1 – Create and ground an agent in the portal](A1-create-and-ground-an-agent.md) | ▰▰▱▱▱ L200 | ~15 min |
+| **Core** | [Task 2 – Connect the agent to a remote MCP server in code](A2-connect-a-remote-mcp-server.md) | ▰▰▰▱▱ L300 | ~20 min |
+| *Optional* | [Task 3 – Call your agent from a client app](A3-call-your-agent-from-a-client-app.md) | ▰▰▰▱▱ L300 | ~20 min |
+| *Optional* | [Task 4 – Add custom function tools](A4-add-custom-function-tools.md) | ▰▰▰▱▱ L300 | ~25 min |
+| *Optional* | [Task 5 – Capstone: your own MCP server + combine every tool](A5-capstone-build-your-own-mcp-server.md) | ▰▰▰▰▱ L400 | ~35 min |
+| *Optional* | [Task 6 – Promote your assistant to a hosted agent](A6-promote-your-assistant-to-a-hosted-agent.md) | ▰▰▰▱▱ L300 | ~30 min |
 
 **Choosing your path** — pick the tasks that fit the time you have:
 
 - **Core only (~35 min):** do Tasks 1–2.
 - **Core + recommended (~1h 20m):** also do **Task 3** and **Task 4**.
-- **Everything (~1h 55m):** add **Task 5** (the capstone builds on Task 4, so do Task 4 first).
+- **Everything (~2h 25m):** add **Task 5** (the capstone builds on Task 4, so do Task 4 first)
+  and **Task 6** (deploy the assistant as a hosted agent).
 
 > **One assistant, growing capabilities**: Tasks 3–5 all run behind the same provided web
 > chat window (`tailwind_ui.py`) — the **Tailwind Traders Assistant**. You focus only
@@ -158,6 +164,8 @@ Across this lab you:
 - (Optionally) consumed an agent from a **client app**, added **custom function tools**,
   and built your **own MCP server** — then combined the function tools and your MCP tools
   into a single **capstone assistant** that routes each call to the right place.
+- (Optionally) promoted the assistant to a **hosted agent** — your own code deployed to a
+  Foundry-managed container and invoked by reference.
 
 Together these show the two big levers for making agents useful: giving them the right
 **knowledge** (grounding) and the right **capabilities** (tools).

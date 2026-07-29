@@ -16,6 +16,7 @@ Tasks and what they need:
     Task 3  (code)    PROJECT_ENDPOINT, AGENT_NAME   (the grounded portal agent)
     Task 4  (code)    PROJECT_ENDPOINT, MODEL_DEPLOYMENT_NAME
     Task 5  (code)    PROJECT_ENDPOINT, MODEL_DEPLOYMENT_NAME
+    Task 6  (deploy)  PROJECT_ENDPOINT, MODEL_DEPLOYMENT_NAME
 """
 
 import argparse
@@ -31,6 +32,7 @@ TASK_REQUIREMENTS = {
     3: ["PROJECT_ENDPOINT", "AGENT_NAME"],
     4: ["PROJECT_ENDPOINT", "MODEL_DEPLOYMENT_NAME"],
     5: ["PROJECT_ENDPOINT", "MODEL_DEPLOYMENT_NAME"],
+    6: ["PROJECT_ENDPOINT", "MODEL_DEPLOYMENT_NAME"],
 }
 
 # Placeholder text shipped in .env.example — present but not yet filled in.
@@ -104,7 +106,7 @@ def main():
         type=int,
         choices=sorted(TASK_REQUIREMENTS),
         required=True,
-        help="Which task you're about to start (1-5).",
+        help="Which task you're about to start (1-6).",
     )
     args = parser.parse_args()
 

@@ -21,8 +21,13 @@ Solution/
    ├─ tailwind_ui.py         # shared Gradio chat shell (provided; not edited by learners)
    ├─ Store_Policy.txt        # Task 1 grounding doc (uploaded to the portal agent)
    ├─ weekly_sales.csv        # Task 3 code-interpreter data (uploaded to the portal agent)
-   └─ data/                   #   Task 4 lookup data (trips, rental rates, service multipliers)
+   ├─ data/                   #   Task 4 lookup data (trips, rental rates, service multipliers)
+   └─ hosted_agent/           # Task 6 — the assistant packaged as a hosted agent (own deps + azd)
 ```
+
+Task 6's `hosted_agent/` folder is **self-contained**: it has its own `main.py`,
+`requirements.txt`, and `azure.yaml`, and deploys with the Azure Developer CLI rather than
+running in the shared `labenv`.
 
 Because everything lives in one folder, the two `agent.py` files from the source labs were
 renamed to avoid a collision: **`remote_mcp_agent.py`** (Task 2) and **`functions_agent.py`**
@@ -38,7 +43,7 @@ something learners edit.
 This lab can be completed end to end **or one task at a time**. Two things make that possible:
 
 - **Per-task instruction pages** — `Instructions/Exercises/A0-getting-started.md` (shared setup)
-  plus `A1`–`A5` (one page per task). Each task page tells a standalone learner exactly what it
+  plus `A1`–`A6` (one page per task). Each task page tells a standalone learner exactly what it
   needs and how to fast-forward.
 - **Setup scripts** in `Labfiles/A-build-and-extend-ai-agents/setup/`:
   - `check_env.py --task N` — preflight-checks that `.env` has the keys task *N* needs.
@@ -124,6 +129,7 @@ All commands run from the single `Python/` folder:
 | 4 (MAF) | `python functions_agent_maf.py` | Same agent built with the Microsoft Agent Framework (`@tool` + `agent.run()`) |
 | 5 | `python client.py` | Browser chat; **capstone** — one agent that plans trips (Task 4 functions) *and* checks the warehouse (your MCP server). Do Task 4 first. |
 | 5 (MAF) | `python client_maf.py` | Same capstone built with the Microsoft Agent Framework (`MCPStdioTool` + `agent.run()`) |
+| 6 | `azd ai agent run` then `azd deploy` (from `hosted_agent/`) | The assistant deployed as a hosted agent; invoke it with `azd ai agent invoke "..."` |
 
 For the web tasks (3–5): the browser opens automatically. **Close the tab and press Ctrl+C**
 in the terminal to stop the app. Tasks 4 and 5 delete their agent version on exit. The `_maf.py`
