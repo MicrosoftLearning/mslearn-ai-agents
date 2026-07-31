@@ -24,7 +24,7 @@ Labfiles/C-build-multi-agent-solutions-with-agent-framework/setup/ and infra/.
 
 # Build multi-agent solutions with the Agent Framework
 
-**Difficulty** ▰▰▰▱▱ **L300**  (filled bars out of 5; **L100** beginner → **L500** expert)
+**Level** ▰▰▰▱▱ **L300**  (filled bars out of 5; **L100** beginner → **L500** expert)
 
 A single agent is useful. A *team* of agents — each one focused, and able to hand work to the
 others — is how you build real operations. In this lab you'll build up a Tailwind Traders
@@ -110,7 +110,7 @@ Complete the **Core** task first (about **30 minutes**) — it ends with a worki
 agent. Then expand any **Optional** tasks that interest you. The full lab, including all
 optional tasks, takes about **2 hours**.
 
-| Section | Task | Difficulty | Time |
+| Section | Task | Level | Time |
 | --- | --- | --- | --- |
 | **Core** | [Task 1 – Build an agent with a tool](C1-create-an-agent-with-a-tool.md) | ▰▰▰▱▱ L300 | ~30 min |
 | *Optional* | [Task 2 – Orchestrate multiple agents in sequence](C2-orchestrate-multiple-agents.md) | ▰▰▰▱▱ L300 | ~30 min |

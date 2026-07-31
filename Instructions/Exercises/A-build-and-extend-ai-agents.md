@@ -24,7 +24,7 @@ provisioning scripts live in Labfiles/A-build-and-extend-ai-agents/setup/ and in
 
 # Build and extend AI agents
 
-**Difficulty** ▰▰▰▱▱ **L300**  (filled bars out of 5; **L100** beginner → **L500** expert)
+**Level** ▰▰▰▱▱ **L300**  (filled bars out of 5; **L100** beginner → **L500** expert)
 
 An agent becomes genuinely useful when it can *do* things — look up live information,
 call your business logic, and act on a user's behalf. In this lab you'll build a
@@ -111,7 +111,7 @@ Complete the **Core** tasks first (about **35 minutes**) — they end with a wor
 tool-using agent. Then expand any **Optional** tasks that interest you. The full lab,
 including all optional tasks, takes about **2 hours 25 minutes**.
 
-| Section | Task | Difficulty | Time |
+| Section | Task | Level | Time |
 | --- | --- | --- | --- |
 | **Core** | [Task 1 – Create and ground an agent in the portal](A1-create-and-ground-an-agent.md) | ▰▰▱▱▱ L200 | ~15 min |
 | **Core** | [Task 2 – Connect the agent to a remote MCP server in code](A2-connect-a-remote-mcp-server.md) | ▰▰▰▱▱ L300 | ~20 min |

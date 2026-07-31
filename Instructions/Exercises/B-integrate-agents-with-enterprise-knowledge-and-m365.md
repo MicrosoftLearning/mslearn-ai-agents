@@ -24,7 +24,7 @@ provisioning scripts live in Labfiles/B-integrate-agents-with-enterprise-knowled
 
 # Integrate agents with enterprise knowledge and Microsoft 365
 
-**Difficulty** ▰▰▰▱▱ **L300**  (filled bars out of 5; **L100** beginner → **L500** expert)
+**Level** ▰▰▰▱▱ **L300**  (filled bars out of 5; **L100** beginner → **L500** expert)
 
 An agent becomes genuinely useful to a business when it answers from the company's *own*
 knowledge and shows up where employees already work. In this lab you'll build a **grounded
@@ -108,7 +108,7 @@ Complete the **Core** task first (about **35 minutes**) — it ends with a worki
 enterprise-knowledge agent you can call from code. Then expand any **Optional** tasks that
 interest you. The full lab, including all optional tasks, takes about **1 hour 50 minutes**.
 
-| Section | Task | Difficulty | Time |
+| Section | Task | Level | Time |
 | --- | --- | --- | --- |
 | **Core** | [Task 1 – Create a Foundry IQ knowledge agent and connect from code](B1-create-a-foundry-iq-knowledge-agent.md) | ▰▰▰▱▱ L300 | ~35 min |
 | *Optional* | [Task 2 – Publish your agent to Microsoft Teams](B2-publish-to-microsoft-teams.md) | ▰▰▱▱▱ L200 | ~20 min |
