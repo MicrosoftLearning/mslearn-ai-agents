@@ -22,7 +22,7 @@ Before starting this exercise, ensure you have:
 
 - [Visual Studio Code](https://code.visualstudio.com/) installed on your local machine
 - An active [Azure subscription](https://azure.microsoft.com/free/)
-- [Python 3.13](https://www.python.org/downloads/) or later installed
+- [Python 3.13](https://www.python.org/downloads/) or later installed, **or** the [.NET 8 SDK](https://dotnet.microsoft.com/download) or later if you're following the C# version of the client application
 - [Git](https://git-scm.com/downloads) installed on your local machine
 
 > \* Python 3.13 is available, but some dependencies are not yet compiled for that release. The lab has been successfully tested with Python 3.12.
@@ -96,6 +96,10 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 1. When prompted, select **Open** to open the cloned repository in VS Code.
 
 1. Once the repository opens, select **File > Open Folder** and navigate to `mslearn-ai-agents/Labfiles/03-mcp-integration`, then choose **Select Folder**.
+
+This exercise provides starter code for both Python and C#. Follow the **Python** sections below to build the agents step by step, or skip to the **C#** section near the end if you're using C#.
+
+### Python
 
 1. In the Explorer pane, expand the **Python** folder to view the code files for this exercise.
 
@@ -535,6 +539,70 @@ In this task, you'll connect the MCP server tools to your agent so that it can c
 1. Enter `quit` to exit the application.
 
     You can also use `deactivate` to exit the Python virtual environment in the terminal.
+
+### C#
+
+> **Tip**: This C# client uses the [Microsoft Agent Framework](https://learn.microsoft.com/agent-framework/overview/) (`Microsoft.Agents.AI.Foundry`) instead of hand-written `azure-ai-projects` calls. The package is still prerelease, so APIs may change before general availability.
+
+The C# version splits across three projects in the **CSharp** folder, matching the three Python files: **Agent** (equivalent to `agent.py`), **InventoryServer** (equivalent to `server.py`), and **InventoryClient** (equivalent to `client.py`). All three already contain a complete implementation -- there's no incremental "find the comment, add this code" flow like the Python steps above, so this section just walks through what each one does and how to run it.
+
+#### Connect to the remote MCP server (Agent)
+
+1. In the Explorer pane, expand the **CSharp** folder, then the **Agent** folder.
+
+1. Open **Program.cs** and review the code. Instead of `MCPTool(server_label=..., server_url=..., require_approval="always")`, it creates a `HostedMcpServerTool` with `ApprovalMode = HostedMcpServerToolApprovalMode.AlwaysRequire`, and passes it to `AIProjectClient.AsAIAgent(...)` as a tool. Just like the Python sample, Foundry calls the remote MCP server directly -- this is a *hosted* MCP tool, not a local one.
+
+1. Notice the approval loop: instead of manually walking `response.output` for `mcp_approval_request` items and resending `McpApprovalResponse`s, the code reads `ToolApprovalRequestContent` items off the response and calls `request.CreateResponse(approved: true)` for each one, looping with `agent.RunAsync(...)` until none remain -- the same automatic-approval behavior as the Python sample.
+
+1. In the Explorer pane, duplicate the **.env.example** file in the **Agent** folder and rename it to **.env**. Fill in `PROJECT_ENDPOINT` and `MODEL_DEPLOYMENT_NAME` as you did for the Python `.env` file.
+
+1. Open a terminal in the **Agent** folder and sign in to Azure:
+
+    ```bash
+   az login
+    ```
+
+1. Run the application:
+
+    ```bash
+   dotnet run
+    ```
+
+    You should see output similar to the Python version -- the agent using the remote MCP server to answer the fixed prompt about creating an Azure Container App with a managed identity.
+
+#### Create and connect to a custom MCP server (InventoryServer and InventoryClient)
+
+1. In the Explorer pane, expand the **InventoryServer** folder and open **InventoryTools.cs**. This is the C# equivalent of `server.py`: `[McpServerToolType]` marks the class as a tool container, and `[McpServerTool]` marks `GetInventoryLevels` and `GetWeeklySales` as discoverable tools -- the same role `@mcp.tool()` plays in the Python version. Open **Program.cs** to see the few lines of hosting setup (`AddMcpServer().WithStdioServerTransport().WithTools<InventoryTools>()`) that start the server over stdio, replacing `FastMCP` and `mcp.run(...)`.
+
+1. Expand the **InventoryClient** folder and open **Program.cs**. Compare this with `client.py`:
+    - `McpClient.CreateAsync(new StdioClientTransport(...))` starts `InventoryServer` as a subprocess and connects to it, the same role `StdioServerParameters` and `stdio_client(...)` play in Python
+    - `mcpTools.Cast<AITool>()` hands the discovered tools straight to `AIProjectClient.AsAIAgent(...)` -- there's no equivalent of `make_tool_func`, the hand-written `FunctionTool` JSON schemas, or the manual `function_call` dispatch loop, because `McpClientTool` already implements `AITool`
+
+1. In the **InventoryClient** folder, duplicate **.env.example** and rename it to **.env**. Fill in `PROJECT_ENDPOINT` and `MODEL_DEPLOYMENT_NAME`. **InventoryServer** doesn't need its own `.env` -- it has no Azure dependency at all.
+
+1. Open a terminal in the **InventoryClient** folder and sign in to Azure:
+
+    ```bash
+   az login
+    ```
+
+1. Run the client (this automatically starts **InventoryServer** as a subprocess -- you don't need to run it separately):
+
+    ```bash
+   dotnet run
+    ```
+
+1. Try the same prompts as the Python version, for example:
+
+    ```
+   Show me the current inventory levels for all products.
+    ```
+
+    ```
+   Are there any products that should be restocked?
+    ```
+
+1. Enter `quit` to exit the application.
 
 ## Clean up
 

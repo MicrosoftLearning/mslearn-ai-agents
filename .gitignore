@@ -70,6 +70,13 @@ Thumbs.db
 # Azure
 .azure/
 
+# .NET
+bin/
+obj/
+*.user
+.vs/
+
 # Output files
 analysis_results.json
 output.txt
+agent_outputs/
