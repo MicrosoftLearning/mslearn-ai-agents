@@ -25,14 +25,22 @@ if (string.IsNullOrWhiteSpace(projectEndpoint) || projectEndpoint == "your_proje
 }
 
 Console.WriteLine("Connecting to Microsoft Foundry project...");
-AIProjectClient projectClient = new(new Uri(projectEndpoint), new DefaultAzureCredential());
+// AzureCliCredential (rather than DefaultAzureCredential) is used here because this app is
+// meant to run locally against the "az login" session from the setup steps. DefaultAzureCredential
+// also tries ManagedIdentityCredential first, which can throw (instead of just being "unavailable")
+// on machines without IMDS -- e.g. WSL -- aborting the credential chain before it ever reaches
+// AzureCliCredential. See https://aka.ms/azsdk/net/identity/managedidentitycredential/troubleshoot
+AIProjectClient projectClient = new(new Uri(projectEndpoint), new AzureCliCredential());
 
 FoundryAgent agent;
 try
 {
     Console.WriteLine($"Loading agent: {agentName}");
+    System.Diagnostics.Stopwatch loadStopwatch = System.Diagnostics.Stopwatch.StartNew();
     ProjectsAgentRecord agentRecord = await projectClient.AgentAdministrationClient.GetAgentAsync(agentName);
     agent = projectClient.AsAIAgent(agentRecord);
+    loadStopwatch.Stop();
+    Console.WriteLine($"[GetAgentAsync took {loadStopwatch.Elapsed.TotalSeconds:F1}s]");
 }
 catch (Exception ex)
 {
@@ -78,7 +86,10 @@ while (true)
     Console.WriteLine();
     Console.WriteLine("[Agent is thinking...]");
 
+    System.Diagnostics.Stopwatch stopwatch = System.Diagnostics.Stopwatch.StartNew();
     AgentResponse response = await agent.RunAsync(userInput, session);
+    stopwatch.Stop();
+    Console.WriteLine($"[RunAsync took {stopwatch.Elapsed.TotalSeconds:F1}s]");
 
     if (!string.IsNullOrWhiteSpace(response.Text))
     {

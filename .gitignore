@@ -77,4 +77,5 @@ obj/
 
 # Output files
 analysis_results.json
+agent_outputs/
 output.txt
