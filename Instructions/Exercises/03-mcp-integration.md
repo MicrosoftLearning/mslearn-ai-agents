@@ -109,6 +109,14 @@ For this exercise, you'll use starter code that will help you connect to your Fo
    pip install -r requirements.txt
     ```
 
+    On Linux, macOS, or WSL, use:
+
+    ```
+   python3 -m venv labenv
+   source labenv/bin/activate
+   pip install -r requirements.txt
+    ```
+
 1. Open the **.env** file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project deployment resource in the Foundry Toolkit extension) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name. Use **Ctrl+S** to save the file after making these changes.
 
 Now you're ready to create an AI agent that uses MCP server tools to access external data sources and APIs.

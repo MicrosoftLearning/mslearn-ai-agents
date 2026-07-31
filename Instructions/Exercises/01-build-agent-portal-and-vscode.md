@@ -444,6 +444,14 @@ Now let's create a client application that interacts with your agent programmati
    pip install -r requirements.txt
     ```
 
+    On Linux, macOS, or WSL, use:
+
+    ```bash
+   python3 -m venv labenv
+   source labenv/bin/activate
+   pip install -r requirements.txt
+    ```
+
     ```bash
    az login
     ```

@@ -377,6 +377,14 @@ For this exercise, you'll use starter code that will help you connect to your Fo
    pip install -r requirements.txt
     ```
 
+    On Linux, macOS, or WSL, use:
+
+    ```
+   python3 -m venv labenv
+   source labenv/bin/activate
+   pip install -r requirements.txt
+    ```
+
 6. Open the **.env** file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the code tab of the workflow visualizer). Use **Ctrl+S** to save the file after making these changes.
 
 ### Invoke the workflow from code
