@@ -71,7 +71,7 @@ At the core of any generative AI project, there’s at least one generative AI m
    - **Deployment name**: Enter a name like "gpt-5"
    - **Deployment type**: Select **Global Standard** (or **Standard** if Global Standard is not available)
    - **Model version**: Leave as default
-   - **Tokens per minute**: Leave as default
+   - **Tokens per minute**: Raise the Tokens per Minute limit to 150000 or higher.
 
 1. Select **Deploy to Microsoft Foundry** in the bottom-left corner.
 
