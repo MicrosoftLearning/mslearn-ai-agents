@@ -74,6 +74,7 @@ Thumbs.db
 bin/
 obj/
 *.user
+.vs/
 
 # Output files
 analysis_results.json
