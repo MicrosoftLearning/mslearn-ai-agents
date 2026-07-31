@@ -22,9 +22,9 @@ Before starting this exercise, ensure you have:
 
 - An [Azure subscription](https://azure.microsoft.com/free/) with sufficient permissions and quota to provision Azure AI resources
 - [Visual Studio Code](https://code.visualstudio.com/) installed on your local machine
-- [Python 3.13](https://www.python.org/downloads/) or later installed
+- [Python 3.13](https://www.python.org/downloads/) or later installed, **or** the [.NET 8 SDK](https://dotnet.microsoft.com/download) or later if you're following the C# version of the client application
 - [Git](https://git-scm.com/downloads) installed on your local machine
-- Basic familiarity with Azure AI services and Python programming
+- Basic familiarity with Azure AI services and Python or C# programming
 
 > \* Python 3.13 is available, but some dependencies are not yet compiled for that release. The lab has been successfully tested with Python 3.13.12.
 
@@ -205,7 +205,11 @@ Now let's create a client application that interacts with your agent programmati
 
 1. When prompted, select **Open** to open the cloned repository in VS Code.
 
-1. Once the repository opens, select **File > Open Folder** and navigate to `mslearn-ai-agents/Labfiles/01-build-agent-portal-and-vscode/Python`, then choose **Select Folder**.
+This exercise provides starter code for both Python and C#. Follow the section below for the language you're using.
+
+### Python
+
+1. Select **File > Open Folder** and navigate to `mslearn-ai-agents/Labfiles/01-build-agent-portal-and-vscode/Python`, then choose **Select Folder**.
 
 1. In the Explorer pane, open the `agent_with_functions.py` file. If the file is empty, replace its contents with the following code.
 
@@ -417,7 +421,7 @@ Now let's create a client application that interacts with your agent programmati
 
 1. Save the `agent_with_functions.py` file (**Ctrl+S** or **File > Save**).
 
-### Configure environment and run the application
+#### Configure environment and run the application
 
 1. In the Explorer pane, you'll see `.env.example` and `requirements.txt` files already present in the folder.
 
@@ -452,6 +456,50 @@ Now let's create a client application that interacts with your agent programmati
 
     ```bash
    python agent_with_functions.py
+    ```
+
+### C#
+
+> **Tip**: This C# client uses the [Microsoft Agent Framework](https://learn.microsoft.com/agent-framework/overview/) (`Microsoft.Agents.AI.Foundry`) instead of the raw Azure AI Projects SDK calls used by the Python client. The package is still prerelease, so APIs may change before general availability.
+
+1. Select **File > Open Folder** and navigate to `mslearn-ai-agents/Labfiles/01-build-agent-portal-and-vscode/CSharp`, then choose **Select Folder**.
+
+1. In the Explorer pane, open the `Program.cs` file and review the code. Unlike the Python starter file, `Program.cs` already contains a complete implementation, since the goal here is to show how the Microsoft Agent Framework simplifies talking to an agent that's already defined in the portal. The file:
+
+    - Loads your `.env` file and connects to the Foundry project with `AIProjectClient` and `DefaultAzureCredential`
+    - Finds the `it-support-agent` you created in the portal by name, using `AgentAdministrationClient.GetAgentAsync(...)`, and wraps it as a `FoundryAgent` with `AsAIAgent(...)` — the agent's instructions, file search, and code interpreter tools all stay defined in the portal, not in this code
+    - Creates an `AgentSession` to keep the conversation's context across turns, then loops on console input, calling `agent.RunAsync(userInput, session)` for each message
+    - Downloads any files Code Interpreter generates (like charts) using `ContainerClient`, the same way the Python client's `download_container_file` function does
+
+#### Configure environment and run the application
+
+1. In the Explorer pane, you'll see a `.env.example` file already present in the folder.
+
+1. Duplicate the `.env.example` file, and rename it to `.env`.
+
+1. In the `.env` file, replace `your_project_endpoint_here` with your actual project endpoint:
+
+    ```
+   PROJECT_ENDPOINT=<your_project_endpoint>
+   AGENT_NAME=it-support-agent
+    ```
+
+    **To get your project endpoint:** In VS Code, open the **Foundry Toolkit** extension, right-click on your active project, and select **Copy Endpoint**. If **Copy Endpoint** isn't available in your installed version of Foundry Toolkit, open the Microsoft Foundry portal, go to your project, and copy the project endpoint from the project overview page instead.
+
+1. Save the `.env` file (**Ctrl+S** or **File > Save**).
+
+1. Open a terminal in VS Code (**Terminal > New Terminal**) and navigate to the working directory.
+
+1. Sign in to Azure so the application can authenticate:
+
+    ```bash
+   az login
+    ```
+
+1. Run the application (this restores the required NuGet packages automatically on first run):
+
+    ```bash
+   dotnet run
     ```
 
 ## Test the client application
