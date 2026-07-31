@@ -1,0 +1,3 @@
+standard|50.00
+advanced|120.00
+premium|300.00

@@ -24,7 +24,7 @@ Before starting this exercise, ensure you have:
 
 - [Visual Studio Code](https://code.visualstudio.com/) installed on your local machine
 - An active [Azure subscription](https://azure.microsoft.com/free/)
-- [Python 3.13](https://www.python.org/downloads/) or later installed
+- [Python 3.13](https://www.python.org/downloads/) or later installed, **or** the [.NET 8 SDK](https://dotnet.microsoft.com/download) or later if you're following the C# version of the client application
 - [Git](https://git-scm.com/downloads) installed on your local machine
 
 > \* Python 3.14 is available, but some dependencies are not yet compiled for that release. The lab has been successfully tested with Python 3.13.12.
@@ -101,6 +101,10 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. Once the repository opens, select **File > Open Folder** and navigate to `mslearn-ai-agents/Labfiles/02-agent-custom-tools`, then choose **Select Folder**.
 
+This exercise provides starter code for both Python and C#. Follow the **Python** section below to build the agent step by step, or skip to the **C#** section further down if you're using C#.
+
+### Python
+
 1. In the Explorer pane, expand the **Python** folder to view the code files for this exercise.
 
 1. Right-click on the **requirements.txt** file and select **Open in Integrated Terminal**.
@@ -115,7 +119,7 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. Open the **.env** file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project deployment resource in the Foundry Toolkit VS Code extension) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name. Use **Ctrl+S** to save the file after making these changes.
 
-Now you're ready to create an AI agent that uses MCP server tools to access external data sources and APIs.
+Now you're ready to create an AI agent that uses custom function tools to complete tasks.
 
 ## Create a function for the agent to use
 
@@ -462,6 +466,65 @@ Now that you've created the agent with the function tools, you can send messages
 1. Enter `quit` to exit the application.
 
     You can also use `deactivate` to exit the Python virtual environment in the terminal.
+
+### C#
+
+> **Tip**: This C# client uses the [Microsoft Agent Framework](https://learn.microsoft.com/agent-framework/overview/) (`Microsoft.Agents.AI.Foundry`) instead of hand-written `azure-ai-projects` calls. The package is still prerelease, so APIs may change before general availability.
+
+1. In the Explorer pane, expand the **CSharp** folder to view the code files for this exercise.
+
+1. Open the **Functions.cs** file and review the code. It contains C# ports of the same three functions defined in `functions.py`: `NextVisibleEvent`, `CalculateObservationCost`, and `GenerateObservationReport`. Each method has `[Description]` attributes on the method and its parameters, which the Microsoft Agent Framework uses to generate the tool's JSON schema automatically -- unlike the Python sample, there's no hand-written schema to keep in sync with the function signature.
+
+1. Open the **Program.cs** file and review the code. Unlike the Python starter files, `Program.cs` and `Functions.cs` already contain a complete implementation. `Program.cs`:
+
+    - Wraps each method in `Functions.cs` as a tool with `AIFunctionFactory.Create(...)`
+    - Creates an agent in a single call with `AIProjectClient.AsAIAgent(model, instructions, name, tools)` -- combining what the Python sample does across defining each `FunctionTool`'s JSON schema and calling `agents.create_version(...)`
+    - Creates an `AgentSession` to keep the conversation's context across turns, then loops on console input, calling `agent.RunAsync(userInput, session)` for each message
+
+    Notice there's no code here that inspects `response.output` for `function_call` items, dispatches to the matching function, or resends results as `function_call_output` -- the Microsoft Agent Framework handles that loop internally. It also doesn't call an equivalent of `agents.delete_version(...)` at the end, since this pattern doesn't persist an agent resource on the server to begin with.
+
+#### Configure environment and run the application
+
+1. In the Explorer pane, you'll see a `.env.example` file already present in the folder.
+
+1. Duplicate the `.env.example` file, and rename it to `.env`.
+
+1. In the `.env` file, replace the placeholders with your project endpoint and model deployment name:
+
+    ```
+   PROJECT_ENDPOINT=<your_project_endpoint>
+   MODEL_DEPLOYMENT_NAME=<your_model_deployment_name>
+    ```
+
+1. Save the `.env` file (**Ctrl+S** or **File > Save**).
+
+1. Open a terminal in VS Code (**Terminal > New Terminal**) and navigate to the working directory.
+
+1. Sign in to Azure so the application can authenticate:
+
+    ```bash
+   az login
+    ```
+
+1. Run the application (this restores the required NuGet packages automatically on first run):
+
+    ```bash
+   dotnet run
+    ```
+
+1. When prompted, try the same prompts as the Python version above, for example:
+
+    ```
+   Find me the next event I can see from South America and give me the cost for 5 hours of premium telescope time at normal priority.
+    ```
+
+    ```
+   Generate that information in a report for Bellows College.
+    ```
+
+    The generated report is saved to the working directory, matching the Python sample's behavior.
+
+1. Enter `quit` to exit the application.
 
 ## Clean up
 

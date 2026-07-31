@@ -1,0 +1,9 @@
+Quadrantids Meteor Shower|meteor_shower|01-03|north_america;europe;asia
+Annular Solar Eclipse|eclipse|02-17|south_america;africa;antarctica
+Total Lunar Eclipse|eclipse|03-03|north_america;europe;africa
+Lyrids Meteor Shower|meteor_shower|04-22|north_america;europe;asia
+Jupiter-Venus Conjunction|conjunction|05-01|north_america;south_america;europe;asia;africa;australia
+Saturn-Mars Conjunction|conjunction|07-10|north_america;south_america;europe;asia;africa;australia
+Partial Solar Eclipse|eclipse|08-12|europe;africa
+Perseids Meteor Shower|meteor_shower|08-12|north_america;europe;asia
+Geminids Meteor Shower|meteor_shower|12-14|north_america;south_america;europe;asia;africa;australia
