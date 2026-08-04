@@ -1,4 +1,5 @@
 ---
+title: 'Task 4 – Add custom function tools'
 lab:
     title: 'Task 4 – Add custom function tools'
     description: 'Give an agent tools backed by your own Python functions and process the function-calling loop.'

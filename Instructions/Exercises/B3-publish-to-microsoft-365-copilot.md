@@ -1,4 +1,5 @@
 ---
+title: 'Task 3 – Publish your agent to Microsoft 365 Copilot'
 lab:
     title: 'Task 3 – Publish your agent to Microsoft 365 Copilot'
     description: 'Publish the Tailwind Traders knowledge agent to Microsoft 365 Copilot so staff can reach it inside Copilot.'

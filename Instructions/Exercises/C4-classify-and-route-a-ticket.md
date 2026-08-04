@@ -1,4 +1,5 @@
 ---
+title: 'Task 4 – Classify and route a support ticket'
 lab:
     title: 'Task 4 – Classify and route a support ticket'
     description: 'Use the Microsoft Agent Framework to classify Tailwind Traders support tickets with a triage agent, then route each one in code based on its category and confidence.'

@@ -1,4 +1,5 @@
 ---
+title: 'Task 2 – Publish your agent to Microsoft Teams'
 lab:
     title: 'Task 2 – Publish your agent to Microsoft Teams'
     description: 'Publish the Tailwind Traders knowledge agent to Microsoft Teams so staff can chat with it where they already work.'

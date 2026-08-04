@@ -1,4 +1,5 @@
 ---
+title: 'Build and extend AI agents'
 lab:
     title: 'Build and extend AI agents'
     description: 'Build the Tailwind Traders assistant: ground it in store policy, then extend it with tools using remote MCP servers, custom functions, and a client app. A modular lab you can complete end to end or one task at a time.'

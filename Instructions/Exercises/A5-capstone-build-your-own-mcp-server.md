@@ -1,4 +1,5 @@
 ---
+title: 'Task 5 – Capstone: build your own MCP server'
 lab:
     title: 'Task 5 – Capstone: build your own MCP server'
     description: 'Capstone: build your own MCP server and combine it with your function tools into one Tailwind Traders assistant.'

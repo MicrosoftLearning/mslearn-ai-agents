@@ -1,4 +1,5 @@
 ---
+title: 'Task 1 – Create a Foundry IQ knowledge agent and connect from code'
 lab:
     title: 'Task 1 – Create a Foundry IQ knowledge agent and connect from code'
     description: 'Create an enterprise-knowledge agent in the Microsoft Foundry portal, ground it on the Tailwind Traders knowledge base with Foundry IQ, require approval before knowledge lookups, then connect from code and handle the approval flow.'

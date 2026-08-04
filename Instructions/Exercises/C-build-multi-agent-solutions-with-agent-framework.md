@@ -1,4 +1,5 @@
 ---
+title: 'Build multi-agent solutions with the Agent Framework'
 lab:
     title: 'Build multi-agent solutions with the Agent Framework'
     description: 'Build Tailwind Traders operations agents with the Microsoft Agent Framework: start with a single tool-using agent, then orchestrate several agents in sequence, then connect remote agents across processes with the A2A protocol. A modular lab you can complete end to end or one task at a time.'

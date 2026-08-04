@@ -1,4 +1,5 @@
 ---
+title: 'Integrate agents with enterprise knowledge and Microsoft 365'
 lab:
     title: 'Integrate agents with enterprise knowledge and Microsoft 365'
     description: 'Build the Tailwind Traders staff knowledge assistant: ground it on enterprise documents with Foundry IQ, then deliver it through Microsoft Teams, Microsoft 365 Copilot, and Work IQ. A modular lab you can complete end to end or one task at a time.'

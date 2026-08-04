@@ -1,4 +1,5 @@
 ---
+title: 'Task 1 – Create and ground an agent'
 lab:
     title: 'Task 1 – Create and ground an agent'
     description: 'Create an agent in the Microsoft Foundry portal and ground it in Tailwind Traders store policy so it answers from your data.'

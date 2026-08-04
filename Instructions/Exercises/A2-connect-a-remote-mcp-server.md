@@ -1,4 +1,5 @@
 ---
+title: 'Task 2 – Connect a remote MCP server'
 lab:
     title: 'Task 2 – Connect a remote MCP server'
     description: 'Extend an agent with a tool by connecting it to a remote Model Context Protocol (MCP) server, and handle tool-approval requests in code.'

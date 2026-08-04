@@ -1,4 +1,5 @@
 ---
+title: 'Task 4 – Work IQ: bring Microsoft 365 signals into an agent'
 lab:
     title: 'Task 4 – Work IQ: bring Microsoft 365 signals into an agent'
     description: 'Build an agent that accesses Microsoft 365 workplace data using Work IQ and the Model Context Protocol for meeting prep, project tracking, and action items.'
