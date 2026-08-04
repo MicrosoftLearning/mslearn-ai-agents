@@ -24,11 +24,24 @@ provisioning scripts live in Labfiles/B-integrate-agents-with-enterprise-knowled
 
 # Integrate agents with enterprise knowledge and Microsoft 365
 
-**Level** ▰▰▰▱▱ **L300**  (filled bars out of 5; **L100** beginner → **L500** expert)
+**Level** ▰▰▰▱▱ **L300**  (**L100** beginner → **L500** expert)
 
 An agent becomes genuinely useful to a business when it answers from the company's *own*
 knowledge and shows up where employees already work. In this lab you'll build a **grounded
 enterprise-knowledge agent** and then **deliver it through Microsoft 365**.
+
+![Anton](../Media/anton-avatar.png)<br /><strong>Meet Anton, your AI guide.</strong><br />You'll spot **Ask Anton** tips throughout this lab. Want more interactive, hands-on help? Chat with Anton in the *[Ask Anton](https://aka.ms/choose-anton)* app.
+
+<details>
+<summary><strong><i>About the Ask Anton app</i></strong></summary>
+
+<strong><i><a href="https://aka.ms/choose-anton" target="_blank">Ask Anton</a></i></strong> is a generative AI agent that can answer questions about AI concepts and Microsoft Foundry technologies. It's available in two versions at <code>https://aka.ms/choose-anton</code>:
+<ul>
+<li><strong>Azure-based</strong>: Best experience <i>(requires an Azure subscription and deployment of a model in a Foundry project)</i>.</li>
+<li><strong>Browser-based</strong>: Use a small language model in your browser <i>(reduced functionality - may be slow or work only in "basic" mode in older/lower-spec devices)</i>.</li>
+</ul>
+<blockquote><i>Ask Anton is <u>not</u> a supported Microsoft product or a component of Microsoft Learn or AI Skills Navigator.</i></blockquote>
+</details>
 
 <style>
 /* "Ask Anton" just-in-time concept blocks */
