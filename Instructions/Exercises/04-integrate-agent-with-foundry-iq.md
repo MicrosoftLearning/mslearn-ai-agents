@@ -80,6 +80,8 @@ Now you'll configure your agent that uses Foundry IQ to search the knowledge bas
     - **Pricing tier**: Free *if available, otherwise choose Basic*
     - **Foundry IQ Knowledge base capabilities**: Pause til next month
 
+    > **Note**: If you run into any problems creating the resource here, select the link at the bottom of the form to create it from the Azure portal instead.
+
 Now you'll upload sample product information documents to connect to with Foundry IQ.
 
 1. Download the sample product information files by opening a new browser tab and navigating to `https://github.com/MicrosoftLearning/mslearn-ai-agents/raw/main/Labfiles/04-integrate-agent-with-foundry-iq/data/contoso-products.zip`
@@ -156,7 +158,7 @@ When you create an agent in the portal, its Foundry IQ (knowledge) tool runs **w
 
 1. Under **Microsoft Foundry Resources**, choose **Set Default Project** and select the project you created earlier.
 1. Expand the project section. Under **Prompt Agents**, select your `product-expert-agent` agent to open the **Agent Builder** window.
-1. In the **Tools** section, add the **Azure AI Search** tool, and then select the connection and knowledge base you created earlier.
+1. In the **Tools** section, you should already see the **Azure AI Search** tool for your knowledge base, since it was linked automatically when you connected Foundry IQ in the portal.
 
     > **Note**: The agent may list more than one tool. The Foundry portal adds a **Web search** tool to new agents by default, so be sure to select the three dots on the **Azure AI Search** tool for your knowledge base rather than another tool.
 1. In the **Require approval before using tools** dropdown, select **Ask for approval for all tools**, and save your changes if you're prompted.
@@ -250,56 +252,45 @@ Now let's use Visual Studio Code to develop an app. The code files for your app 
        input=""
    )
 
-   # Check if the response output contains an MCP approval request
-   approval_request = None
-   if hasattr(response, 'output') and response.output:
-       for item in response.output:
-           if hasattr(item, 'type') and item.type == 'mcp_approval_request':
-               approval_request = item
-               break
+   # Loop until a response has no pending approval requests (zero, one, or many)
+   while True:
+       approval_requests = [
+           item for item in (getattr(response, "output", None) or [])
+           if getattr(item, "type", None) == "mcp_approval_request"
+       ]
 
-   # Handle approval request if present
-   if approval_request:
-       print(f"[Approval required for: {approval_request.name}]\n")
-       print(f"Server: {approval_request.server_label}")
+       if not approval_requests:
+           break
 
-       # Parse and display the arguments (optional, for transparency)
-       import json
-       try:
-           args = json.loads(approval_request.arguments)
-           print(f"Arguments: {json.dumps(args, indent=2)}\n")
-       except:
-           print(f"Arguments: {approval_request.arguments}\n")
+       approval_items = []
+       for approval_request in approval_requests:
+           print(f"[Approval required for: {approval_request.name}]\n")
+           print(f"Server: {approval_request.server_label}")
 
-       # Prompt user for approval
-       approval_input = input("Approve this action? (yes/no): ").strip().lower()
+           # Show the tool call arguments for transparency
+           import json
+           try:
+               args = json.loads(approval_request.arguments)
+               print(f"Arguments: {json.dumps(args, indent=2)}\n")
+           except Exception:
+               print(f"Arguments: {approval_request.arguments}\n")
 
-       if approval_input in ['yes', 'y']:
-           print("Approving action...\n")
+           approval_input = input("Approve this action? (yes/no): ").strip().lower()
+           approved = approval_input in ['yes', 'y']
+           print("Approving action...\n" if approved else "Action denied.\n")
 
-           # Create approval response item
-           approval_response = {
+           approval_items.append({
                "type": "mcp_approval_response",
                "approval_request_id": approval_request.id,
-               "approve": True
-           }
-       else:
-           print("Action denied.\n")
+               "approve": approved
+           })
 
-           # Create denial response item
-           approval_response = {
-               "type": "mcp_approval_response",
-               "approval_request_id": approval_request.id,
-               "approve": False
-           }
-
-       # Add the approval response to the conversation
+       # Send the approval decisions and fetch the next response
        openai_client.conversations.items.create(
            conversation_id=conversation.id,
-           items=[approval_response]
+           items=approval_items
        )
 
-       # Get the actual response after approval/denial
        response = openai_client.responses.create(
            conversation=conversation.id,
            extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
@@ -308,15 +299,17 @@ Now let's use Visual Studio Code to develop an app. The code files for your app 
 
     ```
 
+    > **Note**: The agent doesn't always request approval, and it can occasionally request approval for more than one tool call in the same turn. Looping until `approval_requests` is empty handles both cases correctly.
+
 1. After you've added the code, save the file.
 
 1. Review the code now uses the conversations API to manage interactions with your agent, where:
     - A conversation is created and tracked by its ID
     - User messages are added to the conversation using `conversations.items.create()`
     - Responses are generated using `responses.create()` with an agent reference
-    - **MCP approval handling**: When the agent needs to access Foundry IQ, it requests approval by returning an `mcp_approval_request` in the response output
-    - The code prompts you to approve or deny the action before proceeding
-    - After approval/denial, an `mcp_approval_response` is added to the conversation and a new response is generated
+    - **MCP approval handling**: When the agent needs to access Foundry IQ, it requests approval by returning one or more `mcp_approval_request` items in the response output
+    - The code loops, prompting you to approve or deny each pending request, until the agent returns a response with no outstanding approval requests (including the case where no approval was ever needed)
+    - After each approval/denial, an `mcp_approval_response` is added to the conversation and a new response is generated
     - The agent retrieves information from Foundry IQ based on your approval decision
 
 ## Test the Integration
