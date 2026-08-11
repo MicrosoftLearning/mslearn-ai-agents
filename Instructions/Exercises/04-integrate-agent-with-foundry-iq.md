@@ -160,8 +160,9 @@ When you create an agent in the portal, its Foundry IQ (knowledge) tool runs **w
 1. Expand the project section. Under **Prompt Agents**, select your `product-expert-agent` agent to open the **Agent Builder** window.
 1. In the **Tools** section, you should already see the **Azure AI Search** tool for your knowledge base, since it was linked automatically when you connected Foundry IQ in the portal.
 
-    > **Note**: The agent may list more than one tool. The Foundry portal adds a **Web search** tool to new agents by default, so be sure to select the three dots on the **Azure AI Search** tool for your knowledge base rather than another tool.
-1. In the **Require approval before using tools** dropdown, select **Ask for approval for all tools**, and save your changes if you're prompted.
+    > **Note**: The agent may list more than one tool. The Foundry portal adds a **Web search** tool to new agents by default, so be sure to select the ellipsis (**...**) on the **Azure AI Search** tool for your knowledge base rather than another tool.
+
+1. Select the ellipsis (**...**) icon on the **Azure AI Search** tool, then select **Ask for approval for all tools**, and save your changes if you're prompted.
 
 Your agent will now request approval each time it uses Foundry IQ to search the knowledge base, which the client app you complete next will handle.
 
