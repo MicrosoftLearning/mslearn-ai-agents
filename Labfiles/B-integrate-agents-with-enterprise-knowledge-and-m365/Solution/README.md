@@ -34,13 +34,16 @@ This lab can be completed end to end **or one task at a time**. Two things make 
   needs and how to fast-forward.
 - **Setup scripts** in `Labfiles/B-integrate-agents-with-enterprise-knowledge-and-m365/setup/`:
   - `check_env.py --task N` — preflight-checks that `.env` has the keys task *N* needs.
+    Run it as `python ../setup/check_env.py --task N`.
   - `bootstrap_agent.py` — **fast-forwards the Task 1 grounding step in code**: creates and
     grounds `tailwind-knowledge-agent` (File Search over the `data/` knowledge base) and writes
     `AGENT_NAME` to `.env`, so learners can start against a working agent without the portal.
     Idempotent; pass `--force` to recreate.
 
-Both scripts run from the **starter** `Python/` folder and use the shared virtual environment
-and `.env`.
+Both scripts run from the **starter** `Python/` folder
+(`Labfiles/B-integrate-agents-with-enterprise-knowledge-and-m365/Python`, not `Solution/Python/`)
+and use the shared virtual environment and `.env`. That's why the paths above are
+`../setup/...` — `setup/` is a sibling of the starter `Python/` folder.
 
 > **Note**: Task 1 in the portal grounds the agent with **Foundry IQ** (a knowledge source with
 > agentic retrieval and an approval step). `bootstrap_agent.py` uses the simpler **File Search**
@@ -87,12 +90,13 @@ The Task 1 clients load an agent **by name** that you create in the portal:
 2. Add a **Foundry IQ knowledge source** and index the Tailwind Traders docs from `Python/data/`.
 3. Give it instructions to answer store staff questions from the knowledge base. Save the agent.
 
-> **Shortcut**: instead of the portal grounding above, run `python setup/bootstrap_agent.py` from
-> the `Python/` folder to create and ground `tailwind-knowledge-agent` in code (File Search) and
+> **Shortcut**: instead of the portal grounding above, run `python ../setup/bootstrap_agent.py`
+> from the **starter** `Python/` folder (not `Solution/Python/`) to create and ground
+> `tailwind-knowledge-agent` in code (File Search) and
 > write `AGENT_NAME`.
 
 ### 4. Set up the environment once (shared by all code tasks)
-From the `Python/` folder:
+From this folder (`Solution/Python/`):
 ```
 python -m venv labenv
 .\labenv\Scripts\Activate.ps1        # Windows PowerShell
@@ -104,7 +108,7 @@ Then copy `.env.example` to `.env` and fill in the values (all tasks read the sa
 - `AGENT_NAME=tailwind-knowledge-agent` — used by the Task 1 code clients
 
 ### 5. Run each task
-Code tasks run from the single `Python/` folder:
+Code tasks run from the single `Solution/Python/` folder:
 
 | Task | Command | What you get |
 |------|---------|--------------|

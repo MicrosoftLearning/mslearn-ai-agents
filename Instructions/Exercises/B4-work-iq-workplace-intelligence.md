@@ -16,11 +16,10 @@ lab:
 > **Set up (start here):** This task needs a Foundry project (with a deployed model) and the
 > starter code. If you haven't already, complete [Getting started](B0-getting-started.md) to
 > create your project, clone the code, and set `PROJECT_ENDPOINT` and `MODEL_DEPLOYMENT_NAME` in
-> `Python/.env`. Then, from the `Labfiles/B-integrate-agents-with-enterprise-knowledge-and-m365`
-> folder, verify you're ready:
+> `Python/.env`. Then, from the `Python` folder you opened in VS Code, verify you're ready:
 
 ```
-python setup/check_env.py --task 4
+python ../setup/check_env.py --task 4
 ```
 
 > **Note**: This is an **optional/advanced** task that requires a **Microsoft 365 Copilot

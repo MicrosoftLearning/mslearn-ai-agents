@@ -16,11 +16,10 @@ lab:
 > **Set up (start here):** This task needs a Foundry project (with a deployed model) and the
 > starter code. If you haven't already, complete [Getting started](B0-getting-started.md) to
 > create your project, clone the code, and set `PROJECT_ENDPOINT` and `MODEL_DEPLOYMENT_NAME`
-> in `Python/.env`. Then, from the `Labfiles/B-integrate-agents-with-enterprise-knowledge-and-m365`
-> folder, verify you're ready:
+> in `Python/.env`. Then, from the `Python` folder you opened in VS Code, verify you're ready:
 
 ```
-python setup/check_env.py --task 1
+python ../setup/check_env.py --task 1
 ```
 
 > **Continuing from a previous task?** If your project, virtual environment, and `.env` are
@@ -398,7 +397,7 @@ python knowledge_chat_app.py
 A browser opens at `http://localhost:7860` with the **Tailwind Traders Staff Knowledge Assistant**. This variant **auto-approves** the Foundry IQ knowledge tool so the chat stays smooth. Ask it the same questions as above. Close the tab and press **Ctrl+C** to stop it.
 
 > **Fast-forward**: If you'd rather ground an agent in code instead of the portal, run
-> `python setup/bootstrap_agent.py` from the `Python` folder. It creates
+> `python ../setup/bootstrap_agent.py` from the `Python` folder. It creates
 > `tailwind-knowledge-agent`, grounds it on the six knowledge docs with File Search, and writes
 > `AGENT_NAME` to `.env`. The client code you run against it is identical.
 

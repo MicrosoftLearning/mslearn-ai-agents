@@ -33,4 +33,4 @@ Set-EnvValue 'PROJECT_ENDPOINT' $env:PROJECT_ENDPOINT
 Set-EnvValue 'MODEL_DEPLOYMENT_NAME' $env:MODEL_DEPLOYMENT_NAME
 
 Write-Host "Updated $envPath with your provisioned PROJECT_ENDPOINT and MODEL_DEPLOYMENT_NAME."
-Write-Host "Task 1 also needs a grounded agent: run 'python setup/bootstrap_agent.py' to create it."
+Write-Host "Task 1 also needs a grounded agent: from the Python folder, run 'python ../setup/bootstrap_agent.py' to create it."

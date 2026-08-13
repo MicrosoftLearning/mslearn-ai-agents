@@ -16,8 +16,8 @@ lab:
 > **Set up (start here):** This task publishes the grounded `tailwind-knowledge-agent` from
 > [Task 1](B1-create-a-foundry-iq-knowledge-agent.md). If you don't have that agent yet, complete
 > Task 1 first (or, for the quickest path, create and ground it in code with
-> `python setup/bootstrap_agent.py` from the `Labfiles/B-integrate-agents-with-enterprise-knowledge-and-m365`
-> folder). You also need a **Microsoft 365 account with Teams access**. This task is completed
+> `python ../setup/bootstrap_agent.py` from the `Python` folder you opened in VS Code). You
+> also need a **Microsoft 365 account with Teams access**. This task is completed
 > entirely in the portal and Teams — no local code or `.env` file is required.
 
 > **Continuing from a previous task?** If you just finished Task 1 and your

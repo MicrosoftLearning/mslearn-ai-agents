@@ -16,10 +16,11 @@ lab:
 > **Set up (start here):** This task deploys code, so it needs a Foundry project, a deployed
 > model, and the **Azure Developer CLI (`azd`)**. If you haven't already, complete
 > [Getting started](A0-getting-started.md) to create your project and set `PROJECT_ENDPOINT`
-> and `MODEL_DEPLOYMENT_NAME` in `Python/.env`. Then verify:
+> and `MODEL_DEPLOYMENT_NAME` in `Python/.env`. Then, from the `Python` folder you opened in
+> VS Code, verify:
 
 ```
-python setup/check_env.py --task 6
+python ../setup/check_env.py --task 6
 ```
 
 > You also need **`azd` 1.25.3 or later** and the Foundry extension. Install it once with:

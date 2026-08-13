@@ -34,4 +34,4 @@ set_env_value "PROJECT_ENDPOINT" "$PROJECT_ENDPOINT"
 set_env_value "MODEL_DEPLOYMENT_NAME" "$MODEL_DEPLOYMENT_NAME"
 
 echo "Updated $env_path with your provisioned PROJECT_ENDPOINT and MODEL_DEPLOYMENT_NAME."
-echo "Task 3 also needs a grounded agent: run 'python setup/bootstrap_agent.py' to create it."
+echo "Task 3 also needs a grounded agent: from the Python folder, run 'python ../setup/bootstrap_agent.py' to create it."

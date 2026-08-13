@@ -16,10 +16,11 @@ lab:
 > **Set up (start here):** This task needs a Foundry project and the starter code. If you
 > haven't already, complete [Getting started](A0-getting-started.md) to create your project,
 > clone the code, and set `PROJECT_ENDPOINT` and `MODEL_DEPLOYMENT_NAME` in `Python/.env`. The
-> helper file `functions.py` is already in the starter folder. Then verify you're ready:
+> helper file `functions.py` is already in the starter folder. Then, from the `Python` folder
+> you opened in VS Code, verify you're ready:
 
 ```
-python setup/check_env.py --task 4
+python ../setup/check_env.py --task 4
 ```
 
 > **Continuing from a previous task?** If you just finished an earlier task in the same

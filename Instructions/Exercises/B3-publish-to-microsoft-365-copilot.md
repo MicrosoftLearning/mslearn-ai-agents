@@ -15,8 +15,8 @@ lab:
 
 > **Set up (start here):** This task publishes the grounded `tailwind-knowledge-agent` from
 > [Task 1](B1-create-a-foundry-iq-knowledge-agent.md). If you don't have that agent yet, complete
-> Task 1 first (or create and ground it in code with `python setup/bootstrap_agent.py` from the
-> `Labfiles/B-integrate-agents-with-enterprise-knowledge-and-m365` folder). This task is completed
+> Task 1 first (or create and ground it in code with `python ../setup/bootstrap_agent.py` from
+> the `Python` folder you opened in VS Code). This task is completed
 > entirely in the portal and Copilot — no local code or `.env` file is required.
 
 > **Note**: This task requires a **Microsoft 365 Copilot license**. If you don't have one, you can

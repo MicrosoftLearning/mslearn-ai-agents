@@ -17,10 +17,11 @@ lab:
 > starter code. If you haven't already, complete [Getting started](A0-getting-started.md) to
 > create your project, clone the code, and set `PROJECT_ENDPOINT` and `MODEL_DEPLOYMENT_NAME`
 > in `Python/.env`. It reuses `functions.py` from [Task 4](A4-add-custom-function-tools.md) —
-> already in the starter folder, so you don't need to have finished Task 4. Then verify:
+> already in the starter folder, so you don't need to have finished Task 4. Then, from the
+> `Python` folder you opened in VS Code, verify:
 
 ```
-python setup/check_env.py --task 5
+python ../setup/check_env.py --task 5
 ```
 
 > **Continuing from a previous task?** If you just finished an earlier task in the same
