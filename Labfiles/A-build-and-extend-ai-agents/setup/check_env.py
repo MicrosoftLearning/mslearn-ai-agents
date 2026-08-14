@@ -269,8 +269,14 @@ def _scan_for_close(text, quote):
         # statement. end still says where parsing resumes.
         return contents, True, end, False
 
-    recovered, closed, end = _read_quoted(text, quote, escape_aware=False)
-    return recovered, closed, end, False
+    # Recovery. python-dotenv's value pattern failed to match, and it then
+    # resynchronises on the LAST occurrence of the quote character rather than
+    # the first, so everything up to that point is lost. Measured: keys after
+    # that final occurrence survive, and if there are none, nothing does.
+    last = text.rfind(quote, 1)
+    if last == -1:
+        return "", False, len(text), False
+    return text[1:last], True, last + 1, False
 
 
 def _read_quoted(text, quote, escape_aware):
