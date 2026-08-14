@@ -1,0 +1,55 @@
+name: Content checks
+
+# Tier 0: fast, static checks that need no Azure resources and no credentials.
+# These catch the failure modes that actually reach learners - a code block that
+# won't parse, frontmatter that breaks the site build, a link to a page that was
+# renamed, or line endings drifting back to CRLF.
+
+on:
+  pull_request:
+    paths:
+      - "Instructions/**"
+      - "Labfiles/**"
+      - "tools/checks/**"
+      - ".gitattributes"
+      - ".github/workflows/content-checks.yml"
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  content-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          # Matches what the labs tell learners to install ("Python 3.13 or
+          # later") and what they are tested against. Testing on anything else
+          # risks passing on a configuration no learner uses.
+          python-version: "3.13"
+
+      - name: Install check dependencies
+        run: pip install --disable-pip-version-check -r tools/checks/requirements.txt
+
+      # Each check runs as its own step so a failure is obvious in the UI, and
+      # always() means one failing check doesn't hide the others.
+      - name: Frontmatter is valid
+        if: always()
+        run: python tools/checks/check_frontmatter.py
+
+      - name: Python code blocks parse
+        if: always()
+        run: python tools/checks/check_code_blocks.py
+
+      - name: Links and media resolve
+        if: always()
+        run: python tools/checks/check_links.py
+
+      - name: Line endings match .gitattributes
+        if: always()
+        run: python tools/checks/check_line_endings.py

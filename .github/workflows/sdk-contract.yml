@@ -1,0 +1,117 @@
+name: SDK contract
+
+# Tier 1: install each lab's pinned requirements, import the modules the lab
+# ships, and assert the SDK symbols and keyword arguments the instructions use
+# still exist.
+#
+# No Azure resources, no credentials, no spend - so this can run nightly and
+# give early warning before a learner hits a broken lab.
+#
+# It runs twice per lab:
+#   pinned  - the versions in requirements.txt. A failure means something was
+#             yanked or a transitive dependency broke.
+#   latest  - unpinned. A failure is early warning for the next version bump,
+#             so it does not fail the job.
+
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  pull_request:
+    paths:
+      - "Labfiles/**/requirements.txt"
+      - "tools/checks/check_sdk_contract.py"
+      - ".github/workflows/sdk-contract.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      labs: ${{ steps.list.outputs.labs }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - id: list
+        run: |
+          labs=$(python tools/checks/check_sdk_contract.py --list | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          echo "labs=$labs" >> "$GITHUB_OUTPUT"
+
+  contract:
+    needs: discover
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        lab: ${{ fromJSON(needs.discover.outputs.labs) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          # Matches what the labs tell learners to install ("Python 3.13 or
+          # later") and what they are tested against. Testing on anything else
+          # risks passing on a configuration no learner uses.
+          python-version: "3.13"
+
+      - name: Install pinned requirements
+        run: |
+          pip install --disable-pip-version-check -r tools/checks/requirements.txt
+          pip install --disable-pip-version-check -r "Labfiles/${{ matrix.lab }}/Python/requirements.txt"
+
+      - name: Check SDK contract (pinned)
+        run: python tools/checks/check_sdk_contract.py --lab "${{ matrix.lab }}"
+
+      - name: Check SDK contract (latest, advisory)
+        continue-on-error: true
+        run: |
+          sed -E 's/[=<>~!]=.*//' "Labfiles/${{ matrix.lab }}/Python/requirements.txt" > /tmp/latest.txt
+          pip install --disable-pip-version-check --upgrade -r /tmp/latest.txt
+          python tools/checks/check_sdk_contract.py --lab "${{ matrix.lab }}"
+
+  report:
+    needs: contract
+    if: failure() && github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      # These labs are maintained asynchronously, so a red badge nobody is
+      # watching is worth nothing. Open an issue instead.
+      - name: Open an issue for the failure
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = 'SDK contract check failed';
+            const url = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'sdk-contract',
+            });
+            if (existing.data.length > 0) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.data[0].number,
+                body: `Nightly SDK contract check failed again: ${url}`,
+              });
+              return;
+            }
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              labels: ['sdk-contract'],
+              body: [
+                'The nightly SDK contract check failed, which usually means a',
+                'package the labs depend on changed an import path or a keyword',
+                'argument.',
+                '',
+                `Run: ${url}`,
+              ].join('\n'),
+            });
