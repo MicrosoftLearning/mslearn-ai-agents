@@ -29,3 +29,11 @@ labs:
     hint: >-
       Task 3 (remote agents) also reads SERVER_URL and the *_PORT values, which
       ship pre-filled in .env.example.
+
+  D-observe-evaluate-and-secure-agents:
+    azd_name: tailwind-traders-observability-lab
+    description: the Tailwind Traders observability lab
+    hint: >-
+      Task 1 needs Application Insights connected to your project (Agents >
+      Traces > Connect in the portal), and Task 2 needs a grounded agent to
+      evaluate: from the Python folder, run 'python ../setup/bootstrap_agent.py'.
