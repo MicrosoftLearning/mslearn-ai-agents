@@ -1,0 +1,19 @@
+# Normalize line endings so lab content doesn't diverge between branches.
+# Without this, files edited on Windows land as CRLF and every sync from main
+# produces conflicts on files nobody actually changed.
+
+* text=auto eol=lf
+
+# Windows-only scripts must keep CRLF to run correctly.
+*.ps1 text eol=crlf
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# Binary assets — never touch.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.pdf binary
+*.zip binary
+*.docx binary
