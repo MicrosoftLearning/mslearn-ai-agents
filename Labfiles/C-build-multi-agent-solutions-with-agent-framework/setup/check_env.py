@@ -40,19 +40,95 @@ from pathlib import Path
 def read_env_file(env_path):
     """Parse a .env file into a dict, using only the standard library.
 
-    Mirrors python-dotenv's dotenv_values() for the syntax these labs use:
-    comments, blank lines, 'export KEY=value', single- and double-quoted values,
-    inline comments after unquoted values, and bare keys (value None). Reads as
-    utf-8-sig so a Notepad-saved .env carrying a UTF-8 BOM still resolves its
-    first key. Returns an empty dict if the file cannot be read.
+    Matches python-dotenv's dotenv_values() for every well-formed .env these
+    labs use: comments, blank lines, 'export KEY=value' (space or tab), single-
+    and double-quoted values, escape sequences inside double quotes, inline
+    comments after a value, and bare keys (value None). Returns an empty dict
+    if the file cannot be read.
+
+    Matching python-dotenv matters because the lab apps load .env with
+    python-dotenv: whatever it returns is what the app actually sees, so the
+    preflight has to agree with it rather than be a "better" parser.
+
+    Malformed files are handled by find_env_problems() instead -- see the note
+    there for why this function does not try to imitate python-dotenv's
+    behaviour on broken input.
+    """
+    values, _ = _parse(env_path)
+    return values
+
+
+def find_env_problems(env_path):
+    """Return a list of (summary, advice) for defects that break the lab apps.
+
+    Some .env defects do not make a key "missing" so much as make the file
+    unusable in ways the learner cannot see. For those we refuse to give a
+    per-key verdict at all: reporting "[OK] PROJECT_ENDPOINT" for a file the
+    app cannot read would be a false positive, and reporting unrelated keys as
+    MISSING would send the learner hunting the wrong problem. Instead we name
+    the defect, explain the cause, and exit non-zero.
+
+    Detected:
+
+    * UTF-8 BOM. python-dotenv does not strip it, so it becomes part of the
+      first setting's NAME and the app's os.getenv() for that setting returns
+      None even though the file looks correct.
+    * Unterminated quote. python-dotenv treats the opening quote as the start
+      of a multi-line value. What that costs depends on the rest of the file:
+      with no later quote it drops just that entry, but if a quote appears
+      further down it swallows everything in between, silently wiping settings
+      that are themselves written correctly.
+    """
+    problems = []
+    if _has_bom(env_path):
+        problems.append((
+            ".env starts with a UTF-8 BOM",
+            "Your .env was saved as 'UTF-8 with BOM' (Notepad does this by\n"
+            "    default). The BOM becomes part of the first setting's name, so the\n"
+            "    lab apps read that setting as empty even though the file looks\n"
+            "    correct. Re-save as plain UTF-8: in VS Code click the encoding\n"
+            "    indicator in the status bar, choose 'Save with Encoding', then\n"
+            "    'UTF-8' (not 'UTF-8 with BOM').",
+        ))
+
+    _, open_quote_line = _parse(env_path)
+    if open_quote_line is not None:
+        number, text = open_quote_line
+        problems.append((
+            f"unterminated quote on line {number} of .env",
+            f"That line is:  {text}\n"
+            "    It opens a quote that is never closed. The lab apps then treat\n"
+            "    everything after it as part of that one value, which can silently\n"
+            "    wipe out settings further down the file. Close the quote, or\n"
+            "    remove both quotes -- values in .env do not need them.",
+        ))
+    return problems
+
+
+def _has_bom(env_path):
+    """True if the file starts with a UTF-8 BOM."""
+    try:
+        with open(env_path, "rb") as handle:
+            return handle.read(3) == b"\xef\xbb\xbf"
+    except OSError:
+        return False
+
+
+def _parse(env_path):
+    """Return (values, first_unterminated_quote) for a .env file.
+
+    first_unterminated_quote is None, or (line_number, stripped_line).
     """
     values = {}
+    bad_quote = None
     try:
+        # utf-8-sig strips a BOM so the remaining keys are reported accurately.
+        # The BOM itself is surfaced separately by find_env_problems().
         text = Path(env_path).read_text(encoding="utf-8-sig")
     except OSError:
-        return values
+        return values, bad_quote
 
-    for raw_line in text.splitlines():
+    for number, raw_line in enumerate(text.splitlines(), start=1):
         line = raw_line.strip()
         if not line or line.startswith("#"):
             continue
@@ -69,10 +145,10 @@ def read_env_file(env_path):
 
         value = value.strip()
         if value[:1] in ("'", '"'):
-            quote = value[0]
-            inner, closed = _read_quoted(value, quote)
+            inner, closed = _read_quoted(value, value[0])
             if not closed:
-                # Unterminated quote: python-dotenv discards the whole entry.
+                if bad_quote is None:
+                    bad_quote = (number, line)
                 continue
             # Anything after the closing quote (such as ' # comment') is dropped.
             value = inner
@@ -82,21 +158,27 @@ def read_env_file(env_path):
             value = value.strip()
         values[key] = value
 
-    return values
+    return values, bad_quote
+
+
+# Escape sequences python-dotenv expands inside double-quoted values.
+_ESCAPES = {"n": "\n", "t": "\t", "r": "\r", "\\": "\\", "'": "'", '"': '"'}
 
 
 def _read_quoted(value, quote):
     """Return (contents, closed) for a value that starts with a quote character.
 
-    A '#' inside the quotes is data, not a comment. Backslash escapes are
-    honored inside double quotes, matching python-dotenv.
+    A '#' inside the quotes is data, not a comment. Inside double quotes,
+    backslash escapes are expanded in a single pass, so an escaped quote does
+    not end the value and a literal backslash is never re-interpreted.
     """
     chars = []
     index = 1
     while index < len(value):
         char = value[index]
         if char == "\\" and quote == '"' and index + 1 < len(value):
-            chars.append(value[index + 1])
+            following = value[index + 1]
+            chars.append(_ESCAPES.get(following, "\\" + following))
             index += 2
             continue
         if char == quote:
@@ -130,16 +212,32 @@ ALL_KEYS = [
     "ROUTING_AGENT_PORT",
 ]
 
-# Placeholder text shipped in .env.example — present but not yet filled in.
-PLACEHOLDERS = {
-    "",
-    "your_project_endpoint_here",
-    "your_model_deployment_name_here",
-    "your-project-endpoint",
-    "your-model-deployment-name",
-    "<your-project-endpoint>",
-    "<your-model-deployment-name>",
-}
+def looks_like_placeholder(value):
+    """True if the value is still example text rather than a real setting.
+
+    Matched by shape rather than an exact list. The shipped .env.example files
+    have used both 'your-project-endpoint' and 'your_project_endpoint_here',
+    and an exact list silently rots the moment one of them changes -- which is
+    exactly what happened: a learner could copy .env.example verbatim, change
+    nothing, and be told they were ready to start.
+
+    Anything empty, wrapped in angle brackets, or whose first word is "your"
+    counts as unfilled. Real defaults these labs ship (tailwind-agent,
+    tailwind-knowledge-agent, localhost, port numbers) do not match.
+
+    This deliberately errs toward "not filled in": a real value beginning with
+    the word "your" would be flagged, but none of these keys takes one (they
+    hold a URL, a model deployment name, a slug or a port). Being told to
+    double-check a key you did set is recoverable; being told you are ready
+    when you are not is the failure this whole script exists to prevent.
+    """
+    text = value.strip()
+    if not text:
+        return True
+    if text.startswith("<") and text.endswith(">"):
+        return True
+    words = text.replace("-", " ").replace("_", " ").lower().split()
+    return bool(words) and words[0] == "your"
 
 # How to fix each key, shown only when it's missing.
 FIX_HINTS = {
@@ -199,9 +297,16 @@ def load_values(env_path):
 
 def is_set(values, key):
     """A key counts as set if it's present and not a leftover placeholder."""
-    value = (values.get(key) or "").strip()
-    return bool(value) and value not in PLACEHOLDERS
+    return not looks_like_placeholder(values.get(key) or "")
 
+
+
+def report_problems(problems):
+    """Print each .env defect and how to fix it."""
+    print()
+    print("Fix your .env before starting this task:")
+    for summary, advice in problems:
+        print(f"\n  {summary}\n    {advice}")
 
 def main():
     parser = argparse.ArgumentParser(
@@ -219,10 +324,20 @@ def main():
     env_path = find_env_file()
     values = load_values(env_path)
     required = TASK_REQUIREMENTS[args.task]
+    problems = find_env_problems(env_path) if env_path.exists() else []
 
     print(f"Checking readiness for Task {args.task}")
     print(f"Reading: {env_path}{'' if env_path.exists() else '  (not found yet)'}")
     print()
+
+    # A malformed .env is reported on its own. Listing keys as OK/MISSING
+    # alongside it would either claim a broken file is fine, or point the
+    # learner at keys that are only "missing" because of the real defect.
+    if problems:
+        for summary, _ in problems:
+            print(f"  [PROBLEM] {summary}")
+        report_problems(problems)
+        return 1
 
     missing = [key for key in required if not is_set(values, key)]
 
