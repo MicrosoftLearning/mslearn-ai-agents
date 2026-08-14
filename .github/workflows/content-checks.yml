@@ -6,13 +6,10 @@ name: Content checks
 # renamed, or line endings drifting back to CRLF.
 
 on:
+  # No path filter: the whole suite takes about ten seconds, and filtering
+  # only creates blind spots. A change to _includes or a root markdown file
+  # can break every lab page, so it should be checked too.
   pull_request:
-    paths:
-      - "Instructions/**"
-      - "Labfiles/**"
-      - "tools/checks/**"
-      - ".gitattributes"
-      - ".github/workflows/content-checks.yml"
   push:
     branches: [main]
   workflow_dispatch:

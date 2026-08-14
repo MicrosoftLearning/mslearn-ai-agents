@@ -18,7 +18,7 @@ Each script exits non-zero when it finds a problem and prints the file and line.
 In GitHub Actions the same output becomes an inline annotation on the pull
 request diff.
 
-## Tier 0 — content checks (every pull request)
+## Tier 0 — content checks (every pull request, and every push to `main`)
 
 | Check | What it catches |
 | --- | --- |
@@ -47,6 +47,11 @@ indentation` and `fix code sample indentation` fixes on `main`.
 every module and symbol the lab imports still resolves — both in the Python
 files the lab ships **and in the code blocks the instructions tell learners to
 paste**.
+
+It runs nightly, and on any pull request that touches a `requirements.txt`, the
+check itself, or its workflow — the changes most likely to break it. It is
+path-filtered because it installs dependencies across a matrix of every lab,
+which is too slow to run on unrelated pull requests.
 
 This targets the breakages this repo actually hits, which are import- and
 signature-level:
