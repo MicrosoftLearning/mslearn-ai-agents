@@ -47,13 +47,15 @@ This lab can be completed end to end **or one task at a time**. Two things make 
   needs and how to fast-forward.
 - **Setup scripts** in `Labfiles/A-build-and-extend-ai-agents/setup/`:
   - `check_env.py --task N` — preflight-checks that `.env` has the keys task *N* needs.
+    Run it as `python ../setup/check_env.py --task N`.
   - `bootstrap_agent.py` — **fast-forwards Task 1 in code**: creates and grounds
     `tailwind-agent` (File Search on `Store_Policy.txt` + Code Interpreter on `weekly_sales.csv`)
     and writes `AGENT_NAME` to `.env`, so learners can start at **Task 3** without the portal.
     Idempotent; pass `--force` to recreate.
 
-Both scripts run from the **starter** `Python/` folder and use the shared virtual environment
-and `.env`.
+Both scripts run from the **starter** `Python/` folder (`Labfiles/A-build-and-extend-ai-agents/Python`,
+not `Solution/Python/`) and use the shared virtual environment and `.env`. That's why the paths
+above are `../setup/...` — `setup/` is a sibling of the starter `Python/` folder.
 
 ### Optional: provision infrastructure with azd
 
@@ -95,7 +97,7 @@ traceback prints in the terminal**.
 ### 3. Create the portal agent (Task 1 — required for Task 3)
 The Task 3 client loads an agent **by name** that you create in the portal:
 1. In the Foundry portal, create an agent named **`tailwind-agent`**.
-2. Ground it: upload **`Store_Policy.txt`** (from `Python/`) and give it instructions to
+2. Ground it: upload **`Store_Policy.txt`** (from `Solution/Python/`) and give it instructions to
    answer from store policy.
 3. For Task 3's chart demo, add the **Code interpreter** tool and upload **`weekly_sales.csv`**
    (from the same folder). Save the agent.
@@ -103,11 +105,12 @@ The Task 3 client loads an agent **by name** that you create in the portal:
 > Tasks 4 and 5 create their own agents in code (`trip-planner-agent`, `tailwind-assistant`)
 > and delete them on exit — no portal work needed for those.
 
-> **Shortcut**: instead of the portal steps above, run `python setup/bootstrap_agent.py` from
-> the `Python/` folder to create and ground `tailwind-agent` in code and write `AGENT_NAME`.
+> **Shortcut**: instead of the portal steps above, run `python ../setup/bootstrap_agent.py`
+> from the **starter** `Python/` folder (not `Solution/Python/`) to create and ground
+> `tailwind-agent` in code and write `AGENT_NAME`.
 
 ### 4. Set up the environment once (shared by all tasks)
-From the `Python/` folder:
+From this folder (`Solution/Python/`):
 ```
 python -m venv labenv
 .\labenv\Scripts\Activate.ps1        # Windows PowerShell
@@ -119,7 +122,7 @@ Then copy `.env.example` to `.env` and fill in the values (all tasks read the sa
 - `AGENT_NAME=tailwind-agent` — used by Task 3
 
 ### 5. Run each task
-All commands run from the single `Python/` folder:
+All commands run from the single `Solution/Python/` folder:
 
 | Task | Command | What you get |
 |------|---------|--------------|
@@ -140,5 +143,5 @@ agent" section in the exercise instructions.
 
 ## Quick sanity checks that DON'T need Azure
 - `python -m py_compile <file>` — all solution files compile.
-- From `Python/`: `python -c "import functions; print(functions.calculate_rental_cost('premium', 5, 'priority'))"`
+- From `Solution/Python/`: `python -c "import functions; print(functions.calculate_rental_cost('premium', 5, 'priority'))"`
   should show a total cost of **$1,875** (premium $300/day × 5 × priority 1.25).

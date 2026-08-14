@@ -16,10 +16,10 @@ lab:
 > **Set up (start here):** This task needs a Foundry project and the starter code. If you
 > haven't already, complete [Getting started](C0-getting-started.md) to create your project,
 > clone the code, and set `PROJECT_ENDPOINT` and `MODEL_DEPLOYMENT_NAME` in `Python/.env`.
-> Then, from the `Labfiles/C-build-multi-agent-solutions-with-agent-framework` folder, verify you're ready:
+> Then, from the `Python` folder you opened in VS Code, verify you're ready:
 
 ```
-python setup/check_env.py --task 4
+python ../setup/check_env.py --task 4
 ```
 
 > **Continuing from a previous task?** If you just finished an earlier task in the same

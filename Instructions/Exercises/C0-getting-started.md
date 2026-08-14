@@ -111,14 +111,19 @@ creates the Foundry resource, a project, and a model deployment for you.
 ## Check you're ready for a task
 
 Each task needs specific values in your `.env`. Before starting a task, run the preflight
-check from the `Labfiles/C-build-multi-agent-solutions-with-agent-framework` folder — it reads
+check from the `Python` folder you opened in VS Code — it reads
 your `.env` and tells you what (if anything) is missing:
 
 ```
-python setup/check_env.py --task 1
+python ../setup/check_env.py --task 1
 ```
 
-Swap `1` for the task number you're about to start. That's it — head to any task:
+Swap `1` for the task number you're about to start.
+
+> **Tip**: The preflight check uses only the Python standard library, so it's safe to run
+> before `pip install` and without the virtual environment active.
+
+That's it — head to any task:
 
 | Task | Page |
 | --- | --- |

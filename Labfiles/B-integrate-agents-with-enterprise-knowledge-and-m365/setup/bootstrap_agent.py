@@ -3,9 +3,13 @@ Fast-forward setup for the Tailwind Traders enterprise-knowledge lab.
 
 Task 1 has you build an enterprise-knowledge agent and ground it on the Tailwind
 Traders knowledge base. If you'd rather jump straight to connecting from code (or
-to an optional task), run this once to create a grounded agent for you:
+to an optional task), run this once to create a grounded agent for you.
 
-    python setup/bootstrap_agent.py
+Run it from the lab's starter code folder —
+Labfiles/B-integrate-agents-with-enterprise-knowledge-and-m365/Python, the folder you
+open in VS Code — with the lab virtual environment active:
+
+    python ../setup/bootstrap_agent.py
 
 It reproduces, in code, the grounding step Task 1 has you do in the portal:
 

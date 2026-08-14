@@ -3,9 +3,12 @@ Fast-forward setup for the Tailwind Traders lab.
 
 Task 3 needs the grounded agent you would normally build by hand in Task 1
 (and extend at the start of Task 3). If you're starting at Task 3 on its own,
-run this once to create that agent for you:
+run this once to create that agent for you.
 
-    python setup/bootstrap_agent.py
+Run it from the lab's starter code folder — Labfiles/A-build-and-extend-ai-agents/Python,
+the folder you open in VS Code — with the lab virtual environment active:
+
+    python ../setup/bootstrap_agent.py
 
 It reproduces, in code, exactly what Tasks 1 and 3 have you do in the portal:
 
@@ -142,7 +145,7 @@ def main():
         project_client.get_openai_client() as openai_client,
     ):
         if agent_exists(project_client) and not args.force:
-            print(f"\nAgent '{AGENT_NAME}' already exists — nothing to do.")
+            print(f"\nAgent '{AGENT_NAME}' already exists - nothing to do.")
             print("Re-run with --force to add a new grounded version.")
             set_env_value("AGENT_NAME", AGENT_NAME)
             print(f"Ensured AGENT_NAME={AGENT_NAME} in {ENV_PATH}")

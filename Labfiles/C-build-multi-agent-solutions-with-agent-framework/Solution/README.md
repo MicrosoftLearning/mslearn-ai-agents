@@ -39,9 +39,12 @@ This lab can be completed end to end **or one task at a time**. Two things make 
   needs and how to fast-forward.
 - **Setup scripts** in `Labfiles/C-build-multi-agent-solutions-with-agent-framework/setup/`:
   - `check_env.py --task N` — preflight-checks that `.env` has the keys task *N* needs.
+    Run it as `python ../setup/check_env.py --task N`.
 
-Both scripts run from the **starter** `Python/` folder and use the shared virtual environment
-and `.env`.
+The script runs from the **starter** `Python/` folder
+(`Labfiles/C-build-multi-agent-solutions-with-agent-framework/Python`, not `Solution/Python/`)
+and uses the shared virtual environment and `.env`. That's why the path above is
+`../setup/...` — `setup/` is a sibling of the starter `Python/` folder.
 
 ### Optional: provision infrastructure with azd
 
@@ -80,7 +83,7 @@ Sign in with the same account that has access to the project. Every task authent
 fails at run time.
 
 ### 3. Set up the environment once (shared by all tasks)
-From the `Python/` folder:
+From this folder (`Solution/Python/`):
 ```
 python -m venv labenv
 .\labenv\Scripts\Activate.ps1        # Windows PowerShell
@@ -93,7 +96,7 @@ Then copy `.env.example` to `.env` and fill in the values (all tasks read the sa
   (these ship pre-filled in `.env.example`)
 
 ### 4. Run each task
-All commands run from the single `Python/` folder:
+All commands run from the single `Solution/Python/` folder:
 
 | Task | Command | What you get |
 |------|---------|--------------|
@@ -110,5 +113,5 @@ Press Ctrl+C in the `run_all.py` terminal to stop every server.
 
 ## Quick sanity checks that DON'T need Azure
 - `python -m py_compile <file>` — all solution files compile.
-- From `Python/`: `python -c "print(open('data.txt').read())"` prints the Tailwind Traders
+- From `Solution/Python/`: `python -c "print(open('data.txt').read())"` prints the Tailwind Traders
   guided-trip expense data that Task 1's agent reads.

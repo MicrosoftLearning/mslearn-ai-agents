@@ -84,8 +84,8 @@ creates the Foundry resource, a project, and a model deployment for you.
 
     > **Note**: This provisions the resources but does **not** create the grounded portal
     > agent — Task 1 does that. If you're starting at Task 3, run
-    > `python setup/bootstrap_agent.py` after `azd up` to create it. When you're done with
-    > the lab, run `azd down` to delete everything it created.
+    > `python ../setup/bootstrap_agent.py` from the `Python` folder after `azd up` to create
+    > it. When you're done with the lab, run `azd down` to delete everything it created.
 
 ## Get the starter code
 
@@ -112,14 +112,19 @@ creates the Foundry resource, a project, and a model deployment for you.
 ## Check you're ready for a task
 
 Each task needs specific values in your `.env`. Before starting a task, run the preflight
-check from the `Labfiles/A-build-and-extend-ai-agents` folder — it reads your `.env` and
+check from the `Python` folder you opened in VS Code — it reads your `.env` and
 tells you what (if anything) is missing:
 
 ```
-python setup/check_env.py --task 2
+python ../setup/check_env.py --task 2
 ```
 
-Swap `2` for the task number you're about to start. That's it — head to any task:
+Swap `2` for the task number you're about to start.
+
+> **Tip**: The preflight check uses only the Python standard library, so it's safe to run
+> before `pip install` and without the virtual environment active.
+
+That's it — head to any task:
 
 | Task | Page |
 | --- | --- |

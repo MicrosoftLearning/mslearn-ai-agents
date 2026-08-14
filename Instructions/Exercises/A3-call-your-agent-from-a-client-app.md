@@ -18,17 +18,17 @@ lab:
 > clone the code, and set `PROJECT_ENDPOINT` in `Python/.env`.
 
 This task drives a **grounded agent**. The quickest way to get one is to create it in code —
-from the `Labfiles/A-build-and-extend-ai-agents` folder, run:
+from the `Python` folder you opened in VS Code, run:
 
 ```
-python setup/bootstrap_agent.py
+python ../setup/bootstrap_agent.py
 ```
 
 That creates and grounds `tailwind-agent` — including the **Code Interpreter** tool with the
 sales data already attached — and writes `AGENT_NAME` into your `.env`. Then verify you're ready:
 
 ```
-python setup/check_env.py --task 3
+python ../setup/check_env.py --task 3
 ```
 
 > **Already built the agent in [Task 1](A1-create-and-ground-an-agent.md)?** Use it instead
@@ -48,7 +48,7 @@ not the interface.
 
 **Set up:**
 
-If you ran `python setup/bootstrap_agent.py` above, your agent, its **Code Interpreter** tool,
+If you ran `python ../setup/bootstrap_agent.py` above, your agent, its **Code Interpreter** tool,
 and `AGENT_NAME` are already configured — activate your virtual environment
 (`.\labenv\Scripts\Activate.ps1`) and skip to **Try it first**.
 
