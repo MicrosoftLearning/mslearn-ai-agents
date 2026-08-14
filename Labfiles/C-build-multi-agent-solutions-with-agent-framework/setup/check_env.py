@@ -40,44 +40,29 @@ from pathlib import Path
 def read_env_file(env_path):
     """Parse a .env file into a dict, using only the standard library.
 
-    Matches python-dotenv's dotenv_values() for every well-formed .env these
-    labs use: comments, blank lines, 'export KEY=value' (space or tab), single-
+    Matches python-dotenv's dotenv_values() for every .env shape these labs can
+    encounter: comments, blank lines, 'export KEY=value' (space or tab), single-
     and double-quoted values, escape sequences inside double quotes, inline
-    comments after a value, and bare keys (value None). Returns an empty dict
-    if the file cannot be read.
+    comments, values quoted across several lines, and bare keys (value None).
 
     Matching python-dotenv matters because the lab apps load .env with
-    python-dotenv: whatever it returns is what the app actually sees, so the
-    preflight has to agree with it rather than be a "better" parser.
+    python-dotenv. Whatever it returns is what the app actually sees, so the
+    preflight has to agree with it rather than be a "better" parser -- a parser
+    that is more forgiving than the runtime reports keys as present that the
+    app cannot read.
 
-    Malformed files are handled by find_env_problems() instead -- see the note
-    there for why this function does not try to imitate python-dotenv's
-    behaviour on broken input.
+    Returns an empty dict if the file cannot be read.
     """
     values, _ = _parse(env_path)
     return values
 
 
 def find_env_problems(env_path):
-    """Return a list of (summary, advice) for defects that break the lab apps.
+    """Return a list of (summary, advice) for defects that always break the app.
 
-    Some .env defects do not make a key "missing" so much as make the file
-    unusable in ways the learner cannot see. For those we refuse to give a
-    per-key verdict at all: reporting "[OK] PROJECT_ENDPOINT" for a file the
-    app cannot read would be a false positive, and reporting unrelated keys as
-    MISSING would send the learner hunting the wrong problem. Instead we name
-    the defect, explain the cause, and exit non-zero.
-
-    Detected:
-
-    * UTF-8 BOM. python-dotenv does not strip it, so it becomes part of the
-      first setting's NAME and the app's os.getenv() for that setting returns
-      None even though the file looks correct.
-    * Unterminated quote. python-dotenv treats the opening quote as the start
-      of a multi-line value. What that costs depends on the rest of the file:
-      with no later quote it drops just that entry, but if a quote appears
-      further down it swallows everything in between, silently wiping settings
-      that are themselves written correctly.
+    Only a BOM qualifies: it always corrupts the name of the first setting, so
+    the file cannot work no matter which task the learner is starting. Other
+    malformations are impact-dependent and come back from find_env_notes().
     """
     problems = []
     if _has_bom(env_path):
@@ -90,19 +75,52 @@ def find_env_problems(env_path):
             "    indicator in the status bar, choose 'Save with Encoding', then\n"
             "    'UTF-8' (not 'UTF-8 with BOM').",
         ))
-
-    _, open_quote_line = _parse(env_path)
-    if open_quote_line is not None:
-        number, text = open_quote_line
-        problems.append((
-            f"unterminated quote on line {number} of .env",
-            f"That line is:  {text}\n"
-            "    It opens a quote that is never closed. The lab apps then treat\n"
-            "    everything after it as part of that one value, which can silently\n"
-            "    wipe out settings further down the file. Close the quote, or\n"
-            "    remove both quotes -- values in .env do not need them.",
-        ))
     return problems
+
+
+def find_env_notes(env_path):
+    """Return a list of (summary, advice) for malformed lines in the .env.
+
+    These are reported but not automatically fatal. A stray quote only matters
+    if it actually costs the learner a setting the task needs: an unterminated
+    quote with nothing after it to swallow leaves a working file, and failing
+    that would be its own false alarm. The caller decides, by checking whether
+    the keys the task needs came through.
+
+    Detection reads the file directly rather than inferring from parser output,
+    because python-dotenv reports malformed statements to stderr and simply
+    omits them from its result -- the app just sees a setting vanish with no
+    indication of why.
+    """
+    notes = []
+    _, defects = _parse(env_path)
+    for kind, number, text in defects:
+        if kind == "unterminated":
+            notes.append((
+                f"unterminated quote on line {number} of .env",
+                f"That line is:  {text}\n"
+                "    It opens a quote that is never closed, so the lab apps drop\n"
+                "    that setting entirely. Close the quote, or remove both quotes\n"
+                "    -- values in .env do not need them.",
+            ))
+        elif kind == "swallowed":
+            notes.append((
+                f"quote opened on line {number} of .env is closed much later",
+                f"That line is:  {text}\n"
+                "    Everything up to the next quote further down the file becomes\n"
+                "    part of this one value, so the settings in between are lost\n"
+                "    even though they look correct. Close the quote on this line,\n"
+                "    or remove both quotes.",
+            ))
+        elif kind == "trailing":
+            notes.append((
+                f"unexpected text after the quoted value on line {number} of .env",
+                f"That line is:  {text}\n"
+                "    python-dotenv cannot parse the line, so the lab apps drop that\n"
+                "    setting. Keep the value inside one pair of quotes, and put\n"
+                "    nothing after the closing quote except a # comment.",
+            ))
+    return notes
 
 
 def _has_bom(env_path):
@@ -114,22 +132,45 @@ def _has_bom(env_path):
         return False
 
 
-def _parse(env_path):
-    """Return (values, first_unterminated_quote) for a .env file.
+def _looks_like_assignment(line):
+    """True for a line shaped like KEY=..., used to spot swallowed settings."""
+    head = line.strip().partition("=")
+    if not head[1]:
+        return False
+    name = head[0].strip()
+    if name.startswith("export "):
+        name = name[len("export "):].strip()
+    return bool(name) and name.replace("_", "").isalnum()
 
-    first_unterminated_quote is None, or (line_number, stripped_line).
+
+def _parse(env_path):
+    """Return (values, defects).
+
+    defects is a list of (kind, line_number, line_text) where kind is one of
+    "unterminated", "swallowed" or "trailing".
+
+    Quoted values are resolved with a lookahead that only advances when a
+    closing quote is actually found, which is what python-dotenv does: a quote
+    closed on a later line is a legitimate multi-line value, while a quote that
+    is never closed makes python-dotenv discard that statement and resume at
+    the next line.
     """
     values = {}
-    bad_quote = None
+    defects = []
     try:
         # utf-8-sig strips a BOM so the remaining keys are reported accurately.
         # The BOM itself is surfaced separately by find_env_problems().
         text = Path(env_path).read_text(encoding="utf-8-sig")
     except OSError:
-        return values, bad_quote
+        return values, defects
 
-    for number, raw_line in enumerate(text.splitlines(), start=1):
-        line = raw_line.strip()
+    lines = text.splitlines()
+    index = 0
+    while index < len(lines):
+        number = index + 1
+        line = lines[index].strip()
+        index += 1
+
         if not line or line.startswith("#"):
             continue
         if line.startswith("export ") or line.startswith("export\t"):
@@ -144,48 +185,122 @@ def _parse(env_path):
             continue
 
         value = value.strip()
-        if value[:1] in ("'", '"'):
-            inner, closed = _read_quoted(value, value[0])
-            if not closed:
-                if bad_quote is None:
-                    bad_quote = (number, line)
-                continue
-            # Anything after the closing quote (such as ' # comment') is dropped.
-            value = inner
-        else:
+        if value[:1] not in ("'", '"'):
             for comment_marker in (" #", "\t#"):
                 value = value.split(comment_marker, 1)[0]
-            value = value.strip()
-        values[key] = value
+            values[key] = value.strip()
+            continue
 
-    return values, bad_quote
+        quote = value[0]
+        # Join the rest of the file so a value may close on a later line.
+        rest = "\n".join([value] + lines[index:])
+        inner, closed, end, usable = _scan_for_close(rest, quote)
+        if not closed:
+            defects.append(("unterminated", number, line))
+            continue
+
+        consumed = rest.count("\n", 0, end)
+        if not usable:
+            # python-dotenv cannot parse the statement and drops it. If the
+            # quote also spanned lines, report it as a swallow: the settings it
+            # ate are the part the learner can actually see and act on.
+            defects.append(("swallowed" if consumed else "trailing", number, line))
+            index += consumed
+            continue
+
+        if consumed:
+            swallowed = lines[index:index + consumed]
+            if any(_looks_like_assignment(item) for item in swallowed):
+                defects.append(("swallowed", number, line))
+            index += consumed
+
+        values[key] = inner
+
+    return values, defects
 
 
-# Escape sequences python-dotenv expands inside double-quoted values.
-_ESCAPES = {"n": "\n", "t": "\t", "r": "\r", "\\": "\\", "'": "'", '"': '"'}
+# Escape sequences python-dotenv decodes, per quote character. Double quotes
+# take the full set; single quotes decode only the delimiter and a literal
+# backslash, so '\n' inside single quotes stays as a backslash and an n.
+# Anything not listed keeps its backslash.
+_ESCAPES = {
+    '"': {
+        "a": "\a",
+        "b": "\b",
+        "f": "\f",
+        "n": "\n",
+        "r": "\r",
+        "t": "\t",
+        "v": "\v",
+        '"': '"',
+        "'": "'",
+        "\\": "\\",
+    },
+    "'": {"'": "'", "\\": "\\"},
+}
 
 
-def _read_quoted(value, quote):
-    """Return (contents, closed) for a value that starts with a quote character.
+def _scan_for_close(text, quote):
+    """Find where a quoted value ends, the way python-dotenv does.
 
-    A '#' inside the quotes is data, not a comment. Inside double quotes,
-    backslash escapes are expanded in a single pass, so an escaped quote does
-    not end the value and a literal backslash is never re-interpreted.
+    Returns (contents, closed, end_index, usable). usable is False when
+    python-dotenv could not parse the statement and dropped it, in which case
+    end_index still says where parsing resumes.
+
+    Two passes, matching python-dotenv:
+
+    1. Escape-aware, using the escape set for whichever character opened the
+       value (see _ESCAPES). A backslash-escaped quote is skipped rather than
+       treated as the close. If this closes with nothing but whitespace or a
+       comment after it, the value is good.
+    2. Raw, only if the first pass finds no close anywhere. Nothing is exempt
+       here: a matching character inside a comment, inside a differently quoted
+       value, or in an unquoted value all close the run.
+
+    A close found by pass 2, or a pass-1 close followed by text python-dotenv
+    cannot parse, means the statement is unparseable: its key is dropped and
+    parsing resumes after the close that was found.
+    """
+    contents, closed, end = _read_quoted(text, quote, escape_aware=True)
+    if closed:
+        tail = text[end:].split("\n", 1)[0].strip()
+        if not tail or tail.startswith("#"):
+            return contents, True, end, True
+        # Closed, but python-dotenv cannot parse what follows, so it drops the
+        # statement. end still says where parsing resumes.
+        return contents, True, end, False
+
+    recovered, closed, end = _read_quoted(text, quote, escape_aware=False)
+    return recovered, closed, end, False
+
+
+def _read_quoted(text, quote, escape_aware):
+    """Return (contents, closed, end_index) for text starting with a quote.
+
+    end_index is the position just past the closing quote. A '#' inside the
+    quotes is data, not a comment.
+
+    When escape_aware, backslash escapes are expanded in a single pass, so an
+    escaped quote does not end the run and a literal backslash is never
+    re-interpreted. The caller decides when that applies: parsing a value
+    honours escapes in double quotes only, while recovering from an unclosed
+    quote honours them for either character.
     """
     chars = []
     index = 1
-    while index < len(value):
-        char = value[index]
-        if char == "\\" and quote == '"' and index + 1 < len(value):
-            following = value[index + 1]
-            chars.append(_ESCAPES.get(following, "\\" + following))
+    while index < len(text):
+        char = text[index]
+        if escape_aware and char == "\\" and index + 1 < len(text):
+            following = text[index + 1]
+            decoded = _ESCAPES.get(quote, {})
+            chars.append(decoded.get(following, "\\" + following))
             index += 2
             continue
         if char == quote:
-            return "".join(chars), True
+            return "".join(chars), True, index + 1
         chars.append(char)
         index += 1
-    return "".join(chars), False
+    return "".join(chars), False, index
 
 # Which .env keys each task needs to run on its own.
 TASK_REQUIREMENTS = {
@@ -301,11 +416,11 @@ def is_set(values, key):
 
 
 
-def report_problems(problems):
+def report_items(heading, items):
     """Print each .env defect and how to fix it."""
     print()
-    print("Fix your .env before starting this task:")
-    for summary, advice in problems:
+    print(heading)
+    for summary, advice in items:
         print(f"\n  {summary}\n    {advice}")
 
 def main():
@@ -325,18 +440,19 @@ def main():
     values = load_values(env_path)
     required = TASK_REQUIREMENTS[args.task]
     problems = find_env_problems(env_path) if env_path.exists() else []
+    notes = find_env_notes(env_path) if env_path.exists() else []
 
     print(f"Checking readiness for Task {args.task}")
     print(f"Reading: {env_path}{'' if env_path.exists() else '  (not found yet)'}")
     print()
 
-    # A malformed .env is reported on its own. Listing keys as OK/MISSING
-    # alongside it would either claim a broken file is fine, or point the
-    # learner at keys that are only "missing" because of the real defect.
+    # A BOM always corrupts the first setting's name, so the file cannot work
+    # whatever the task needs. Report it on its own: listing keys as OK/MISSING
+    # alongside it would either bless a broken file or point at the wrong thing.
     if problems:
         for summary, _ in problems:
             print(f"  [PROBLEM] {summary}")
-        report_problems(problems)
+        report_items("Fix your .env before starting this task:", problems)
         return 1
 
     missing = [key for key in required if not is_set(values, key)]
@@ -344,8 +460,19 @@ def main():
     for key in required:
         mark = "OK " if is_set(values, key) else "MISSING"
         print(f"  [{mark}] {key}")
+    for summary, _ in notes:
+        print(f"  [NOTE] {summary}")
 
+    # A malformed line only matters if it actually cost this task a setting.
+    # A stray quote with nothing after it to swallow leaves a working file, and
+    # failing that would be a false alarm in the other direction.
     if not missing:
+        if notes:
+            report_items(
+                "One line in your .env is malformed, but nothing this task "
+                "needs is affected:",
+                notes,
+            )
         print()
         print(f"You're ready to start Task {args.task}.")
         return 0
@@ -354,6 +481,8 @@ def main():
     print("Set the following before starting this task:")
     for key in missing:
         print(f"\n  {key}\n    {FIX_HINTS.get(key, 'Add this key to your .env file.')}")
+    if notes:
+        report_items("This may be why -- your .env has a malformed line:", notes)
     return 1
 
 
