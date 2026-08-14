@@ -8,7 +8,7 @@ View the exercises in the [GitHub Pages site for this repo](https://go.microsoft
 
 > **Note**: While you can complete these exercises on their own, they're designed to complement modules on [Microsoft Learn](https://learn.microsoft.com/training/paths/develop-ai-agents-azure/); in which you'll find a deeper dive into some of the underlying concepts on which these exercises are based.
 
-If you choose to run the code from applications in this repository locally, it will require Python 3.12+.
+If you choose to run the code from applications in this repository locally, it will require Python 3.13+.
 
 ## Reporting issues
 

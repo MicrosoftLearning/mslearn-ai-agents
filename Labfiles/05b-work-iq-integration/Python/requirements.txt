@@ -2,3 +2,6 @@ python-dotenv>=1.0.0
 azure-ai-projects>=1.0.0b4
 azure-identity>=1.19.0
 mcp>=1.1.2
+# openai 3.x replaced httpx with httpx2, which breaks azure-ai-projects'
+# `import httpx`. Pinned until azure-ai-projects supports openai 3.
+openai<3

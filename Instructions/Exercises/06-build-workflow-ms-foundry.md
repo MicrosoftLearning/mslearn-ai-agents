@@ -52,7 +52,7 @@ Before starting this exercise, ensure you have:
 - [Python 3.13](https://www.python.org/downloads/) or later installed
 - [Git](https://git-scm.com/downloads) installed on your local machine
 
-> \* Python 3.13 is available, but some dependencies are not yet compiled for that release. The lab has been successfully tested with Python 3.13.12.
+> \* Python 3.14 is available, but some dependencies are not yet compiled for that release. The lab has been successfully tested with Python 3.13.12.
 
 ## Create a Foundry project
 
@@ -413,7 +413,7 @@ Now you're ready to create a project that invokes a workflow. Let's get started!
 3. Find the comment **Specify the workflow** and add the following code:
 
     ```python
-   # Specify the workflow
+    # Specify the workflow
     workflow = {
         "name": "ContosoPay-Customer-Support-Triage"
     }
