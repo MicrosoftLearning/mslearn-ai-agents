@@ -1,0 +1,9 @@
+Cascade Waterfalls Day Hike|hiking|01-03|pacific_northwest;rockies
+Patagonia Glacier Trek|trekking|02-17|patagonia;andes
+Northern Lights Snowshoe|snowshoe|03-03|scandinavia;rockies
+Wildflower Ridge Hike|hiking|04-22|pacific_northwest;alps
+Grand Canyon Rim-to-Rim|trekking|05-01|rockies;patagonia;pacific_northwest;alps;andes;scandinavia
+Alpine Lakes Kayak Tour|kayaking|07-10|rockies;patagonia;pacific_northwest;alps;andes;scandinavia
+Dolomites Via Ferrata|climbing|08-12|alps;andes
+Perseid Stargazing Backpack|backpacking|08-12|rockies;alps;scandinavia
+Autumn Summit Sunrise Climb|climbing|12-14|rockies;patagonia;pacific_northwest;alps;andes;scandinavia

@@ -1,0 +1,56 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+#
+# Reference azure.yaml for the Tailwind Traders hosted agent.
+#
+# `azd ai agent init --protocol responses --deploy-mode code` generates a file
+# like this for you. It is included here so you can see what the tool produces
+# and compare it with your own. The `azure.ai.agent` service is what turns this
+# folder's code into a hosted agent on Foundry Agent Service.
+
+requiredVersions:
+  extensions:
+    azure.ai.agents: '>=1.0.0-beta.4'
+name: tailwind-hosted-agent
+services:
+  ai-project:
+    host: azure.ai.project
+    deployments:
+      - name: gpt-4o
+        model:
+          format: OpenAI
+          name: gpt-4o
+          version: '2024-11-20'
+        sku:
+          name: GlobalStandard
+          capacity: 10
+  tailwind-hosted-agent:
+    host: azure.ai.agent
+    metadata:
+      tags:
+        - AI Agent Hosting
+        - Responses Protocol
+        - Bring Your Own
+        - Python
+    project: .
+    language: python
+    codeConfiguration:
+      runtime: python_3_13
+      entryPoint: main.py
+    uses:
+      - ai-project
+    kind: hosted
+    name: tailwind-hosted-agent
+    displayName: Tailwind Traders assistant (hosted)
+    description: The Tailwind Traders store assistant packaged as a hosted agent using the Responses protocol.
+    protocols:
+      - protocol: responses
+        version: 2.0.0
+    environmentVariables:
+      - name: AZURE_AI_MODEL_DEPLOYMENT_NAME
+        value: ${AZURE_AI_MODEL_DEPLOYMENT_NAME}
+    container:
+      resources:
+        cpu: '0.5'
+        memory: 1Gi
+infra:
+  provider: microsoft.foundry
