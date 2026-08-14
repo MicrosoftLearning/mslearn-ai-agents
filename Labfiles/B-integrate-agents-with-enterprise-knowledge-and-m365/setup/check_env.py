@@ -66,9 +66,14 @@ def read_env_file(env_path):
             continue
 
         value = value.strip()
-        if len(value) >= 2 and value[0] == value[-1] and value[0] in ("'", '"'):
-            # Quoted: a '#' inside the quotes is data, not a comment.
-            value = value[1:-1]
+        if value[:1] in ("'", '"'):
+            quote = value[0]
+            inner, closed = _read_quoted(value, quote)
+            if not closed:
+                # Unterminated quote: python-dotenv discards the whole entry.
+                continue
+            # Anything after the closing quote (such as ' # comment') is dropped.
+            value = inner
         else:
             for comment_marker in (" #", "\t#"):
                 value = value.split(comment_marker, 1)[0]
@@ -76,6 +81,27 @@ def read_env_file(env_path):
         values[key] = value
 
     return values
+
+
+def _read_quoted(value, quote):
+    """Return (contents, closed) for a value that starts with a quote character.
+
+    A '#' inside the quotes is data, not a comment. Backslash escapes are
+    honored inside double quotes, matching python-dotenv.
+    """
+    chars = []
+    index = 1
+    while index < len(value):
+        char = value[index]
+        if char == "\\" and quote == '"' and index + 1 < len(value):
+            chars.append(value[index + 1])
+            index += 2
+            continue
+        if char == quote:
+            return "".join(chars), True
+        chars.append(char)
+        index += 1
+    return "".join(chars), False
 
 # Which .env keys each task needs to run on its own.
 TASK_REQUIREMENTS = {
