@@ -1,3 +1,5 @@
 python-dotenv
 azure-identity==1.25.3
-agent-framework==1.9.0
+pydantic>=2,<3
+agent-framework-core==1.12.1
+agent-framework-foundry==1.10.3

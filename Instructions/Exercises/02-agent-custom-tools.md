@@ -92,7 +92,7 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 1. Enter the repository URL:
 
     ```
-    https://github.com/MicrosoftLearning/mslearn-ai-agents.git
+   https://github.com/MicrosoftLearning/mslearn-ai-agents.git
     ```
 
 1. Choose a location on your local machine to clone the repository.
@@ -108,9 +108,9 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 1. In the terminal, enter the following command to install the required Python packages in a virtual environment:
 
     ```
-    python -m venv labenv
-    .\labenv\Scripts\Activate.ps1
-    pip install -r requirements.txt
+   python -m venv labenv
+   .\labenv\Scripts\Activate.ps1
+   pip install -r requirements.txt
     ```
 
 1. Open the **.env** file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project deployment resource in the Foundry Toolkit VS Code extension) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name. Use **Ctrl+S** to save the file after making these changes.
@@ -165,12 +165,12 @@ Now you're ready to create an AI agent that uses MCP server tools to access exte
 1. Find the comment **Connect to the project client** and add the following code:
 
     ```python
-    # Connect to the project client
-    with (
-        DefaultAzureCredential() as credential,
-        AIProjectClient(endpoint=project_endpoint, credential=credential) as project_client,
-        project_client.get_openai_client() as openai_client,
-    ):
+   # Connect to the project client
+   with (
+       DefaultAzureCredential() as credential,
+       AIProjectClient(endpoint=project_endpoint, credential=credential) as project_client,
+       project_client.get_openai_client() as openai_client,
+   ):
     ```
 
 ## Define the function tools
@@ -310,7 +310,7 @@ Now that you've created the agent with the function tools, you can send messages
     ```python
    # Create a list to hold function call outputs that will be sent back as input to the agent
    input_list: ResponseInputParam = []
-   ```
+    ```
 
 1. Find the comment **Send a prompt to the agent** and add the following code:
 
@@ -356,7 +356,7 @@ Now that you've created the agent with the function tools, you can send messages
                result = calculate_observation_cost(**json.loads(item.arguments))
            elif item.name == "generate_observation_report":
                result = generate_observation_report(**json.loads(item.arguments))
-                
+
            # Append the output text
            input_list.append(
                FunctionCallOutput(
@@ -388,9 +388,9 @@ Now that you've created the agent with the function tools, you can send messages
 1. Find the comment **Delete the agent when done** and add the following code:
 
     ```python
-    # Delete the agent when done
-    project_client.agents.delete_version(agent_name=agent.name, agent_version=agent.version)
-    print("Deleted agent.")
+   # Delete the agent when done
+   project_client.agents.delete_version(agent_name=agent.name, agent_version=agent.version)
+   print("Deleted agent.")
     ```
 
 1. Review the complete code you've added to the file. It should now include sections that:
@@ -410,7 +410,7 @@ Now that you've created the agent with the function tools, you can send messages
 1. In the integrated terminal, enter the following command to run the application:
 
     ```
-    az login
+   az login
     ```
 
     ```
@@ -430,31 +430,31 @@ Now that you've created the agent with the function tools, you can send messages
     You should see some output similar to the following:
 
     ```output
-    AGENT: The next astronomical event you can observe from South America is the Jupiter-Venus Conjunction, taking place on May 1st.
-    The cost for 5 hours of premium telescope time at normal priority for this observation will be $1,875. 
+   AGENT: The next astronomical event you can observe from South America is the Jupiter-Venus Conjunction, taking place on May 1st.
+   The cost for 5 hours of premium telescope time at normal priority for this observation will be $1,875. 
     ```
 
 1. Enter a follow-up prompt to generate an observation report, such as:
 
     ```
-    Generate that information in a report for Bellows College.
+   Generate that information in a report for Bellows College.
     ```
 
     You should see a response similar to the following:
 
     ```output
-    AGENT: Here is your report for Bellows College:
+   AGENT: Here is your report for Bellows College:
 
-    - Next visible astronomical event: Jupiter-Venus Conjunction
-    - Date: May 1st
-    - Visible from: South America
-    - Observation details:
-        - Telescope tier: Premium
-        - Duration: 5 hours
-        - Priority: Normal
-    - Observation cost: $1,875
+   - Next visible astronomical event: Jupiter-Venus Conjunction
+   - Date: May 1st
+   - Visible from: South America
+   - Observation details:
+       - Telescope tier: Premium
+       - Duration: 5 hours
+       - Priority: Normal
+   - Observation cost: $1,875
 
-    A formal report has been generated for Bellows College.
+   A formal report has been generated for Bellows College.
     ```
 
     In the file explorer, you can see that a new file named `report-<event-type>.txt` has been created, which contains the generated report. You can open this file to view the contents of the report.

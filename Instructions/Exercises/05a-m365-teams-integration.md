@@ -64,15 +64,15 @@ Now that you have an agent created, let's configure it with instructions and kno
 1. Set the **Instructions** to:
 
     ```
-    You are an Enterprise Knowledge Assistant for Contoso Corporation.
-    
-    Your role:
-    - Answer questions about company policies and procedures
-    - Provide accurate information from uploaded documents
-    - Be professional, helpful, and concise
-    - If you don't know the answer, say so and suggest who to contact
-    
-    Always cite your sources when referencing specific policies.
+   You are an Enterprise Knowledge Assistant for Contoso Corporation.
+
+   Your role:
+   - Answer questions about company policies and procedures
+   - Provide accurate information from uploaded documents
+   - Be professional, helpful, and concise
+   - If you don't know the answer, say so and suggest who to contact
+
+   Always cite your sources when referencing specific policies.
     ```
 
 2. Select **Save** to save your current agent configuration.
@@ -82,13 +82,13 @@ Now that you have an agent created, let's configure it with instructions and kno
     **IT Security Policy:**
 
     ```
-    https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/05a-m365-teams-integration/Python/sample_documents/it_security_policy.txt
+   https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/05a-m365-teams-integration/Python/sample_documents/it_security_policy.txt
     ```
 
     **Remote Work Policy:**
 
     ```
-    https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/05a-m365-teams-integration/Python/sample_documents/remote_work_policy.txt
+   https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/05a-m365-teams-integration/Python/sample_documents/remote_work_policy.txt
     ```
 
 4. Return to your agent's configuration, scroll to the **Tools** section.
@@ -104,7 +104,7 @@ Now that you have an agent created, let's configure it with instructions and kno
 1. In the playground, ask a question about IT security:
 
     ```
-    What are the password requirements for my laptop?
+   What are the password requirements for my laptop?
     ```
 
 2. The agent should provide specific information from the IT security policy (minimum 12 characters, uppercase, lowercase, numbers, special characters, etc.)
@@ -112,7 +112,7 @@ Now that you have an agent created, let's configure it with instructions and kno
 3. Try a question about remote work:
 
     ```
-    What are the core hours for remote employees?
+   What are the core hours for remote employees?
     ```
 
 4. The agent should respond with information from the remote work policy (9 AM - 3 PM)
@@ -120,7 +120,7 @@ Now that you have an agent created, let's configure it with instructions and kno
 5. Try another query:
 
     ```
-    What encryption is required on company laptops?
+   What encryption is required on company laptops?
     ```
 
 6. Notice how the agent finds the right document and provides accurate answers about BitLocker requirements
@@ -233,19 +233,19 @@ After the agent package is prepared (this takes 1-2 minutes), you can deploy it 
 2. Send a greeting:
 
     ```
-    Hello! What can you help me with?
+   Hello! What can you help me with?
     ```
 
 3. Test a knowledge query:
 
     ```
-    What are the laptop password requirements?
+   What are the laptop password requirements?
     ```
 
 4. Try another question:
 
     ```
-    What MFA methods are supported?
+   What MFA methods are supported?
     ```
 
 5. The agent should respond with information from the IT security policy document!
@@ -345,13 +345,13 @@ Once published with shared scope, your agent is immediately available:
 4. Start a conversation:
 
     ```
-    @Enterprise Knowledge Agent What are the laptop security requirements?
+   @Enterprise Knowledge Agent What are the laptop security requirements?
     ```
 
 5. Or select your agent and ask directly:
 
     ```
-    What MFA methods are supported for company systems?
+   What MFA methods are supported for company systems?
     ```
 
 6. Copilot routes the query to your agent and returns information from the IT security policy
