@@ -3,9 +3,15 @@ title: 'Task 3 – Connect remote agents with A2A'
 lab:
     title: 'Task 3 – Connect remote agents with A2A'
     description: 'Use the Agent-to-Agent (A2A) protocol to connect agents that run in separate processes: a routing agent discovers and delegates to a trip-title agent and a trip-itinerary agent, which collaborate to plan Tailwind Traders guided trips.'
-    level: 300
+    type: 'task'
+    parent: 'C'
+    order: 3
+    section: 'optional'
+    difficulty: 4
+    duration: 30
+    access: 'open'
+    level: 400
     concepts: 'A2A protocol, remote agents, multi-agent orchestration'
-    islab: true
     status: 'draft'
 ---
 

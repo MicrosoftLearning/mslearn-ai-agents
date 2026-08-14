@@ -3,6 +3,11 @@ title: 'Getting started: set up your environment'
 lab:
     title: 'Getting started: set up your environment'
     description: 'Shared setup for the Build and extend AI agents lab: create a Microsoft Foundry project, get the starter code, and configure your environment. Complete this once before any task.'
+    type: 'task'
+    parent: 'A'
+    order: 0
+    section: 'setup'
+    access: 'open'
     level: 300
     concepts: 'environment setup, Microsoft Foundry project'
     status: 'draft'

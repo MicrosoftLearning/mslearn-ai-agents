@@ -1,0 +1,56 @@
+{%- comment -%}
+Renders the "Lab at a glance" task table for one consolidated lab, generated
+from task frontmatter so it can never drift from the task pages themselves.
+
+Usage:  {% include lab-tasks-table.html lab='A' %}
+
+Reads, from each task page under /Instructions/Consolidated/:
+  lab.type       'task'
+  lab.parent     which lab it belongs to ('A', 'B', 'C')
+  lab.order      position within the lab
+  lab.section    'core' | 'optional' | 'setup'  (setup rows are omitted)
+  lab.difficulty 1-5, rendered as filled/empty bars
+  lab.level      200/300/400
+  lab.duration   minutes
+  lab.access     'open' | 'gated'
+{%- endcomment -%}
+
+{%- assign labid = include.lab -%}
+{%- assign consolidated = site.pages | where_exp: "p", "p.url contains '/Instructions/Consolidated/'" -%}
+{%- assign tasks = consolidated | where_exp: "p", "p.lab.type == 'task'" | where_exp: "p", "p.lab.parent == labid" | sort: "lab.order" -%}
+
+{%- assign core_total = 0 -%}
+{%- assign full_total = 0 -%}
+{%- for p in tasks -%}
+  {%- if p.lab.duration -%}
+    {%- assign full_total = full_total | plus: p.lab.duration -%}
+    {%- if p.lab.section == 'core' -%}
+      {%- assign core_total = core_total | plus: p.lab.duration -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign full_h = full_total | divided_by: 60 -%}
+{%- assign full_m = full_total | modulo: 60 -%}
+
+| Section | Task | Level | Time |
+| --- | --- | --- | --- |
+{% for p in tasks -%}
+{%- if p.lab.section == 'setup' -%}{%- continue -%}{%- endif -%}
+{%- if p.lab.section == 'core' -%}
+  {%- assign section_label = '**Core**' -%}
+{%- else -%}
+  {%- assign section_label = '*Optional*' -%}
+{%- endif -%}
+{%- capture bars -%}
+{%- for i in (1..5) -%}{%- if i <= p.lab.difficulty -%}▰{%- else -%}▱{%- endif -%}{%- endfor -%}
+{%- endcapture -%}
+| {{ section_label }} | [{{ p.lab.title }}]({{ p.url | relative_url }}){% if p.lab.access == 'gated' %} 🔒{% endif %} | {{ bars }} L{{ p.lab.level }} | ~{{ p.lab.duration }} min |
+{% endfor %}
+**Core tasks:** about **{{ core_total }} minutes**. **Full lab**, including every optional task: about **{% if full_h > 0 %}{{ full_h }} hour{% if full_h > 1 %}s{% endif %}{% if full_m > 0 %} {{ full_m }} minutes{% endif %}{% else %}{{ full_m }} minutes{% endif %}**.
+{%- assign gated = tasks | where_exp: "p", "p.lab.access == 'gated'" -%}
+{%- if gated.size > 0 %}
+
+> 🔒 Tasks marked with a lock need access your account may not have. Each one opens with a
+> quick check and tells you what to do if you don't have it — nothing else in this lab depends
+> on them.
+{%- endif -%}

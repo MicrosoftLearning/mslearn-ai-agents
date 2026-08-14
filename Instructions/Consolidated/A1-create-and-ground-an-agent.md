@@ -3,9 +3,15 @@ title: 'Task 1 – Create and ground an agent'
 lab:
     title: 'Task 1 – Create and ground an agent'
     description: 'Create an agent in the Microsoft Foundry portal and ground it in Tailwind Traders store policy so it answers from your data.'
-    level: 300
+    type: 'task'
+    parent: 'A'
+    order: 1
+    section: 'core'
+    difficulty: 2
+    duration: 15
+    access: 'open'
+    level: 200
     concepts: 'agent creation, grounding, file search'
-    islab: true
     status: 'draft'
 ---
 
