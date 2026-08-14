@@ -9,3 +9,6 @@ fastapi
 azure-ai-projects
 azure-ai-agents
 a2a-sdk==0.3.26
+# openai 3.x replaced httpx with httpx2, which breaks azure-ai-projects'
+# import httpx. Pinned until azure-ai-projects supports openai 3.
+openai<3
