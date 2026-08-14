@@ -26,7 +26,7 @@ Before starting this exercise, ensure you have:
 - [Git](https://git-scm.com/downloads) installed on your local machine
 - Basic familiarity with Azure AI services and Python programming
 
-> \* Python 3.13 is available, but some dependencies are not yet compiled for that release. The lab has been successfully tested with Python 3.13.12.
+> \* Python 3.14 is available, but some dependencies are not yet compiled for that release. The lab has been successfully tested with Python 3.13.12.
 
 ## Create a Microsoft Foundry Project
 
