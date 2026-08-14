@@ -1,3 +1,7 @@
+# GENERATED FROM Labfiles/_shared/ - DO NOT EDIT THIS COPY.
+# Edit the file under Labfiles/_shared/, then run:
+#     python Labfiles/_shared/sync.py
+
 # Copies the endpoint + model deployment name that 'azd up' just provisioned
 # into the lab's Python/.env, so the task scripts can read them.
 #

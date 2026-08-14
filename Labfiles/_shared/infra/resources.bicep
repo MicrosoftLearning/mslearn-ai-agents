@@ -1,7 +1,3 @@
-// GENERATED FROM Labfiles/_shared/ - DO NOT EDIT THIS COPY.
-// Edit the file under Labfiles/_shared/, then run:
-//     python Labfiles/_shared/sync.py
-
 // Foundry account + project + model deployment for the lab.
 // Deployed into the resource group created by main.bicep.
 

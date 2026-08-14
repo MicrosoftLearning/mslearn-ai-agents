@@ -1,7 +1,3 @@
-# GENERATED FROM Labfiles/_shared/ - DO NOT EDIT THIS COPY.
-# Edit the file under Labfiles/_shared/, then run:
-#     python Labfiles/_shared/sync.py
-
 # Copies the endpoint + model deployment name that 'azd up' just provisioned
 # into the lab's Python/.env, so the task scripts can read them.
 #
@@ -37,4 +33,4 @@ Set-EnvValue 'PROJECT_ENDPOINT' $env:PROJECT_ENDPOINT
 Set-EnvValue 'MODEL_DEPLOYMENT_NAME' $env:MODEL_DEPLOYMENT_NAME
 
 Write-Host "Updated $envPath with your provisioned PROJECT_ENDPOINT and MODEL_DEPLOYMENT_NAME."
-Write-Host "Task 1 also needs a grounded agent: from the Python folder, run 'python ../setup/bootstrap_agent.py' to create it."
+Write-Host "{{LAB_HINT}}"

@@ -1,7 +1,3 @@
-// GENERATED FROM Labfiles/_shared/ - DO NOT EDIT THIS COPY.
-// Edit the file under Labfiles/_shared/, then run:
-//     python Labfiles/_shared/sync.py
-
 // Optional azd infrastructure for the Tailwind Traders lab.
 //
 // Provisions a Microsoft Foundry (Azure AI Services) resource, a Foundry
