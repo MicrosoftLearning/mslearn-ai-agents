@@ -22,6 +22,20 @@ lab:
 
 *Part of the **Integrate agents with enterprise knowledge and Microsoft 365** lab. New here? Start with [Getting started](B0-getting-started.md).*
 
+<!-- BEGIN GENERATED: gated-notice - do not edit by hand; run: python tools/generate_lab_blocks.py -->
+> ### Check your access before you start
+>
+> **This task needs:** A Microsoft 365 Copilot licence, IT admin consent for Work IQ, and Node.js 18 or later.
+>
+> Run the command below. If it returns your calendar you're ready; if it reports missing consent or no Copilot licence, skip this task.
+
+```
+npm install -g @microsoft/workiq && workiq accept-eula && workiq ask -q "What meetings do I have today?"
+```
+
+> **Don't have it?** Skip this task. Nothing else in this lab depends on it, and you can still read through the steps to see how it works.
+<!-- END GENERATED: gated-notice -->
+
 > **Set up (start here):** This task needs a Foundry project (with a deployed model) and the
 > starter code. If you haven't already, complete [Getting started](B0-getting-started.md) to
 > create your project, clone the code, and set `PROJECT_ENDPOINT` and `MODEL_DEPLOYMENT_NAME` in
@@ -30,11 +44,6 @@ lab:
 ```
 python ../setup/check_env.py --task 4
 ```
-
-> **Note**: This is an **optional/advanced** task that requires a **Microsoft 365 Copilot
-> license** and **Node.js 18** or later. It's designed for enterprise learners or those with M365
-> Copilot access. Standard M365 accounts without Copilot won't work. You can still read through
-> the steps to understand the concepts.
 
 > **Continuing from a previous task?** If your project, virtual environment, and `.env` are
 > already set from an earlier task, you only need to install Work IQ (below), then go straight to
