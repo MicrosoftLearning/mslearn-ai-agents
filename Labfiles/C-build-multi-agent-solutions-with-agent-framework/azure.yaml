@@ -1,3 +1,7 @@
+# GENERATED FROM Labfiles/_shared/ - DO NOT EDIT THIS COPY.
+# Edit the file under Labfiles/_shared/, then run:
+#     python Labfiles/_shared/sync.py
+
 # azd configuration for the Tailwind Traders multi-agent lab (OPTIONAL infra path).
 #
 # This is a convenience for learners/instructors who want to provision the

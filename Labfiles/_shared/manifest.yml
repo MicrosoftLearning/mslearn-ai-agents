@@ -1,0 +1,31 @@
+# Which labs consume the shared infrastructure, and the values that differ
+# between them.
+#
+# Everything else in Labfiles/_shared/ is identical across labs and is copied
+# verbatim. Add a lab here and run `python Labfiles/_shared/sync.py` to give it
+# the standard azd template, Bicep and post-provision scripts.
+#
+# Files that are genuinely lab-specific - check_env.py, bootstrap_agent.py,
+# requirements.txt, the lab's own Python code - are NOT managed here.
+
+labs:
+  A-build-and-extend-ai-agents:
+    azd_name: tailwind-traders-lab
+    description: the Tailwind Traders lab
+    hint: >-
+      Task 3 also needs a grounded agent: from the Python folder, run 'python
+      ../setup/bootstrap_agent.py' to create it.
+
+  B-integrate-agents-with-enterprise-knowledge-and-m365:
+    azd_name: tailwind-traders-lab-b
+    description: the Tailwind Traders enterprise-knowledge lab
+    hint: >-
+      Task 1 also needs a grounded agent: from the Python folder, run 'python
+      ../setup/bootstrap_agent.py' to create it.
+
+  C-build-multi-agent-solutions-with-agent-framework:
+    azd_name: tailwind-traders-multi-agent-lab
+    description: the Tailwind Traders multi-agent lab
+    hint: >-
+      Task 3 (remote agents) also reads SERVER_URL and the *_PORT values, which
+      ship pre-filled in .env.example.

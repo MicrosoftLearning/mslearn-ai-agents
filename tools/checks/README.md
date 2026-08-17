@@ -26,6 +26,7 @@ request diff.
 | `check_code_blocks.py` | A ```` ```python ```` block that isn't valid Python. Learners paste these straight into a file, so a bad indent breaks the lab. |
 | `check_links.py` | A link to a page that was renamed or moved, or a screenshot that no longer exists. |
 | `check_line_endings.py` | Text files drifting back to CRLF in the index, against the `.gitattributes` policy. |
+| `Labfiles/_shared/sync.py --check` | A lab's copy of the shared azd template, Bicep or post-provision scripts drifting from the canonical version. See [`Labfiles/_shared/README.md`](../../Labfiles/_shared/README.md). |
 
 ### Why the code block check normalizes first
 
@@ -95,4 +96,3 @@ These need groundwork that doesn't exist yet:
 | Strict frontmatter schema (`type`, `section`, `difficulty`, `order`) | The consolidated labs carrying that metadata. |
 | Generated task tables match frontmatter | The same metadata, plus the table include. |
 | Instructions match the `Solution/` code | A convention for mapping a code block to its solution file, e.g. an HTML comment above each block. |
-| Shared infrastructure hasn't drifted between labs | A canonical `Labfiles/_shared/` with a sync script. |
