@@ -15,19 +15,6 @@ lab:
     status: 'draft'
 ---
 
-<!--
-PILOT NOTE (remove before publishing):
-This is a pilot of the new lab template (Core + Optional tasks) applied to
-"Lab A" = a consolidation of the current exercises 01, 02, and 03.
-Starter code lives in a single folder — Labfiles/A-build-and-extend-ai-agents/Python/ —
-shared by every task (one virtual environment, one .env). The completed reference code is
-in Labfiles/A-build-and-extend-ai-agents/Solution/Python/.
-
-This landing page is the lab overview. Setup lives in A0-getting-started.md and each task is
-its own page (A1–A5) so it can be completed on its own. Optional per-task fast-forward and
-provisioning scripts live in Labfiles/A-build-and-extend-ai-agents/setup/ and infra/.
--->
-
 # Build and extend AI agents
 
 **Level** ▰▰▰▱▱ **L300**  (**L100** beginner → **L500** expert)

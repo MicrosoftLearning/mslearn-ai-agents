@@ -15,19 +15,6 @@ lab:
     status: 'draft'
 ---
 
-<!--
-PILOT NOTE (remove before publishing):
-This is a pilot of the new lab template (Core + Optional tasks) applied to
-"Lab C" = a consolidation of the current exercises 07, 08, and 09.
-Starter code lives in a single folder — Labfiles/C-build-multi-agent-solutions-with-agent-framework/Python/ —
-shared by every task (one virtual environment, one .env). The completed reference code is
-in Labfiles/C-build-multi-agent-solutions-with-agent-framework/Solution/Python/.
-
-This landing page is the lab overview. Setup lives in C0-getting-started.md and each task is
-its own page (C1–C3) so it can be completed on its own. Optional provisioning scripts live in
-Labfiles/C-build-multi-agent-solutions-with-agent-framework/setup/ and infra/.
--->
-
 # Build multi-agent solutions with the Agent Framework
 
 **Level** ▰▰▰▱▱ **L300**  (**L100** beginner → **L500** expert)

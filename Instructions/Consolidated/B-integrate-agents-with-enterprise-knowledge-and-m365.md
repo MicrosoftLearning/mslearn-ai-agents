@@ -15,19 +15,6 @@ lab:
     status: 'draft'
 ---
 
-<!--
-PILOT NOTE (remove before publishing):
-This is a pilot of the new lab template (Core + Optional tasks) applied to
-"Lab B" = a consolidation of the current exercises 04, 05a, and 05b.
-Starter code lives in a single folder — Labfiles/B-integrate-agents-with-enterprise-knowledge-and-m365/Python/ —
-shared by every code task (one virtual environment, one .env). The completed reference code is
-in Labfiles/B-integrate-agents-with-enterprise-knowledge-and-m365/Solution/Python/.
-
-This landing page is the lab overview. Setup lives in B0-getting-started.md and each task is
-its own page (B1–B4) so it can be completed on its own. Optional per-task fast-forward and
-provisioning scripts live in Labfiles/B-integrate-agents-with-enterprise-knowledge-and-m365/setup/ and infra/.
--->
-
 # Integrate agents with enterprise knowledge and Microsoft 365
 
 **Level** ▰▰▰▱▱ **L300**  (**L100** beginner → **L500** expert)
