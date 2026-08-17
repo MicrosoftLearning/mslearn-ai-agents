@@ -1,6 +1,7 @@
 ---
 title: Workshop agenda
 permalink: workshop.html
+layout: workshop
 ---
 
 {%- comment -%}
@@ -16,57 +17,7 @@ and the agenda on the right.
 {%- assign labs = consolidated | where_exp: "p", "p.lab.type == 'lab'" | sort: "lab.order" -%}
 {%- assign all_tasks = consolidated | where_exp: "p", "p.lab.type == 'task'" -%}
 
-<style>
-.wk-wrap { display: grid; grid-template-columns: 15rem 1fr; gap: 2.5rem; align-items: start; }
-@media (max-width: 900px) { .wk-wrap { grid-template-columns: 1fr; } }
 
-.wk-nav { position: sticky; top: 1rem; font-size: .9em; border-right: 1px solid #e4e4e7; padding-right: 1rem; }
-.wk-nav h4 { margin: 0 0 .5rem; font-size: .75em; letter-spacing: .08em; text-transform: uppercase; color: #6b7280; }
-.wk-nav ol { list-style: none; margin: 0 0 1.25rem; padding: 0; }
-.wk-nav li { margin: 0 0 .35rem; }
-.wk-nav a { text-decoration: none; }
-.wk-nav a:hover { text-decoration: underline; }
-.wk-nav .wk-time { color: #6b7280; font-size: .85em; }
-
-.wk-lab { border: 1px solid #e4e4e7; border-radius: 8px; padding: 1rem 1.25rem; margin: 0 0 1.25rem; }
-.wk-lab h3 { margin-top: 0; }
-.wk-meta { font-size: .85em; color: #6b7280; margin: -.4rem 0 .9rem; }
-.wk-step { display: grid; grid-template-columns: 1fr auto auto; gap: .75rem;
-           padding: .45rem 0; border-top: 1px solid #f1f1f3; align-items: baseline; }
-.wk-step:first-of-type { border-top: none; }
-.wk-badge { font-size: .72em; padding: .12em .5em; border-radius: 999px; white-space: nowrap; }
-.wk-core { background: #e8f0fe; color: #1a45a5; }
-.wk-setup { background: #f1f1f3; color: #52525b; }
-.wk-elapsed { color: #6b7280; font-size: .85em; white-space: nowrap; }
-.wk-locked { color: #92400e; background: #fef3c7; }
-.wk-optional-list { font-size: .92em; color: #3f3f46; margin-top: .85rem; }
-</style>
-
-<div class="wk-wrap" markdown="0">
-<nav class="wk-nav">
-  <h4>Workshop</h4>
-  <ol>
-    <li><a href="#agenda">Agenda</a></li>
-    <li><a href="#before-you-start">Before you start</a></li>
-  </ol>
-  <h4>Sessions</h4>
-  <ol>
-  {%- for lab in labs -%}
-    {%- assign lab_id = lab.lab.id -%}
-    {%- assign core = all_tasks | where_exp: "p", "p.lab.parent == lab_id" | where_exp: "p", "p.lab.section == 'core'" -%}
-    {%- assign mins = 0 -%}
-    {%- for t in core %}{% assign mins = mins | plus: t.lab.duration %}{% endfor -%}
-    <li><a href="#lab-{{ lab_id | downcase }}">{{ lab.lab.title }}</a><br><span class="wk-time">{{ mins }} min core</span></li>
-  {%- endfor -%}
-  </ol>
-  <h4>Other views</h4>
-  <ol>
-    <li><a href="{{ '/explore.html' | relative_url }}">Task explorer</a></li>
-    <li><a href="{{ '/index.html' | relative_url }}">Full lab catalogue</a></li>
-  </ol>
-</nav>
-
-<div class="wk-main" markdown="1">
 
 # AI agents workshop
 
@@ -172,6 +123,3 @@ they're **demo only** in a workshop setting. Nothing else depends on them.
 | [{{ t.lab.title }}]({{ t.url | relative_url }}) | {{ t.lab.requires }} |
 {% endfor %}
 {%- endif %}
-
-</div>
-</div>

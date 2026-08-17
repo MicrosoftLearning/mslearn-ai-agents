@@ -1,6 +1,7 @@
 ---
 title: Task explorer
 permalink: explore.html
+layout: workshop
 ---
 
 {%- comment -%}
@@ -13,32 +14,10 @@ here automatically once its page exists - there is no list to maintain.
 {%- assign labs = consolidated | where_exp: "p", "p.lab.type == 'lab'" | sort: "lab.order" -%}
 {%- assign tasks = consolidated | where_exp: "p", "p.lab.type == 'task'" | sort: "lab.order" -%}
 
-<style>
-.ex-filters { display: flex; flex-wrap: wrap; gap: 1.25rem; margin: 1rem 0 1.5rem;
-              padding: .9rem 1rem; border: 1px solid #e4e4e7; border-radius: 8px; font-size: .9em; }
-.ex-filters label { display: block; font-size: .78em; text-transform: uppercase;
-                    letter-spacing: .06em; color: #6b7280; margin-bottom: .25rem; }
-.ex-filters select { padding: .3rem .5rem; border: 1px solid #d4d4d8; border-radius: 6px; }
-.ex-count { margin: 0 0 1rem; color: #6b7280; font-size: .9em; }
-
-.ex-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr)); gap: 1rem; }
-.ex-card { border: 1px solid #e4e4e7; border-radius: 8px; padding: .9rem 1rem; }
-.ex-card h4 { margin: 0 0 .35rem; font-size: 1em; }
-.ex-card p { margin: .35rem 0 .6rem; font-size: .88em; color: #3f3f46; }
-.ex-tags { display: flex; flex-wrap: wrap; gap: .3rem; }
-.ex-tag { font-size: .72em; padding: .12em .5em; border-radius: 999px; background: #f1f1f3; color: #52525b; }
-.ex-tag.core { background: #e8f0fe; color: #1a45a5; }
-.ex-tag.gated { background: #fef3c7; color: #92400e; }
-.ex-bars { letter-spacing: .1em; }
-.ex-empty { padding: 2rem; text-align: center; color: #6b7280; }
-</style>
-
 # Task explorer
 
 Every task across the consolidated labs, filterable. Each card is generated from that task's
 own frontmatter, so this list stays in step with the labs automatically.
-
-Looking for a guided route instead? See the [workshop agenda]({{ '/workshop.html' | relative_url }}).
 
 <div class="ex-filters" markdown="0">
   <div>
