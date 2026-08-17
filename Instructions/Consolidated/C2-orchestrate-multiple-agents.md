@@ -3,9 +3,15 @@ title: 'Task 2 – Orchestrate multiple agents in sequence'
 lab:
     title: 'Task 2 – Orchestrate multiple agents in sequence'
     description: 'Use the Microsoft Agent Framework to orchestrate several agents in a sequence: a summarizer, a classifier, and an action agent triage a piece of customer feedback, each building on the last.'
+    type: 'task'
+    parent: 'C'
+    order: 2
+    section: 'optional'
+    difficulty: 3
+    duration: 30
+    access: 'open'
     level: 300
     concepts: 'Microsoft Agent Framework, multi-agent orchestration, sequential workflow'
-    islab: true
     status: 'draft'
 ---
 

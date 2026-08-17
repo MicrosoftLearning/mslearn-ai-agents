@@ -3,9 +3,17 @@ title: 'Task 2 – Publish your agent to Microsoft Teams'
 lab:
     title: 'Task 2 – Publish your agent to Microsoft Teams'
     description: 'Publish the Tailwind Traders knowledge agent to Microsoft Teams so staff can chat with it where they already work.'
-    level: 300
+    type: 'task'
+    parent: 'B'
+    order: 2
+    section: 'optional'
+    difficulty: 2
+    duration: 20
+    access: 'gated'
+    requires: 'A Microsoft 365 account with Teams access, and permission to publish agents to Teams in your tenant'
+    verify: 'In the Foundry portal, open your agent and select **Publish**. If Teams is greyed out or returns a consent error, you don''t have the rights this task needs.'
+    level: 200
     concepts: 'agent publishing, Microsoft Teams, Azure Bot Service'
-    islab: true
     status: 'draft'
 ---
 

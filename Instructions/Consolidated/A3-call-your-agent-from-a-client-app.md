@@ -3,9 +3,15 @@ title: 'Task 3 – Call your agent from a client app'
 lab:
     title: 'Task 3 – Call your agent from a client app'
     description: 'Drive your grounded portal agent from a small web chat app using the Foundry SDK and Responses API, with inline charts.'
+    type: 'task'
+    parent: 'A'
+    order: 3
+    section: 'optional'
+    difficulty: 3
+    duration: 20
+    access: 'open'
     level: 300
     concepts: 'Foundry SDK, Responses API, code interpreter'
-    islab: true
     status: 'draft'
 ---
 

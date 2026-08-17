@@ -26,7 +26,35 @@ request diff.
 | `check_code_blocks.py` | A ```` ```python ```` block that isn't valid Python. Learners paste these straight into a file, so a bad indent breaks the lab. |
 | `check_links.py` | A link to a page that was renamed or moved, or a screenshot that no longer exists. |
 | `check_line_endings.py` | Text files drifting back to CRLF in the index, against the `.gitattributes` policy. |
+| `generate_lab_blocks.py --check` | A generated block in a lab page — the task table, or a gated-access notice — no longer matching the frontmatter it is built from. |
 | `Labfiles/_shared/sync.py --check` | A lab's copy of the shared azd template, Bicep or post-provision scripts drifting from the canonical version. See [`Labfiles/_shared/README.md`](../../Labfiles/_shared/README.md). |
+
+### Why the lab pages contain generated markdown rather than Liquid
+
+The lab instruction pages are read directly by platforms that never run Liquid.
+GitHub's own markdown renderer is one: a `{% include %}` in a `.md` file shows
+up verbatim where the content should be. Confirmed by rendering one through
+GitHub's markdown API, which returns
+`<p>{% include lab-tasks-table.html lab='A' %}</p>`.
+
+So those pages stay plain markdown, and `tools/generate_lab_blocks.py` writes
+the generated parts between HTML comment markers — invisible in every renderer:
+
+```
+<!-- BEGIN GENERATED: task-table - do not edit by hand; ... -->
+| Section | Task | Level | Time |
+...
+<!-- END GENERATED: task-table -->
+```
+
+Frontmatter stays the single source of truth, the output is real markdown that
+works everywhere, and `--check` makes drift a build failure. A lab page that is
+missing its markers is an error, so a new lab cannot silently ship without its
+table.
+
+The web-only pages — `workshop.md`, `explore.md`, `labs.json` — still use Liquid
+directly. They are never consumed as raw markdown, so there is nothing to work
+around.
 
 ### Why the code block check normalizes first
 

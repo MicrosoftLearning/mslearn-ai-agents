@@ -3,9 +3,15 @@ title: 'Task 2 – Connect a remote MCP server'
 lab:
     title: 'Task 2 – Connect a remote MCP server'
     description: 'Extend an agent with a tool by connecting it to a remote Model Context Protocol (MCP) server, and handle tool-approval requests in code.'
+    type: 'task'
+    parent: 'A'
+    order: 2
+    section: 'core'
+    difficulty: 3
+    duration: 20
+    access: 'open'
     level: 300
     concepts: 'tools, Model Context Protocol (MCP), approvals'
-    islab: true
     status: 'draft'
 ---
 

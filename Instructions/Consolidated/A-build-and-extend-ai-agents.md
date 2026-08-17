@@ -3,9 +3,14 @@ title: 'Build and extend AI agents'
 lab:
     title: 'Build and extend AI agents'
     description: 'Build the Tailwind Traders assistant: ground it in store policy, then extend it with tools using remote MCP servers, custom functions, and a client app. A modular lab you can complete end to end or one task at a time.'
+    type: 'lab'
+    id: 'A'
+    order: 1
+    difficulty: 3
+    duration: 35
+    access: 'open'
     level: 300
     concepts: 'agent creation and grounding, tools, Model Context Protocol (MCP)'
-    duration: 35
     islab: true
     status: 'draft'
 ---
@@ -121,18 +126,21 @@ one virtual environment, and one `.env`, so if you'd rather work straight throug
 
 ## Lab at a glance
 
-Complete the **Core** tasks first (about **35 minutes**) — they end with a working,
-tool-using agent. Then expand any **Optional** tasks that interest you. The full lab,
-including all optional tasks, takes about **2 hours 25 minutes**.
+Complete the **Core** tasks first — they end with a working, tool-using agent. Then expand any
+**Optional** tasks that interest you.
 
+<!-- BEGIN GENERATED: task-table - do not edit by hand; run: python tools/generate_lab_blocks.py -->
 | Section | Task | Level | Time |
 | --- | --- | --- | --- |
-| **Core** | [Task 1 – Create and ground an agent in the portal](A1-create-and-ground-an-agent.md) | ▰▰▱▱▱ L200 | ~15 min |
-| **Core** | [Task 2 – Connect the agent to a remote MCP server in code](A2-connect-a-remote-mcp-server.md) | ▰▰▰▱▱ L300 | ~20 min |
+| **Core** | [Task 1 – Create and ground an agent](A1-create-and-ground-an-agent.md) | ▰▰▱▱▱ L200 | ~15 min |
+| **Core** | [Task 2 – Connect a remote MCP server](A2-connect-a-remote-mcp-server.md) | ▰▰▰▱▱ L300 | ~20 min |
 | *Optional* | [Task 3 – Call your agent from a client app](A3-call-your-agent-from-a-client-app.md) | ▰▰▰▱▱ L300 | ~20 min |
 | *Optional* | [Task 4 – Add custom function tools](A4-add-custom-function-tools.md) | ▰▰▰▱▱ L300 | ~25 min |
-| *Optional* | [Task 5 – Capstone: your own MCP server + combine every tool](A5-capstone-build-your-own-mcp-server.md) | ▰▰▰▰▱ L400 | ~35 min |
+| *Optional* | [Task 5 – Capstone: build your own MCP server](A5-capstone-build-your-own-mcp-server.md) | ▰▰▰▰▱ L400 | ~35 min |
 | *Optional* | [Task 6 – Promote your assistant to a hosted agent](A6-promote-your-assistant-to-a-hosted-agent.md) | ▰▰▰▱▱ L300 | ~30 min |
+
+**Core tasks:** about **35 minutes**. **Full lab**, including every optional task: about **2 hours 25 minutes**.
+<!-- END GENERATED: task-table -->
 
 **Choosing your path** — pick the tasks that fit the time you have:
 

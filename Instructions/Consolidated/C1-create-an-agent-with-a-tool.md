@@ -3,9 +3,15 @@ title: 'Task 1 – Build an agent with a tool'
 lab:
     title: 'Task 1 – Build an agent with a tool'
     description: 'Use the Microsoft Agent Framework to build a single agent that calls a custom tool: decorate a Python function with @tool, attach it to an Agent, and let agent.run() drive the tool-calling loop.'
+    type: 'task'
+    parent: 'C'
+    order: 1
+    section: 'core'
+    difficulty: 3
+    duration: 30
+    access: 'open'
     level: 300
     concepts: 'Microsoft Agent Framework, tools, agents'
-    islab: true
     status: 'draft'
 ---
 

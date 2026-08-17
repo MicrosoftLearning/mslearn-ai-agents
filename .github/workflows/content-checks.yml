@@ -51,6 +51,10 @@ jobs:
         if: always()
         run: python tools/checks/check_line_endings.py
 
+      - name: Generated blocks in the lab pages are current
+        if: always()
+        run: python tools/generate_lab_blocks.py --check
+
       - name: Shared lab infrastructure is in sync
         if: always()
         run: python Labfiles/_shared/sync.py --check
