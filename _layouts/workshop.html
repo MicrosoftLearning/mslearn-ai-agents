@@ -1,0 +1,132 @@
+---
+layout: default
+---
+
+{%- comment -%}
+Layout for the workshop and task-explorer pages: a nav rail on the left,
+content on the right.
+
+Inherits the site's `default` layout, so the header and footer still come from
+MicrosoftLearning/Jekyll-Theme. Jekyll resolves local _layouts/ ahead of
+remote_theme, and only pages that set `layout: workshop` use this one, so the
+lab pages are unaffected.
+{%- endcomment -%}
+
+<style>
+:root {
+  --wk-border: #e4e4e7;
+  --wk-muted: #6b7280;
+  --wk-accent: #1a45a5;
+  --wk-accent-bg: #e8f0fe;
+  --wk-surface: #fafafa;
+}
+
+.wk-shell { display: grid; grid-template-columns: 16rem minmax(0, 1fr); gap: 2.5rem;
+            align-items: start; }
+@media (max-width: 900px) { .wk-shell { grid-template-columns: 1fr; gap: 1rem; } }
+
+/* Nav rail */
+.wk-rail { position: sticky; top: 1rem; font-size: .9em; padding-right: 1rem;
+           border-right: 1px solid var(--wk-border); }
+@media (max-width: 900px) {
+  .wk-rail { position: static; border-right: none;
+             border-bottom: 1px solid var(--wk-border); padding: 0 0 1rem; }
+}
+.wk-rail h2 { font-size: .72em; letter-spacing: .09em; text-transform: uppercase;
+              color: var(--wk-muted); margin: 1.2rem 0 .5rem; border: none; padding: 0; }
+.wk-rail h2:first-child { margin-top: 0; }
+.wk-rail ul { list-style: none; margin: 0; padding: 0; }
+.wk-rail li { margin: 0 0 .3rem; line-height: 1.35; }
+.wk-rail a { text-decoration: none; color: inherit; display: block;
+             padding: .25rem .5rem; border-radius: 6px; }
+.wk-rail a:hover { background: var(--wk-accent-bg); color: var(--wk-accent); }
+.wk-rail a[aria-current="page"] { background: var(--wk-accent-bg); color: var(--wk-accent);
+                                  font-weight: 600; }
+.wk-rail .wk-sub { color: var(--wk-muted); font-size: .85em; padding-left: .5rem;
+                   display: block; }
+
+/* Content */
+.wk-content { min-width: 0; }
+.wk-content h1 { margin-top: 0; }
+.wk-content h2 { margin-top: 2.2rem; padding-bottom: .3rem;
+                 border-bottom: 1px solid var(--wk-border); }
+.wk-content table { border-collapse: collapse; }
+.wk-content th, .wk-content td { border: 1px solid var(--wk-border);
+                                 padding: .4rem .7rem; font-size: .93em; }
+.wk-content th { background: var(--wk-surface); text-align: left; }
+
+/* Session cards, used by the workshop agenda */
+.wk-lab { border: 1px solid var(--wk-border); border-radius: 8px;
+          padding: 1rem 1.25rem; margin: 0 0 1.25rem; }
+.wk-lab h3 { margin-top: 0; }
+.wk-meta { font-size: .85em; color: var(--wk-muted); margin: -.4rem 0 .9rem; }
+.wk-step { display: grid; grid-template-columns: 1fr auto auto; gap: .75rem;
+           padding: .45rem 0; border-top: 1px solid #f1f1f3; align-items: baseline; }
+.wk-step:first-of-type { border-top: none; }
+.wk-badge { font-size: .72em; padding: .12em .5em; border-radius: 999px; white-space: nowrap; }
+.wk-core { background: var(--wk-accent-bg); color: var(--wk-accent); }
+.wk-setup { background: #f1f1f3; color: #52525b; }
+.wk-locked { background: #fef3c7; color: #92400e; }
+.wk-elapsed { color: var(--wk-muted); font-size: .85em; white-space: nowrap; }
+.wk-optional-list { font-size: .92em; color: #3f3f46; margin-top: .85rem; }
+
+/* Task explorer cards */
+.ex-filters { display: flex; flex-wrap: wrap; gap: 1.25rem; margin: 1rem 0 1.5rem;
+              padding: .9rem 1rem; border: 1px solid var(--wk-border);
+              border-radius: 8px; font-size: .9em; }
+.ex-filters label { display: block; font-size: .78em; text-transform: uppercase;
+                    letter-spacing: .06em; color: var(--wk-muted); margin-bottom: .25rem; }
+.ex-filters select { padding: .3rem .5rem; border: 1px solid #d4d4d8; border-radius: 6px; }
+.ex-count { margin: 0 0 1rem; color: var(--wk-muted); font-size: .9em; }
+.ex-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr)); gap: 1rem; }
+.ex-card { border: 1px solid var(--wk-border); border-radius: 8px; padding: .9rem 1rem; }
+.ex-card h4 { margin: 0 0 .35rem; font-size: 1em; }
+.ex-card p { margin: .35rem 0 .6rem; font-size: .88em; color: #3f3f46; }
+.ex-tags { display: flex; flex-wrap: wrap; gap: .3rem; }
+.ex-tag { font-size: .72em; padding: .12em .5em; border-radius: 999px;
+          background: #f1f1f3; color: #52525b; }
+.ex-tag.core { background: var(--wk-accent-bg); color: var(--wk-accent); }
+.ex-tag.gated { background: #fef3c7; color: #92400e; }
+.ex-bars { letter-spacing: .1em; }
+.ex-empty { padding: 2rem; text-align: center; color: var(--wk-muted); }
+</style>
+
+<div class="wk-shell">
+  <nav class="wk-rail" aria-label="Workshop navigation">
+    {%- assign consolidated = site.pages | where_exp: "p", "p.url contains '/Instructions/Consolidated/'" -%}
+    {%- assign labs = consolidated | where_exp: "p", "p.lab.type == 'lab'" | sort: "lab.order" -%}
+    {%- assign all_tasks = consolidated | where_exp: "p", "p.lab.type == 'task'" -%}
+
+    <h2>Views</h2>
+    <ul>
+      <li><a href="{{ '/workshop.html' | relative_url }}"
+             {% if page.url contains 'workshop' %}aria-current="page"{% endif %}>Workshop agenda</a></li>
+      <li><a href="{{ '/explore.html' | relative_url }}"
+             {% if page.url contains 'explore' %}aria-current="page"{% endif %}>Task explorer</a></li>
+      <li><a href="{{ '/index.html' | relative_url }}">Lab catalogue</a></li>
+    </ul>
+
+    <h2>Labs</h2>
+    <ul>
+      {%- for lab in labs -%}
+      {%- assign lab_id = lab.lab.id -%}
+      {%- assign core = all_tasks | where_exp: "p", "p.lab.parent == lab_id" | where_exp: "p", "p.lab.section == 'core'" -%}
+      {%- assign mins = 0 -%}
+      {%- for t in core %}{% assign mins = mins | plus: t.lab.duration %}{% endfor -%}
+      <li>
+        <a href="{{ lab.url | relative_url }}">{{ lab.lab.title }}</a>
+        <span class="wk-sub">{{ mins }} min core</span>
+      </li>
+      {%- endfor -%}
+    </ul>
+
+    <h2>Data</h2>
+    <ul>
+      <li><a href="{{ '/labs.json' | relative_url }}">labs.json</a></li>
+    </ul>
+  </nav>
+
+  <main class="wk-content" id="main-content">
+    {{ content }}
+  </main>
+</div>

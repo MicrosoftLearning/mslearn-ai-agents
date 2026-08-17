@@ -1,0 +1,59 @@
+---
+permalink: labs.json
+layout: null
+sitemap: false
+---
+{%- comment -%}
+Machine-readable index of the consolidated labs, for anything that needs the
+catalogue without parsing the pages.
+{%- endcomment -%}
+{%- assign consolidated = site.pages | where_exp: "p", "p.url contains '/Instructions/Consolidated/'" -%}
+{%- assign labs = consolidated | where_exp: "p", "p.lab.type == 'lab'" | sort: "lab.order" -%}
+{%- assign all_tasks = consolidated | where_exp: "p", "p.lab.type == 'task'" -%}
+{
+  "labs": [
+{%- for lab in labs -%}
+{%- assign lab_id = lab.lab.id -%}
+{%- assign tasks = all_tasks | where_exp: "p", "p.lab.parent == lab_id" | sort: "lab.order" -%}
+{%- assign core_total = 0 -%}
+{%- assign full_total = 0 -%}
+{%- for t in tasks -%}
+  {%- if t.lab.duration -%}
+    {%- assign full_total = full_total | plus: t.lab.duration -%}
+    {%- if t.lab.section == 'core' %}{% assign core_total = core_total | plus: t.lab.duration %}{% endif -%}
+  {%- endif -%}
+{%- endfor %}
+    {
+      "id": {{ lab.lab.id | jsonify }},
+      "order": {{ lab.lab.order }},
+      "title": {{ lab.lab.title | jsonify }},
+      "description": {{ lab.lab.description | jsonify }},
+      "level": {{ lab.lab.level }},
+      "difficulty": {{ lab.lab.difficulty }},
+      "status": {{ lab.lab.status | jsonify }},
+      "concepts": {{ lab.lab.concepts | split: ", " | jsonify }},
+      "url": {{ lab.url | relative_url | jsonify }},
+      "duration_core_minutes": {{ core_total }},
+      "duration_total_minutes": {{ full_total }},
+      "tasks": [
+      {%- for t in tasks %}
+        {
+          "order": {{ t.lab.order }},
+          "title": {{ t.lab.title | jsonify }},
+          "description": {{ t.lab.description | jsonify }},
+          "section": {{ t.lab.section | jsonify }},
+          "level": {{ t.lab.level }},
+          {% if t.lab.difficulty %}"difficulty": {{ t.lab.difficulty }},{% else %}"difficulty": null,{% endif %}
+          {% if t.lab.duration %}"duration_minutes": {{ t.lab.duration }},{% else %}"duration_minutes": null,{% endif %}
+          "access": {{ t.lab.access | jsonify }},
+          {% if t.lab.requires %}"requires": {{ t.lab.requires | jsonify }},{% else %}"requires": null,{% endif %}
+          {% if t.lab.verify %}"verify": {{ t.lab.verify | jsonify }},{% else %}"verify": null,{% endif %}
+          "concepts": {{ t.lab.concepts | split: ", " | jsonify }},
+          "url": {{ t.url | relative_url | jsonify }}
+        }{% unless forloop.last %},{% endunless %}
+      {%- endfor %}
+      ]
+    }{% unless forloop.last %},{% endunless %}
+{%- endfor %}
+  ]
+}
