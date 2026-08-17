@@ -3,9 +3,15 @@ title: 'Task 5 – Capstone: build your own MCP server'
 lab:
     title: 'Task 5 – Capstone: build your own MCP server'
     description: 'Capstone: build your own MCP server and combine it with your function tools into one Tailwind Traders assistant.'
-    level: 300
+    type: 'task'
+    parent: 'A'
+    order: 5
+    section: 'optional'
+    difficulty: 4
+    duration: 35
+    access: 'open'
+    level: 400
     concepts: 'MCP server, tool orchestration, Microsoft Agent Framework'
-    islab: true
     status: 'draft'
 ---
 

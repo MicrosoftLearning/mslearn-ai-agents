@@ -3,9 +3,15 @@ title: 'Task 4 – Add custom function tools'
 lab:
     title: 'Task 4 – Add custom function tools'
     description: 'Give an agent tools backed by your own Python functions and process the function-calling loop.'
+    type: 'task'
+    parent: 'A'
+    order: 4
+    section: 'optional'
+    difficulty: 3
+    duration: 25
+    access: 'open'
     level: 300
     concepts: 'function tools, function calling, Microsoft Agent Framework'
-    islab: true
     status: 'draft'
 ---
 

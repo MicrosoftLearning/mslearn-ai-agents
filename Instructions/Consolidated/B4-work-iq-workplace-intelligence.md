@@ -3,9 +3,18 @@ title: 'Task 4 – Work IQ: bring Microsoft 365 signals into an agent'
 lab:
     title: 'Task 4 – Work IQ: bring Microsoft 365 signals into an agent'
     description: 'Build an agent that accesses Microsoft 365 workplace data using Work IQ and the Model Context Protocol for meeting prep, project tracking, and action items.'
-    level: 300
+    type: 'task'
+    parent: 'B'
+    order: 4
+    section: 'optional'
+    difficulty: 4
+    duration: 40
+    access: 'gated'
+    requires: 'A Microsoft 365 Copilot licence, IT admin consent for Work IQ, and Node.js 18 or later'
+    verify: 'Run the command below. If it returns your calendar you''re ready; if it reports missing consent or no Copilot licence, skip this task.'
+    verify_command: 'npm install -g @microsoft/workiq && workiq accept-eula && workiq ask -q "What meetings do I have today?"'
+    level: 400
     concepts: 'Work IQ, Microsoft 365, Model Context Protocol (MCP), function tools'
-    islab: true
     status: 'draft'
 ---
 

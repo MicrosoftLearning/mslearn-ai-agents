@@ -3,9 +3,15 @@ title: 'Task 4 – Classify and route a support ticket'
 lab:
     title: 'Task 4 – Classify and route a support ticket'
     description: 'Use the Microsoft Agent Framework to classify Tailwind Traders support tickets with a triage agent, then route each one in code based on its category and confidence.'
+    type: 'task'
+    parent: 'C'
+    order: 4
+    section: 'optional'
+    difficulty: 3
+    duration: 30
+    access: 'open'
     level: 300
     concepts: 'Microsoft Agent Framework, structured output, classification, conditional routing'
-    islab: true
     status: 'draft'
 ---
 

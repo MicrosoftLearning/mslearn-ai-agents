@@ -3,9 +3,17 @@ title: 'Task 3 – Publish your agent to Microsoft 365 Copilot'
 lab:
     title: 'Task 3 – Publish your agent to Microsoft 365 Copilot'
     description: 'Publish the Tailwind Traders knowledge agent to Microsoft 365 Copilot so staff can reach it inside Copilot.'
-    level: 300
+    type: 'task'
+    parent: 'B'
+    order: 3
+    section: 'optional'
+    difficulty: 2
+    duration: 15
+    access: 'gated'
+    requires: 'A Microsoft 365 Copilot licence, and permission to publish agents to Copilot in your tenant'
+    verify: 'In the Foundry portal, open your agent and select **Publish**. If Microsoft 365 Copilot is greyed out or returns a consent error, you don''t have the rights this task needs.'
+    level: 200
     concepts: 'agent publishing, Microsoft 365 Copilot, Copilot agents'
-    islab: true
     status: 'draft'
 ---
 

@@ -3,9 +3,15 @@ title: 'Task 6 – Promote your assistant to a hosted agent'
 lab:
     title: 'Task 6 – Promote your assistant to a hosted agent'
     description: 'Take the Tailwind Traders assistant you built as a prompt agent and deploy it as a hosted agent - your own code running in a Foundry-managed container - with the Azure Developer CLI.'
+    type: 'task'
+    parent: 'A'
+    order: 6
+    section: 'optional'
+    difficulty: 3
+    duration: 30
+    access: 'open'
     level: 300
     concepts: 'hosted agents, deployment, Azure Developer CLI'
-    islab: true
     status: 'draft'
 ---
 
