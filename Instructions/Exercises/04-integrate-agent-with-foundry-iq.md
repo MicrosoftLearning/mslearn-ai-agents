@@ -24,9 +24,11 @@ Before starting this exercise, ensure you have:
 
 - An [Azure subscription](https://azure.microsoft.com/free/) with permissions to create AI resources
 - [Visual Studio Code](https://code.visualstudio.com/) installed on your local machine
-- [Python 3.13](https://www.python.org/downloads/) or later installed
+- [Python 3.13](https://www.python.org/downloads/) installed
 - [Git](https://git-scm.com/downloads) installed on your local machine
 - Basic familiarity with the Microsoft Foundry portal and Python programming
+
+> \* Python 3.14 isn't supported yet: some dependencies have no 3.14 build. This lab was tested with Python 3.13.12.
 
 ## Create a Foundry project
 

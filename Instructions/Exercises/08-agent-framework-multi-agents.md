@@ -28,10 +28,10 @@ Before starting this exercise, ensure you have:
 
 - [Visual Studio Code](https://code.visualstudio.com/) installed on your local machine
 - An active [Azure subscription](https://azure.microsoft.com/free/)
-- [Python 3.13](https://www.python.org/downloads/) or later installed
+- [Python 3.13](https://www.python.org/downloads/) installed
 - [Git](https://git-scm.com/downloads) installed on your local machine
 
-> \* Python 3.14 is available, but some dependencies are not yet compiled for that release. The lab has been successfully tested with Python 3.13.12.
+> \* Python 3.14 isn't supported yet: some dependencies have no 3.14 build. This lab was tested with Python 3.13.12.
 
 ## Create a Foundry project with the Foundry Toolkit for VS Code extension
 

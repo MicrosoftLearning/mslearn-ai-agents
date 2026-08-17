@@ -24,9 +24,11 @@ Before starting this lab, ensure you have:
 - **Microsoft 365 with Copilot License**
 - IT admin approval for Work IQ (organizational accounts only)
 - [Node.js 18](https://nodejs.org/en/download/) or later installed
-- [Python 3.13](https://www.python.org/downloads/) or later installed
+- [Python 3.13](https://www.python.org/downloads/) installed
 - [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli) installed (authenticated with `az login`)
 - Active M365 data (emails, meetings, Teams chats) to query
+
+> \* Python 3.14 isn't supported yet: some dependencies have no 3.14 build. This lab was tested with Python 3.13.12.
 
 > **Important:** Work IQ **only works** with Microsoft 365 Copilot-enabled accounts. You cannot complete this lab without Copilot.
 
