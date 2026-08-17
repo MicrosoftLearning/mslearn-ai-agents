@@ -128,11 +128,20 @@ one virtual environment, and one `.env`, so if you'd rather work straight throug
 Complete the **Core** task first — it ends with a working, tool-using agent. Then expand any
 **Optional** tasks that interest you.
 
-{% include lab-tasks-table.html lab='C' %}
+<!-- BEGIN GENERATED: task-table - do not edit by hand; run: python tools/generate_lab_blocks.py -->
+| Section | Task | Level | Time |
+| --- | --- | --- | --- |
+| **Core** | [Task 1 – Build an agent with a tool](C1-create-an-agent-with-a-tool.md) | ▰▰▰▱▱ L300 | ~30 min |
+| *Optional* | [Task 2 – Orchestrate multiple agents in sequence](C2-orchestrate-multiple-agents.md) | ▰▰▰▱▱ L300 | ~30 min |
+| *Optional* | [Task 3 – Connect remote agents with A2A](C3-connect-remote-agents-with-a2a.md) | ▰▰▰▰▱ L400 | ~30 min |
+| *Optional* | [Task 4 – Classify and route a support ticket](C4-classify-and-route-a-ticket.md) | ▰▰▰▱▱ L300 | ~30 min |
+
+**Core tasks:** about **30 minutes**. **Full lab**, including every optional task: about **2 hours**.
+<!-- END GENERATED: task-table -->
 
 **Choosing your path** — pick the tasks that fit the time you have:
 
-- **Core only (~30 min):** do Task 1.
+- **Core only (~99 min):** do Task 1.
 - **Core + one pattern (~1h):** add **Task 2** (sequential orchestration) or **Task 4** (classify + route).
 - **Everything (~2h):** add **Task 2**, **Task 3** (remote agents with A2A), and **Task 4**.
 

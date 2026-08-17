@@ -21,7 +21,15 @@ lab:
 
 *Part of the **Integrate agents with enterprise knowledge and Microsoft 365** lab. New here? Start with [Getting started](B0-getting-started.md).*
 
-{% include gated-notice.html %}
+<!-- BEGIN GENERATED: gated-notice - do not edit by hand; run: python tools/generate_lab_blocks.py -->
+> ### Check your access before you start
+>
+> **This task needs:** A Microsoft 365 Copilot licence, and permission to publish agents to Copilot in your tenant.
+>
+> In the Foundry portal, open your agent and select **Publish**. If Microsoft 365 Copilot is greyed out or returns a consent error, you don't have the rights this task needs.
+>
+> **Don't have it?** Skip this task. Nothing else in this lab depends on it, and you can still read through the steps to see how it works.
+<!-- END GENERATED: gated-notice -->
 
 > **Set up (start here):** This task publishes the grounded `tailwind-knowledge-agent` from
 > [Task 1](B1-create-a-foundry-iq-knowledge-agent.md). If you don't have that agent yet, complete

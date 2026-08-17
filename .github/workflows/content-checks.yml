@@ -50,3 +50,7 @@ jobs:
       - name: Line endings match .gitattributes
         if: always()
         run: python tools/checks/check_line_endings.py
+
+      - name: Generated blocks in the lab pages are current
+        if: always()
+        run: python tools/generate_lab_blocks.py --check

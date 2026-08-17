@@ -129,7 +129,18 @@ one virtual environment, and one `.env`, so if you'd rather work straight throug
 Complete the **Core** tasks first — they end with a working, tool-using agent. Then expand any
 **Optional** tasks that interest you.
 
-{% include lab-tasks-table.html lab='A' %}
+<!-- BEGIN GENERATED: task-table - do not edit by hand; run: python tools/generate_lab_blocks.py -->
+| Section | Task | Level | Time |
+| --- | --- | --- | --- |
+| **Core** | [Task 1 – Create and ground an agent](A1-create-and-ground-an-agent.md) | ▰▰▱▱▱ L200 | ~15 min |
+| **Core** | [Task 2 – Connect a remote MCP server](A2-connect-a-remote-mcp-server.md) | ▰▰▰▱▱ L300 | ~20 min |
+| *Optional* | [Task 3 – Call your agent from a client app](A3-call-your-agent-from-a-client-app.md) | ▰▰▰▱▱ L300 | ~20 min |
+| *Optional* | [Task 4 – Add custom function tools](A4-add-custom-function-tools.md) | ▰▰▰▱▱ L300 | ~25 min |
+| *Optional* | [Task 5 – Capstone: build your own MCP server](A5-capstone-build-your-own-mcp-server.md) | ▰▰▰▰▱ L400 | ~35 min |
+| *Optional* | [Task 6 – Promote your assistant to a hosted agent](A6-promote-your-assistant-to-a-hosted-agent.md) | ▰▰▰▱▱ L300 | ~30 min |
+
+**Core tasks:** about **35 minutes**. **Full lab**, including every optional task: about **2 hours 25 minutes**.
+<!-- END GENERATED: task-table -->
 
 **Choosing your path** — pick the tasks that fit the time you have:
 

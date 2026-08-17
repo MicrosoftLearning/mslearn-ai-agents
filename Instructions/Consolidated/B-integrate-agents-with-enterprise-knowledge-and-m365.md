@@ -126,7 +126,20 @@ folder, one virtual environment, and one `.env`, so if you'd rather work straigh
 Complete the **Core** task first — it ends with a working, grounded enterprise-knowledge agent
 you can call from code. Then expand any **Optional** tasks that interest you.
 
-{% include lab-tasks-table.html lab='B' %}
+<!-- BEGIN GENERATED: task-table - do not edit by hand; run: python tools/generate_lab_blocks.py -->
+| Section | Task | Level | Time |
+| --- | --- | --- | --- |
+| **Core** | [Task 1 – Create a Foundry IQ knowledge agent and connect from code](B1-create-a-foundry-iq-knowledge-agent.md) | ▰▰▰▱▱ L300 | ~35 min |
+| *Optional* | [Task 2 – Publish your agent to Microsoft Teams](B2-publish-to-microsoft-teams.md) 🔒 | ▰▰▱▱▱ L200 | ~20 min |
+| *Optional* | [Task 3 – Publish your agent to Microsoft 365 Copilot](B3-publish-to-microsoft-365-copilot.md) 🔒 | ▰▰▱▱▱ L200 | ~15 min |
+| *Optional* | [Task 4 – Work IQ: bring Microsoft 365 signals into an agent](B4-work-iq-workplace-intelligence.md) 🔒 | ▰▰▰▰▱ L400 | ~40 min |
+
+**Core tasks:** about **35 minutes**. **Full lab**, including every optional task: about **1 hour 50 minutes**.
+
+> 🔒 Tasks marked with a lock need access your account may not have. Each one opens
+> with a quick check and tells you what to do if you don't have it — nothing else in
+> this lab depends on them.
+<!-- END GENERATED: task-table -->
 
 **Choosing your path** — pick the tasks that fit the time you have:
 
