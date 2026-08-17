@@ -1,0 +1,47 @@
+<!--
+    TEMPORARY OVERRIDE of the layout from MicrosoftLearning/Jekyll-Theme.
+
+    Theme commit d6cdbff ("Fix typo", 13 Aug 2026) reformatted the theme's
+    _layouts/default.html and introduced a space inside the stylesheet string:
+
+        href="{{ " /assets/css/style.css?v=" | append: ... | relative_url }}"
+                 ^ here
+
+    relative_url then produces "/mslearn-ai-agents/ /assets/css/style.css",
+    which the browser requests as ".../%20/assets/css/style.css". That 404s, so
+    every page on the site renders unstyled.
+
+    This file is the theme's current layout with that single space removed, so
+    it also keeps the genuine fix from the same commit (page.lab.tile ->
+    page.lab.title, which had been blanking lab page titles).
+
+    Jekyll resolves local _layouts/ ahead of remote_theme, so this takes effect
+    for every page, including home.html which inherits from it.
+
+    DELETE THIS FILE once the fix is released upstream. The bug affects every
+    course repo using the theme, so it is worth fixing there rather than
+    carrying a copy here indefinitely.
+-->
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>
+        {% if page.title %}{{ page.title }} |
+        {% elsif page.lab.title %}{{ page.lab.title }} | {% endif %}
+        {{ site.title }}
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/vs.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
+</head>
+{{ content }}
+
+</html>
