@@ -1,6 +1,7 @@
 ---
 permalink: labs.json
 layout: null
+sitemap: false
 ---
 {%- comment -%}
 Machine-readable index of the consolidated labs, for anything that needs the

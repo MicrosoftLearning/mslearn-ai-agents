@@ -2,6 +2,7 @@
 title: Workshop agenda
 permalink: workshop.html
 layout: workshop
+sitemap: false
 ---
 
 {%- comment -%}

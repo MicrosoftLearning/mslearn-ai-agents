@@ -2,6 +2,7 @@
 title: Task explorer
 permalink: explore.html
 layout: workshop
+sitemap: false
 ---
 
 {%- comment -%}
