@@ -5,12 +5,8 @@ layout: workshop
 ---
 
 {%- comment -%}
-Workshop view. Every lab, task, timing and level on this page is read from the
-frontmatter of the pages under /Instructions/Consolidated/, so it cannot drift
-from the labs themselves. Nothing here is hard-coded.
-
-Layout deliberately echoes a docs-style workshop site: a nav rail on the left
-and the agenda on the right.
+Workshop view. Reads lab and task details from the frontmatter of the pages
+under /Instructions/Consolidated/.
 {%- endcomment -%}
 
 {%- assign consolidated = site.pages | where_exp: "p", "p.url contains '/Instructions/Consolidated/'" -%}

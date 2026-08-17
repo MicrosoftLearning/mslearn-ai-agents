@@ -3,16 +3,13 @@ permalink: labs.json
 layout: null
 ---
 {%- comment -%}
-Machine-readable index of the consolidated labs, generated from the same page
-frontmatter that drives the site. Any consumer that needs the catalogue - a
-workshop scheduler, an LMS import, another site - can read this instead of
-scraping the pages or keeping its own copy.
+Machine-readable index of the consolidated labs, for anything that needs the
+catalogue without parsing the pages.
 {%- endcomment -%}
 {%- assign consolidated = site.pages | where_exp: "p", "p.url contains '/Instructions/Consolidated/'" -%}
 {%- assign labs = consolidated | where_exp: "p", "p.lab.type == 'lab'" | sort: "lab.order" -%}
 {%- assign all_tasks = consolidated | where_exp: "p", "p.lab.type == 'task'" -%}
 {
-  "generated_by": "labs.json template, from page frontmatter",
   "labs": [
 {%- for lab in labs -%}
 {%- assign lab_id = lab.lab.id -%}

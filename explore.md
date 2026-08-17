@@ -5,9 +5,8 @@ layout: workshop
 ---
 
 {%- comment -%}
-Task explorer. Renders every consolidated task from its own frontmatter, then
-filters client-side. The data attributes are generated, so a new task appears
-here automatically once its page exists - there is no list to maintain.
+Task explorer. Lists every consolidated task and filters client-side using the
+data- attributes on each card.
 {%- endcomment -%}
 
 {%- assign consolidated = site.pages | where_exp: "p", "p.url contains '/Instructions/Consolidated/'" -%}
@@ -16,8 +15,8 @@ here automatically once its page exists - there is no list to maintain.
 
 # Task explorer
 
-Every task across the consolidated labs, filterable. Each card is generated from that task's
-own frontmatter, so this list stays in step with the labs automatically.
+Every task across the consolidated labs. Filter by lab, section, level, time or access to
+find the ones that fit.
 
 <div class="ex-filters" markdown="0">
   <div>

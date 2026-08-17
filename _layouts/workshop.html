@@ -3,19 +3,13 @@ layout: default
 ---
 
 {%- comment -%}
-Layout for the workshop and task-explorer pages.
+Layout for the workshop and task-explorer pages: a nav rail on the left,
+content on the right.
 
-These are docs-style pages rather than lab instructions: a nav rail on the
-left, content on the right. The look is modelled on Just the Docs, but the
-theme itself is deliberately not adopted - its sidebar is generated from
-nav_order/parent frontmatter, whereas ours comes from lab metadata, which
-suits this repo better. What is borrowed is the presentation, not the
-machinery.
-
-It inherits the site's `default` layout, so the header and footer still come
-from MicrosoftLearning/Jekyll-Theme. Jekyll resolves local _layouts/ ahead of
-remote_theme, and only pages that opt in with `layout: workshop` are affected -
-every lab page is untouched.
+Inherits the site's `default` layout, so the header and footer still come from
+MicrosoftLearning/Jekyll-Theme. Jekyll resolves local _layouts/ ahead of
+remote_theme, and only pages that set `layout: workshop` use this one, so the
+lab pages are unaffected.
 {%- endcomment -%}
 
 <style>
