@@ -185,10 +185,10 @@ When you create an agent in the portal, its Foundry IQ (knowledge) tool runs **w
 
 1. Under **Microsoft Foundry Resources**, choose **Set Default Project** and select the project you created earlier.
 1. Expand the project section. Under **Prompt Agents**, select your `tailwind-knowledge-agent` agent to open the **Agent Builder** window.
-1. In the **Tools** section, add the **Azure AI Search** tool, and then select the connection and knowledge base you created earlier.
+1. In the **Tools** section, find the tool named with a `kb-knowledgebase` prefix followed by a unique ID (for example, `kb-knowledgebase677-7w5fj`). This is the Foundry IQ knowledge base tool, and it was added automatically when you connected Foundry IQ in the portal.
 
-    > **Note**: The agent may list more than one tool. The Foundry portal adds a **Web search** tool to new agents by default, so be sure to select the three dots on the **Azure AI Search** tool for your knowledge base rather than another tool.
-1. In the **Require approval before using tools** dropdown, select **Ask for approval for all tools**, and save your changes if you're prompted.
+    > **Note**: The agent lists more than one tool. The Foundry portal adds a **Web search** tool to new agents by default, and you may also see a standalone **Azure AI Search** tool. The agent actually calls the `kb-knowledgebase...` tool when it searches your knowledge base, so setting approval on any other tool has no effect.
+1. Select the three dots on the `kb-knowledgebase...` tool. Then, in the **Require approval before using tools** dropdown, select **Ask for approval for all tools**, and save your changes if you're prompted.
 
 Your agent will now request approval each time it uses Foundry IQ to search the knowledge base, which the client app you complete next will handle.
 
