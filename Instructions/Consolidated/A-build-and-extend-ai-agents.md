@@ -2,7 +2,7 @@
 title: 'Build and extend AI agents'
 lab:
     title: 'Build and extend AI agents'
-    description: 'Build the Tailwind Traders assistant: ground it in store policy, then extend it with tools using remote MCP servers, custom functions, and a client app. A modular lab you can complete end to end or one task at a time.'
+    description: 'Build the Caldova supply chain assistant: ground it in company policy, then extend it with tools using remote MCP servers, custom functions, and a client app. A modular lab you can complete end to end or one task at a time.'
     type: 'lab'
     id: 'A'
     order: 1
@@ -65,11 +65,13 @@ the model alone — it's the **knowledge** you ground it in and the **tools** yo
 </div>
 </details>
 
-**Your scenario:** you work at **Tailwind Traders**, an outdoor-gear retailer that
-also runs guided trips. Across this lab you'll build the staff assistant that powers the
-business, adding one capability per task: first grounding it in the store's own policies,
-then connecting it to live documentation, letting it analyze sales data, take trip
-bookings, and check warehouse stock.
+**Your scenario:** you work at **Caldova**, a pharmaceutical manufacturer preparing an
+accelerated product launch. Planning forecasts a 7% capacity gap across the three manufacturing
+sites, and teams need to know whether they can close it internally or bring in a pre-qualified
+contract manufacturer. Across this lab you'll build the supply chain assistant that answers
+those questions, adding one capability per task: first grounding it in the company's own supply
+chain policy, then connecting it to live documentation, letting it analyze production output,
+draft capacity requests, and check material stock.
 
 You'll start with the **Core** tasks that get you to a working, tool-using agent as
 quickly as possible. From there, a set of **Optional** tasks lets you go deeper into the
@@ -137,9 +139,9 @@ Complete the **Core** tasks first — they end with a working, tool-using agent.
   and **Task 6** (deploy the assistant as a hosted agent).
 
 > **One assistant, growing capabilities**: Tasks 3–5 all run behind the same provided web
-> chat window (`tailwind_ui.py`) — the **Tailwind Traders Assistant**. You focus only
-> on the agent code; each task gives the same assistant a new capability (analyzing sales
-> data, planning trips, and checking warehouse stock). You don't edit `tailwind_ui.py`; you
+> chat window (`caldova_ui.py`) — the **Caldova Assistant**. You focus only
+> on the agent code; each task gives the same assistant a new capability (analyzing output
+> data, planning capacity, and checking material stock). You don't edit `caldova_ui.py`; you
 > just write a `respond()` function and hand it to `run_chat_app()`.
 
 ## Two ways to build the same agent

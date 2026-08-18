@@ -2,7 +2,7 @@
 title: 'Task 6 – Promote your assistant to a hosted agent'
 lab:
     title: 'Task 6 – Promote your assistant to a hosted agent'
-    description: 'Take the Tailwind Traders assistant you built as a prompt agent and deploy it as a hosted agent - your own code running in a Foundry-managed container - with the Azure Developer CLI.'
+    description: 'Take the Caldova assistant you built as a prompt agent and deploy it as a hosted agent - your own code running in a Foundry-managed container - with the Azure Developer CLI.'
     type: 'task'
     parent: 'A'
     order: 6
@@ -42,7 +42,7 @@ python ../setup/check_env.py --task 6
 
 ---
 
-**Goal**: take the **same Tailwind Traders assistant** you've been building and run it as a
+**Goal**: take the **same Caldova assistant** you've been building and run it as a
 **hosted agent** — your own code, packaged and deployed to Foundry Agent Service, invokable by
 reference just like the prompt agents you built earlier.
 
@@ -86,7 +86,7 @@ _responses_client = (
 )
 ```
 
-Then complete the handler to call the model with the Tailwind system prompt and return the reply:
+Then complete the handler to call the model with the Caldova system prompt and return the reply:
 
 ```python
 response = await asyncio.get_running_loop().run_in_executor(
@@ -121,7 +121,7 @@ The complete file is in `Solution/Python/hosted_agent/main.py`.
     azd ai agent init --protocol responses --deploy-mode code
     ```
 
-    Answer the prompts: pick an **agent name** (for example, `tailwind-hosted-agent`), select
+    Answer the prompts: pick an **agent name** (for example, `caldova-hosted-agent`), select
     **Use an existing Foundry project** (the one from Getting started), and choose your
     subscription and location.
 
@@ -147,7 +147,7 @@ The complete file is in `Solution/Python/hosted_agent/main.py`.
 1. Chat with it in the inspector, or invoke it from a second terminal:
 
     ```
-    azd ai agent invoke --local "What's your return policy on rented gear?"
+    azd ai agent invoke --local "How long does review take for a capacity request?"
     ```
 
 ## Deploy to Foundry Agent Service
@@ -164,7 +164,7 @@ The complete file is in `Solution/Python/hosted_agent/main.py`.
 1. Invoke the deployed agent:
 
     ```
-    azd ai agent invoke "A customer wants to return a tent they bought two weeks ago. What are their options?"
+    azd ai agent invoke "A planner needs five weeks of premium contract capacity. What will it cost at expedited priority?"
     ```
 
 > **Same reference, your code now**: a hosted agent is invoked exactly like the prompt agents
@@ -173,7 +173,7 @@ The complete file is in `Solution/Python/hosted_agent/main.py`.
 > difference is that the logic answering each turn is now **your code** running in a container,
 > not a prompt definition.
 
-> ✅ **Checkpoint**: You promoted the Tailwind Traders assistant from a prompt agent to a hosted
+> ✅ **Checkpoint**: You promoted the Caldova assistant from a prompt agent to a hosted
 > agent, tested it locally with `azd ai agent run`, deployed it with `azd deploy`, and invoked
 > the deployed agent by name.
 

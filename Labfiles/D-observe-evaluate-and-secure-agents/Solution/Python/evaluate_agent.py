@@ -12,14 +12,14 @@ from azure.ai.evaluation import (
     SimilarityEvaluator,
     evaluate,
 )
-from agent_target import TailwindAgentTarget
+from agent_target import CaldovaAgentTarget
 
 # Load environment variables from .env file
 load_dotenv()
 project_endpoint = os.getenv("PROJECT_ENDPOINT")
 model_deployment = os.getenv("MODEL_DEPLOYMENT_NAME")
 
-DATASET = Path("data/tailwind_eval.jsonl")
+DATASET = Path("data/caldova_eval.jsonl")
 OUTPUT = Path("eval_results.json")
 
 
@@ -51,7 +51,7 @@ similarity = SimilarityEvaluator(model_config)
 # Run the evaluation
 result = evaluate(
     data=str(DATASET),
-    target=TailwindAgentTarget(),
+    target=CaldovaAgentTarget(),
     evaluators={
         "groundedness": groundedness,
         "relevance": relevance,

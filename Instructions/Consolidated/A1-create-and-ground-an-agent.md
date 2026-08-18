@@ -2,7 +2,7 @@
 title: 'Task 1 – Create and ground an agent'
 lab:
     title: 'Task 1 – Create and ground an agent'
-    description: 'Create an agent in the Microsoft Foundry portal and ground it in Tailwind Traders store policy so it answers from your data.'
+    description: 'Create an agent in the Microsoft Foundry portal and ground it in Caldova store policy so it answers from your data.'
     type: 'task'
     parent: 'A'
     order: 1
@@ -49,8 +49,8 @@ details.concept .concept-body { border:1px solid #6b4ba133; border-top:none;
 <summary>What is grounding?</summary>
 <div class="concept-body" markdown="1">
 
-The single most important capability for the Tailwind Traders agent is **grounding**.
-Grounding attaches trusted source material — such as the store policy document — so the
+The single most important capability for the Caldova agent is **grounding**.
+Grounding attaches trusted source material — such as the supply chain policy document — so the
 agent answers *from that data* instead of inventing a response.
 
 [Learn more →](https://review.learn.microsoft.com/en-us/training/modules/build-extend-ai-agents/2-understand-agents-foundry?branch=pr-en-us-55509)
@@ -61,26 +61,26 @@ agent answers *from that data* instead of inventing a response.
 1. In the agent playground, set the **Instructions** to:
 
     ```prompt
-    You are the Tailwind Traders store assistant.
-    You help customers and store staff with questions about products, orders, returns, rentals, and guided trips.
+    You are the Caldova supply chain assistant.
+    You help planning and materials teams with questions about capacity, contract manufacturers, and materials.
 
     Guidelines:
-    - Always be friendly and helpful
-    - Use the store policy documentation to answer questions accurately
-    - If you don't know the answer, admit it and suggest contacting the support team directly
+    - Always be clear and concise
+    - Use the supply chain policy documentation to answer questions accurately
+    - If you don't know the answer, admit it and suggest contacting the planning desk directly
     ```
 
-1. Download the sample store policy document. Open a new browser tab and navigate to:
+1. Download the sample supply chain policy document. Open a new browser tab and navigate to:
 
     ```
-    https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/A-build-and-extend-ai-agents/Python/Store_Policy.txt
+    https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/A-build-and-extend-ai-agents/Python/Supply_Chain_Policy.txt
     ```
 
     Save the file to your local machine.
 
 1. Back in the playground, in the **Tools** section, select **Add**, and add **File search**.
 
-1. To the right of **Add**, select **Upload files**, browse to the `Store_Policy.txt` file you downloaded, and select **Attach**. Wait for the file to be indexed.
+1. To the right of **Add**, select **Upload files**, browse to the `Supply_Chain_Policy.txt` file you downloaded, and select **Attach**. Wait for the file to be indexed.
 
 1. **Save** the agent.
 
@@ -89,18 +89,18 @@ agent answers *from that data* instead of inventing a response.
 1. In the chat pane, enter:
 
     ```
-    What's your return policy for a tent?
+    How long does review take for a capacity request with a complete brief?
     ```
 
-    The agent should reference the store policy document in its answer.
+    The agent should reference the supply chain policy document in its answer.
 
 1. Try a second question to confirm it's using the grounding data:
 
     ```
-    How do I rent gear for a weekend trip?
+    How much is five weeks of premium contract capacity at expedited priority?
     ```
 
-> ✅ **Checkpoint**: Your agent answers store questions using the uploaded policy document.
+> ✅ **Checkpoint**: Your agent answers supply chain questions using the uploaded policy document.
 > You've created and grounded an agent entirely in the portal.
 
 ---

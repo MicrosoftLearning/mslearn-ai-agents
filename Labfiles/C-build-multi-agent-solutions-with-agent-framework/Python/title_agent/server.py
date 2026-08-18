@@ -37,7 +37,7 @@ routes = a2a_app.routes()
 
 # Add health check endpoint
 async def health_check(request: Request) -> PlainTextResponse:
-    return PlainTextResponse('Tailwind Traders Trip Title Agent is running!')
+    return PlainTextResponse('Caldova Transfer Title Agent is running!')
 
 routes.append(Route(path='/health', methods=['GET'], endpoint=health_check))
 

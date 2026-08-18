@@ -11,15 +11,15 @@ like the starter code learners work in:
 Solution/
 └─ Python/
    ├─ expense_agent.py        # Task 1 — single agent with a tool (Microsoft Agent Framework)
-   ├─ data.txt                #   Task 1 — Tailwind Traders guided-trip expense data
+   ├─ data.txt                #   Task 1 — Caldova site-visit expense data
    ├─ feedback_agents.py      # Task 2 — sequential orchestration of three agents (MAF)
    ├─ run_all.py              # Task 3 — launches the three A2A agent servers
    ├─ client.py               # Task 3 — chat client that talks to the routing agent
-   ├─ title_agent/            #   Task 3 — remote agent: suggests a guided-trip title
-   ├─ outline_agent/          #   Task 3 — remote agent: drafts a trip itinerary outline
+   ├─ title_agent/            #   Task 3 — remote agent: suggests a transfer brief title
+   ├─ outline_agent/          #   Task 3 — remote agent: drafts a transfer plan outline
    ├─ routing_agent/          #   Task 3 — orchestrator that delegates to the remote agents via A2A
    ├─ ticket_triage.py        # Task 4 — single agent classifies a ticket; code routes on the result
-   └─ sample_tickets.json     #   Task 4 — sample Tailwind Traders support tickets
+   └─ sample_tickets.json     #   Task 4 — sample Caldova support tickets
 ```
 
 The whole lab is built on the **Microsoft Agent Framework (MAF)**. Task 1 and Task 2 use the
@@ -101,8 +101,8 @@ All commands run from the single `Solution/Python/` folder:
 | Task | Command | What you get |
 |------|---------|--------------|
 | 1 | `python expense_agent.py` | Console output: the agent reads `data.txt`, then calls the `submit_claim` tool to email an expense claim |
-| 2 | `python feedback_agents.py` | Console output: three agents summarize, classify, and recommend an action on customer feedback, in sequence |
-| 3 | `python run_all.py` (leave running), then in a second terminal `python client.py` | The three A2A agent servers start; the routing agent delegates your request to the trip-title and trip-itinerary agents |
+| 2 | `python feedback_agents.py` | Console output: three agents summarize, classify, and recommend an action on site feedback, in sequence |
+| 3 | `python run_all.py` (leave running), then in a second terminal `python client.py` | The three A2A agent servers start; the routing agent delegates your request to the transfer-title and transfer-outline agents |
 | 4 | `python ticket_triage.py` | Console output: the triage agent classifies three sample tickets; code routes each by category and confidence |
 
 For Task 3, `run_all.py` starts the `title_agent`, `outline_agent`, and `routing_agent`
@@ -113,5 +113,5 @@ Press Ctrl+C in the `run_all.py` terminal to stop every server.
 
 ## Quick sanity checks that DON'T need Azure
 - `python -m py_compile <file>` — all solution files compile.
-- From `Solution/Python/`: `python -c "print(open('data.txt').read())"` prints the Tailwind Traders
-  guided-trip expense data that Task 1's agent reads.
+- From `Solution/Python/`: `python -c "print(open('data.txt').read())"` prints the Caldova
+  site-visit expense data that Task 1's agent reads.

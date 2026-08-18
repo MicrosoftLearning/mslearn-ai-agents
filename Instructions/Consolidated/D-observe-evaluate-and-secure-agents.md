@@ -2,7 +2,7 @@
 title: 'Observe, evaluate, and secure your agents'
 lab:
     title: 'Observe, evaluate, and secure your agents'
-    description: 'Find out what your Tailwind Traders agent is actually doing: trace it with OpenTelemetry, score its answers against ground truth with built-in evaluators, and attack it with the AI Red Teaming Agent. A modular lab you can complete end to end or one task at a time.'
+    description: 'Find out what your Caldova agent is actually doing: trace it with OpenTelemetry, score its answers against ground truth with built-in evaluators, and attack it with the AI Red Teaming Agent. A modular lab you can complete end to end or one task at a time.'
     type: 'lab'
     id: 'D'
     order: 4
@@ -79,10 +79,11 @@ a tool call that timed out. **Tracing** shows you what happened on the way to th
 </div>
 </details>
 
-**Your scenario:** you work at **Tailwind Traders**, an outdoor-gear retailer that also runs
-guided trips. The staff assistant you built in earlier labs is now answering real questions
-on the shop floor — and store managers are asking harder questions about it. *Why was that
-answer slow? Is it making things up about the returns policy? What happens if a customer
+**Your scenario:** you work at **Caldova**, a pharmaceutical manufacturer preparing an
+accelerated product launch. The supply chain assistant you built in earlier labs is now
+answering real questions from planning teams — and the IT compliance lead is asking harder
+questions about it. *Why was that answer slow? Is it making things up about the capacity
+policy? What happens if someone
 tries to talk it into something it shouldn't say?* In this lab you answer all three with
 evidence rather than opinion.
 

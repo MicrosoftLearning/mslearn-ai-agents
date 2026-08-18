@@ -38,8 +38,8 @@ python ../setup/check_env.py --task 2
 
 ---
 
-The Tailwind Traders knowledge agent answers questions about returns, rentals, tents and
-backpacks. It sounds confident every time. That's the problem: you can read ten answers, feel
+The Caldova knowledge agent answers questions about capacity, contract manufacturers,
+and suppliers. It sounds confident every time. That's the problem: you can read ten answers, feel
 good about them, and still have no idea whether the eleventh invents a returns window that
 doesn't exist.
 
@@ -86,11 +86,11 @@ Open the `Python` folder and activate the virtual environment from [Getting star
 
 ### Look at the dataset first
 
-Open **data/tailwind_eval.jsonl**. Each line is one test case, and evaluation is only ever as
+Open **data/caldova_eval.jsonl**. Each line is one test case, and evaluation is only ever as
 good as this file:
 
 ```json
-{"query": "A customer wants to return an unused tent with a receipt. How long do they have?", "context": "Standard Return Window: Unused items with a receipt: 90 days for a full refund ...", "ground_truth": "They have 90 days from purchase for a full refund to the original payment method ..."}
+{"query": "A planner wants to raise a capacity request with a complete program brief. How long does review take?", "context": "Standard Request Window: Requests with a complete program brief: reviewed within 5 business days ...", "ground_truth": "Five business days for a request with a complete program brief ..."}
 ```
 
 - `query` — what you ask the agent.
@@ -119,7 +119,7 @@ Open **evaluate_agent.py** and add code at each commented placeholder.
         SimilarityEvaluator,
         evaluate,
     )
-    from agent_target import TailwindAgentTarget
+    from agent_target import CaldovaAgentTarget
     ```
 
 1. **Configure the model that grades the answers** — the evaluators are themselves model
@@ -155,7 +155,7 @@ Open **evaluate_agent.py** and add code at each commented placeholder.
     # Run the evaluation
     result = evaluate(
         data=str(DATASET),
-        target=TailwindAgentTarget(),
+        target=CaldovaAgentTarget(),
         evaluators={
             "groundedness": groundedness,
             "relevance": relevance,
@@ -245,11 +245,11 @@ Open **evaluate_agent.py** and add code at each commented placeholder.
 
 This is what evaluation is actually for.
 
-1. Add a bad test case to the end of **data/tailwind_eval.jsonl** — a question whose `context`
+1. Add a bad test case to the end of **data/caldova_eval.jsonl** — a question whose `context`
     doesn't support the `ground_truth`, so the agent has nothing to answer from:
 
     ```json
-    {"query": "What is the warranty on the Windward Explorer 2P tent?", "context": "Store hours: Monday-Saturday 9:00 AM - 8:00 PM.", "ground_truth": "Lifetime limited warranty."}
+    {"query": "What is the fast-track window for Halden Biologics?", "context": "Planning Desk Hours: Monday-Friday 8:00 AM - 6:00 PM.", "ground_truth": "Four months to first commercial batch."}
     ```
 
 1. Run `python evaluate_agent.py` again and look at that row. Groundedness should drop sharply

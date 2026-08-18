@@ -1,12 +1,12 @@
 """
-The application under evaluation: the Tailwind Traders knowledge agent.
+The application under evaluation: the Caldova knowledge agent.
 
 This file is PROVIDED - you don't edit it. It wraps the agent you already have
 (from Lab B, or from `python ../setup/bootstrap_agent.py`) in the shape the
 evaluate() API expects for a *target*: something callable that takes a row of
 your dataset and returns the application's output for that row.
 
-evaluate() calls this once per line of tailwind_eval.jsonl, passing the columns
+evaluate() calls this once per line of caldova_eval.jsonl, passing the columns
 of that line as keyword arguments, and merges the returned dictionary back into
 the row as `outputs.*`. So returning {"response": ...} makes `${outputs.response}`
 available to every evaluator.
@@ -21,12 +21,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-class TailwindAgentTarget:
+class CaldovaAgentTarget:
     """Sends one question to the knowledge agent and returns its answer."""
 
     def __init__(self):
         project_endpoint = os.getenv("PROJECT_ENDPOINT")
-        self.agent_name = os.getenv("AGENT_NAME", "tailwind-knowledge-agent")
+        self.agent_name = os.getenv("AGENT_NAME", "caldova-knowledge-agent")
 
         if not project_endpoint:
             raise ValueError("PROJECT_ENDPOINT must be set in .env")

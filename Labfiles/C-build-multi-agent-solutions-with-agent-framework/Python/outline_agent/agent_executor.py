@@ -1,4 +1,4 @@
-""" Tailwind Traders Foundry Agent that generates a guided-trip itinerary outline """
+""" Caldova Foundry Agent that generates a tech-transfer plan outline """
 
 from a2a.server.agent_execution import AgentExecutor
 from a2a.server.agent_execution.context import RequestContext
@@ -27,13 +27,13 @@ class OutlineAgentExecutor(AgentExecutor):
             # Retrieve message from A2A parts
             user_message = message_parts[0].root.text
 
-            # Get the itinerary agent
+            # Get the outline agent
             agent = await self._get_or_create_agent()
 
             # Update the task status
             await task_updater.update_status(
                 TaskState.working,
-                message=new_agent_text_message('Itinerary Agent is processing your request...', context_id=context_id)
+                message=new_agent_text_message('Outline Agent is processing your request...', context_id=context_id)
             )
 
             # Run the conversation
@@ -54,7 +54,7 @@ class OutlineAgentExecutor(AgentExecutor):
 
         except Exception as e:
             await task_updater.failed(
-                message=new_agent_text_message('Itinerary Agent failed to process the request.', 
+                message=new_agent_text_message('Outline Agent failed to process the request.', 
                 context_id=context_id)
             )
 
@@ -71,7 +71,7 @@ class OutlineAgentExecutor(AgentExecutor):
         await self._process_request(context.message.parts, context.context_id, updater)
 
     async def cancel(self, context: RequestContext, event_queue: EventQueue):
-        print(f'Itinerary Agent: Cancelling execution for context {context.context_id}')
+        print(f'Outline Agent: Cancelling execution for context {context.context_id}')
 
         updater = TaskUpdater(event_queue, context.task_id, context.context_id)
         await updater.failed(

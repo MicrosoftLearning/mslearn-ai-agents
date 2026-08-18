@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
 #
-# Reference azure.yaml for the Tailwind Traders hosted agent.
+# Reference azure.yaml for the Caldova hosted agent.
 #
 # `azd ai agent init --protocol responses --deploy-mode code` generates a file
 # like this for you. It is included here so you can see what the tool produces
@@ -10,7 +10,7 @@
 requiredVersions:
   extensions:
     azure.ai.agents: '>=1.0.0-beta.4'
-name: tailwind-hosted-agent
+name: caldova-hosted-agent
 services:
   ai-project:
     host: azure.ai.project
@@ -23,7 +23,7 @@ services:
         sku:
           name: GlobalStandard
           capacity: 10
-  tailwind-hosted-agent:
+  caldova-hosted-agent:
     host: azure.ai.agent
     metadata:
       tags:
@@ -39,9 +39,9 @@ services:
     uses:
       - ai-project
     kind: hosted
-    name: tailwind-hosted-agent
-    displayName: Tailwind Traders assistant (hosted)
-    description: The Tailwind Traders store assistant packaged as a hosted agent using the Responses protocol.
+    name: caldova-hosted-agent
+    displayName: Caldova assistant (hosted)
+    description: The Caldova supply chain assistant packaged as a hosted agent using the Responses protocol.
     protocols:
       - protocol: responses
         version: 2.0.0

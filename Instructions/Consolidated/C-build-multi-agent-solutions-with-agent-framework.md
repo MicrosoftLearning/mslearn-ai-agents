@@ -2,7 +2,7 @@
 title: 'Build multi-agent solutions with the Agent Framework'
 lab:
     title: 'Build multi-agent solutions with the Agent Framework'
-    description: 'Build Tailwind Traders operations agents with the Microsoft Agent Framework: start with a single tool-using agent, then orchestrate several agents in sequence, then connect remote agents across processes with the A2A protocol. A modular lab you can complete end to end or one task at a time.'
+    description: 'Build Caldova operations agents with the Microsoft Agent Framework: start with a single tool-using agent, then orchestrate several agents in sequence, then connect remote agents across processes with the A2A protocol. A modular lab you can complete end to end or one task at a time.'
     type: 'lab'
     id: 'C'
     order: 3
@@ -20,7 +20,7 @@ lab:
 **Level** ▰▰▰▱▱ **L300**  (**L100** beginner → **L500** expert)
 
 A single agent is useful. A *team* of agents — each one focused, and able to hand work to the
-others — is how you build real operations. In this lab you'll build up a Tailwind Traders
+others — is how you build real operations. In this lab you'll build up a Caldova
 multi-agent system with the **Microsoft Agent Framework (MAF)**, starting from one tool-using
 agent and growing to a set of remote agents that call each other over a protocol.
 
@@ -68,10 +68,10 @@ together — so you don't have to wire the plumbing by hand.
 </div>
 </details>
 
-**Your scenario:** you work at **Tailwind Traders**, an outdoor-gear retailer that also runs
-guided trips. Across this lab you'll build the automation behind Tailwind Traders operations —
-starting with a single agent that files trip-expense claims, then a pipeline of agents that
-triage customer feedback, and finally a set of specialist trip-planning agents that live in
+**Your scenario:** you work at **Caldova**, a pharmaceutical manufacturer preparing an
+accelerated product launch. Across this lab you'll build the automation behind Caldova operations —
+starting with a single agent that files site-visit expense claims, then a pipeline of agents that
+triage site feedback, and finally a set of specialist transfer-planning agents that live in
 separate processes and collaborate over a protocol.
 
 You'll start with the **Core** task that gets you to a working, tool-using agent as quickly as

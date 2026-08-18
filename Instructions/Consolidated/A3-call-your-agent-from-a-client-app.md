@@ -30,16 +30,16 @@ from the `Python` folder you opened in VS Code, run:
 python ../setup/bootstrap_agent.py
 ```
 
-That creates and grounds `tailwind-agent` — including the **Code Interpreter** tool with the
-sales data already attached — and writes `AGENT_NAME` into your `.env`. Then verify you're ready:
+That creates and grounds `caldova-agent` — including the **Code Interpreter** tool with the
+output data already attached — and writes `AGENT_NAME` into your `.env`. Then verify you're ready:
 
 ```
 python ../setup/check_env.py --task 3
 ```
 
 > **Already built the agent in [Task 1](A1-create-and-ground-an-agent.md)?** Use it instead
-> of the script: open your `tailwind-agent` in the portal, add the **Code interpreter** tool
-> with the sales data (step 1 below), and set `AGENT_NAME=tailwind-agent` in `.env`.
+> of the script: open your `caldova-agent` in the portal, add the **Code interpreter** tool
+> with the output data (step 1 below), and set `AGENT_NAME=caldova-agent` in `.env`.
 
 ---
 
@@ -49,7 +49,7 @@ the playground — including charts the agent produces (from code interpreter), 
 
 **Concept reinforced**: consuming an agent programmatically with the Foundry SDK — loading
 an existing agent by name and driving it with the Responses API. A provided UI shell
-(`tailwind_ui.py`) turns your agent into a browser chat app, so you focus on the agent code,
+(`caldova_ui.py`) turns your agent into a browser chat app, so you focus on the agent code,
 not the interface.
 
 **Set up:**
@@ -60,18 +60,18 @@ and `AGENT_NAME` are already configured — activate your virtual environment
 
 **If you built the agent yourself in Task 1**, finish wiring it up:
 
-1. In the portal, open your `tailwind-agent`, add a **Code interpreter** tool, and upload
+1. In the portal, open your `caldova-agent`, add a **Code interpreter** tool, and upload
     a data file so there's something to analyze. Download and attach:
 
     ```
-    https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/A-build-and-extend-ai-agents/Python/weekly_sales.csv
+    https://raw.githubusercontent.com/MicrosoftLearning/mslearn-ai-agents/main/Labfiles/A-build-and-extend-ai-agents/Python/weekly_output.csv
     ```
 
     Save the agent.
 
 1. In the `Labfiles/A-build-and-extend-ai-agents/Python` folder, activate the virtual
     environment (`.\labenv\Scripts\Activate.ps1`). Then open **.env** and add
-    `AGENT_NAME=tailwind-agent` alongside the `PROJECT_ENDPOINT` you already set. Save the file.
+    `AGENT_NAME=caldova-agent` alongside the `PROJECT_ENDPOINT` you already set. Save the file.
 
 > **Try it first**: The `agent_with_functions.py` file already contains a complete client
 > that launches a web chat window. Before running it, predict: which SDK call loads your
@@ -107,7 +107,7 @@ The provided `agent_with_functions.py` already implements the client and hands i
 4. **Launch the app**: the file ends by starting the browser chat window:
 
     ```python
-    run_chat_app(respond, title="Tailwind Traders Assistant")
+    run_chat_app(respond, title="Caldova Assistant")
     ```
 
 Sign in and run it:

@@ -1,4 +1,4 @@
-"""Tailwind Traders assistant - hosted agent edition (complete reference).
+"""Caldova assistant - hosted agent edition (complete reference).
 
 Everywhere else in this lab you built *prompt agents*: you described the agent
 with a PromptAgentDefinition (model + instructions + tools) and let Foundry run
@@ -8,7 +8,7 @@ own code, running in a Foundry-managed container.
 The azure-ai-agentserver-responses library turns this file into a web service
 that speaks the Responses protocol: it provides the HTTP server, health checks,
 and conversation history, so you only write the handler. Inside the handler you
-forward the user's message to a Foundry model with the Tailwind system prompt.
+forward the user's message to a Foundry model with the Caldova system prompt.
 
 Run and deploy it with the Azure Developer CLI (see A6 in the instructions):
     azd ai agent run          # test locally
@@ -53,10 +53,10 @@ app = ResponsesAgentServerHost(
     options=ResponsesServerOptions(default_fetch_history_count=20),
 )
 
-# The same store-assistant instructions you used for your prompt agents.
+# The same assistant instructions you used for your prompt agents.
 _SYSTEM_PROMPT = (
-    "You are the Tailwind Traders store assistant. You help customers and store "
-    "staff with questions about products, orders, returns, rentals, and guided trips. "
+    "You are the Caldova supply chain assistant. You help planning and "
+    "materials teams with questions about capacity, contract manufacturers, and materials. "
     "Always be friendly and concise. If you don't know the answer, say so and suggest "
     "contacting the support team directly."
 )

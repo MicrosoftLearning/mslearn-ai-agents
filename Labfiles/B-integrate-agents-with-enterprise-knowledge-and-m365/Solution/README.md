@@ -13,10 +13,10 @@ Solution/
    ├─ knowledge_agent.py      # Task 1 (core) — console client for the Foundry IQ agent + approval loop
    ├─ knowledge_chat_app.py   # Task 1 (optional) — same agent in a web chat window (auto-approves)
    ├─ workiq_lab.py           # Task 4 — Work IQ workplace intelligence (menu-driven, 5 scenarios)
-   ├─ tailwind_ui.py          # shared Gradio chat shell (provided; not edited by learners)
+   ├─ caldova_ui.py          # shared Gradio chat shell (provided; not edited by learners)
    ├─ requirements.txt        # shared dependencies for all tasks
    ├─ .env.example            # copy to .env and fill in
-   └─ data/                   # Tailwind Traders knowledge base (grounding docs)
+   └─ data/                   # Caldova knowledge base (grounding docs)
 ```
 
 Two of the four tasks are **portal publishing workflows** (Task 2: Microsoft Teams, Task 3:
@@ -36,7 +36,7 @@ This lab can be completed end to end **or one task at a time**. Two things make 
   - `check_env.py --task N` — preflight-checks that `.env` has the keys task *N* needs.
     Run it as `python ../setup/check_env.py --task N`.
   - `bootstrap_agent.py` — **fast-forwards the Task 1 grounding step in code**: creates and
-    grounds `tailwind-knowledge-agent` (File Search over the `data/` knowledge base) and writes
+    grounds `caldova-knowledge-agent` (File Search over the `data/` knowledge base) and writes
     `AGENT_NAME` to `.env`, so learners can start against a working agent without the portal.
     Idempotent; pass `--force` to recreate.
 
@@ -86,13 +86,13 @@ Sign in with the same account that has access to the project.
 
 ### 3. Create the Foundry IQ knowledge agent (Task 1 — required for the code clients)
 The Task 1 clients load an agent **by name** that you create in the portal:
-1. In the Foundry portal, create an agent named **`tailwind-knowledge-agent`**.
-2. Add a **Foundry IQ knowledge source** and index the Tailwind Traders docs from `Python/data/`.
-3. Give it instructions to answer store staff questions from the knowledge base. Save the agent.
+1. In the Foundry portal, create an agent named **`caldova-knowledge-agent`**.
+2. Add a **Foundry IQ knowledge source** and index the Caldova docs from `Python/data/`.
+3. Give it instructions to answer planning and materials questions from the knowledge base. Save the agent.
 
 > **Shortcut**: instead of the portal grounding above, run `python ../setup/bootstrap_agent.py`
 > from the **starter** `Python/` folder (not `Solution/Python/`) to create and ground
-> `tailwind-knowledge-agent` in code (File Search) and
+> `caldova-knowledge-agent` in code (File Search) and
 > write `AGENT_NAME`.
 
 ### 4. Set up the environment once (shared by all code tasks)
@@ -105,7 +105,7 @@ pip install -r requirements.txt
 Then copy `.env.example` to `.env` and fill in the values (all tasks read the same file):
 - `PROJECT_ENDPOINT` — used by the code tasks
 - `MODEL_DEPLOYMENT_NAME` — used by Task 4 (Work IQ)
-- `AGENT_NAME=tailwind-knowledge-agent` — used by the Task 1 code clients
+- `AGENT_NAME=caldova-knowledge-agent` — used by the Task 1 code clients
 
 ### 5. Run each task
 Code tasks run from the single `Solution/Python/` folder:
@@ -129,5 +129,5 @@ in the terminal to stop the app. Task 4 deletes its agent version on exit.
 ## Quick sanity checks that DON'T need Azure
 - `python -m py_compile <file>` — all solution files compile.
 - The knowledge base under `Python/data/` is what the agent is grounded on; ask the running agent
-  about the **90-day return window**, **premium gear rental rates**, or **supplier lead times** to
+  about **site headroom**, **premium tier transfer rates**, or **supplier lead times** to
   confirm grounding works.

@@ -1,4 +1,4 @@
-""" Tailwind Traders Foundry Agent that generates a guided-trip title """
+""" Caldova Foundry Agent that generates a transfer brief title """
 
 import os
 from azure.ai.agents import AgentsClient
@@ -27,10 +27,10 @@ class TitleAgent:
         # Create the title agent
         self.agent = self.client.create_agent(
             model=os.environ['MODEL_DEPLOYMENT_NAME'],
-            name='trip-title-agent',
+            name='transfer-title-agent',
             instructions="""
-            You are a helpful trip marketing assistant for Tailwind Traders.
-            Given a region or activity the customer wants to explore, suggest a single clear and catchy guided-trip title.
+            You are a helpful planning assistant for Caldova.
+            Given a site or capability the planner names, suggest a single clear transfer brief title.
             """,
         )
 

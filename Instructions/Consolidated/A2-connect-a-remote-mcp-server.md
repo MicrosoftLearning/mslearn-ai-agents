@@ -35,8 +35,8 @@ python ../setup/check_env.py --task 2
 ---
 
 The **Model Context Protocol (MCP)** lets an agent discover and call tools hosted by a
-server. Behind the scenes, the Tailwind Traders platform team is rebuilding the
-online store on Azure — so in this task you'll connect an agent to the **Microsoft Learn
+server. Behind the scenes, the Caldova platform team is rebuilding the
+supply chain platform on Azure — so in this task you'll connect an agent to the **Microsoft Learn
 Docs** remote MCP server, giving the team an assistant that can pull trusted, up-to-date
 Azure documentation on demand.
 
@@ -117,7 +117,7 @@ Open **remote_mcp_agent.py** and add code at each commented placeholder.
         agent_name="platform-docs-agent",
         definition=PromptAgentDefinition(
             model=model_deployment,
-            instructions="You are a platform engineering assistant for Tailwind Traders. Use the available MCP tools to look up trusted Azure documentation and help the team build and operate the online store.",
+            instructions="You are a platform engineering assistant for Caldova. Use the available MCP tools to look up trusted Azure documentation and help the team build and operate the supply chain platform.",
             tools=[mcp_tool],
         ),
     )

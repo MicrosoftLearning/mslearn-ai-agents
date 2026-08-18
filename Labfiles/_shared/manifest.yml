@@ -10,29 +10,29 @@
 
 labs:
   A-build-and-extend-ai-agents:
-    azd_name: tailwind-traders-lab
-    description: the Tailwind Traders lab
+    azd_name: caldova-lab
+    description: the Caldova lab
     hint: >-
       Task 3 also needs a grounded agent: from the Python folder, run 'python
       ../setup/bootstrap_agent.py' to create it.
 
   B-integrate-agents-with-enterprise-knowledge-and-m365:
-    azd_name: tailwind-traders-lab-b
-    description: the Tailwind Traders enterprise-knowledge lab
+    azd_name: caldova-lab-b
+    description: the Caldova enterprise-knowledge lab
     hint: >-
       Task 1 also needs a grounded agent: from the Python folder, run 'python
       ../setup/bootstrap_agent.py' to create it.
 
   C-build-multi-agent-solutions-with-agent-framework:
-    azd_name: tailwind-traders-multi-agent-lab
-    description: the Tailwind Traders multi-agent lab
+    azd_name: caldova-multi-agent-lab
+    description: the Caldova multi-agent lab
     hint: >-
       Task 3 (remote agents) also reads SERVER_URL and the *_PORT values, which
       ship pre-filled in .env.example.
 
   D-observe-evaluate-and-secure-agents:
-    azd_name: tailwind-traders-observability-lab
-    description: the Tailwind Traders observability lab
+    azd_name: caldova-observability-lab
+    description: the Caldova observability lab
     hint: >-
       Task 1 needs Application Insights connected to your project (Agents >
       Traces > Connect in the portal), and Task 2 needs a grounded agent to

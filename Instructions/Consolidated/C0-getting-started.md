@@ -20,8 +20,8 @@ needs. **Every task begins here** — complete this page first. Each task is wri
 do it on its own; if you're working through the whole lab in one sitting, you only need to do this
 setup once.
 
-**Your scenario:** you work at **Tailwind Traders**, an outdoor-gear retailer that also runs
-guided trips. Across the lab you'll build the automation behind Tailwind Traders operations,
+**Your scenario:** you work at **Caldova**, a pharmaceutical manufacturer preparing an
+accelerated product launch. Across the lab you'll build the automation behind Caldova operations,
 starting with one agent and growing to a coordinated team of them.
 
 > **Note**: Some of the technologies used in this lab are in preview or in active

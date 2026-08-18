@@ -1,0 +1,9 @@
+Line 1 Batch Window|production|01-03|ashford;brightwater
+Granulation Suite Slot|production|02-17|calderwood
+Line 3 Changeover|changeover|03-03|brightwater;calderwood
+Packaging Line B Window|packaging|04-22|ashford
+Qualification Run Slot|qualification|05-01|ashford;brightwater;calderwood
+Line 2 Batch Window|production|07-10|ashford;brightwater;calderwood
+Blending Suite Slot|production|08-12|calderwood
+Packaging Line A Window|packaging|08-12|ashford;brightwater
+Stability Sampling Slot|qualification|12-14|ashford;brightwater;calderwood

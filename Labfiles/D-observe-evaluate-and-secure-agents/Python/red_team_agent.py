@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 project_endpoint = os.getenv("PROJECT_ENDPOINT")
-agent_name = os.getenv("AGENT_NAME", "tailwind-knowledge-agent")
+agent_name = os.getenv("AGENT_NAME", "caldova-knowledge-agent")
 
 SEED_PROMPTS = Path("data/attack_objectives.json")
 OUTPUT = Path("redteam_scan.json")
@@ -25,7 +25,7 @@ OUTPUT = Path("redteam_scan.json")
 
 async def main():
     # Provided: --seed-prompts switches the scan to your own attack prompts.
-    parser = argparse.ArgumentParser(description="Red team the Tailwind Traders agent.")
+    parser = argparse.ArgumentParser(description="Red team the Caldova agent.")
     parser.add_argument(
         "--seed-prompts",
         action="store_true",

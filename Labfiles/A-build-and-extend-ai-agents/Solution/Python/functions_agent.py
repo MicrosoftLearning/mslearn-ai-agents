@@ -9,8 +9,8 @@ from azure.identity import DefaultAzureCredential
 from openai.types.responses.response_input_param import FunctionCallOutput
 
 # Import the local functions the agent can call, and the shared chat UI
-from functions import next_available_trip, calculate_rental_cost, generate_booking_report
-from tailwind_ui import run_chat_app, AgentReply
+from functions import next_available_slot, calculate_transfer_cost, generate_capacity_report
+from caldova_ui import run_chat_app, AgentReply
 
 # Load environment variables from .env file
 load_dotenv()
@@ -24,83 +24,83 @@ with (
     project_client.get_openai_client() as openai_client,
 ):
 
-    # Define the trip lookup function tool
-    trip_tool = FunctionTool(
-        name="next_available_trip",
-        description="Get the next available guided trip in a given region.",
+    # Define the slot lookup function tool
+    slot_tool = FunctionTool(
+        name="next_available_slot",
+        description="Get the next open production slot at a given site.",
         parameters={
             "type": "object",
             "properties": {
-                "region": {
+                "site": {
                     "type": "string",
-                    "description": "region to find the next guided trip in (e.g. 'pacific_northwest', 'rockies', 'patagonia')",
+                    "description": "site to find the next open production slot at (e.g. 'ashford', 'brightwater', 'calderwood')",
                 },
             },
-            "required": ["region"],
+            "required": ["site"],
             "additionalProperties": False,
         },
         strict=True,
     )
 
-    # Define the rental cost function tool
+    # Define the transfer cost function tool
     cost_tool = FunctionTool(
-        name="calculate_rental_cost",
-        description="Calculate the cost of a gear rental based on the gear tier, number of days, and service level.",
+        name="calculate_transfer_cost",
+        description="Calculate the cost of transferring production to a contract manufacturer, based on the CMO tier, number of weeks, and priority.",
         parameters={
             "type": "object",
             "properties": {
-                "gear_tier": {
+                "cmo_tier": {
                     "type": "string",
-                    "description": "the tier of the gear rental (e.g. 'standard', 'advanced', 'premium')",
+                    "description": "the CMO tier for the transfer (e.g. 'standard', 'advanced', 'premium')",
                 },
-                "days": {
+                "weeks": {
                     "type": "number",
-                    "description": "the number of days for the gear rental",
+                    "description": "the number of weeks of contract capacity",
                 },
-                "service_level": {
+                "priority": {
                     "type": "string",
-                    "description": "the service level of the rental (e.g. 'standard', 'priority', 'express', 'rush')",
+                    "description": "the priority of the transfer (e.g. 'standard', 'expedited', 'fast_track', 'emergency')",
                 },
             },
-            "required": ["gear_tier", "days", "service_level"],
+            "required": ["cmo_tier", "weeks", "priority"],
             "additionalProperties": False,
         },
         strict=True,
     )
 
-    # Define the booking report generation function tool
+    # Define the capacity request function tool
     report_tool = FunctionTool(
-        name="generate_booking_report",
-        description="Generate a report summarizing a guided trip booking and gear rental.",
+        name="generate_capacity_report",
+        description="Draft a capacity request summarizing an open production slot and a contract manufacturing estimate.",
         parameters={
             "type": "object",
             "properties": {
-                "trip_name": {
+                "slot_name": {
                     "type": "string",
-                    "description": "the name of the guided trip being booked",
+                    "description": "the name of the production slot being requested",
                 },
-                "region": {
+                "site": {
                     "type": "string",
-                    "description": "the region of the guided trip",
+                    "description": "the site the production slot belongs to",
                 },
-                "gear_tier": {
+                "cmo_tier": {
                     "type": "string",
-                    "description": "the tier of the gear rented for the trip (e.g. 'standard', 'advanced', 'premium')",
+                    "description": "the CMO tier for the transfer (e.g. 'standard', 'advanced', 'premium')",
                 },
-                "days": {
+                "weeks": {
                     "type": "number",
-                    "description": "the number of days the gear was rented",
+                    "description": "the number of weeks of contract capacity",
                 },
-                "service_level": {
+                "priority": {
                     "type": "string",
-                    "description": "the service level of the rental (e.g. 'standard', 'priority', 'express', 'rush')",
+                    "description": "the priority of the transfer (e.g. 'standard', 'expedited', 'fast_track', 'emergency')",
                 },
-                "customer_name": {
+                "requested_by": {
                     "type": "string",
-                    "description": "the name of the customer making the booking",
+                    "description": "the team or role requesting the capacity",
                 },
             },
-            "required": ["trip_name", "region", "gear_tier", "days", "service_level", "customer_name"],
+            "required": ["slot_name", "site", "cmo_tier", "weeks", "priority", "requested_by"],
             "additionalProperties": False,
         },
         strict=True,
@@ -108,13 +108,13 @@ with (
 
     # Create a new agent with the function tools
     agent = project_client.agents.create_version(
-        agent_name="trip-planner-agent",
+        agent_name="capacity-planner-agent",
         definition=PromptAgentDefinition(
             model=model_deployment,
-            instructions="""You are a trip planning assistant for Tailwind Traders that helps
-                customers find guided trips and calculate gear rental costs.
+            instructions="""You are a capacity planning assistant for Caldova that helps
+                planners find open production slots and estimate contract manufacturing costs.
                 Use the available tools to assist users with their inquiries.""",
-            tools=[trip_tool, cost_tool, report_tool],
+            tools=[slot_tool, cost_tool, report_tool],
         ),
     )
 
@@ -144,12 +144,12 @@ with (
         for item in response.output:
             if item.type == "function_call":
                 result = None
-                if item.name == "next_available_trip":
-                    result = next_available_trip(**json.loads(item.arguments))
-                elif item.name == "calculate_rental_cost":
-                    result = calculate_rental_cost(**json.loads(item.arguments))
-                elif item.name == "generate_booking_report":
-                    result = generate_booking_report(**json.loads(item.arguments))
+                if item.name == "next_available_slot":
+                    result = next_available_slot(**json.loads(item.arguments))
+                elif item.name == "calculate_transfer_cost":
+                    result = calculate_transfer_cost(**json.loads(item.arguments))
+                elif item.name == "generate_capacity_report":
+                    result = generate_capacity_report(**json.loads(item.arguments))
 
                 input_list.append(
                     FunctionCallOutput(
@@ -177,8 +177,8 @@ with (
     try:
         run_chat_app(
             respond,
-            title="Tailwind Traders Assistant",
-            subtitle="Plan a guided trip and price your gear rental.",
+            title="Caldova Assistant",
+            subtitle="Find an open production slot and estimate contract capacity.",
         )
     finally:
         # Delete the agent when the app closes

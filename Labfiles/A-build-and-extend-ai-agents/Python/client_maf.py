@@ -2,7 +2,7 @@
 Task 5 capstone — Microsoft Agent Framework edition (provided complete, for comparison).
 
 This is the same capstone as client.py — one agent that combines the Task 4
-trip-planner functions with your MCP inventory server — but built with the
+capacity-planner functions with your MCP inventory server — but built with the
 **Microsoft Agent Framework**. Compare the two:
 
   client.py (raw SDK + Responses API)               client_maf.py (this file)
@@ -30,44 +30,44 @@ from agent_framework.foundry import FoundryChatClient
 from azure.identity import AzureCliCredential
 from pydantic import Field
 
-# The Task 4 trip-planner logic, reused so the capstone agent can plan trips AND
-# check the warehouse (the tools your MCP server hosts).
+# The Task 4 capacity-planner logic, reused so the capstone agent can plan capacity AND
+# check materials (the tools your MCP server hosts).
 import functions
-from tailwind_ui import run_chat_app, AgentReply
+from caldova_ui import run_chat_app, AgentReply
 
 # Load environment variables from .env file
 load_dotenv()
 
 
 @tool(approval_mode="never_require")
-def next_available_trip(
-    region: Annotated[str, Field(description="Region to find the next guided trip in (e.g. 'pacific_northwest', 'rockies', 'patagonia')")],
+def next_available_slot(
+    site: Annotated[str, Field(description="Site to find the next open production slot at (e.g. 'ashford', 'brightwater', 'calderwood')")],
 ) -> str:
-    """Get the next available guided trip in a given region."""
-    return functions.next_available_trip(region)
+    """Get the next open production slot at a given site."""
+    return functions.next_available_slot(site)
 
 
 @tool(approval_mode="never_require")
-def calculate_rental_cost(
-    gear_tier: Annotated[str, Field(description="The tier of the gear rental (e.g. 'standard', 'advanced', 'premium')")],
-    days: Annotated[float, Field(description="The number of days for the gear rental")],
-    service_level: Annotated[str, Field(description="The service level of the rental (e.g. 'standard', 'priority', 'express', 'rush')")],
+def calculate_transfer_cost(
+    cmo_tier: Annotated[str, Field(description="The CMO tier for the transfer (e.g. 'standard', 'advanced', 'premium')")],
+    weeks: Annotated[float, Field(description="The number of weeks of contract capacity")],
+    priority: Annotated[str, Field(description="The priority of the transfer (e.g. 'standard', 'expedited', 'fast_track', 'emergency')")],
 ) -> str:
-    """Calculate the cost of a gear rental based on the gear tier, number of days, and service level."""
-    return functions.calculate_rental_cost(gear_tier, days, service_level)
+    """Calculate the cost of transferring production to a contract manufacturer, based on the CMO tier, number of weeks, and priority."""
+    return functions.calculate_transfer_cost(cmo_tier, weeks, priority)
 
 
 @tool(approval_mode="never_require")
-def generate_booking_report(
-    trip_name: Annotated[str, Field(description="The name of the guided trip being booked")],
-    region: Annotated[str, Field(description="The region of the guided trip")],
-    gear_tier: Annotated[str, Field(description="The tier of the gear rented for the trip (e.g. 'standard', 'advanced', 'premium')")],
-    days: Annotated[float, Field(description="The number of days the gear was rented")],
-    service_level: Annotated[str, Field(description="The service level of the rental (e.g. 'standard', 'priority', 'express', 'rush')")],
-    customer_name: Annotated[str, Field(description="The name of the customer making the booking")],
+def generate_capacity_report(
+    slot_name: Annotated[str, Field(description="The name of the production slot being requested")],
+    site: Annotated[str, Field(description="The site the production slot belongs to")],
+    cmo_tier: Annotated[str, Field(description="The CMO tier for the transfer (e.g. 'standard', 'advanced', 'premium')")],
+    weeks: Annotated[float, Field(description="The number of weeks of contract capacity")],
+    priority: Annotated[str, Field(description="The priority of the transfer (e.g. 'standard', 'expedited', 'fast_track', 'emergency')")],
+    requested_by: Annotated[str, Field(description="The team or role requesting the capacity")],
 ) -> str:
-    """Generate a report summarizing a guided trip booking and gear rental."""
-    return functions.generate_booking_report(trip_name, region, gear_tier, days, service_level, customer_name)
+    """Draft a capacity request summarizing an open production slot and a contract manufacturing estimate."""
+    return functions.generate_capacity_report(slot_name, site, cmo_tier, weeks, priority, requested_by)
 
 
 # Created once on the first message, on the same event loop the chat window uses.
@@ -96,22 +96,23 @@ async def setup():
         credential=AzureCliCredential(),
     )
 
-    # The agent holds the local trip-planner tools; the MCP tools are supplied per run.
+    # The agent holds the local capacity-planner tools; the MCP tools are supplied per run.
     agent = Agent(
         client=client,
-        name="tailwind-assistant",
+        name="caldova-assistant",
         instructions="""
-        You are the Tailwind Traders assistant. You help customers plan guided
-        trips and price gear rentals, and you help warehouse staff check live stock and sales.
+        You are the Caldova supply chain assistant. You help planners find open
+        production capacity and estimate contract manufacturing costs, and you help
+        the materials team check live stock and consumption.
 
-        Trip planning and rentals:
-        - Use the trip and rental tools to find guided trips, price gear, and produce booking reports.
+        Capacity planning and transfers:
+        - Use the slot and transfer tools to find open capacity, estimate cost, and draft capacity requests.
 
-        Warehouse inventory:
-        - Recommend restock if item inventory < 10 and weekly sales > 15
-        - Recommend clearance if item inventory > 20 and weekly sales < 5
+        Material inventory:
+        - Recommend reorder if material inventory < 10 and weekly consumption > 15
+        - Flag for review if material inventory > 20 and weekly consumption < 5
         """,
-        tools=[next_available_trip, calculate_rental_cost, generate_booking_report],
+        tools=[next_available_slot, calculate_transfer_cost, generate_capacity_report],
     )
 
     # A session keeps the conversation history across messages in the chat window.
@@ -132,6 +133,6 @@ async def respond(user_message):
 if __name__ == "__main__":
     run_chat_app(
         respond,
-        title="Tailwind Traders Assistant",
-        subtitle="Plan trips, price gear, and check warehouse stock (Microsoft Agent Framework edition)",
+        title="Caldova Assistant",
+        subtitle="Find capacity, estimate transfers, and check material stock (Microsoft Agent Framework edition)",
     )

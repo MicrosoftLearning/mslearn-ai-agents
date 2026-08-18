@@ -2,7 +2,7 @@
 title: 'Task 5 – Capstone: build your own MCP server'
 lab:
     title: 'Task 5 – Capstone: build your own MCP server'
-    description: 'Capstone: build your own MCP server and combine it with your function tools into one Tailwind Traders assistant.'
+    description: 'Capstone: build your own MCP server and combine it with your function tools into one Caldova assistant.'
     type: 'task'
     parent: 'A'
     order: 5
@@ -37,8 +37,8 @@ python ../setup/check_env.py --task 5
 ---
 
 **Goal**: Host your **own** tools on an MCP server, then bring the lab together into a single
-**Tailwind Traders Assistant** — one agent that both **plans trips and prices gear**
-(the function tools from Task 4) *and* **checks live warehouse stock and sales** (the tools
+**Caldova Supply Chain Assistant** — one agent that both **plans capacity and estimates transfers**
+(the function tools from Task 4) *and* **checks live material stock and consumption** (the tools
 you host here).
 
 **Concept reinforced**: the MCP server/client split — a server *registers* tools; a client
@@ -46,9 +46,9 @@ you host here).
 once. In `respond()` you *route* each call to the right place: local Python functions run
 in-process, MCP tools run over the server session.
 
-> **How this builds on Task 4**: This capstone *combines* the trip-planner tools from Task 4
+> **How this builds on Task 4**: This capstone *combines* the capacity-planner tools from Task 4
 > with a new MCP server. You don't need to have finished Task 4 — those tools
-> (`next_available_trip`, `calculate_rental_cost`, `generate_booking_report`) are provided
+> (`next_available_slot`, `calculate_transfer_cost`, `generate_capacity_report`) are provided
 > ready-made in `client.py` — so you can focus on the new work: hosting your MCP server and
 > *combining* both tool sets on one agent. (Already did Task 4? Even better — you'll recognize them.)
 
@@ -83,15 +83,15 @@ def get_inventory_levels() -> dict:
     ...  # returns the sample inventory dict already in the file
 
 @mcp.tool()
-def get_weekly_sales() -> dict:
-    ...  # returns the sample sales dict already in the file
+def get_weekly_consumption() -> dict:
+    ...  # returns the sample consumption dict already in the file
 
 # Run the MCP server
 mcp.run(show_banner=False)
 ```
 
 **In `client.py`** — connect to the server, discover its tools, register them **alongside**
-the trip-planner tools on one agent, then route each call in `respond()`. Because the chat UI
+the capacity-planner tools on one agent, then route each call in `respond()`. Because the chat UI
 runs on an async event loop, the connection code lives in an async `setup()` that runs once on
 the first message.
 
@@ -102,7 +102,7 @@ the first message.
     from mcp.client.stdio import stdio_client
     ```
 
-    The `trip_planner_tools` list and the `local_functions` dispatch dict (the Task 4 tools)
+    The `capacity_planner_tools` list and the `local_functions` dispatch dict (the Task 4 tools)
     are already provided near the top of the file — you don't need to rewrite them.
 
 2. Inside `setup()`, start the server over stdio and open a session, then list the available
@@ -134,25 +134,26 @@ the first message.
     ]
     ```
 
-3. Create the agent with **both** tool sets — the trip planner *and* the warehouse tools:
+3. Create the agent with **both** tool sets — the capacity planner *and* the materials tools:
 
     ```python
     agent = project_client.agents.create_version(
-        agent_name="tailwind-assistant",
+        agent_name="caldova-assistant",
         definition=PromptAgentDefinition(
             model=model_deployment,
             instructions="""
-            You are the Tailwind Traders assistant. You help customers plan guided
-            trips and price gear rentals, and you help warehouse staff check live stock and sales.
+            You are the Caldova supply chain assistant. You help planners find open
+            production capacity and estimate contract manufacturing costs, and you help
+            the materials team check live stock and consumption.
 
-            Trip planning and rentals:
-            - Use the trip and rental tools to find guided trips, price gear, and produce booking reports.
+            Capacity planning and transfers:
+            - Use the slot and transfer tools to find open capacity, estimate cost, and draft capacity requests.
 
-            Warehouse inventory:
-            - Recommend restock if item inventory < 10 and weekly sales > 15
-            - Recommend clearance if item inventory > 20 and weekly sales < 5
+            Material inventory:
+            - Recommend reorder if material inventory < 10 and weekly consumption > 15
+            - Flag for review if material inventory > 20 and weekly consumption < 5
             """,
-            tools=[*trip_planner_tools, *mcp_function_tools],
+            tools=[*capacity_planner_tools, *mcp_function_tools],
         ),
     )
     ```
@@ -188,13 +189,13 @@ over stdio on the first message. Now try a prompt that exercises **both** halves
 assistant in one conversation:
 
 ```
-Plan me a trip: find the next available trip in Patagonia and price 5 days of premium gear at priority service.
+Plan capacity: find the next open slot at Brightwater and price 5 weeks of premium contract capacity at expedited priority.
 ```
 ```
-Now check the warehouse — are there any products we should restock?
+Now check materials — are there any we should reorder?
 ```
 
-The first prompt calls your Task 4 trip-planner functions; the second calls your MCP
+The first prompt calls your Task 4 capacity-planner functions; the second calls your MCP
 inventory tools — all on the **same** agent, in the **same** chat. Close the browser tab and
 press **Ctrl+C** in the terminal to stop the app.
 
@@ -222,9 +223,9 @@ from agent_framework import tool, Agent, MCPStdioTool
 
 agent = Agent(
     client=FoundryChatClient(...),
-    name="tailwind-assistant",
-    instructions="You are the Tailwind Traders assistant...",
-    tools=[next_available_trip, calculate_rental_cost, generate_booking_report],
+    name="caldova-assistant",
+    instructions="You are the Caldova assistant...",
+    tools=[next_available_slot, calculate_transfer_cost, generate_capacity_report],
 )
 
 async with MCPStdioTool(name="Inventory", command="python", args=["server.py"]) as mcp_tool:

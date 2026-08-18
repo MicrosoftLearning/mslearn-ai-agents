@@ -1,9 +1,9 @@
 """
-Tailwind Traders Staff Knowledge Assistant - web chat variant (provided complete).
+Caldova Staff Knowledge Assistant - web chat variant (provided complete).
 
 This is an optional, friendlier version of knowledge_agent.py. Instead of a console
 loop, it serves the same Foundry IQ enterprise-knowledge agent through the shared
-Tailwind Traders web chat window (tailwind_ui.py).
+Caldova web chat window (caldova_ui.py).
 
 To keep the browser experience smooth, this variant AUTO-APPROVES the Foundry IQ
 knowledge tool when the agent asks for approval. The console client
@@ -15,7 +15,7 @@ from dotenv import load_dotenv
 from azure.identity import DefaultAzureCredential
 from azure.ai.projects import AIProjectClient
 
-from tailwind_ui import run_chat_app
+from caldova_ui import run_chat_app
 
 # Load environment variables
 load_dotenv()
@@ -85,7 +85,7 @@ def respond(user_message):
 if __name__ == "__main__":
     run_chat_app(
         respond,
-        title="Tailwind Traders Staff Knowledge Assistant",
-        subtitle="Grounded on store policies, product catalog, returns, rentals, and supplier docs.",
-        placeholder="Ask about products, returns, rentals, or suppliers...",
+        title="Caldova Staff Knowledge Assistant",
+        subtitle="Grounded on plant capacity, CMO directory, tech transfer, and supplier docs.",
+        placeholder="Ask about capacity, contract manufacturers, or suppliers...",
     )

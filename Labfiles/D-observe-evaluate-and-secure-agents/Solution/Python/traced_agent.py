@@ -17,18 +17,18 @@ model_deployment = os.getenv("MODEL_DEPLOYMENT_NAME")
 os.environ.setdefault("AZURE_EXPERIMENTAL_ENABLE_GENAI_TRACING", "true")
 os.environ.setdefault("OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT", "true")
 
-# A Saturday morning's worth of questions from the shop floor.
+# A morning's worth of questions from the planning desk.
 QUESTIONS = [
-    "A customer wants to return a tent they used on one trip. What do I tell them?",
-    "How much is a week's hire of a premium kayak with priority service?",
-    "Which of our backpacks is best for a three-day hike in heavy rain?",
+    "How long does review take for a capacity request with a complete brief?",
+    "How much is five weeks of premium contract capacity at expedited priority?",
+    "Which contract manufacturers could fast-track us inside a three-month window?",
 ]
 
-AGENT_NAME = "tailwind-shift-assistant"
+AGENT_NAME = "caldova-planning-assistant"
 INSTRUCTIONS = (
-    "You are the Tailwind Traders shift assistant. You answer questions from store "
-    "staff about products, returns, rentals, and guided trips. Keep answers short "
-    "enough to read between customers."
+    "You are the Caldova planning assistant. You answer questions from planning "
+    "and materials teams about capacity, contract manufacturers, and suppliers. "
+    "Keep answers short enough to read between meetings."
 )
 
 # Connect to the project
@@ -62,19 +62,19 @@ with (
     print(f"Agent created (name: {agent.name}, version: {agent.version})")
 
     # Ask each question inside its own span
-    with tracer.start_as_current_span("saturday-morning-shift") as shift_span:
-        shift_span.set_attribute("tailwind.store", "seattle-downtown")
+    with tracer.start_as_current_span("morning-planning-review") as shift_span:
+        shift_span.set_attribute("caldova.site", "ashford")
         conversation = openai_client.conversations.create()
 
         for number, question in enumerate(QUESTIONS, start=1):
-            with tracer.start_as_current_span("staff-question") as question_span:
-                question_span.set_attribute("tailwind.question_number", number)
+            with tracer.start_as_current_span("planner-question") as question_span:
+                question_span.set_attribute("caldova.question_number", number)
                 response = openai_client.responses.create(
                     conversation=conversation.id,
                     input=question,
                     extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
                 )
-                question_span.set_attribute("tailwind.answer_length", len(response.output_text))
+                question_span.set_attribute("caldova.answer_length", len(response.output_text))
                 print(f"\nQ{number}: {question}")
                 print(f"A{number}: {response.output_text}")
 

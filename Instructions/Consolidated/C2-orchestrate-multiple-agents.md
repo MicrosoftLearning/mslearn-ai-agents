@@ -37,7 +37,7 @@ python ../setup/check_env.py --task 2
 Some jobs are best done by a **team** of specialists, each handling one step and passing its
 result to the next. The Microsoft Agent Framework's **sequential orchestration** does exactly
 that: it runs a list of agents in order and collects each one's output. In this task you'll build
-a Tailwind Traders **feedback triage** pipeline — a *summarizer* condenses a customer comment, a
+a Caldova **feedback triage** pipeline — a *summarizer* condenses a customer comment, a
 *classifier* labels it, and an *action* agent recommends the next step.
 
 <style>
@@ -132,8 +132,8 @@ Open **feedback_agents.py** and add code at each commented placeholder.
     ```python
     # Initialize the current feedback
     feedback="""
-    I use your trail-finder app before every hike, and it works well overall.
-    But when I'm checking the map at night on the trail, the bright screen is really harsh on my eyes.
+    I use the line-scheduling app before every changeover, and it works well overall.
+    But when I'm checking the schedule at night on the floor, the bright screen is really harsh on my eyes.
     If you added a dark mode option, it would make it much more comfortable to use in low light.
     """
     ```
@@ -193,18 +193,18 @@ Open **feedback_agents.py** and add code at each commented placeholder.
 1. Review the output. Each agent contributes one step, and you should see output similar to:
 
     ```
-    Customer requests a dark mode option for comfortable nighttime trail use.
+    Site team requests a dark mode option for comfortable night-shift use.
     Feature request
-    Log as an enhancement request to add a dark mode for nighttime trail use.
+    Log as an enhancement request to add a dark mode for night-shift use.
     ------------------------------------------------------------
     01 [summarizer]
-    Customer requests a dark mode option for comfortable nighttime trail use.
+    Site team requests a dark mode option for comfortable night-shift use.
     ------------------------------------------------------------
     02 [classifier]
     Feature request
     ------------------------------------------------------------
     03 [action]
-    Log as an enhancement request to add a dark mode for nighttime trail use.
+    Log as an enhancement request to add a dark mode for night-shift use.
     ```
 
     > **Tip**: If the app fails because the rate limit is exceeded, wait a few seconds and try again. Try editing the `feedback` string to a complaint or a compliment and run again to see the classification and recommended action change.

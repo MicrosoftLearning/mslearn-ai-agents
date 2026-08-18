@@ -12,7 +12,7 @@ load_dotenv()
 project_endpoint = os.getenv("PROJECT_ENDPOINT")
 model_deployment = os.getenv("MODEL_DEPLOYMENT_NAME")
 
-DATASET = Path("data/tailwind_eval.jsonl")
+DATASET = Path("data/caldova_eval.jsonl")
 OUTPUT = Path("eval_results.json")
 
 

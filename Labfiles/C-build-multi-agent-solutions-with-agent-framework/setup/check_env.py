@@ -1,5 +1,5 @@
 """
-Preflight check for the Tailwind Traders multi-agent lab.
+Preflight check for the Caldova multi-agent lab.
 
 Each task in this lab can be completed on its own. Before you start a task,
 run this script to confirm your .env file has everything that task needs.
@@ -343,8 +343,8 @@ def looks_like_placeholder(value):
     nothing, and be told they were ready to start.
 
     Anything empty, wrapped in angle brackets, or whose first word is "your"
-    counts as unfilled. Real defaults these labs ship (tailwind-agent,
-    tailwind-knowledge-agent, localhost, port numbers) do not match.
+    counts as unfilled. Real defaults these labs ship (caldova-agent,
+    caldova-knowledge-agent, localhost, port numbers) do not match.
 
     This deliberately errs toward "not filled in": a real value beginning with
     the word "your" would be flagged, but none of these keys takes one (they
@@ -376,11 +376,11 @@ FIX_HINTS = {
         "(this ships pre-filled in .env.example)."
     ),
     "TITLE_AGENT_PORT": (
-        "Task 3 needs a port for the trip-title agent. Set TITLE_AGENT_PORT=10007 "
+        "Task 3 needs a port for the transfer-title agent. Set TITLE_AGENT_PORT=10007 "
         "(this ships pre-filled in .env.example)."
     ),
     "OUTLINE_AGENT_PORT": (
-        "Task 3 needs a port for the trip-itinerary agent. Set OUTLINE_AGENT_PORT=10008 "
+        "Task 3 needs a port for the transfer-outline agent. Set OUTLINE_AGENT_PORT=10008 "
         "(this ships pre-filled in .env.example)."
     ),
     "ROUTING_AGENT_PORT": (

@@ -2,7 +2,7 @@
 title: 'Task 3 – Connect remote agents with A2A'
 lab:
     title: 'Task 3 – Connect remote agents with A2A'
-    description: 'Use the Agent-to-Agent (A2A) protocol to connect agents that run in separate processes: a routing agent discovers and delegates to a trip-title agent and a trip-itinerary agent, which collaborate to plan Tailwind Traders guided trips.'
+    description: 'Use the Agent-to-Agent (A2A) protocol to connect agents that run in separate processes: a routing agent discovers and delegates to a transfer-title agent and a transfer-outline agent, which collaborate to plan Caldova tech transfers.'
     type: 'task'
     parent: 'C'
     order: 3
@@ -37,8 +37,8 @@ python ../setup/check_env.py --task 3
 So far your agents have lived in a single process. Real systems are often split across services —
 each agent runs on its own, and they collaborate over the network. The **Agent-to-Agent (A2A)
 protocol** is a standard way for agents to advertise what they can do and send each other work.
-In this task you'll build a Tailwind Traders trip-planning system from three remote agents: a
-**trip-title agent** suggests a headline, a **trip-itinerary agent** drafts an outline, and a
+In this task you'll build a Caldova transfer-planning system from three remote agents: a
+**transfer-title agent** suggests a headline, a **transfer-outline agent** drafts a plan, and a
 **routing agent** discovers both and delegates each request to the right one.
 
 <style>
@@ -79,14 +79,14 @@ launcher:
 
 ```output
 Python
-├── outline_agent/       # remote agent: drafts a trip itinerary outline (provided complete)
+├── outline_agent/       # remote agent: drafts a transfer plan outline (provided complete)
 │   ├── agent.py
 │   ├── agent_executor.py
 │   └── server.py
 ├── routing_agent/       # orchestrator that discovers and delegates to the other agents
 │   ├── agent.py
 │   └── server.py
-├── title_agent/         # remote agent: suggests a guided-trip title
+├── title_agent/         # remote agent: suggests a transfer brief title
 │   ├── agent.py
 │   ├── agent_executor.py
 │   └── server.py
@@ -95,16 +95,16 @@ Python
 ```
 
 Each agent folder contains the Foundry agent code and a server to host it. The **routing agent**
-discovers and communicates with the **trip-title** and **trip-itinerary** agents. The **client**
+discovers and communicates with the **transfer-title** and **transfer-outline** agents. The **client**
 lets you submit prompts to the routing agent. `run_all.py` launches all the servers.
 
-> The `outline_agent` (trip-itinerary agent) is provided **complete** as a reference — you'll
+> The `outline_agent` (transfer-outline agent) is provided **complete** as a reference — you'll
 > build the equivalent code in the `title_agent`, then wire up the `routing_agent`.
 
 ### Create a discoverable agent
 
-In this task you complete the trip-title agent that suggests headlines for Tailwind Traders
-guided trips. You also define the agent's skills and card, which the A2A protocol uses to make
+In this task you complete the transfer-title agent that suggests headlines for Caldova
+tech transfers. You also define the agent's skills and card, which the A2A protocol uses to make
 the agent discoverable.
 
 > **Tip**: As you add code, keep the indentation aligned with the comments.
@@ -130,10 +130,10 @@ the agent discoverable.
     # Create the title agent
     self.agent = self.client.create_agent(
         model=os.environ['MODEL_DEPLOYMENT_NAME'],
-        name='trip-title-agent',
+        name='transfer-title-agent',
         instructions="""
-        You are a helpful trip marketing assistant for Tailwind Traders.
-        Given a region or activity the customer wants to explore, suggest a single clear and catchy guided-trip title.
+        You are a helpful planning assistant for Caldova.
+        Given a site or capability the planner names, suggest a single clear transfer brief title.
         """,
     )
     ```
@@ -172,11 +172,11 @@ the agent discoverable.
     skills = [
         AgentSkill(
             id='generate_trip_title',
-            name='Generate Trip Title',
-            description='Generates a guided-trip title based on a region or activity',
+            name='Generate Transfer Title',
+            description='Generates a transfer brief title based on a site or capability',
             tags=['title'],
             examples=[
-                'Can you give me a title for a hiking trip in Patagonia?',
+                'Can you give me a title for a packaging transfer at Ashford?',
             ],
         ),
     ]
@@ -187,9 +187,9 @@ the agent discoverable.
     ```python
     # Create agent card
     agent_card = AgentCard(
-        name='Tailwind Traders Trip Title Agent',
-        description='An intelligent trip-title generator agent powered by Foundry. '
-        'I can help you generate catchy titles for Tailwind Traders guided trips.',
+        name='Caldova Transfer Title Agent',
+        description='An intelligent title generator agent powered by Foundry. '
+        'I can help you generate clear titles for Caldova tech transfers.',
         url=f'http://{host}:{port}/',
         version='1.0.0',
         default_input_modes=['text'],
@@ -224,14 +224,14 @@ the agent discoverable.
     )
     ```
 
-    This creates an A2A server that shares the trip-title agent's information and handles incoming requests using the agent executor.
+    This creates an A2A server that shares the transfer-title agent's information and handles incoming requests using the agent executor.
 
 1. Save the file (**Ctrl+S**).
 
 ### Enable messages between the agents
 
 In this task you use the A2A protocol to let the routing agent send messages to the other agents,
-and let the trip-title agent receive them by completing its agent executor.
+and let the transfer-title agent receive them by completing its agent executor.
 
 1. Open **routing_agent/agent.py**.
 
@@ -275,7 +275,7 @@ and let the trip-title agent receive them by completing its agent executor.
     ```
 
 1. Save the file (**Ctrl+S**). The routing agent can now discover and message the remote agents.
-    Next, complete the trip-title agent's executor so it can handle those incoming messages.
+    Next, complete the transfer-title agent's executor so it can handle those incoming messages.
 
 1. Open **title_agent/agent_executor.py**.
 
@@ -335,7 +335,7 @@ and let the trip-title agent receive them by completing its agent executor.
     )
     ```
 
-    The trip-title agent is now wrapped with an executor that the A2A protocol uses to handle messages.
+    The transfer-title agent is now wrapped with an executor that the A2A protocol uses to handle messages.
 
 1. Save the file (**Ctrl+S**).
 
@@ -362,10 +362,10 @@ and let the trip-title agent receive them by completing its agent executor.
 1. When prompted, enter a prompt such as:
 
     ```
-    Create a title and outline for a guided hiking trip in Patagonia.
+    Create a title and outline for a packaging transfer at Ashford.
     ```
 
-    After a few moments, the routing agent delegates to the trip-title and trip-itinerary agents, and you should see a suggested title and an itinerary outline in the response.
+    After a few moments, the routing agent delegates to the transfer-title and transfer-outline agents, and you should see a suggested title and a plan outline in the response.
 
     > **Tip**: If a server fails to start because a port is already in use, stop any earlier run (Ctrl+C in the `run_all.py` terminal) and try again, or change the `*_PORT` values in `.env`.
 

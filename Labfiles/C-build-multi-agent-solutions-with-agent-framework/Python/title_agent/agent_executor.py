@@ -1,4 +1,4 @@
-""" Tailwind Traders Foundry Agent that generates a guided-trip title """
+""" Caldova Foundry Agent that generates a transfer brief title """
 
 from a2a.server.events.event_queue import EventQueue
 from a2a.server.agent_execution import AgentExecutor

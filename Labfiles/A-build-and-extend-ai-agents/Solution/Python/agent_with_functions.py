@@ -7,7 +7,7 @@ from azure.identity import DefaultAzureCredential
 from dotenv import load_dotenv
 
 # The shared chat UI shell (provided – you don't edit this file)
-from tailwind_ui import run_chat_app, AgentReply
+from caldova_ui import run_chat_app, AgentReply
 
 
 OUTPUT_DIR = Path("agent_outputs")
@@ -94,7 +94,7 @@ def format_output_text(content_item, openai_client, downloaded_files):
 # Initialize the project client
 load_dotenv()
 project_endpoint = os.environ.get("PROJECT_ENDPOINT")
-agent_name = os.environ.get("AGENT_NAME", "tailwind-agent")
+agent_name = os.environ.get("AGENT_NAME", "caldova-agent")
 
 if not project_endpoint:
     raise SystemExit(
@@ -175,6 +175,6 @@ def respond(user_message):
 # Launch the browser chat window (replaces the old console loop)
 run_chat_app(
     respond,
-    title="Tailwind Traders Assistant",
-    subtitle="Ask about store policy or request an analysis of the weekly sales data.",
+    title="Caldova Assistant",
+    subtitle="Ask about supply chain policy or request an analysis of the weekly output data.",
 )

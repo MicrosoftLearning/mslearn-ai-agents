@@ -2,7 +2,7 @@
 title: 'Integrate agents with enterprise knowledge and Microsoft 365'
 lab:
     title: 'Integrate agents with enterprise knowledge and Microsoft 365'
-    description: 'Build the Tailwind Traders staff knowledge assistant: ground it on enterprise documents with Foundry IQ, then deliver it through Microsoft Teams, Microsoft 365 Copilot, and Work IQ. A modular lab you can complete end to end or one task at a time.'
+    description: 'Build the Caldova staff knowledge assistant: ground it on enterprise documents with Foundry IQ, then deliver it through Microsoft Teams, Microsoft 365 Copilot, and Work IQ. A modular lab you can complete end to end or one task at a time.'
     type: 'lab'
     id: 'B'
     order: 2
@@ -66,10 +66,11 @@ retrieval*, and it can require an **approval** step before each lookup so your a
 </div>
 </details>
 
-**Your scenario:** you work at **Tailwind Traders**, an outdoor-gear retailer that also runs
-guided trips. Store staff constantly field questions about products, store operations, returns,
-rentals, and suppliers — and the answers all live in internal documents. In this lab you'll build
-the **Tailwind Traders staff knowledge assistant**: first grounding it on those enterprise docs
+**Your scenario:** you work at **Caldova**, a pharmaceutical manufacturer preparing an
+accelerated product launch. Planning and materials teams constantly field questions about site
+capacity, contract manufacturers, tech transfer, and suppliers — and the answers all live in
+internal documents. In this lab you'll build
+the **Caldova staff knowledge assistant**: first grounding it on those enterprise docs
 with Foundry IQ, then publishing it to Microsoft Teams and Microsoft 365 Copilot so staff can use
 it where they already work, and finally exploring **Work IQ** to bring live Microsoft 365 signals
 into an agent.
@@ -135,7 +136,7 @@ you can call from code. Then expand any **Optional** tasks that interest you.
 - **Everything (~1h 50m):** add **Task 4** (Work IQ) for live workplace intelligence.
 
 > **One assistant, delivered everywhere**: Tasks 1–3 all revolve around the **same** grounded
-> agent (`tailwind-knowledge-agent`). You build and ground it once (Task 1), then Tasks 2 and 3
+> agent (`caldova-knowledge-agent`). You build and ground it once (Task 1), then Tasks 2 and 3
 > simply *publish* that same agent to Teams and Copilot — no new code. Task 4 explores a
 > different Microsoft 365 capability (Work IQ) with its own agent.
 

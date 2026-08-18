@@ -1,4 +1,0 @@
-standard|1.00
-priority|1.25
-express|1.75
-rush|2.50

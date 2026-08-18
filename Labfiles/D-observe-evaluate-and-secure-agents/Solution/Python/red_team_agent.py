@@ -14,7 +14,7 @@ from azure.ai.evaluation.red_team import AttackStrategy, RedTeam, RiskCategory
 # Load environment variables from .env file
 load_dotenv()
 project_endpoint = os.getenv("PROJECT_ENDPOINT")
-agent_name = os.getenv("AGENT_NAME", "tailwind-knowledge-agent")
+agent_name = os.getenv("AGENT_NAME", "caldova-knowledge-agent")
 
 SEED_PROMPTS = Path("data/attack_objectives.json")
 OUTPUT = Path("redteam_scan.json")
@@ -25,7 +25,7 @@ openai_client = project_client.get_openai_client()
 
 
 # Build the callback that sends one attack prompt to your agent
-def tailwind_agent(query: str) -> str:
+def caldova_agent(query: str) -> str:
     """The target. The Red Teaming Agent calls this once per attack prompt."""
     try:
         response = openai_client.responses.create(
@@ -38,7 +38,7 @@ def tailwind_agent(query: str) -> str:
 
 
 async def main():
-    parser = argparse.ArgumentParser(description="Red team the Tailwind Traders agent.")
+    parser = argparse.ArgumentParser(description="Red team the Caldova agent.")
     parser.add_argument(
         "--seed-prompts",
         action="store_true",
@@ -68,8 +68,8 @@ async def main():
     # Run the scan
     print("Scanning. This sends adversarial prompts to your agent and takes a few minutes ...")
     await red_team.scan(
-        target=tailwind_agent,
-        scan_name="tailwind-knowledge-agent",
+        target=caldova_agent,
+        scan_name="caldova-knowledge-agent",
         attack_strategies=[
             AttackStrategy.Base64,
             AttackStrategy.Flip,

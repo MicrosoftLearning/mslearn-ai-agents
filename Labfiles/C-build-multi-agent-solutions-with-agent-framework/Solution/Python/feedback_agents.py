@@ -1,7 +1,7 @@
 """
 Task 2 (Optional) - Multi-agent sequential orchestration with the Microsoft Agent Framework.
 
-Three Tailwind Traders agents work together in a pipeline to triage a piece of customer
+Three Caldova agents work together in a pipeline to triage a piece of site
 feedback: a Summarizer condenses it, a Classifier labels it, and an Action agent recommends
 the next step. SequentialBuilder runs them in order and collects every agent's output.
 """
@@ -22,10 +22,10 @@ load_dotenv()
 async def main():
     # Agent instructions
     summarizer_instructions="""
-    Summarize the customer's feedback in one short sentence. Keep it neutral and concise.
+    Summarize the reported issue in one short sentence. Keep it neutral and concise.
     Example output:
-    Tent zipper broke on the first night of a trip.
-    Customer praises the guided kayak tour.
+    Sealing unit failed on the first shift of a packaging run.
+    Site team praises the new changeover procedure.
     """
 
     classifier_instructions="""
@@ -35,8 +35,8 @@ async def main():
     action_instructions="""
     Based on the summary and classification, suggest the next action in one short sentence.
     Example output:
-    Escalate as a high-priority defect for the gear team.
-    Log as positive feedback to share with the trips team.
+    Escalate as a high-priority defect for the engineering team.
+    Log as positive feedback to share with the operations team.
     Log as enhancement request for the product backlog.
     """
 
@@ -66,8 +66,8 @@ async def main():
 
     # Initialize the current feedback
     feedback="""
-    I use your trail-finder app before every hike, and it works well overall.
-    But when I'm checking the map at night on the trail, the bright screen is really harsh on my eyes.
+    I use the line-scheduling app before every changeover, and it works well overall.
+    But when I'm checking the schedule at night on the floor, the bright screen is really harsh on my eyes.
     If you added a dark mode option, it would make it much more comfortable to use in low light.
     """
 
@@ -78,7 +78,7 @@ async def main():
     ).build()
 
     # Run and collect outputs
-    result = await workflow.run(f"Customer feedback: {feedback}")
+    result = await workflow.run(f"Site feedback: {feedback}")
     outputs = result.get_outputs()
 
     # Display outputs

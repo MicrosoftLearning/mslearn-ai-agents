@@ -1,4 +1,4 @@
-"""Tailwind Traders assistant - hosted agent edition (starter).
+"""Caldova assistant - hosted agent edition (starter).
 
 Everywhere else in this lab you built *prompt agents*: you described the agent
 with a PromptAgentDefinition (model + instructions + tools) and let Foundry run
@@ -47,10 +47,10 @@ app = ResponsesAgentServerHost(
     options=ResponsesServerOptions(default_fetch_history_count=20),
 )
 
-# The same store-assistant instructions you used for your prompt agents.
+# The same assistant instructions you used for your prompt agents.
 _SYSTEM_PROMPT = (
-    "You are the Tailwind Traders store assistant. You help customers and store "
-    "staff with questions about products, orders, returns, rentals, and guided trips. "
+    "You are the Caldova supply chain assistant. You help planning and "
+    "materials teams with questions about capacity, contract manufacturers, and materials. "
     "Always be friendly and concise. If you don't know the answer, say so and suggest "
     "contacting the support team directly."
 )
@@ -84,7 +84,7 @@ async def handler(
     history = await context.get_history()
     input_items = _build_input(user_input, history)
 
-    # TODO: Call the model with the Tailwind system prompt and the input items,
+    # TODO: Call the model with the Caldova system prompt and the input items,
     #   then return the reply. The Responses client is synchronous, so run it off
     #   the event loop with run_in_executor:
     #

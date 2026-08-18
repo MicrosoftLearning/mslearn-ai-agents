@@ -46,10 +46,10 @@ call and with *what* arguments; your code executes it and returns the result.
 1. In the `Labfiles/A-build-and-extend-ai-agents/Python` folder, activate the virtual
     environment (`.\labenv\Scripts\Activate.ps1`) and confirm `PROJECT_ENDPOINT` and
     `MODEL_DEPLOYMENT_NAME` are set in **.env** (see [Getting started](A0-getting-started.md)).
-    Then review **functions.py**, which contains the trip planner's helper functions.
+    Then review **functions.py**, which contains the capacity planner's helper functions.
 
-> **Try it first**: Look at `next_available_trip(region)` in **functions.py**. How would
-> you describe its single `region` parameter to the model so it knows when and how to
+> **Try it first**: Look at `next_available_slot(site)` in **functions.py**. How would
+> you describe its single `site` parameter to the model so it knows when and how to
 > call it? Write the JSON schema before revealing the solution.
 
 <details markdown="1">
@@ -60,42 +60,42 @@ same pattern as Task 2). The file is structured so your agent setup runs once, t
 `respond()` function handles each chat message and hands the reply to `run_chat_app()`:
 
 1. **Define the three function tools.** Each schema tells the model how to call one of the
-    Python functions — for example the trip lookup tool:
+    Python functions — for example the slot lookup tool:
 
     ```python
-    # Define the trip lookup function tool
-    trip_tool = FunctionTool(
-        name="next_available_trip",
-        description="Get the next available guided trip in a given region.",
+    # Define the slot lookup function tool
+    slot_tool = FunctionTool(
+        name="next_available_slot",
+        description="Get the next open production slot at a given site.",
         parameters={
             "type": "object",
             "properties": {
-                "region": {
+                "site": {
                     "type": "string",
-                    "description": "region to find the next guided trip in (e.g. 'pacific_northwest', 'rockies', 'patagonia')",
+                    "description": "site to find the next open production slot at (e.g. 'ashford', 'brightwater', 'calderwood')",
                 },
             },
-            "required": ["region"],
+            "required": ["site"],
             "additionalProperties": False,
         },
         strict=True,
     )
     ```
 
-    Define `cost_tool` (`calculate_rental_cost`) and `report_tool`
-    (`generate_booking_report`) the same way, matching each function's parameters.
+    Define `cost_tool` (`calculate_transfer_cost`) and `report_tool`
+    (`generate_capacity_report`) the same way, matching each function's parameters.
 
 2. **Create the agent with all three tools:**
 
     ```python
     agent = project_client.agents.create_version(
-        agent_name="trip-planner-agent",
+        agent_name="capacity-planner-agent",
         definition=PromptAgentDefinition(
             model=model_deployment,
-            instructions="""You are a trip planning assistant for Tailwind Traders that helps
-                customers find guided trips and calculate gear rental costs.
+            instructions="""You are a capacity planning assistant for Caldova that helps
+                planners find open production slots and estimate contract manufacturing costs.
                 Use the available tools to assist users with their inquiries.""",
-            tools=[trip_tool, cost_tool, report_tool],
+            tools=[slot_tool, cost_tool, report_tool],
         ),
     )
     ```
@@ -108,12 +108,12 @@ same pattern as Task 2). The file is structured so your agent setup runs once, t
     for item in response.output:
         if item.type == "function_call":
             result = None
-            if item.name == "next_available_trip":
-                result = next_available_trip(**json.loads(item.arguments))
-            elif item.name == "calculate_rental_cost":
-                result = calculate_rental_cost(**json.loads(item.arguments))
-            elif item.name == "generate_booking_report":
-                result = generate_booking_report(**json.loads(item.arguments))
+            if item.name == "next_available_slot":
+                result = next_available_slot(**json.loads(item.arguments))
+            elif item.name == "calculate_transfer_cost":
+                result = calculate_transfer_cost(**json.loads(item.arguments))
+            elif item.name == "generate_capacity_report":
+                result = generate_capacity_report(**json.loads(item.arguments))
             input_list.append(
                 FunctionCallOutput(
                     type="function_call_output",
@@ -145,14 +145,14 @@ Run `python functions_agent.py`. Your browser opens the chat window — try a pr
 tools at once:
 
 ```
-Find me the next trip I can join in Patagonia and give me the cost for 5 days of premium gear rental at priority service.
+Find me the next open slot at Brightwater and give me the cost for 5 weeks of premium contract capacity at expedited priority.
 ```
 
 The agent calls both functions in one turn and combines the results, for example:
 
 ```
-The next trip available in Patagonia is the Patagonia Glacier Trek on February 17th.
-The cost for 5 days of premium gear rental at priority service is $1,875.
+The next open slot at Brightwater is the Line 3 Changeover on March 3rd.
+The cost for 5 weeks of premium contract capacity at expedited priority is $1,875K.
 ```
 
 Close the browser tab and press **Ctrl+C** in the terminal to stop the app (the agent is
@@ -168,7 +168,7 @@ deleted automatically on exit).
 You just wrote two schemas per tool and a dispatch loop that matches each `function_call` to a
 Python function. The **Microsoft Agent Framework** removes both. Open **functions_agent_maf.py**
 (provided complete) and run it with `python functions_agent_maf.py` — it produces the *same*
-trip-planner assistant.
+capacity-planner assistant.
 
 The difference is the tool definition and the loop. Instead of a hand-written `FunctionTool`
 schema, you decorate the function with `@tool` and describe each parameter inline:
@@ -181,11 +181,11 @@ from pydantic import Field
 from typing import Annotated
 
 @tool(approval_mode="never_require")
-def next_available_trip(
-    region: Annotated[str, Field(description="Region to find the next guided trip in (e.g. 'pacific_northwest', 'rockies', 'patagonia')")],
+def next_available_slot(
+    site: Annotated[str, Field(description="Site to find the next open production slot at (e.g. 'ashford', 'brightwater', 'calderwood')")],
 ) -> str:
-    """Get the next available guided trip in a given region."""
-    return functions.next_available_trip(region)
+    """Get the next open production slot at a given site."""
+    return functions.next_available_slot(region)
 ```
 
 Then you create the agent with the decorated functions and let `agent.run()` handle the whole
@@ -198,9 +198,9 @@ agent = Agent(
         model=os.getenv("MODEL_DEPLOYMENT_NAME"),
         credential=AzureCliCredential(),
     ),
-    name="trip-planner-agent",
-    instructions="You are a trip planning assistant for Tailwind Traders...",
-    tools=[next_available_trip, calculate_rental_cost, generate_booking_report],
+    name="capacity-planner-agent",
+    instructions="You are a capacity planning assistant for Caldova...",
+    tools=[next_available_slot, calculate_transfer_cost, generate_capacity_report],
 )
 
 # agent.run() decides which tools to call, runs them, and returns the final answer
