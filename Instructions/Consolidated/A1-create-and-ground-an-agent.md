@@ -89,7 +89,7 @@ agent answers *from that data* instead of inventing a response.
 1. In the chat pane, enter:
 
     ```
-    How long does review take for a capacity request with a complete brief?
+    How long does review take for a standard capacity request?
     ```
 
     The agent should reference the supply chain policy document in its answer.

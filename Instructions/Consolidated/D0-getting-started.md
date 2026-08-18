@@ -21,8 +21,8 @@ do it on its own; if you're working through the whole lab in one sitting, you on
 do this setup once.
 
 **Your scenario:** you work at **Caldova**, a pharmaceutical manufacturer preparing an
-accelerated product launch. The supply chain assistant is live, and this lab is how you find out what it's really
-doing: tracing it, scoring its answers, and attacking it.
+accelerated product launch. The supply chain assistant is live, and this lab is how you
+find out what it's really doing: tracing it, scoring its answers, and attacking it.
 
 > **Note**: Some of the technologies used in this lab are in preview or in active
 > development. You may experience some unexpected behavior, warnings, or errors.

@@ -21,8 +21,8 @@ then do it on its own; if you're working through the whole lab in one sitting, y
 this setup once.
 
 **Your scenario:** you work at **Caldova**, a pharmaceutical manufacturer preparing an
-accelerated product launch. Across the lab you'll build the staff knowledge assistant, ground it on enterprise
-documents, and deliver it through Microsoft 365.
+accelerated product launch. Across the lab you'll build the staff knowledge assistant,
+ground it on enterprise documents, and deliver it through Microsoft 365.
 
 > **Note**: Some of the technologies used in this lab are in preview or in active
 > development. You may experience some unexpected behavior, warnings, or errors.

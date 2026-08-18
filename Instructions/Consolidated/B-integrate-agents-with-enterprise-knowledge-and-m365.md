@@ -67,9 +67,9 @@ retrieval*, and it can require an **approval** step before each lookup so your a
 </details>
 
 **Your scenario:** you work at **Caldova**, a pharmaceutical manufacturer preparing an
-accelerated product launch. Planning and materials teams constantly field questions about site
-capacity, contract manufacturers, tech transfer, and suppliers — and the answers all live in
-internal documents. In this lab you'll build
+accelerated product launch. Planning and materials teams constantly field questions about
+site capacity, contract manufacturers, tech transfer, and suppliers — and the answers all
+live in internal documents. In this lab you'll build
 the **Caldova staff knowledge assistant**: first grounding it on those enterprise docs
 with Foundry IQ, then publishing it to Microsoft Teams and Microsoft 365 Copilot so staff can use
 it where they already work, and finally exploring **Work IQ** to bring live Microsoft 365 signals

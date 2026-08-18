@@ -83,9 +83,8 @@ a tool call that timed out. **Tracing** shows you what happened on the way to th
 accelerated product launch. The supply chain assistant you built in earlier labs is now
 answering real questions from planning teams — and the IT compliance lead is asking harder
 questions about it. *Why was that answer slow? Is it making things up about the capacity
-policy? What happens if someone
-tries to talk it into something it shouldn't say?* In this lab you answer all three with
-evidence rather than opinion.
+policy? What happens if someone tries to talk it into something it shouldn't say?* In this
+lab you answer all three with evidence rather than opinion.
 
 You'll start with the **Core** tasks, which get you from "it runs" to "I can prove how well
 it runs". The **Optional** task then goes after safety.

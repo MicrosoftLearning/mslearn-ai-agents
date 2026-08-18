@@ -20,8 +20,8 @@ here** — complete this page first. Each task is written so you can then do it 
 you're working through the whole lab in one sitting, you only need to do this setup once.
 
 **Your scenario:** you work at **Caldova**, a pharmaceutical manufacturer preparing an
-accelerated product launch. Across the lab you'll build the supply chain assistant that powers the
-business, adding one capability per task.
+accelerated product launch. Across the lab you'll build the supply chain assistant that
+powers the business, adding one capability per task.
 
 > **Note**: Some of the technologies used in this lab are in preview or in active
 > development. You may experience some unexpected behavior, warnings, or errors.
