@@ -1,0 +1,15 @@
+python-dotenv
+azure-identity
+azure-ai-projects==2.3.0
+# openai 3.x replaced httpx with httpx2, which breaks azure-ai-projects'
+# `import httpx`. Pinned until azure-ai-projects supports openai 3.
+openai<3
+
+# Task 1 - tracing to Azure Monitor / Application Insights
+azure-monitor-opentelemetry
+opentelemetry-sdk
+
+# Task 2 - evaluators (groundedness, relevance, similarity)
+# Task 3 - the [redteam] extra adds PyRIT, used by the AI Red Teaming Agent.
+# PyRIT supports Python 3.10-3.13 only.
+azure-ai-evaluation[redteam]==1.18.3
