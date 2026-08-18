@@ -6,8 +6,8 @@ from dotenv import load_dotenv
 
 
 # Import the local functions the agent can call, and the shared chat UI
-from functions import next_available_trip, calculate_rental_cost, generate_booking_report
-from tailwind_ui import run_chat_app, AgentReply
+from functions import next_available_slot, calculate_transfer_cost, generate_capacity_report
+from caldova_ui import run_chat_app, AgentReply
 
 # Load environment variables from .env file
 load_dotenv()
@@ -21,13 +21,13 @@ with (
     project_client.get_openai_client() as openai_client,
 ):
 
-    # Define the trip lookup function tool
+    # Define the slot lookup function tool
 
 
-    # Define the rental cost function tool
+    # Define the transfer cost function tool
 
 
-    # Define the booking report generation function tool
+    # Define the capacity request function tool
 
 
     # Create a new agent with the function tools
@@ -76,8 +76,8 @@ with (
     try:
         run_chat_app(
             respond,
-            title="Tailwind Traders Assistant",
-            subtitle="Plan a guided trip and price your gear rental.",
+            title="Caldova Assistant",
+            subtitle="Find an open production slot and estimate contract capacity.",
         )
     finally:
         # Delete the agent when the app closes

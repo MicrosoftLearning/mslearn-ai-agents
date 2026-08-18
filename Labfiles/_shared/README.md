@@ -39,8 +39,8 @@ Add an entry to `manifest.yml` and run the sync:
 ```yaml
 labs:
   D-observe-evaluate-and-secure-agents:
-    azd_name: tailwind-traders-observability-lab
-    description: the Tailwind Traders observability lab
+    azd_name: caldova-observability-lab
+    description: the Caldova observability lab
     hint: >-
       Task 2 needs a grounded agent to evaluate: from the Python folder, run
       'python ../setup/bootstrap_agent.py' to create one.
@@ -72,8 +72,8 @@ Three files vary slightly between labs, so they're templated. Values come from
 | Token | Used in | Example |
 | --- | --- | --- |
 | `{{LAB_FOLDER}}` | `azure.yaml` | `A-build-and-extend-ai-agents` |
-| `{{AZD_NAME}}` | `azure.yaml` | `tailwind-traders-lab` |
-| `{{LAB_DESCRIPTION}}` | `azure.yaml` | `the Tailwind Traders lab` |
+| `{{AZD_NAME}}` | `azure.yaml` | `caldova-lab` |
+| `{{LAB_DESCRIPTION}}` | `azure.yaml` | `the Caldova lab` |
 | `{{LAB_HINT}}` | `write_env.ps1`, `write_env.sh` | the closing line telling the learner what else that lab needs |
 
 An unresolved token is an error, so a lab added to `manifest.yml` without all of

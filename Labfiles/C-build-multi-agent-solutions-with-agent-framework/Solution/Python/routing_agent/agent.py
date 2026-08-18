@@ -155,7 +155,7 @@ class RoutingAgent:
                 model=os.environ["MODEL_DEPLOYMENT_NAME"],
                 name="routing-agent",
                 instructions=f"""
-                You are an expert Routing Delegator for Tailwind Traders guided trips.
+                You are an expert Routing Delegator for Caldova tech transfers.
 
                 Your role:
                 - Delegate user inquiries to appropriate specialized remote agents

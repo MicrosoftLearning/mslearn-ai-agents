@@ -15,7 +15,7 @@ Solution/
    ├─ red_team_agent.py   # Task 3 — AI Red Teaming Agent scan of the deployed agent
    ├─ agent_target.py     # provided; wraps the knowledge agent as an evaluation target
    ├─ data/
-   │  ├─ tailwind_eval.jsonl      # Task 2 — 10 questions with context and ground truth
+   │  ├─ caldova_eval.jsonl      # Task 2 — 10 questions with context and ground truth
    │  └─ attack_objectives.json   # Task 3 — custom adversarial seed prompts
    └─ knowledge/          # grounding docs used by ../setup/bootstrap_agent.py
 ```
@@ -35,7 +35,7 @@ This lab can be completed end to end **or one task at a time**. Two things make 
 - **Setup scripts** in `Labfiles/D-observe-evaluate-and-secure-agents/setup/`:
   - `check_env.py --task N` — preflight-checks that `.env` has the keys task *N* needs.
     Run it as `python ../setup/check_env.py --task N`.
-  - `bootstrap_agent.py` — creates and grounds `tailwind-knowledge-agent` (File Search over
+  - `bootstrap_agent.py` — creates and grounds `caldova-knowledge-agent` (File Search over
     the docs in `Python/knowledge/`) and writes `AGENT_NAME` to `.env`, so Tasks 2 and 3
     have something to measure without doing Lab B first. Idempotent; pass `--force` to
     recreate.
@@ -112,7 +112,7 @@ Task 3 takes several minutes and sends deliberately harmful prompts to your own 
 
 ## Quick sanity checks that DON'T need Azure
 - `python -m py_compile traced_agent.py evaluate_agent.py red_team_agent.py agent_target.py`
-- `python -c "import json;[json.loads(l) for l in open('data/tailwind_eval.jsonl',encoding='utf-8')];print('dataset ok')"`
+- `python -c "import json;[json.loads(l) for l in open('data/caldova_eval.jsonl',encoding='utf-8')];print('dataset ok')"`
 - `python -c "import json;print(len(json.load(open('data/attack_objectives.json',encoding='utf-8'))),'seed prompts')"`
 
 > **Note**: this lab's code has been import- and syntax-verified against

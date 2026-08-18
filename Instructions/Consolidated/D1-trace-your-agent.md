@@ -36,8 +36,8 @@ python ../setup/check_env.py --task 1
 
 ---
 
-It's Saturday morning at the Tailwind Traders flagship store. Staff are firing questions at
-the assistant between customers, and the shift manager says some answers "take ages". You
+It's Monday morning at Caldova's Ashford site. Planners are firing questions at
+the assistant between meetings, and the planning lead says some answers "take ages". You
 have no idea which ones, or why: the terminal shows you an answer, and nothing about how it
 got there.
 
@@ -161,24 +161,24 @@ Open **traced_agent.py** and add code at each commented placeholder.
     ```
 
 1. **Ask each question inside its own span** — this is the part that pays off. An outer span
-    represents the shift; each question gets a child span, tagged with attributes you choose
+    represents the review; each question gets a child span, tagged with attributes you choose
     so you can tell them apart in the portal:
 
     ```python
     # Ask each question inside its own span
-    with tracer.start_as_current_span("saturday-morning-shift") as shift_span:
-        shift_span.set_attribute("tailwind.store", "seattle-downtown")
+    with tracer.start_as_current_span("morning-planning-review") as shift_span:
+        shift_span.set_attribute("caldova.site", "ashford")
         conversation = openai_client.conversations.create()
 
         for number, question in enumerate(QUESTIONS, start=1):
-            with tracer.start_as_current_span("staff-question") as question_span:
-                question_span.set_attribute("tailwind.question_number", number)
+            with tracer.start_as_current_span("planner-question") as question_span:
+                question_span.set_attribute("caldova.question_number", number)
                 response = openai_client.responses.create(
                     conversation=conversation.id,
                     input=question,
                     extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
                 )
-                question_span.set_attribute("tailwind.answer_length", len(response.output_text))
+                question_span.set_attribute("caldova.answer_length", len(response.output_text))
                 print(f"\nQ{number}: {question}")
                 print(f"A{number}: {response.output_text}")
     ```
@@ -208,9 +208,9 @@ Open **traced_agent.py** and add code at each commented placeholder.
 1. You should see the three answers print, then the agent delete itself:
 
     ```
-    Agent created (name: tailwind-shift-assistant, version: 1)
+    Agent created (name: caldova-planning-assistant, version: 1)
 
-    Q1: A customer wants to return a tent they used on one trip. What do I tell them?
+    Q1: How long does review take for a capacity request with a complete brief?
     A1: ...
 
     Agent deleted
@@ -227,13 +227,13 @@ Open **traced_agent.py** and add code at each commented placeholder.
 1. Find the most recent trace and select it. Telemetry takes a minute or two to arrive — if
     it isn't there, wait and refresh.
 
-1. Step through the spans. You should see your `saturday-morning-shift` span at the top with
-    three `staff-question` children, and inside each one the model call the SDK emitted.
+1. Step through the spans. You should see your `morning-planning-review` span at the top with
+    three `planner-question` children, and inside each one the model call the SDK emitted.
 
-1. Select a `staff-question` span and look at its attributes. Your `tailwind.question_number`
-    and `tailwind.answer_length` are there alongside the standard GenAI attributes.
+1. Select a `planner-question` span and look at its attributes. Your `caldova.question_number`
+    and `caldova.answer_length` are there alongside the standard GenAI attributes.
 
-1. Compare the durations of the three questions. That's the shift manager's complaint,
+1. Compare the durations of the three questions. That's the planning lead's complaint,
     answered with data — and the span breakdown tells you *which part* of the slow one was
     slow.
 

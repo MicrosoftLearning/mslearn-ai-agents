@@ -1,0 +1,4 @@
+standard|1.00
+expedited|1.25
+fast_track|1.75
+emergency|2.50

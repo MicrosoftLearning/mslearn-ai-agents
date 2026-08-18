@@ -1,5 +1,5 @@
 """
-Fast-forward setup for the Tailwind Traders lab.
+Fast-forward setup for the Caldova lab.
 
 Task 3 needs the grounded agent you would normally build by hand in Task 1
 (and extend at the start of Task 3). If you're starting at Task 3 on its own,
@@ -12,10 +12,10 @@ the folder you open in VS Code — with the lab virtual environment active:
 
 It reproduces, in code, exactly what Tasks 1 and 3 have you do in the portal:
 
-  * creates an agent named 'tailwind-agent'
-  * grounds it on Store_Policy.txt with the File Search tool
-  * adds the Code Interpreter tool with weekly_sales.csv attached
-  * writes AGENT_NAME=tailwind-agent into Python/.env
+  * creates an agent named 'caldova-agent'
+  * grounds it on Supply_Chain_Policy.txt with the File Search tool
+  * adds the Code Interpreter tool with weekly_output.csv attached
+  * writes AGENT_NAME=caldova-agent into Python/.env
 
 Prerequisites: PROJECT_ENDPOINT and MODEL_DEPLOYMENT_NAME set in Python/.env
 (run 'azd up', or fill them in from the portal), and 'az login' completed.
@@ -41,23 +41,23 @@ from azure.core.exceptions import ResourceNotFoundError
 from azure.identity import DefaultAzureCredential
 from dotenv import load_dotenv
 
-AGENT_NAME = "tailwind-agent"
+AGENT_NAME = "caldova-agent"
 
 # The same instructions Task 1 has you paste into the portal.
-INSTRUCTIONS = """You are the Tailwind Traders store assistant.
-You help customers and store staff with questions about products, orders, returns, rentals, and guided trips.
+INSTRUCTIONS = """You are the Caldova supply chain assistant.
+You help planning and materials teams with questions about capacity, contract manufacturers, and materials.
 
 Guidelines:
 - Always be friendly and helpful
-- Use the store policy documentation to answer questions accurately
+- Use the supply chain policy documentation to answer questions accurately
 - If you don't know the answer, admit it and suggest contacting the support team directly"""
 
 # Resolve paths relative to this file so the script works from any directory.
 LAB_ROOT = Path(__file__).resolve().parent.parent
 PYTHON_DIR = LAB_ROOT / "Python"
 ENV_PATH = PYTHON_DIR / ".env"
-POLICY_FILE = PYTHON_DIR / "Store_Policy.txt"
-SALES_FILE = PYTHON_DIR / "weekly_sales.csv"
+POLICY_FILE = PYTHON_DIR / "Supply_Chain_Policy.txt"
+OUTPUT_FILE = PYTHON_DIR / "weekly_output.csv"
 
 
 def fail(message):
@@ -77,9 +77,9 @@ def upload_file(openai_client, path):
 
 def build_vector_store(openai_client, file_id):
     """Create a vector store for File Search and wait until it's indexed."""
-    print("  Creating vector store for Store_Policy.txt ...")
+    print("  Creating vector store for Supply_Chain_Policy.txt ...")
     vector_store = openai_client.vector_stores.create(
-        name="tailwind-store-policy",
+        name="caldova-supply-chain-policy",
         file_ids=[file_id],
     )
 
@@ -120,7 +120,7 @@ def set_env_value(key, value):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Create and ground the tailwind-agent for Task 3."
+        description="Create and ground the caldova-agent for Task 3."
     )
     parser.add_argument(
         "--force",
@@ -154,11 +154,11 @@ def main():
         print("Grounding the agent (this uploads two small files):")
         policy_file_id = upload_file(openai_client, POLICY_FILE)
         vector_store_id = build_vector_store(openai_client, policy_file_id)
-        sales_file_id = upload_file(openai_client, SALES_FILE)
+        output_file_id = upload_file(openai_client, OUTPUT_FILE)
 
         file_search = FileSearchTool(vector_store_ids=[vector_store_id])
         code_interpreter = CodeInterpreterTool(
-            container=AutoCodeInterpreterToolParam(file_ids=[sales_file_id])
+            container=AutoCodeInterpreterToolParam(file_ids=[output_file_id])
         )
 
         print("Creating the agent ...")

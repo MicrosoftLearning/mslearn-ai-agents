@@ -21,20 +21,20 @@ port = os.environ["OUTLINE_AGENT_PORT"]
 skills = [
     AgentSkill(
         id='generate_itinerary',
-        name='Generate Itinerary',
-        description='Generates a guided-trip itinerary outline based on a destination',
+        name='Generate Outline',
+        description='Generates a tech-transfer plan outline based on a site',
         tags=['outline'],
         examples=[
-            'Can you give me an itinerary outline for this trip?',
+            'Can you give me a plan outline for this transfer?',
         ],
     ),
 ]
 
 # Create agent card
 agent_card = AgentCard(
-    name='Tailwind Traders Trip Itinerary Agent',
-    description='An intelligent itinerary generator agent powered by Azure AI Foundry. '
-    'I can help you generate itinerary outlines for Tailwind Traders guided trips.',
+    name='Caldova Transfer Outline Agent',
+    description='An intelligent plan-outline generator agent powered by Azure AI Foundry. '
+    'I can help you generate plan outlines for Caldova tech transfers.',
     url=f'http://{host}:{port}/',
     version='1.0.0',
     default_input_modes=['text'],
@@ -61,7 +61,7 @@ routes = a2a_app.routes()
 
 # Add health check endpoint
 async def health_check(request: Request) -> PlainTextResponse:
-    return PlainTextResponse('Tailwind Traders Trip Itinerary Agent is running!')
+    return PlainTextResponse('Caldova Transfer Outline Agent is running!')
 
 routes.append(Route(path='/health', methods=['GET'], endpoint=health_check))
 

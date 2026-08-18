@@ -52,7 +52,7 @@ python ../setup/check_env.py --task 4
 ---
 
 Where Tasks 1-3 grounded an agent on *documents*, this task connects an agent to **live Microsoft
-365 signals** — emails, meetings, Teams messages — using **Work IQ**. You'll build a Tailwind
+365 signals** — emails, meetings, Teams messages — using **Work IQ**. You'll build a Caldova
 Traders workplace intelligence agent that can prep for meetings, track projects, and extract
 action items from real M365 data.
 
@@ -136,7 +136,7 @@ The Work IQ app is provided **complete** in the starter code — you run it as-i
     - Validates your Work IQ installation
     - Connects to your Microsoft Foundry project
     - Initializes the Work IQ MCP client (`npx -y @microsoft/workiq mcp`)
-    - Creates a `tailwind-workplace-agent` with the Work IQ tools
+    - Creates a `caldova-workplace-agent` with the Work IQ tools
     - Displays an interactive menu with five scenarios
 
 ## Explore workplace intelligence scenarios
@@ -160,7 +160,7 @@ The application connects to Work IQ and your Foundry project, then shows a menu 
 2. When prompted, enter a meeting topic or time, such as:
    - "my 2pm meeting"
    - "Spring Catalog Planning session"
-   - "store operations standup"
+   - "site operations standup"
 
 3. The agent will find your meeting details, search recent emails about the topic, look for previous meetings, summarize key points, and suggest discussion points.
 
@@ -172,7 +172,7 @@ The application connects to Work IQ and your Foundry project, then shows a menu 
 
 2. Enter a project name you're working on, such as:
    - "Spring Catalog Launch"
-   - "Store Refresh"
+   - "Capacity Review"
    - "Supplier onboarding"
 
 3. The agent searches emails and Teams messages, finds related meetings, identifies recent decisions and blockers, and summarizes next steps and deadlines.
@@ -189,14 +189,14 @@ The application connects to Work IQ and your Foundry project, then shows a menu 
 
 This scenario demonstrates using **both** Work IQ (workplace data) and Foundry IQ (knowledge base) together.
 
-> **Note**: This scenario requires Foundry IQ (Azure AI Search) configured in your project with an indexed knowledge base — for example, the Tailwind Traders knowledge base from [Task 1](B1-create-a-foundry-iq-knowledge-agent.md).
+> **Note**: This scenario requires Foundry IQ (Azure AI Search) configured in your project with an indexed knowledge base — for example, the Caldova knowledge base from [Task 1](B1-create-a-foundry-iq-knowledge-agent.md).
 
 1. From the main menu, select **4 - Combined Intelligence**.
 
 2. Enter a topic that exists in both your workplace discussions and official documentation:
-   - "store return and rental policies"
+   - "capacity request and transfer policies"
    - "supplier lead times"
-   - "guided-trip gear rentals"
+   - "contract manufacturing transfers"
 
 3. The agent searches workplace data (Work IQ) **and** the knowledge base (Foundry IQ), compares informal discussions with official documentation, identifies gaps, and provides a comprehensive summary with labeled sources.
 
@@ -217,7 +217,7 @@ This scenario demonstrates using **both** Work IQ (workplace data) and Foundry I
     ```
 
     ```
-    What was decided in yesterday's store operations standup?
+    What was decided in yesterday's site operations standup?
     ```
 
     ```
@@ -228,7 +228,7 @@ This scenario demonstrates using **both** Work IQ (workplace data) and Foundry I
 
 ### View Work IQ capabilities
 
-From the main menu, select **6 - View Work IQ Capabilities** to review the architecture, data sources, security model, and the Work IQ vs. Foundry IQ comparison. Select **0** to exit — the app deletes the `tailwind-workplace-agent` version on the way out.
+From the main menu, select **6 - View Work IQ Capabilities** to review the architecture, data sources, security model, and the Work IQ vs. Foundry IQ comparison. Select **0** to exit — the app deletes the `caldova-workplace-agent` version on the way out.
 
 ## Understanding the code
 
@@ -276,10 +276,10 @@ workiq_tools = [
 
 # Create agent with Work IQ tools
 self.agent = self.project_client.agents.create_version(
-    agent_name="tailwind-workplace-agent",
+    agent_name="caldova-workplace-agent",
     definition=PromptAgentDefinition(
         model=self.model_deployment,
-        instructions="You are a workplace intelligence assistant for Tailwind Traders staff...",
+        instructions="You are a workplace intelligence assistant for Caldova staff...",
         tools=workiq_tools  # Work IQ tools added here
     )
 )
@@ -328,7 +328,7 @@ The loop continues until the agent produces a response with no pending function 
 
 ## Clean up
 
-The app deletes the `tailwind-workplace-agent` version when you exit. Work IQ uses your M365 license rather than creating Azure resources, so there's nothing else to remove for this task. When you're finished, enter `deactivate` to exit the virtual environment.
+The app deletes the `caldova-workplace-agent` version when you exit. Work IQ uses your M365 license rather than creating Azure resources, so there's nothing else to remove for this task. When you're finished, enter `deactivate` to exit the virtual environment.
 
 ## Troubleshooting
 

@@ -14,14 +14,14 @@ async def main():
     # Clear the console
     os.system('cls' if os.name == 'nt' else 'clear')
 
-    # Load the trip expenses data file
+    # Load the site-visit expenses data file
     script_dir = Path(__file__).parent
     file_path = script_dir / 'data.txt'
     with file_path.open('r') as file:
         data = file.read() + "\n"
 
     # Ask for a prompt
-    user_prompt = input(f"Here is the trip expense data in your file:\n\n{data}\n\nWhat would you like me to do with it?\n\n")
+    user_prompt = input(f"Here is the site-visit expense data in your file:\n\n{data}\n\nWhat would you like me to do with it?\n\n")
 
     # Run the async agent code
     await process_expenses_data(user_prompt, data)
@@ -39,7 +39,7 @@ async def process_expenses_data(prompt, expenses_data):
     try:
         # A session keeps the conversation history across the agent run
         session = agent.create_session()
-        # Invoke the agent with the prompt and the trip expenses data
+        # Invoke the agent with the prompt and the site-visit expenses data
         response = await agent.run(f"{prompt}: {expenses_data}", session=session)
         # Display the response
         print(f"\n# Agent:\n{response.text}")

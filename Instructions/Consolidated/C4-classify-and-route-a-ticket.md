@@ -2,7 +2,7 @@
 title: 'Task 4 – Classify and route a support ticket'
 lab:
     title: 'Task 4 – Classify and route a support ticket'
-    description: 'Use the Microsoft Agent Framework to classify Tailwind Traders support tickets with a triage agent, then route each one in code based on its category and confidence.'
+    description: 'Use the Microsoft Agent Framework to classify Caldova support tickets with a triage agent, then route each one in code based on its category and confidence.'
     type: 'task'
     parent: 'C'
     order: 4
@@ -36,7 +36,7 @@ python ../setup/check_env.py --task 4
 
 Not every multi-agent job needs a pipeline. Sometimes one agent does the *thinking* — reading a
 message and making a decision — and your **code** acts on that decision. In this task you'll build
-a Tailwind Traders **support-desk triage**: a single agent classifies each customer ticket into a
+a Caldova **support-desk triage**: a single agent classifies each support ticket into a
 category with a confidence score, and your Python code routes the ticket accordingly — escalating
 billing problems, sending low-confidence tickets back for more detail, and handling the rest
 automatically.
@@ -165,17 +165,17 @@ Open **ticket_triage.py** and add code at each commented placeholder.
 1. Review the output. Each ticket is classified and routed. You should see output similar to:
 
     ```
-    Ticket 1: The GPS on my TrailMate hiking watch keeps losing signal even after I did a full factory reset.
-      Category:   Gear (confidence 0.95)
-      Decision:   [auto] Gear issue: send troubleshooting steps and a return option.
+    Ticket 1: The batch record terminal on packaging line B keeps losing its connection even after a full restart.
+      Category:   Equipment (confidence 0.95)
+      Decision:   [auto] Equipment issue: send troubleshooting steps and raise a maintenance job.
 
-    Ticket 2: Is there a way to see all of my past orders and download them as receipts?
+    Ticket 2: Is there a way to see all of our past capacity requests and export them as a report?
       Category:   General (confidence 0.90)
       Decision:   [auto] General question: reply with a help-center answer.
 
-    Ticket 3: I was charged twice for the same tent order last Friday and my card statement shows two payments. Can someone fix this?
+    Ticket 3: We were invoiced twice for the same transfer week last Friday and the statement shows two payments. Can someone fix this?
       Category:   Billing (confidence 0.97)
-      Decision:   [escalated] Billing issue routed to the Tailwind Traders orders team.
+      Decision:   [escalated] Billing issue routed to the Caldova orders team.
     ```
 
     > **Tip**: Try adding a vague ticket (for example, `"It's not working"`) to `sample_tickets.json`. A low confidence score should trip the `CONFIDENCE_THRESHOLD` and route it back for more detail instead of guessing.

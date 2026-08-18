@@ -1,4 +1,4 @@
-""" Tailwind Traders Foundry Agent that generates a guided-trip itinerary outline """
+""" Caldova Foundry Agent that generates a tech-transfer plan outline """
 
 import os
 
@@ -25,14 +25,14 @@ class OutlineAgent:
         if self.agent:
             return self.agent
 
-        # Create the itinerary agent
+        # Create the outline agent
         self.agent = self.client.create_agent(
             model=os.environ['MODEL_DEPLOYMENT_NAME'],
-            name='trip-itinerary-agent',
+            name='transfer-outline-agent',
             instructions="""
-            You are a helpful trip planning assistant for Tailwind Traders.
-            Based on the provided trip title or destination, write a concise itinerary outline with 4 to 6 key stages.
-            Each stage should be 5 to 10 words long, suitable for structuring a short guided-trip plan.
+            You are a helpful tech-transfer planning assistant for Caldova.
+            Based on the provided transfer title or site, write a concise plan outline with 4 to 6 key stages.
+            Each stage should be 5 to 10 words long, suitable for structuring a short transfer plan.
             """,
         )
         return self.agent
@@ -51,7 +51,7 @@ class OutlineAgent:
         run = self.client.runs.create_and_process(thread_id=thread.id, agent_id=self.agent.id)
 
         if run.status == 'failed':
-            print(f'Itinerary Agent: Run failed - {run.last_error}')
+            print(f'Outline Agent: Run failed - {run.last_error}')
             return [f'Error: {run.last_error}']
 
         # Get response messages

@@ -1,7 +1,7 @@
 """
 Task 4 (Optional) - Classify and route a support ticket with the Microsoft Agent Framework.
 
-A single triage agent reads each Tailwind Traders customer ticket and returns a structured
+A single triage agent reads each Caldova support ticket and returns a structured
 classification (category + confidence). Your code then routes the ticket: low-confidence
 tickets go back for more detail, billing issues are escalated, and everything else is handled
 automatically. This shows how one agent's structured output can drive conditional routing in
@@ -26,29 +26,29 @@ CONFIDENCE_THRESHOLD = 0.6
 
 # The triage agent must return a strict JSON classification so code can route on it.
 TRIAGE_INSTRUCTIONS = """
-Classify the customer's support message into exactly ONE category from the list below. Provide a confidence score from 0 to 1.
+Classify the support message into exactly ONE category from the list below. Provide a confidence score from 0 to 1.
 
 Billing
-- Charges, refunds, duplicate payments
-- Missing or incorrect refunds on an order
-- Being charged the wrong price for an order or a gear rental
+- Charges, credits, duplicate payments
+- Missing or incorrect credits on an invoice
+- Being invoiced the wrong amount for a transfer week
 
-Gear
+Equipment
 - Faulty, damaged, or defective equipment
-- Product setup, pairing, or usage problems
-- Unexpected behavior from gear or gadgets
+- Equipment setup, calibration, or usage problems
+- Unexpected behavior from equipment or systems
 
 General
 - How-to questions
-- Product, trip, or stock availability
-- Order history, receipts, returns, or website navigation
+- Material, slot, or stock availability
+- Request history, reports, or portal navigation
 
 Important rules
-- Questions about viewing, downloading, or exporting orders or receipts are General, not Billing
-- Billing ONLY applies when money was charged, refunded, or paid incorrectly
+- Questions about viewing, downloading, or exporting requests or reports are General, not Billing
+- Billing ONLY applies when money was invoiced, credited, or paid incorrectly
 
 Respond with ONLY a JSON object (no markdown, no extra text) using exactly these keys:
-{"customer_issue": "<the customer's message>", "category": "<Billing|Gear|General>", "confidence": <number between 0 and 1>}
+{"reported_issue": "<the reported message>", "category": "<Billing|Equipment|General>", "confidence": <number between 0 and 1>}
 """
 
 
@@ -73,11 +73,11 @@ def route_ticket(classification):
     confidence = float(classification.get("confidence", 0))
 
     if confidence < CONFIDENCE_THRESHOLD:
-        return f"[needs detail] Low confidence ({confidence:.2f}). Ask the customer for more information."
+        return f"[needs detail] Low confidence ({confidence:.2f}). Ask the requester for more information."
     if category == "Billing":
-        return "[escalated] Billing issue routed to the Tailwind Traders orders team."
-    if category == "Gear":
-        return "[auto] Gear issue: send troubleshooting steps and a return option."
+        return "[escalated] Billing issue routed to the Caldova procurement team."
+    if category == "Equipment":
+        return "[auto] Equipment issue: send troubleshooting steps and raise a maintenance job."
     if category == "General":
         return "[auto] General question: reply with a help-center answer."
     return f"[review] Unrecognized category '{category}'. Send for manual review."

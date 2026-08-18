@@ -1,4 +1,4 @@
-""" Tailwind Traders Foundry Agent that generates a guided-trip title """
+""" Caldova Foundry Agent that generates a transfer brief title """
 
 import os
 from azure.ai.agents import AgentsClient

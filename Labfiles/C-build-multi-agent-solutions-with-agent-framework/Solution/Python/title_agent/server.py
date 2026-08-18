@@ -21,20 +21,20 @@ port = os.environ["TITLE_AGENT_PORT"]
 skills = [
     AgentSkill(
         id='generate_trip_title',
-        name='Generate Trip Title',
-        description='Generates a guided-trip title based on a region or activity',
+        name='Generate Transfer Title',
+        description='Generates a transfer brief title based on a site or capability',
         tags=['title'],
         examples=[
-            'Can you give me a title for a hiking trip in Patagonia?',
+            'Can you give me a title for a packaging transfer at Ashford?',
         ],
     ),
 ]
 
 # Create agent card
 agent_card = AgentCard(
-    name='Tailwind Traders Trip Title Agent',
-    description='An intelligent trip-title generator agent powered by Foundry. '
-    'I can help you generate catchy titles for Tailwind Traders guided trips.',
+    name='Caldova Transfer Title Agent',
+    description='An intelligent title generator agent powered by Foundry. '
+    'I can help you generate clear titles for Caldova tech transfers.',
     url=f'http://{host}:{port}/',
     version='1.0.0',
     default_input_modes=['text'],
@@ -61,7 +61,7 @@ routes = a2a_app.routes()
 
 # Add health check endpoint
 async def health_check(request: Request) -> PlainTextResponse:
-    return PlainTextResponse('Tailwind Traders Trip Title Agent is running!')
+    return PlainTextResponse('Caldova Transfer Title Agent is running!')
 
 routes.append(Route(path='/health', methods=['GET'], endpoint=health_check))
 

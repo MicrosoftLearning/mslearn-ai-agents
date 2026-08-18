@@ -18,7 +18,7 @@ under /Instructions/Consolidated/.
 
 # AI agents workshop
 
-A guided, instructor-led path through the Tailwind Traders labs. Each session builds a
+A guided, instructor-led path through the Caldova labs. Each session builds a
 working agent, then hands off to the next.
 
 This page is the **core path**: the shortest route through every lab that still ends with

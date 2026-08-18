@@ -1,5 +1,5 @@
 """
-Tailwind Traders - Work IQ Integration (Workplace Intelligence Agent)
+Caldova - Work IQ Integration (Workplace Intelligence Agent)
 
 This application demonstrates how to build agents that access Microsoft 365
 workplace data using Work IQ (a Model Context Protocol server for M365 Copilot).
@@ -167,10 +167,10 @@ class WorkIQLab:
 
             # Create agent using Responses API pattern
             self.agent = self.project_client.agents.create_version(
-                agent_name="tailwind-workplace-agent",
+                agent_name="caldova-workplace-agent",
                 definition=PromptAgentDefinition(
                     model=self.model_deployment,
-                    instructions="""You are a workplace intelligence assistant for Tailwind Traders staff, with access to Microsoft 365 data through Work IQ.
+                    instructions="""You are a workplace intelligence assistant for Caldova staff, with access to Microsoft 365 data through Work IQ.
 
 Your capabilities:
 - Search emails, meetings, calendar, Teams messages, and documents
@@ -278,7 +278,7 @@ Guidelines:
     def show_menu(self):
         """Display the main menu."""
         print("\n" + "=" * 70)
-        print("        TAILWIND TRADERS: WORK IQ - WORKPLACE INTELLIGENCE")
+        print("        CALDOVA: WORK IQ - WORKPLACE INTELLIGENCE")
         print("=" * 70)
         print("\nChoose a scenario:\n")
         print("  1. Meeting Prep")
@@ -335,7 +335,7 @@ Provide a concise prep summary with sources."""
         print("emails, Teams chats, meetings, and shared documents.\n")
 
         # Get project name from user
-        project_name = input("Enter project name (e.g., 'Spring Catalog Launch', 'Store Refresh'): ").strip()
+        project_name = input("Enter project name (e.g., 'V2 Launch Readiness', 'Capacity Review'): ").strip()
 
         if not project_name:
             project_name = "current projects"
@@ -388,7 +388,7 @@ Provide a prioritized list with sources, deadlines, and who assigned each item."
         topic = input("Enter topic to research (workplace + knowledge base): ").strip()
 
         if not topic:
-            topic = "our store return and rental policies"
+            topic = "our capacity request and transfer policies"
 
         query = f"""Research {topic} using both workplace data and knowledge base. Please:
 
@@ -418,7 +418,7 @@ Label each piece of information with its source (workplace or knowledge base).""
         print("\nAsk any workplace question! Examples:")
         print("  - What did my manager say about the spring catalog?")
         print("  - Find emails about the Q4 inventory count")
-        print("  - What did the store operations team discuss yesterday?")
+        print("  - What did the site operations team discuss yesterday?")
         print("  - Show me shared documents about supplier lead times")
         print("  - Summarize this week's team standups\n")
 
@@ -496,7 +496,7 @@ Label each piece of information with its source (workplace or knowledge base).""
     def run(self):
         """Main application loop."""
         print("\n" + "=" * 70)
-        print("   TAILWIND TRADERS: WORK IQ - WORKPLACE INTELLIGENCE FOR AI AGENTS")
+        print("   CALDOVA: WORK IQ - WORKPLACE INTELLIGENCE FOR AI AGENTS")
         print("=" * 70)
         print("\nThis lab demonstrates how to build AI agents that access")
         print("Microsoft 365 workplace data using Work IQ.\n")

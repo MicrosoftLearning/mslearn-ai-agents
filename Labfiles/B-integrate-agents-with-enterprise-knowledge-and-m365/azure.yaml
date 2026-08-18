@@ -2,7 +2,7 @@
 # Edit the file under Labfiles/_shared/, then run:
 #     python Labfiles/_shared/sync.py
 
-# azd configuration for the Tailwind Traders enterprise-knowledge lab (OPTIONAL infra path).
+# azd configuration for the Caldova enterprise-knowledge lab (OPTIONAL infra path).
 #
 # This is a convenience for learners/instructors who want to provision the
 # Foundry project + model deployment with a single command instead of creating
@@ -24,7 +24,7 @@
 # After provisioning, the postprovision hook writes PROJECT_ENDPOINT and
 # MODEL_DEPLOYMENT_NAME into Python/.env for you.
 
-name: tailwind-traders-lab-b
+name: caldova-lab-b
 metadata:
   template: mslearn-ai-agents/B-integrate-agents-with-enterprise-knowledge-and-m365
 

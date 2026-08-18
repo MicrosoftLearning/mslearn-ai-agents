@@ -11,10 +11,10 @@ load_dotenv()
 async def main():
     # Agent instructions
     summarizer_instructions="""
-    Summarize the customer's feedback in one short sentence. Keep it neutral and concise.
+    Summarize the reported issue in one short sentence. Keep it neutral and concise.
     Example output:
-    Tent zipper broke on the first night of a trip.
-    Customer praises the guided kayak tour.
+    Sealing unit failed on the first shift of a packaging run.
+    Site team praises the new changeover procedure.
     """
 
     classifier_instructions="""
@@ -24,8 +24,8 @@ async def main():
     action_instructions="""
     Based on the summary and classification, suggest the next action in one short sentence.
     Example output:
-    Escalate as a high-priority defect for the gear team.
-    Log as positive feedback to share with the trips team.
+    Escalate as a high-priority defect for the engineering team.
+    Log as positive feedback to share with the operations team.
     Log as enhancement request for the product backlog.
     """
 

@@ -14,14 +14,14 @@ Solution/
    ├─ agent_with_functions.py # Task 3 — client app (web chat + inline charts)
    ├─ functions_agent.py      # Task 4 — custom function tools (web chat)
    ├─ functions_agent_maf.py  #   Task 4 — same agent, Microsoft Agent Framework edition
-   ├─ functions.py            #   Task 4: trip-planner helper functions
-   ├─ server.py               # Task 5 — your MCP server (inventory + sales tools)
+   ├─ functions.py            #   Task 4: capacity-planner helper functions
+   ├─ server.py               # Task 5 — your MCP server (inventory + consumption tools)
    ├─ client.py               # Task 5 — capstone: MCP client that combines Task 4 + Task 5 tools
    ├─ client_maf.py           #   Task 5 — same capstone, Microsoft Agent Framework edition
-   ├─ tailwind_ui.py         # shared Gradio chat shell (provided; not edited by learners)
-   ├─ Store_Policy.txt        # Task 1 grounding doc (uploaded to the portal agent)
-   ├─ weekly_sales.csv        # Task 3 code-interpreter data (uploaded to the portal agent)
-   ├─ data/                   #   Task 4 lookup data (trips, rental rates, service multipliers)
+   ├─ caldova_ui.py         # shared Gradio chat shell (provided; not edited by learners)
+   ├─ Supply_Chain_Policy.txt        # Task 1 grounding doc (uploaded to the portal agent)
+   ├─ weekly_output.csv        # Task 3 code-interpreter data (uploaded to the portal agent)
+   ├─ data/                   #   Task 4 lookup data (slots, CMO rates, priority multipliers)
    └─ hosted_agent/           # Task 6 — the assistant packaged as a hosted agent (own deps + azd)
 ```
 
@@ -31,7 +31,7 @@ running in the shared `labenv`.
 
 Because everything lives in one folder, the two `agent.py` files from the source labs were
 renamed to avoid a collision: **`remote_mcp_agent.py`** (Task 2) and **`functions_agent.py`**
-(Task 4). `tailwind_ui.py` (the shared Gradio chat shell) appears once and is **not**
+(Task 4). `caldova_ui.py` (the shared Gradio chat shell) appears once and is **not**
 something learners edit.
 
 ---
@@ -49,7 +49,7 @@ This lab can be completed end to end **or one task at a time**. Two things make 
   - `check_env.py --task N` — preflight-checks that `.env` has the keys task *N* needs.
     Run it as `python ../setup/check_env.py --task N`.
   - `bootstrap_agent.py` — **fast-forwards Task 1 in code**: creates and grounds
-    `tailwind-agent` (File Search on `Store_Policy.txt` + Code Interpreter on `weekly_sales.csv`)
+    `caldova-agent` (File Search on `Supply_Chain_Policy.txt` + Code Interpreter on `weekly_output.csv`)
     and writes `AGENT_NAME` to `.env`, so learners can start at **Task 3** without the portal.
     Idempotent; pass `--force` to recreate.
 
@@ -96,18 +96,18 @@ traceback prints in the terminal**.
 
 ### 3. Create the portal agent (Task 1 — required for Task 3)
 The Task 3 client loads an agent **by name** that you create in the portal:
-1. In the Foundry portal, create an agent named **`tailwind-agent`**.
-2. Ground it: upload **`Store_Policy.txt`** (from `Solution/Python/`) and give it instructions to
-   answer from store policy.
-3. For Task 3's chart demo, add the **Code interpreter** tool and upload **`weekly_sales.csv`**
+1. In the Foundry portal, create an agent named **`caldova-agent`**.
+2. Ground it: upload **`Supply_Chain_Policy.txt`** (from `Solution/Python/`) and give it instructions to
+   answer from supply chain policy.
+3. For Task 3's chart demo, add the **Code interpreter** tool and upload **`weekly_output.csv`**
    (from the same folder). Save the agent.
 
-> Tasks 4 and 5 create their own agents in code (`trip-planner-agent`, `tailwind-assistant`)
+> Tasks 4 and 5 create their own agents in code (`capacity-planner-agent`, `caldova-assistant`)
 > and delete them on exit — no portal work needed for those.
 
 > **Shortcut**: instead of the portal steps above, run `python ../setup/bootstrap_agent.py`
 > from the **starter** `Python/` folder (not `Solution/Python/`) to create and ground
-> `tailwind-agent` in code and write `AGENT_NAME`.
+> `caldova-agent` in code and write `AGENT_NAME`.
 
 ### 4. Set up the environment once (shared by all tasks)
 From this folder (`Solution/Python/`):
@@ -119,7 +119,7 @@ pip install -r requirements.txt
 Then copy `.env.example` to `.env` and fill in the values (all tasks read the same file):
 - `PROJECT_ENDPOINT` — used by every task
 - `MODEL_DEPLOYMENT_NAME` — used by Tasks 2, 4, and 5
-- `AGENT_NAME=tailwind-agent` — used by Task 3
+- `AGENT_NAME=caldova-agent` — used by Task 3
 
 ### 5. Run each task
 All commands run from the single `Solution/Python/` folder:
@@ -130,7 +130,7 @@ All commands run from the single `Solution/Python/` folder:
 | 3 | `python agent_with_functions.py` | Browser chat at `http://localhost:7860`, charts render inline |
 | 4 | `python functions_agent.py` | Browser chat; agent calls your Python functions |
 | 4 (MAF) | `python functions_agent_maf.py` | Same agent built with the Microsoft Agent Framework (`@tool` + `agent.run()`) |
-| 5 | `python client.py` | Browser chat; **capstone** — one agent that plans trips (Task 4 functions) *and* checks the warehouse (your MCP server). Do Task 4 first. |
+| 5 | `python client.py` | Browser chat; **capstone** — one agent that plans capacity (Task 4 functions) *and* checks materials (your MCP server). Do Task 4 first. |
 | 5 (MAF) | `python client_maf.py` | Same capstone built with the Microsoft Agent Framework (`MCPStdioTool` + `agent.run()`) |
 | 6 | `azd ai agent run` then `azd deploy` (from `hosted_agent/`) | The assistant deployed as a hosted agent; invoke it with `azd ai agent invoke "..."` |
 
@@ -143,5 +143,5 @@ agent" section in the exercise instructions.
 
 ## Quick sanity checks that DON'T need Azure
 - `python -m py_compile <file>` — all solution files compile.
-- From `Solution/Python/`: `python -c "import functions; print(functions.calculate_rental_cost('premium', 5, 'priority'))"`
+- From `Solution/Python/`: `python -c "import functions; print(functions.calculate_transfer_cost('premium', 5, 'priority'))"`
   should show a total cost of **$1,875** (premium $300/day × 5 × priority 1.25).

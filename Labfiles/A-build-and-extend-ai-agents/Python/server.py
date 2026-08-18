@@ -7,35 +7,35 @@
 # Add an inventory check mcp tool
 
 def get_inventory_levels() -> dict:
-    """Returns current inventory for all products."""
+    """Returns current inventory for all materials."""
     return {
-        "Tent": 6,
-        "Sleeping Bag": 8,
-        "Trekking Poles": 28,
-        "Headlamp": 5, 
-        "Water Filter": 12,
-        "Camp Stove": 9,
-        "Backpack": 30,
-        "Rain Jacket": 3,
-        "Hiking Boots": 17,
-        "Trail Snacks": 45
+        "CAL-204 API": 6,
+        "Excipient Blend": 8,
+        "Blister Film": 28,
+        "Vial Stoppers": 5,
+        "Filter Cartridges": 12,
+        "Sterile Vials": 9,
+        "Carton Board": 30,
+        "Label Stock": 3,
+        "Foil Laminate": 17,
+        "Desiccant Packs": 45
     }
 
-# Add a weekly sales mcp tool
+# Add a weekly consumption mcp tool
 
-def get_weekly_sales() -> dict:
-    """Returns number of units sold last week."""
+def get_weekly_consumption() -> dict:
+    """Returns units of each material consumed last week."""
     return {
-        "Tent": 22,
-        "Sleeping Bag": 18,
-        "Trekking Poles": 3,
-        "Headlamp": 2,
-        "Water Filter": 14,
-        "Camp Stove": 19,
-        "Backpack": 4,
-        "Rain Jacket": 1,
-        "Hiking Boots": 13,
-        "Trail Snacks": 17
+        "CAL-204 API": 22,
+        "Excipient Blend": 18,
+        "Blister Film": 3,
+        "Vial Stoppers": 2,
+        "Filter Cartridges": 14,
+        "Sterile Vials": 19,
+        "Carton Board": 4,
+        "Label Stock": 1,
+        "Foil Laminate": 13,
+        "Desiccant Packs": 17
     }
 
 # Run the MCP server

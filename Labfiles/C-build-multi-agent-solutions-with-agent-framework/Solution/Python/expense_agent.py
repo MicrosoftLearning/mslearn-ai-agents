@@ -1,9 +1,9 @@
 """
-Task 1 (Core) - Tailwind Traders trip-expense agent, built with the Microsoft Agent Framework.
+Task 1 (Core) - Caldova site-visit expense agent, built with the Microsoft Agent Framework.
 
-This is a single agent with one custom tool. The agent reads a guide's trip-expense
+This is a single agent with one custom tool. The agent reads an engineer's site-visit expense
 data, itemizes it, and uses the submit_claim tool to "email" a reimbursement claim to
-the Tailwind Traders finance desk. The @tool decorator generates the tool schema from
+the Caldova finance desk. The @tool decorator generates the tool schema from
 the function signature, and agent.run() runs the whole tool-calling loop for you.
 """
 
@@ -26,14 +26,14 @@ async def main():
     # Clear the console
     os.system('cls' if os.name == 'nt' else 'clear')
 
-    # Load the trip expenses data file
+    # Load the site-visit expenses data file
     script_dir = Path(__file__).parent
     file_path = script_dir / 'data.txt'
     with file_path.open('r') as file:
         data = file.read() + "\n"
 
     # Ask for a prompt
-    user_prompt = input(f"Here is the trip expense data in your file:\n\n{data}\n\nWhat would you like me to do with it?\n\n")
+    user_prompt = input(f"Here is the site-visit expense data in your file:\n\n{data}\n\nWhat would you like me to do with it?\n\n")
 
     # Run the async agent code
     await process_expenses_data(user_prompt, data)
@@ -51,9 +51,9 @@ async def process_expenses_data(prompt, expenses_data):
     # Initialize an agent with the tool and instructions
     agent = Agent(
         client=client,
-        name="TripExpenseAgent",
-        instructions="""You are an AI assistant for Tailwind Traders trip-expense claims.
-                    At the user's request, create an expense claim and use the submit_claim tool to send an email to expenses@tailwindtraders.com with the subject 'Trip Expense Claim' and a body that contains the itemized expenses with a total.
+        name="SiteVisitExpenseAgent",
+        instructions="""You are an AI assistant for Caldova site-visit expense claims.
+                    At the user's request, create an expense claim and use the submit_claim tool to send an email to expenses@caldova.example with the subject 'Site Visit Expense Claim' and a body that contains the itemized expenses with a total.
                     Then confirm to the user that you've done so. Don't ask for any more information from the user, just use the data provided to create the email.""",
         tools=[submit_claim],
     )
@@ -62,7 +62,7 @@ async def process_expenses_data(prompt, expenses_data):
     try:
         # A session keeps the conversation history across the agent run
         session = agent.create_session()
-        # Invoke the agent with the prompt and the trip expenses data
+        # Invoke the agent with the prompt and the site-visit expenses data
         response = await agent.run(f"{prompt}: {expenses_data}", session=session)
         # Display the response
         print(f"\n# Agent:\n{response.text}")
@@ -78,7 +78,7 @@ def submit_claim(
     subject: Annotated[str, Field(description="The subject of the email.")],
     body: Annotated[str, Field(description="The text body of the email.")],
 ):
-    """Submit a Tailwind Traders trip-expense claim by sending an email."""
+    """Submit a Caldova site-visit expense claim by sending an email."""
     print("\nTo:", to)
     print("Subject:", subject)
     print(body, "\n")

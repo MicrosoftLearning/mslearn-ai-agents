@@ -170,8 +170,8 @@ def main():
     """
     Main interaction loop.
     """
-    print("Tailwind Traders Knowledge Assistant")
-    print("Ask questions about our products, store policies, returns, rentals, and suppliers.")
+    print("Caldova Knowledge Assistant")
+    print("Ask questions about plant capacity, contract manufacturers, tech transfer, and suppliers.")
     print("Type 'history' to see conversation history, or 'quit' to exit.\n")
 
     while True:

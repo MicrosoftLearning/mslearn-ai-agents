@@ -23,7 +23,7 @@ def send_prompt(prompt: str):
         return f"Request failed: {e}"
 
 async def main():
-    print("Enter a prompt for the Tailwind Traders trip planner. Type 'quit' to exit.")
+    print("Enter a prompt for the Caldova transfer planner. Type 'quit' to exit.")
     while True:
         user_input = input("User: ")
         if user_input.lower() == "quit":

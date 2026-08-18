@@ -1,4 +1,4 @@
-// Optional azd infrastructure for the Tailwind Traders lab.
+// Optional azd infrastructure for the Caldova lab.
 //
 // Provisions a Microsoft Foundry (Azure AI Services) resource, a Foundry
 // project, and one chat model deployment — the same resources you would

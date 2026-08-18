@@ -1,5 +1,5 @@
 """
-Preflight check for the Tailwind Traders enterprise-knowledge lab.
+Preflight check for the Caldova enterprise-knowledge lab.
 
 Each task in this lab can be completed on its own. Before you start a task,
 run this script to confirm your .env file has everything that task needs.
@@ -324,8 +324,8 @@ def looks_like_placeholder(value):
     nothing, and be told they were ready to start.
 
     Anything empty, wrapped in angle brackets, or whose first word is "your"
-    counts as unfilled. Real defaults these labs ship (tailwind-agent,
-    tailwind-knowledge-agent, localhost, port numbers) do not match.
+    counts as unfilled. Real defaults these labs ship (caldova-agent,
+    caldova-knowledge-agent, localhost, port numbers) do not match.
 
     This deliberately errs toward "not filled in": a real value beginning with
     the word "your" would be flagged, but none of these keys takes one (they
@@ -354,7 +354,7 @@ FIX_HINTS = {
     ),
     "AGENT_NAME": (
         "Task 1 needs the Foundry IQ enterprise-knowledge agent. Either build it in the "
-        "portal and set AGENT_NAME=tailwind-knowledge-agent, or fast-forward the grounding "
+        "portal and set AGENT_NAME=caldova-knowledge-agent, or fast-forward the grounding "
         "step by running, from the Python folder: python ../setup/bootstrap_agent.py"
     ),
 }

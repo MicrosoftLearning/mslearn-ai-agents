@@ -1,5 +1,5 @@
 """
-Preflight check for the Tailwind Traders lab.
+Preflight check for the Caldova lab.
 
 Each task in this lab can be completed on its own. Before you start a task,
 run this script to confirm your .env file has everything that task needs.
@@ -327,8 +327,8 @@ def looks_like_placeholder(value):
     nothing, and be told they were ready to start.
 
     Anything empty, wrapped in angle brackets, or whose first word is "your"
-    counts as unfilled. Real defaults these labs ship (tailwind-agent,
-    tailwind-knowledge-agent, localhost, port numbers) do not match.
+    counts as unfilled. Real defaults these labs ship (caldova-agent,
+    caldova-knowledge-agent, localhost, port numbers) do not match.
 
     This deliberately errs toward "not filled in": a real value beginning with
     the word "your" would be flagged, but none of these keys takes one (they
@@ -357,7 +357,7 @@ FIX_HINTS = {
     ),
     "AGENT_NAME": (
         "Task 3 needs the grounded portal agent from Task 1. Either complete Task 1 in "
-        "the portal and set AGENT_NAME=tailwind-agent, or fast-forward past Task 1 by "
+        "the portal and set AGENT_NAME=caldova-agent, or fast-forward past Task 1 by "
         "running, from the Python folder: python ../setup/bootstrap_agent.py"
     ),
 }

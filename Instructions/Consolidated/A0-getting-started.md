@@ -19,9 +19,9 @@ This page sets up everything the **Build and extend AI agents** lab needs. **Eve
 here** — complete this page first. Each task is written so you can then do it on its own; if
 you're working through the whole lab in one sitting, you only need to do this setup once.
 
-**Your scenario:** you work at **Tailwind Traders**, an outdoor-gear retailer that
-also runs guided trips. Across the lab you'll build the staff assistant that powers the
-business, adding one capability per task.
+**Your scenario:** you work at **Caldova**, a pharmaceutical manufacturer preparing an
+accelerated product launch. Across the lab you'll build the supply chain assistant that
+powers the business, adding one capability per task.
 
 > **Note**: Some of the technologies used in this lab are in preview or in active
 > development. You may experience some unexpected behavior, warnings, or errors.
@@ -66,7 +66,7 @@ Microsoft Foundry uses projects to organize models, resources, data, and other a
 
 1. Select **Create** and wait for your project to be created. When prompted, continue through the welcome dialog and select **Create agent**.
 
-1. Set the **Agent name** to `tailwind-agent` and create the agent. The playground opens with a deployed model already selected for you.
+1. Set the **Agent name** to `caldova-agent` and create the agent. The playground opens with a deployed model already selected for you.
 
 Keep this browser tab open — you'll use it in Task 1.
 

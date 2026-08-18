@@ -37,8 +37,8 @@ python ../setup/check_env.py --task 1
 Every useful agent can *do* something beyond chatting. With the **Microsoft Agent Framework
 (MAF)**, you give an agent a capability by writing an ordinary Python function, marking it with
 `@tool`, and handing it to the agent — the framework generates the tool's schema and runs the
-whole tool-calling loop for you. In this task you'll build the Tailwind Traders **trip-expense
-agent**: it reads a guide's trip-expense data, itemizes it, and calls a tool to "email" a
+whole tool-calling loop for you. In this task you'll build the Caldova **site-visit expense
+agent**: it reads an engineer's site-visit expense data, itemizes it, and calls a tool to "email" a
 reimbursement claim to the finance desk.
 
 <style>
@@ -81,7 +81,7 @@ Open **expense_agent.py** and add code at each commented placeholder.
 
 1. Review the code already in the file. It contains:
     - Some **import** statements.
-    - A `main` function that loads `data.txt` (the trip-expense data), asks you what to do with it, and then calls...
+    - A `main` function that loads `data.txt` (the site-visit expense data), asks you what to do with it, and then calls...
     - A `process_expenses_data` function where you'll create and run your agent.
 
     > **Tip**: As you add code, keep the indentation aligned with the comments.
@@ -106,7 +106,7 @@ Open **expense_agent.py** and add code at each commented placeholder.
         subject: Annotated[str, Field(description="The subject of the email.")],
         body: Annotated[str, Field(description="The text body of the email.")],
     ):
-        """Submit a Tailwind Traders trip-expense claim by sending an email."""
+        """Submit a Caldova site-visit expense claim by sending an email."""
         print("\nTo:", to)
         print("Subject:", subject)
         print(body, "\n")
@@ -133,9 +133,9 @@ Open **expense_agent.py** and add code at each commented placeholder.
     # Initialize an agent with the tool and instructions
     agent = Agent(
         client=client,
-        name="TripExpenseAgent",
-        instructions="""You are an AI assistant for Tailwind Traders trip-expense claims.
-                    At the user's request, create an expense claim and use the submit_claim tool to send an email to expenses@tailwindtraders.com with the subject 'Trip Expense Claim' and a body that contains the itemized expenses with a total.
+        name="SiteVisitExpenseAgent",
+        instructions="""You are an AI assistant for Caldova site-visit expense claims.
+                    At the user's request, create an expense claim and use the submit_claim tool to send an email to expenses@caldova.example with the subject 'Site Visit Expense Claim' and a body that contains the itemized expenses with a total.
                     Then confirm to the user that you've done so. Don't ask for any more information from the user, just use the data provided to create the email.""",
         tools=[submit_claim],
     )
@@ -150,7 +150,7 @@ Open **expense_agent.py** and add code at each commented placeholder.
     try:
         # A session keeps the conversation history across the agent run
         session = agent.create_session()
-        # Invoke the agent with the prompt and the trip expenses data
+        # Invoke the agent with the prompt and the site-visit expenses data
         response = await agent.run(f"{prompt}: {expenses_data}", session=session)
         # Display the response
         print(f"\n# Agent:\n{response.text}")
@@ -184,12 +184,12 @@ Open **expense_agent.py** and add code at each commented placeholder.
 1. Review the output. The agent should compose an itemized expense-claim email — printed by the `submit_claim` tool — and then confirm it's done. You'll see output similar to:
 
     ```
-    To: expenses@tailwindtraders.com
-    Subject: Trip Expense Claim
+    To: expenses@caldova.example
+    Subject: Site Visit Expense Claim
     ...itemized expenses with a total...
 
     # Agent:
-    I've submitted your trip-expense claim to expenses@tailwindtraders.com.
+    I've submitted your site-visit expense claim to expenses@caldova.example.
     ```
 
     > **Tip**: If the app fails because the rate limit is exceeded, wait a few seconds and try again. If there is insufficient quota available in your subscription, the model may not be able to respond.

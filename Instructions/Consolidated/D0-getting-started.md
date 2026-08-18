@@ -20,9 +20,9 @@ This page sets up everything the **Observe, evaluate, and secure your agents** l
 do it on its own; if you're working through the whole lab in one sitting, you only need to
 do this setup once.
 
-**Your scenario:** you work at **Tailwind Traders**, an outdoor-gear retailer that also runs
-guided trips. The staff assistant is live, and this lab is how you find out what it's really
-doing: tracing it, scoring its answers, and attacking it.
+**Your scenario:** you work at **Caldova**, a pharmaceutical manufacturer preparing an
+accelerated product launch. The supply chain assistant is live, and this lab is how you
+find out what it's really doing: tracing it, scoring its answers, and attacking it.
 
 > **Note**: Some of the technologies used in this lab are in preview or in active
 > development. You may experience some unexpected behavior, warnings, or errors.
@@ -140,11 +140,11 @@ for your agents without any code at all.
 
 ## Get an agent to measure (needed for Tasks 2 and 3)
 
-Tasks 2 and 3 measure a **grounded** agent — one that answers from the Tailwind Traders
+Tasks 2 and 3 measure a **grounded** agent — one that answers from the Caldova
 knowledge base rather than from the model's own memory. You have two ways to get one:
 
 - **You did [Lab B](B-integrate-agents-with-enterprise-knowledge-and-m365.md)**: set `AGENT_NAME`
-  in `.env` to that agent's name (`tailwind-knowledge-agent` if you kept the default) and you're
+  in `.env` to that agent's name (`caldova-knowledge-agent` if you kept the default) and you're
   done.
 - **You didn't**: create an equivalent agent here. Sign in and run, from the `Python` folder with
   the virtual environment active:
@@ -158,7 +158,7 @@ knowledge base rather than from the model's own memory. You have two ways to get
     ```
 
     This uploads the documents in `Python/knowledge/`, grounds an agent named
-    `tailwind-knowledge-agent` on them with File Search, and writes `AGENT_NAME` into your `.env`.
+    `caldova-knowledge-agent` on them with File Search, and writes `AGENT_NAME` into your `.env`.
 
 > Task 1 doesn't need this agent — it creates and deletes its own.
 

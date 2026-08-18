@@ -2,7 +2,7 @@
 title: 'Task 3 – Publish your agent to Microsoft 365 Copilot'
 lab:
     title: 'Task 3 – Publish your agent to Microsoft 365 Copilot'
-    description: 'Publish the Tailwind Traders knowledge agent to Microsoft 365 Copilot so staff can reach it inside Copilot.'
+    description: 'Publish the Caldova knowledge agent to Microsoft 365 Copilot so staff can reach it inside Copilot.'
     type: 'task'
     parent: 'B'
     order: 3
@@ -31,7 +31,7 @@ lab:
 > **Don't have it?** Skip this task. Nothing else in this lab depends on it, and you can still read through the steps to see how it works.
 <!-- END GENERATED: gated-notice -->
 
-> **Set up (start here):** This task publishes the grounded `tailwind-knowledge-agent` from
+> **Set up (start here):** This task publishes the grounded `caldova-knowledge-agent` from
 > [Task 1](B1-create-a-foundry-iq-knowledge-agent.md). If you don't have that agent yet, complete
 > Task 1 first (or create and ground it in code with `python ../setup/bootstrap_agent.py` from
 > the `Python` folder you opened in VS Code). This task is completed
@@ -85,7 +85,7 @@ When you publish to Copilot, users can:
 
 1. Return to the Foundry portal (**<https://ai.azure.com>**)
 
-2. Navigate to your agent (**Build** → **Agents** → **tailwind-knowledge-agent**)
+2. Navigate to your agent (**Build** → **Agents** → **caldova-knowledge-agent**)
 
 3. Select the **Publish** button
 
@@ -99,8 +99,8 @@ When you publish to Copilot, users can:
 
 If you haven't already published this agent, fill in the configuration (same as the Teams section):
 
-- **Name**: Tailwind Traders Knowledge Assistant
-- **Description**: AI assistant for Tailwind Traders staff
+- **Name**: Caldova Knowledge Assistant
+- **Description**: AI assistant for Caldova staff
 - **Icons**: Upload your 192x192 and 32x32 icons
 - **Publisher information**: Your name and placeholder URLs
 
@@ -138,16 +138,16 @@ Once published with shared scope, your agent is immediately available:
 4. Start a conversation:
 
     ```
-    @Tailwind Traders Knowledge Assistant What is the return window for a tent?
+    @Caldova Knowledge Assistant How much headroom does Calderwood have?
     ```
 
 5. Or select your agent and ask directly:
 
     ```
-    When should we reorder tents, and who is our tent supplier?
+    When should we reorder sterile vials, and who is our component supplier?
     ```
 
-6. Copilot routes the query to your agent and returns information from the Tailwind Traders knowledge base
+6. Copilot routes the query to your agent and returns information from the Caldova knowledge base
 
 > **Note**: For **organization scope**, an admin must first approve the app in the [Microsoft 365 admin center](https://admin.cloud.microsoft/?#/agents/all/requested) under **Requests**. Once approved, the agent appears under **Built by your org** for all users.
 
@@ -162,7 +162,7 @@ To avoid unnecessary charges, clean up resources when done.
 
 1. In the Foundry portal, go to **Build** → **Agents**
 
-2. Find **tailwind-knowledge-agent**
+2. Find **caldova-knowledge-agent**
 
 3. Select the **...** menu → **Delete**
 
@@ -180,7 +180,7 @@ This also removes:
 
 2. Go to **Apps** → **Manage your apps**
 
-3. Find **Tailwind Traders Knowledge Assistant**
+3. Find **Caldova Knowledge Assistant**
 
 4. Select **...** → **Uninstall**
 

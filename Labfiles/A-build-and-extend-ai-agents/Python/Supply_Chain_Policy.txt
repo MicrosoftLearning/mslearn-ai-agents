@@ -1,0 +1,154 @@
+CALDOVA PHARMACEUTICALS
+SUPPLY CHAIN AND CAPACITY POLICY
+
+Effective Date: January 2026
+Version: 2.0
+
+====================
+1. CAPACITY REQUESTS
+====================
+
+Planning teams raise a capacity request when a program needs production time beyond the
+committed schedule.
+
+Process:
+1. Raise the request in the planning portal at https://planning.caldova.example
+2. State the program, the site, the number of weeks, and the required start date
+3. The planning desk checks internal capacity across all three sites first
+4. If internal capacity cannot cover the request, the desk evaluates contract manufacturers
+
+Review Windows:
+- Standard requests: reviewed within 5 business days
+- Expedited requests: reviewed within 2 business days
+- Requests inside 30 days of the required start: escalated to the site planning lead
+
+An agent or assistant may draft a capacity request. Drafts are always reviewed by a planner
+before anything is scheduled. Nothing is reserved and no spend is committed until a planner
+approves the request.
+
+====================
+2. CONTRACT MANUFACTURERS
+====================
+
+Where internal capacity is short, production may be transferred to a pre-qualified contract
+manufacturing organization (CMO).
+
+Transfer Tiers:
+- Standard: packaging and secondary operations, $50K per week
+- Advanced: oral solid dose manufacturing, $120K per week
+- Premium: sterile manufacturing, $300K per week
+
+Priority Levels:
+- Standard: 1.00x, normal onboarding schedule
+- Expedited: 1.25x, prioritized in the CMO queue
+- Fast track: 1.75x, dedicated transfer team
+- Emergency: 2.50x, out-of-hours mobilization by exception only
+
+Cost is calculated as the weekly rate multiplied by the number of weeks, multiplied by the
+priority factor. For example, 5 weeks of premium capacity at expedited priority is
+5 x $300K x 1.25 = $1,875K.
+
+Only pre-qualified CMOs may be engaged. Qualification is held by the supplier quality team and
+reviewed annually.
+
+====================
+3. PRODUCTION SLOTS
+====================
+
+Caldova operates three manufacturing sites: Ashford, Brightwater, and Calderwood.
+
+Slot Types:
+- Production: standard batch manufacturing windows
+- Packaging: primary and secondary packaging windows
+- Changeover: line cleaning and format changes between products
+- Qualification: validation and stability sampling runs
+
+Slot Request Rules:
+- Confirm the slot is open with the planning desk before committing materials
+- Request a slot at least 4 weeks before the required start date
+- Changeover time is reserved automatically either side of a production slot
+- Qualification slots cannot be shortened to create production time
+
+====================
+4. MATERIALS AND INBOUND LOGISTICS
+====================
+
+Reorder Thresholds:
+- Reorder when on-hand inventory falls below 10 units and weekly consumption is above 15 units
+- Flag for review when inventory is above 20 units and weekly consumption is below 5 units
+- Critical materials should never fall below 5 units on hand
+
+Inbound Handling:
+- Record every delivery against its purchase order on receipt
+- Quarantine incoming material until quality release
+- Report short or damaged shipments to the supplier within 48 hours of delivery
+
+Lead Times:
+- Standard materials: 2 to 3 weeks
+- Sterile components: 6 weeks
+- Printed packaging: 4 weeks, longer if artwork changes
+
+====================
+5. QUALITY AND BATCH RELEASE
+====================
+
+Deviations:
+- Log every deviation in the quality system on the day it is observed
+- Deviations affecting a released batch are escalated to the quality lead immediately
+- No batch ships before quality release, regardless of launch pressure
+
+Batch Release:
+- Release requires complete batch records, in-specification test results, and a quality signature
+- Target release time is 10 business days from batch completion
+- Expedited release may be requested for launch-critical batches but never shortens testing
+
+Change Control:
+- Any change to a process, material, supplier, or system requires an approved change control
+- Assistants and agents must not make changes in production systems or supplier portals
+- Agents may draft requests and summarize records for a person to review
+
+====================
+6. SUPPLIER QUALIFICATION
+====================
+
+Qualification Status:
+- Qualified: approved for routine supply
+- Conditional: approved for named programs only, with additional testing
+- Under review: not available for new work until review closes
+
+Requirements:
+- A current quality agreement must be in place before any order is raised
+- Audit findings must be closed before qualification is renewed
+- Requalification is required after any change of manufacturing site
+
+====================
+7. PLANNING DESK AND CONTACTS
+====================
+
+Planning Desk Hours:
+- Monday-Friday: 8:00 AM - 6:00 PM (site local time)
+- Weekend cover: on-call planner for launch-critical programs only
+
+Contact Methods:
+- Planning desk: planning@caldova.example
+- Supplier quality: supplierquality@caldova.example
+- Quality escalations: quality@caldova.example
+- IT service desk: ithelp@caldova.example
+
+Response Times:
+- Planning desk: within 1 business day
+- Supplier quality: within 2 business days
+- Quality escalations: same day
+
+====================
+8. COST REVIEW
+====================
+
+Cost Approval:
+- Transfers above $500K require sign-off from the site planning lead
+- Transfers above $2,000K require sign-off from the VP of Manufacturing
+- Emergency priority always requires VP sign-off, whatever the value
+
+Review:
+- Every transfer is reviewed against its estimate at completion
+- Variances above 10 percent are reported to the planning review meeting

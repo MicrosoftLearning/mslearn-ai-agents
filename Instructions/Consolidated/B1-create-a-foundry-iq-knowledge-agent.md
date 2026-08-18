@@ -2,7 +2,7 @@
 title: 'Task 1 – Create a Foundry IQ knowledge agent and connect from code'
 lab:
     title: 'Task 1 – Create a Foundry IQ knowledge agent and connect from code'
-    description: 'Create an enterprise-knowledge agent in the Microsoft Foundry portal, ground it on the Tailwind Traders knowledge base with Foundry IQ, require approval before knowledge lookups, then connect from code and handle the approval flow.'
+    description: 'Create an enterprise-knowledge agent in the Microsoft Foundry portal, ground it on the Caldova knowledge base with Foundry IQ, require approval before knowledge lookups, then connect from code and handle the approval flow.'
     type: 'task'
     parent: 'B'
     order: 1
@@ -33,8 +33,8 @@ python ../setup/check_env.py --task 1
 
 ---
 
-You'll build the **Tailwind Traders staff knowledge assistant**: an agent grounded on the
-company's internal documents (store operations, product catalog, returns and rentals, suppliers)
+You'll build the **Caldova staff knowledge assistant**: an agent grounded on the
+company's internal documents (site operations, plant capacity, CMO directory, tech transfer, suppliers)
 using **Foundry IQ**, then connect to it from a Python app that controls each knowledge lookup with
 an approval step.
 
@@ -70,26 +70,26 @@ before each lookup so your application reviews and controls every knowledge-base
 
 ## Create an agent
 
-If you created the `tailwind-knowledge-agent` during Getting started, open it now
-(**Build** → **Agents** → **tailwind-knowledge-agent**) and skip to **Configure your data and
+If you created the `caldova-knowledge-agent` during Getting started, open it now
+(**Build** → **Agents** → **caldova-knowledge-agent**) and skip to **Configure your data and
 Foundry IQ**. Otherwise:
 
 1. On the home page, select the **Build** tab, then on the **Agents** tab select **Create agent**.
-1. Create your agent with the name `tailwind-knowledge-agent`.
+1. Create your agent with the name `caldova-knowledge-agent`.
 
 When creating an agent, it deploys the default model (like `gpt-5`). Once your agent is created, you'll see the agent playground with that default model automatically selected for you.
 
 ## Configure your data and Foundry IQ
 
-Now you'll configure your agent to use Foundry IQ to search the Tailwind Traders knowledge base.
+Now you'll configure your agent to use Foundry IQ to search the Caldova knowledge base.
 
 1. First, give your agent the following instructions:
 
     ```
-    You are the Tailwind Traders staff knowledge assistant, specializing in our outdoor-gear
-    products, store operations, returns and rentals, and suppliers. You must ALWAYS search the
-    knowledge base to answer questions about our products, policies, or procedures. Provide
-    detailed, accurate information and always cite your sources.
+    You are the Caldova staff knowledge assistant, specializing in plant capacity,
+    contract manufacturers, tech transfer, site operations, and suppliers. You must
+    ALWAYS search the knowledge base to answer questions about our capacity, policies,
+    or procedures. Provide detailed, accurate information and always cite your sources.
     If you don't find relevant information in the knowledge base, say so clearly.
     ```
 
@@ -103,15 +103,15 @@ Now you'll configure your agent to use Foundry IQ to search the Tailwind Traders
     - **Region**: *The same location as your project*
     - **Pricing tier**: Free *if available, otherwise choose Basic*
 
-Now you'll upload the Tailwind Traders knowledge documents to connect to with Foundry IQ.
+Now you'll upload the Caldova knowledge documents to connect to with Foundry IQ.
 
 1. Download the sample knowledge documents. These are the Markdown files in the starter code under `Labfiles/B-integrate-agents-with-enterprise-knowledge-and-m365/Python/data/`:
-    - `tailwind-store-operations.md`
-    - `tailwind-tents-catalog.md`
-    - `tailwind-backpacks-guide.md`
-    - `tailwind-camping-accessories.md`
-    - `tailwind-returns-and-rentals-policy.md`
-    - `tailwind-supplier-guide.md`
+    - `caldova-site-operations.md`
+    - `caldova-plant-capacity.md`
+    - `caldova-cmo-directory.md`
+    - `caldova-tech-transfer-playbook.md`
+    - `caldova-capacity-booking-policy.md`
+    - `caldova-supplier-guide.md`
 
     > **Tip**: You already have these locally from Getting started. If you'd rather download them directly, browse to the `data` folder in the [repository](https://github.com/MicrosoftLearning/mslearn-ai-agents/tree/main/Labfiles/B-integrate-agents-with-enterprise-knowledge-and-m365/Python/data) and save each file.
 
@@ -125,16 +125,16 @@ Now you'll upload the Tailwind Traders knowledge documents to connect to with Fo
     - **Performance**: *Standard*
     - **Redundancy**: *Locally-redundant storage (LRS)*
 1. Once created, go to the storage account you created and select **Upload** from the top bar.
-1. In the **Upload blob** blade, create a new container named `tailwindproducts`.
-1. Browse for the six Tailwind Traders Markdown files from the `data` folder, select all of them, and select **Upload**.
+1. In the **Upload blob** blade, create a new container named `caldovaproducts`.
+1. Browse for the six Caldova Markdown files from the `data` folder, select all of them, and select **Upload**.
 1. Once your files are uploaded, navigate to the search service you created.
 1. On the left pane, under **Security + networking** > **Keys**, select **Both** for API Access control and confirm the selection. Once complete, leave the Azure Portal tab open and navigate back to the Foundry portal tab and refresh the page.
 1. Verify you are on the **Knowledge** page, select **Create a knowledge base**, choosing **Azure Blob Storage** as your knowledge source, then select **Connect**.
 1. Configure your knowledge source with the following settings:
-    - **Name**: `ks-tailwindproducts`
-    - **Description**: `Tailwind Traders staff knowledge base`
+    - **Name**: `ks-caldovaproducts`
+    - **Description**: `Caldova staff knowledge base`
     - **Storage account name**: *Select your storage account*
-    - **Container name**: `tailwindproducts`
+    - **Container name**: `caldovaproducts`
     - **Authentication type**: *API Key*
     - **Content extraction mode**: *minimal*
     - **Embedding model**: *Select the available deployed model, likely text-embedding-3-small*
@@ -156,17 +156,17 @@ Before connecting from code, test your agent in the portal playground.
 1. Navigate back to your agent on the **Build** > **Agents** page, and select the agent you created.
 2. In the agent page, you should see a playground tab selected. Find the knowledge section and add Foundry IQ, selecting the connection and knowledge base you created.
 1. Try the following test queries to verify the agent can retrieve information from the knowledge base:
-    - `What types of tents does Tailwind Traders offer?`
-    - `Tell me about which backpacks are available in XL.`
-    - `What is the return window for a tent?`
+    - `Which sites can make oral solid dose product?`
+    - `Tell me which contract manufacturers are qualified for sterile work.`
+    - `How much headroom does Calderwood have?`
 
 1. Review the responses and notice:
     - The agent provides specific information from the knowledge base
     - Citations or references to the source documents may be included
-    - The agent stays focused on Tailwind Traders information
+    - The agent stays focused on Caldova information
 
 1. In the agent details page, locate and copy the following information to a notepad (you'll need these later):
-    - **Agent name**: This is the name you created (`tailwind-knowledge-agent`)
+    - **Agent name**: This is the name you created (`caldova-knowledge-agent`)
     - **Project endpoint**: Found in the project settings or home page
 
 ### Configure the agent to require approval for tool calls
@@ -184,7 +184,7 @@ When you create an agent in the portal, its Foundry IQ (knowledge) tool runs **w
     > **Note**: If you're unable to sign in with the Foundry Toolkit extension, you may need to select the Azure extension. Sign in there, then navigate back to the Foundry Toolkit to access your resources.
 
 1. Under **Microsoft Foundry Resources**, choose **Set Default Project** and select the project you created earlier.
-1. Expand the project section. Under **Prompt Agents**, select your `tailwind-knowledge-agent` agent to open the **Agent Builder** window.
+1. Expand the project section. Under **Prompt Agents**, select your `caldova-knowledge-agent` agent to open the **Agent Builder** window.
 1. In the **Tools** section, find the tool named with a `kb-knowledgebase` prefix followed by a unique ID (for example, `kb-knowledgebase677-7w5fj`). This is the Foundry IQ knowledge base tool, and it was added automatically when you connected Foundry IQ in the portal.
 
     > **Note**: The agent lists more than one tool. The Foundry portal adds a **Web search** tool to new agents by default, and you may also see a standalone **Azure AI Search** tool. The agent actually calls the `kb-knowledgebase...` tool when it searches your knowledge base, so setting approval on any other tool has no effect.
@@ -198,7 +198,7 @@ Now you'll complete a Python console client that talks to your agent and handles
 
 Open the `Python` folder and activate the virtual environment from [Getting started](B0-getting-started.md) (`.\labenv\Scripts\Activate.ps1`), then continue below.
 
-1. In **Python/.env**, make sure `AGENT_NAME` is set to `tailwind-knowledge-agent` (the default in `.env.example`). Save the file.
+1. In **Python/.env**, make sure `AGENT_NAME` is set to `caldova-knowledge-agent` (the default in `.env.example`). Save the file.
 
 1. Open **knowledge_agent.py** and review the starter code, including:
     - Import statements and configuration loading
@@ -347,31 +347,31 @@ Now you'll run your application and test the agent's ability to retrieve informa
     **Query 1 - Product categories:**
 
     ```
-    What types of outdoor products does Tailwind Traders offer?
+    Which sites can make oral solid dose product?
     ```
 
     When prompted for approval, type **yes** to allow the agent to search the knowledge base. Observe how the agent retrieves information from multiple documents.
 
-    **Query 2 - Store policy:**
+    **Query 2 - Capacity policy:**
 
     ```
-    What is the return window for tents and how do gear rentals work?
+    How much headroom does Calderwood have and how are transfer costs calculated?
     ```
 
-    Approve the request and notice how the agent provides specific details from the returns and rentals policy.
+    Approve the request and notice how the agent provides specific details from the capacity request policy.
 
-    **Query 3 - Product comparison:**
-
-    ```
-    What's the difference between your daypacks and expedition backpacks?
-    ```
-
-    Approve the request and see how the agent synthesizes information from the backpacks guide.
-
-    **Query 4 - Supplier and restock:**
+    **Query 3 - Contract manufacturer comparison:**
 
     ```
-    When should we reorder tents, and who is our tent supplier?
+    What's the difference between Norvent and Halden for a sterile transfer?
+    ```
+
+    Approve the request and see how the agent synthesizes information from the CMO directory.
+
+    **Query 4 - Supplier and reorder:**
+
+    ```
+    When should we reorder sterile vials, and who is our component supplier?
     ```
 
     Approve the request and observe the agent answering from the supplier guide.
@@ -379,10 +379,10 @@ Now you'll run your application and test the agent's ability to retrieve informa
     **Query 5 - Follow-up question:**
 
     ```
-    What are our store's core hours?
+    What are our site core hours?
     ```
 
-    Notice how the agent maintains conversation context and answers from the store operations doc.
+    Notice how the agent maintains conversation context and answers from the site operations doc.
 
 1. Type `history` to view the complete conversation history.
 
@@ -394,17 +394,17 @@ Now you'll run your application and test the agent's ability to retrieve informa
 
 ### Optional: run the same agent as a web chat app
 
-The same grounded agent can be served through the shared Tailwind Traders web chat window. From the `Python` folder, run:
+The same grounded agent can be served through the shared Caldova web chat window. From the `Python` folder, run:
 
 ```
 python knowledge_chat_app.py
 ```
 
-A browser opens at `http://localhost:7860` with the **Tailwind Traders Staff Knowledge Assistant**. This variant **auto-approves** the Foundry IQ knowledge tool so the chat stays smooth. Ask it the same questions as above. Close the tab and press **Ctrl+C** to stop it.
+A browser opens at `http://localhost:7860` with the **Caldova Staff Knowledge Assistant**. This variant **auto-approves** the Foundry IQ knowledge tool so the chat stays smooth. Ask it the same questions as above. Close the tab and press **Ctrl+C** to stop it.
 
 > **Fast-forward**: If you'd rather ground an agent in code instead of the portal, run
 > `python ../setup/bootstrap_agent.py` from the `Python` folder. It creates
-> `tailwind-knowledge-agent`, grounds it on the six knowledge docs with File Search, and writes
+> `caldova-knowledge-agent`, grounds it on the six knowledge docs with File Search, and writes
 > `AGENT_NAME` to `.env`. The client code you run against it is identical.
 
 When you're finished, enter `deactivate` to exit the virtual environment.

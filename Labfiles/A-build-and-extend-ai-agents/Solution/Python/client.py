@@ -7,15 +7,15 @@ from azure.ai.projects import AIProjectClient
 from azure.ai.projects.models import PromptAgentDefinition, FunctionTool
 from azure.identity import DefaultAzureCredential
 from openai.types.responses.response_input_param import FunctionCallOutput, ResponseInputParam
-from tailwind_ui import run_chat_app, AgentReply
+from caldova_ui import run_chat_app, AgentReply
 
 # Add references
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 
-# The trip-planner functions you built in Task 4, reused here so the capstone agent can
-# both plan trips (local functions) AND check the warehouse (your MCP server tools).
-from functions import next_available_trip, calculate_rental_cost, generate_booking_report
+# The capacity-planner functions you built in Task 4, reused here so the capstone agent can
+# both plan capacity (local functions) AND check materials (your MCP server tools).
+from functions import next_available_slot, calculate_transfer_cost, generate_capacity_report
 
 # Load environment variables from .env file
 load_dotenv()
@@ -27,54 +27,54 @@ credential = DefaultAzureCredential()
 project_client = AIProjectClient(endpoint=project_endpoint, credential=credential)
 openai_client = project_client.get_openai_client()
 
-# --- Trip-planner tools (from Task 4), provided here so you can focus on the combination ---
+# --- Capacity-planner tools (from Task 4), provided here so you can focus on the combination ---
 # The tool schemas the model sees...
-trip_planner_tools = [
+capacity_planner_tools = [
     FunctionTool(
-        name="next_available_trip",
-        description="Get the next available guided trip in a given region.",
+        name="next_available_slot",
+        description="Get the next open production slot at a given site.",
         parameters={
             "type": "object",
             "properties": {
-                "region": {
+                "site": {
                     "type": "string",
-                    "description": "region to find the next guided trip in (e.g. 'pacific_northwest', 'rockies', 'patagonia')",
+                    "description": "site to find the next open production slot at (e.g. 'ashford', 'brightwater', 'calderwood')",
                 },
             },
-            "required": ["region"],
+            "required": ["site"],
             "additionalProperties": False,
         },
         strict=True,
     ),
     FunctionTool(
-        name="calculate_rental_cost",
-        description="Calculate the cost of a gear rental based on the gear tier, number of days, and service level.",
+        name="calculate_transfer_cost",
+        description="Calculate the cost of transferring production to a contract manufacturer, based on the CMO tier, number of weeks, and priority.",
         parameters={
             "type": "object",
             "properties": {
-                "gear_tier": {"type": "string", "description": "the tier of the gear rental (e.g. 'standard', 'advanced', 'premium')"},
-                "days": {"type": "number", "description": "the number of days for the gear rental"},
-                "service_level": {"type": "string", "description": "the service level of the rental (e.g. 'standard', 'priority', 'express', 'rush')"},
+                "cmo_tier": {"type": "string", "description": "the CMO tier for the transfer (e.g. 'standard', 'advanced', 'premium')"},
+                "weeks": {"type": "number", "description": "the number of weeks of contract capacity"},
+                "priority": {"type": "string", "description": "the priority of the transfer (e.g. 'standard', 'expedited', 'fast_track', 'emergency')"},
             },
-            "required": ["gear_tier", "days", "service_level"],
+            "required": ["cmo_tier", "weeks", "priority"],
             "additionalProperties": False,
         },
         strict=True,
     ),
     FunctionTool(
-        name="generate_booking_report",
-        description="Generate a report summarizing a guided trip booking and gear rental.",
+        name="generate_capacity_report",
+        description="Draft a capacity request summarizing an open production slot and a contract manufacturing estimate.",
         parameters={
             "type": "object",
             "properties": {
-                "trip_name": {"type": "string", "description": "the name of the guided trip being booked"},
-                "region": {"type": "string", "description": "the region of the guided trip"},
-                "gear_tier": {"type": "string", "description": "the tier of the gear rented for the trip (e.g. 'standard', 'advanced', 'premium')"},
-                "days": {"type": "number", "description": "the number of days the gear was rented"},
-                "service_level": {"type": "string", "description": "the service level of the rental (e.g. 'standard', 'priority', 'express', 'rush')"},
-                "customer_name": {"type": "string", "description": "the name of the customer making the booking"},
+                "slot_name": {"type": "string", "description": "the name of the production slot being requested"},
+                "site": {"type": "string", "description": "the site the production slot belongs to"},
+                "cmo_tier": {"type": "string", "description": "the CMO tier for the transfer (e.g. 'standard', 'advanced', 'premium')"},
+                "weeks": {"type": "number", "description": "the number of weeks of contract capacity"},
+                "priority": {"type": "string", "description": "the priority of the transfer (e.g. 'standard', 'expedited', 'fast_track', 'emergency')"},
+                "requested_by": {"type": "string", "description": "the team or role requesting the capacity"},
             },
-            "required": ["trip_name", "region", "gear_tier", "days", "service_level", "customer_name"],
+            "required": ["slot_name", "site", "cmo_tier", "weeks", "priority", "requested_by"],
             "additionalProperties": False,
         },
         strict=True,
@@ -83,9 +83,9 @@ trip_planner_tools = [
 
 # ...and how to actually run each one (these are plain synchronous Python functions).
 local_functions = {
-    "next_available_trip": next_available_trip,
-    "calculate_rental_cost": calculate_rental_cost,
-    "generate_booking_report": generate_booking_report,
+    "next_available_slot": next_available_slot,
+    "calculate_transfer_cost": calculate_transfer_cost,
+    "generate_capacity_report": generate_capacity_report,
 }
 
 # Shared state, set up once on the first message so the MCP session is created
@@ -145,23 +145,24 @@ async def setup():
         )
         mcp_function_tools.append(function_tool)
 
-    # Create the capstone agent with BOTH tool sets: trip planning + warehouse tools
+    # Create the capstone agent with BOTH tool sets: capacity planning + materials tools
     agent = project_client.agents.create_version(
-        agent_name="tailwind-assistant",
+        agent_name="caldova-assistant",
         definition=PromptAgentDefinition(
             model=model_deployment,
             instructions="""
-            You are the Tailwind Traders assistant. You help customers plan guided
-            trips and price gear rentals, and you help warehouse staff check live stock and sales.
+            You are the Caldova supply chain assistant. You help planners find open
+            production capacity and estimate contract manufacturing costs, and you help
+            the materials team check live stock and consumption.
 
-            Trip planning and rentals:
-            - Use the trip and rental tools to find guided trips, price gear, and produce booking reports.
+            Capacity planning and transfers:
+            - Use the slot and transfer tools to find open capacity, estimate cost, and draft capacity requests.
 
-            Warehouse inventory:
-            - Recommend restock if item inventory < 10 and weekly sales > 15
-            - Recommend clearance if item inventory > 20 and weekly sales < 5
+            Material inventory:
+            - Recommend reorder if material inventory < 10 and weekly consumption > 15
+            - Flag for review if material inventory > 20 and weekly consumption < 5
             """,
-            tools=[*trip_planner_tools, *mcp_function_tools],
+            tools=[*capacity_planner_tools, *mcp_function_tools],
         ),
     )
 
@@ -198,10 +199,10 @@ async def respond(user_message):
             kwargs = json.loads(item.arguments)
 
             if item.name in local_functions:
-                # Task 4 trip-planner tool — a plain Python function that returns a string
+                # Task 4 capacity-planner tool — a plain Python function that returns a string
                 output_text = local_functions[item.name](**kwargs)
             else:
-                # Task 5 warehouse tool — call it over the MCP session (async)
+                # Task 5 materials tool — call it over the MCP session (async)
                 result = await functions_dict[item.name](**kwargs)
                 output_text = result.content[0].text
 
@@ -231,12 +232,12 @@ if __name__ == "__main__":
     try:
         run_chat_app(
             respond,
-            title="Tailwind Traders Assistant",
-            subtitle="Plan trips, price gear, and check warehouse stock",
+            title="Caldova Assistant",
+            subtitle="Find capacity, estimate transfers, and check material stock",
         )
     finally:
         # Delete the agent when the app closes
         if agent is not None:
             print("Cleaning up agents:")
             project_client.agents.delete_version(agent_name=agent.name, agent_version=agent.version)
-            print("Deleted Tailwind assistant.")
+            print("Deleted Caldova assistant.")

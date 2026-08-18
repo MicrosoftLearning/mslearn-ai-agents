@@ -2,7 +2,7 @@
 title: 'Task 2 – Publish your agent to Microsoft Teams'
 lab:
     title: 'Task 2 – Publish your agent to Microsoft Teams'
-    description: 'Publish the Tailwind Traders knowledge agent to Microsoft Teams so staff can chat with it where they already work.'
+    description: 'Publish the Caldova knowledge agent to Microsoft Teams so staff can chat with it where they already work.'
     type: 'task'
     parent: 'B'
     order: 2
@@ -31,19 +31,19 @@ lab:
 > **Don't have it?** Skip this task. Nothing else in this lab depends on it, and you can still read through the steps to see how it works.
 <!-- END GENERATED: gated-notice -->
 
-> **Set up (start here):** This task publishes the grounded `tailwind-knowledge-agent` from
+> **Set up (start here):** This task publishes the grounded `caldova-knowledge-agent` from
 > [Task 1](B1-create-a-foundry-iq-knowledge-agent.md). If you don't have that agent yet, complete
 > Task 1 first (or, for the quickest path, create and ground it in code with
 > `python ../setup/bootstrap_agent.py` from the `Python` folder you opened in VS Code). This task
 > is completed entirely in the portal and Teams — no local code or `.env` file is required.
 
 > **Continuing from a previous task?** If you just finished Task 1 and your
-> `tailwind-knowledge-agent` is grounded and saved in the Foundry portal, you're ready — go
+> `caldova-knowledge-agent` is grounded and saved in the Foundry portal, you're ready — go
 > straight to **Publish to Microsoft Teams** below.
 
 ---
 
-Publishing to **Microsoft Teams** lets Tailwind Traders staff chat with the knowledge assistant
+Publishing to **Microsoft Teams** lets Caldova staff chat with the knowledge assistant
 directly in Teams, without leaving the tools they already use. This task focuses on the
 **deployment and publishing workflow** — you won't write any code.
 
@@ -90,13 +90,13 @@ Before publishing, gather this information:
 
 | Field | Value |
 |-------|-------|
-| **App Name** | Tailwind Traders Knowledge Assistant |
-| **Short Description** | AI assistant for Tailwind Traders staff |
-| **Full Description** | Enterprise AI assistant that answers staff questions about products, store operations, returns, rentals, and suppliers |
+| **App Name** | Caldova Knowledge Assistant |
+| **Short Description** | AI assistant for Caldova staff |
+| **Full Description** | Enterprise AI assistant that answers staff questions about plant capacity, site operations, contract manufacturers, and suppliers |
 | **Developer Name** | Your name or company name |
-| **Website URL** | <https://tailwindtraders.com> (placeholder is fine for lab) |
-| **Privacy Policy URL** | <https://tailwindtraders.com/privacy> |
-| **Terms of Use URL** | <https://tailwindtraders.com/terms> |
+| **Website URL** | <https://caldova.example> (placeholder is fine for lab) |
+| **Privacy Policy URL** | <https://caldova.example/privacy> |
+| **Terms of Use URL** | <https://caldova.example/terms> |
 
 ### Create app icons
 
@@ -115,7 +115,7 @@ You'll need two icons for the Teams app:
 
 ### Publish from the portal
 
-1. In the Foundry portal, open your agent (**Build** → **Agents** → **tailwind-knowledge-agent**)
+1. In the Foundry portal, open your agent (**Build** → **Agents** → **caldova-knowledge-agent**)
 
 2. Select the **Publish** button at the top of the page
 
@@ -129,16 +129,16 @@ Fill in the configuration form:
 
 **Basic Information:**
 
-- **App Name**: Tailwind Traders Knowledge Assistant
-- **Short Description**: AI assistant for Tailwind Traders staff
-- **Full Description**: Enterprise AI assistant that answers staff questions about products, store operations, returns, rentals, and suppliers
+- **App Name**: Caldova Knowledge Assistant
+- **Short Description**: AI assistant for Caldova staff
+- **Full Description**: Enterprise AI assistant that answers staff questions about plant capacity, site operations, contract manufacturers, and suppliers
 
 **Developer Information:**
 
 - **Developer Name**: Your name
-- **Website**: <https://tailwindtraders.com>
-- **Privacy Policy**: <https://tailwindtraders.com/privacy>
-- **Terms of Use**: <https://tailwindtraders.com/terms>
+- **Website**: <https://caldova.example>
+- **Privacy Policy**: <https://caldova.example/privacy>
+- **Terms of Use**: <https://caldova.example/terms>
 
 **App Icons:**
 
@@ -185,16 +185,16 @@ After the agent package is prepared (this takes 1-2 minutes), you can deploy it 
 3. Test a knowledge query:
 
     ```
-    What is the return window for a tent?
+    How much headroom does Calderwood have?
     ```
 
 4. Try another question:
 
     ```
-    What are our store's core hours?
+    What are our site core hours?
     ```
 
-5. The agent should respond with information from the Tailwind Traders knowledge base!
+5. The agent should respond with information from the Caldova knowledge base!
 
 > ✅ **Checkpoint**: Your grounded knowledge agent is now available in Microsoft Teams, answering
 > staff questions from the enterprise knowledge base.

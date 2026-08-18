@@ -1,7 +1,7 @@
 """
-Fast-forward setup for the Tailwind Traders enterprise-knowledge lab.
+Fast-forward setup for the Caldova enterprise-knowledge lab.
 
-Task 1 has you build an enterprise-knowledge agent and ground it on the Tailwind
+Task 1 has you build an enterprise-knowledge agent and ground it on the Caldova
 Traders knowledge base. If you'd rather jump straight to connecting from code (or
 to an optional task), run this once to create a grounded agent for you.
 
@@ -13,9 +13,9 @@ open in VS Code — with the lab virtual environment active:
 
 It reproduces, in code, the grounding step Task 1 has you do in the portal:
 
-  * creates an agent named 'tailwind-knowledge-agent'
-  * grounds it on the Tailwind Traders knowledge docs with the File Search tool
-  * writes AGENT_NAME=tailwind-knowledge-agent into Python/.env
+  * creates an agent named 'caldova-knowledge-agent'
+  * grounds it on the Caldova knowledge docs with the File Search tool
+  * writes AGENT_NAME=caldova-knowledge-agent into Python/.env
 
 Prerequisites: PROJECT_ENDPOINT and MODEL_DEPLOYMENT_NAME set in Python/.env
 (run 'azd up', or fill them in from the portal), and 'az login' completed.
@@ -44,15 +44,15 @@ from azure.core.exceptions import ResourceNotFoundError
 from azure.identity import DefaultAzureCredential
 from dotenv import load_dotenv
 
-AGENT_NAME = "tailwind-knowledge-agent"
+AGENT_NAME = "caldova-knowledge-agent"
 
 # The same instructions Task 1 has you give the agent in the portal.
-INSTRUCTIONS = """You are the Tailwind Traders staff knowledge assistant.
-You help store staff answer questions about products, store operations, returns, rentals, and suppliers.
+INSTRUCTIONS = """You are the Caldova staff knowledge assistant.
+You help planning and materials teams answer questions about capacity, contract manufacturers, site operations, and suppliers.
 
 Guidelines:
 - Always be friendly and helpful
-- Use the Tailwind Traders knowledge base to answer questions accurately
+- Use the Caldova knowledge base to answer questions accurately
 - Cite the document you used when you can
 - If you don't know the answer, admit it and suggest contacting the relevant team directly"""
 
@@ -80,9 +80,9 @@ def upload_file(openai_client, path):
 
 def build_vector_store(openai_client, file_ids):
     """Create a vector store for File Search and wait until it's indexed."""
-    print("  Creating vector store for the Tailwind Traders knowledge base ...")
+    print("  Creating vector store for the Caldova knowledge base ...")
     vector_store = openai_client.vector_stores.create(
-        name="ks-tailwindproducts",
+        name="ks-caldovaproducts",
         file_ids=file_ids,
     )
 
@@ -123,7 +123,7 @@ def set_env_value(key, value):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Create and ground the tailwind-knowledge-agent."
+        description="Create and ground the caldova-knowledge-agent."
     )
     parser.add_argument(
         "--force",
