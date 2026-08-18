@@ -29,9 +29,9 @@ TRIAGE_INSTRUCTIONS = """
 Classify the support message into exactly ONE category from the list below. Provide a confidence score from 0 to 1.
 
 Billing
-- Charges, refunds, duplicate payments
+- Charges, credits, duplicate payments
 - Missing or incorrect credits on an invoice
-- Being charged the wrong amount for an order or a transfer week
+- Being invoiced the wrong amount for a transfer week
 
 Equipment
 - Faulty, damaged, or defective equipment
@@ -44,8 +44,8 @@ General
 - Request history, reports, or portal navigation
 
 Important rules
-- Questions about viewing, downloading, or exporting orders or receipts are General, not Billing
-- Billing ONLY applies when money was charged, refunded, or paid incorrectly
+- Questions about viewing, downloading, or exporting requests or reports are General, not Billing
+- Billing ONLY applies when money was invoiced, credited, or paid incorrectly
 
 Respond with ONLY a JSON object (no markdown, no extra text) using exactly these keys:
 {"reported_issue": "<the reported message>", "category": "<Billing|Equipment|General>", "confidence": <number between 0 and 1>}

@@ -36,7 +36,7 @@ python ../setup/check_env.py --task 4
 
 Not every multi-agent job needs a pipeline. Sometimes one agent does the *thinking* — reading a
 message and making a decision — and your **code** acts on that decision. In this task you'll build
-a Caldova **support-desk triage**: a single agent classifies each customer ticket into a
+a Caldova **support-desk triage**: a single agent classifies each support ticket into a
 category with a confidence score, and your Python code routes the ticket accordingly — escalating
 billing problems, sending low-confidence tickets back for more detail, and handling the rest
 automatically.
@@ -169,7 +169,7 @@ Open **ticket_triage.py** and add code at each commented placeholder.
       Category:   Equipment (confidence 0.95)
       Decision:   [auto] Equipment issue: send troubleshooting steps and raise a maintenance job.
 
-    Ticket 2: Is there a way to see all of my past orders and download them as receipts?
+    Ticket 2: Is there a way to see all of our past capacity requests and export them as a report?
       Category:   General (confidence 0.90)
       Decision:   [auto] General question: reply with a help-center answer.
 

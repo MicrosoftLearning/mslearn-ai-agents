@@ -224,7 +224,7 @@ from agent_framework import tool, Agent, MCPStdioTool
 agent = Agent(
     client=FoundryChatClient(...),
     name="caldova-assistant",
-    instructions="You are the Caldova assistant...",
+    instructions="You are the Caldova supply chain assistant...",
     tools=[next_available_slot, calculate_transfer_cost, generate_capacity_report],
 )
 

@@ -352,7 +352,7 @@ Now you'll run your application and test the agent's ability to retrieve informa
 
     When prompted for approval, type **yes** to allow the agent to search the knowledge base. Observe how the agent retrieves information from multiple documents.
 
-    **Query 2 - Store policy:**
+    **Query 2 - Capacity policy:**
 
     ```
     How much headroom does Calderwood have and how are transfer costs calculated?
@@ -360,7 +360,7 @@ Now you'll run your application and test the agent's ability to retrieve informa
 
     Approve the request and notice how the agent provides specific details from the capacity request policy.
 
-    **Query 3 - Product comparison:**
+    **Query 3 - Contract manufacturer comparison:**
 
     ```
     What's the difference between Norvent and Halden for a sterile transfer?
@@ -368,7 +368,7 @@ Now you'll run your application and test the agent's ability to retrieve informa
 
     Approve the request and see how the agent synthesizes information from the CMO directory.
 
-    **Query 4 - Supplier and restock:**
+    **Query 4 - Supplier and reorder:**
 
     ```
     When should we reorder sterile vials, and who is our component supplier?
@@ -382,7 +382,7 @@ Now you'll run your application and test the agent's ability to retrieve informa
     What are our site core hours?
     ```
 
-    Notice how the agent maintains conversation context and answers from the store operations doc.
+    Notice how the agent maintains conversation context and answers from the site operations doc.
 
 1. Type `history` to view the complete conversation history.
 

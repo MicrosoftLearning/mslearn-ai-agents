@@ -54,7 +54,7 @@ class OutlineAgentExecutor(AgentExecutor):
 
         except Exception as e:
             await task_updater.failed(
-                message=new_agent_text_message('Outline Agent failed to process the request.', 
+                message=new_agent_text_message('Outline Agent failed to process the request.',
                 context_id=context_id)
             )
 

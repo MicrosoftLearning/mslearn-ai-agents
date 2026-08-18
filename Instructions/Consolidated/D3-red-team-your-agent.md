@@ -39,8 +39,8 @@ python ../setup/check_env.py --task 3
 
 Tasks 1 and 2 asked whether the agent works. This one asks what someone can *make* it do.
 
-The Caldova assistant is grounded in store policy and talks to staff all day. Nobody
-built it expecting hostile input — which is precisely why it's worth testing before a customer,
+The Caldova assistant is grounded in supply chain policy and talks to staff all day. Nobody
+built it expecting hostile input — which is precisely why it's worth testing before a supplier,
 a bored employee, or a scraped web page does the testing for you.
 
 The **AI Red Teaming Agent** automates that. It generates adversarial prompts for the risk

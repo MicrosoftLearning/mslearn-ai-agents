@@ -185,7 +185,7 @@ def next_available_slot(
     site: Annotated[str, Field(description="Site to find the next open production slot at (e.g. 'ashford', 'brightwater', 'calderwood')")],
 ) -> str:
     """Get the next open production slot at a given site."""
-    return functions.next_available_slot(region)
+    return functions.next_available_slot(site)
 ```
 
 Then you create the agent with the decorated functions and let `agent.run()` handle the whole

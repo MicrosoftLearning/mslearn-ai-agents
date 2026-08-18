@@ -160,8 +160,8 @@ which is which:
 - **Red teaming** answers *"what can I make it do?"* It's an adversarial probe, and a clean
   result is a floor, not a guarantee.
 
-None of them replaces the others, and all three are cheap compared to finding out from a
-customer.
+None of them replaces the others, and all three are cheap compared to finding out in
+production.
 
 ## Summary
 

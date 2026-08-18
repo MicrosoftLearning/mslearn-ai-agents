@@ -27,6 +27,24 @@ Incomplete Requests:
 - Requests naming a CMO that is not pre-qualified are returned to procurement
 
 ========================================
+PRODUCTION SLOTS
+========================================
+
+Caldova operates three manufacturing sites: Ashford, Brightwater, and Calderwood.
+
+Slot Types:
+- Production: standard batch manufacturing windows
+- Packaging: primary and secondary packaging windows
+- Changeover: line cleaning and format changes between products
+- Qualification: validation and stability sampling runs
+
+Slot Request Rules:
+- Confirm the slot is open with the planning desk before committing materials
+- Request a slot at least 4 weeks before the required start date
+- Changeover time is reserved automatically either side of a production slot
+- Qualification slots cannot be shortened to create production time
+
+========================================
 CONTRACT MANUFACTURING COSTS
 ========================================
 

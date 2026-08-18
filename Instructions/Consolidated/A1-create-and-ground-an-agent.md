@@ -2,7 +2,7 @@
 title: 'Task 1 – Create and ground an agent'
 lab:
     title: 'Task 1 – Create and ground an agent'
-    description: 'Create an agent in the Microsoft Foundry portal and ground it in Caldova store policy so it answers from your data.'
+    description: 'Create an agent in the Microsoft Foundry portal and ground it in Caldova supply chain policy so it answers from your data.'
     type: 'task'
     parent: 'A'
     order: 1

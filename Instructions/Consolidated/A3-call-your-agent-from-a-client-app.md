@@ -107,7 +107,7 @@ The provided `agent_with_functions.py` already implements the client and hands i
 4. **Launch the app**: the file ends by starting the browser chat window:
 
     ```python
-    run_chat_app(respond, title="Caldova Assistant")
+    run_chat_app(respond, title="Caldova Supply Chain Assistant")
     ```
 
 Sign in and run it:
