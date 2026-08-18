@@ -1,15 +1,19 @@
 ---
-layout: default
+layout: home
 ---
 
 {%- comment -%}
 Layout for the workshop and task-explorer pages: a nav rail on the left,
 content on the right.
 
-Inherits the site's `default` layout, so the header and footer still come from
-MicrosoftLearning/Jekyll-Theme. Jekyll resolves local _layouts/ ahead of
-remote_theme, and only pages that set `layout: workshop` use this one, so the
-lab pages are unaffected.
+Inherits `home` rather than `default`. The theme's `default` layout is only a
+<head> and {{ content }} - `home` is what supplies <body>, the site nav bar,
+the Bootstrap .container that gives the page its margins, and the footer.
+Inheriting `default` directly left these pages flush against the window edge
+with no site chrome.
+
+Jekyll resolves local _layouts/ ahead of remote_theme, and only pages that set
+`layout: workshop` use this one, so the lab pages are unaffected.
 {%- endcomment -%}
 
 <style>
@@ -22,11 +26,12 @@ lab pages are unaffected.
 }
 
 .wk-shell { display: grid; grid-template-columns: 16rem minmax(0, 1fr); gap: 2.5rem;
-            align-items: start; }
-@media (max-width: 900px) { .wk-shell { grid-template-columns: 1fr; gap: 1rem; } }
+            align-items: start; padding: 1.5rem 0 4rem; }
+@media (max-width: 900px) { .wk-shell { grid-template-columns: 1fr; gap: 1rem;
+            padding: 1rem 0 4rem; } }
 
 /* Nav rail */
-.wk-rail { position: sticky; top: 1rem; font-size: .9em; padding-right: 1rem;
+.wk-rail { position: sticky; top: 1.5rem; font-size: .9em; padding-right: 1.25rem;
            border-right: 1px solid var(--wk-border); }
 @media (max-width: 900px) {
   .wk-rail { position: static; border-right: none;
