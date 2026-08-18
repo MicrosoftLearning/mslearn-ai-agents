@@ -37,8 +37,7 @@ Before starting, ensure you have:
 - [Git](https://git-scm.com/downloads) installed on your local machine
 - Basic familiarity with Python
 
-> \* Use Python **3.10–3.13**. Task 3 installs PyRIT, which doesn't support Python 3.14 yet.
-> The lab has been tested with Python 3.13.
+> \* Python 3.14 isn't supported yet: some dependencies have no 3.14 build.
 
 ## Create a Microsoft Foundry project
 
