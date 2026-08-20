@@ -53,6 +53,10 @@ The single most important capability for the Caldova agent is **grounding**.
 Grounding attaches trusted source material — such as the supply chain policy document — so the
 agent answers *from that data* instead of inventing a response.
 
+You could copy policy details into the agent instructions, but that becomes difficult to
+maintain as the policy changes. File search keeps the instructions focused on the agent's
+role while the policy remains a separate source that you can replace or update.
+
 [Learn more →](https://review.learn.microsoft.com/en-us/training/modules/build-extend-ai-agents/2-understand-agents-foundry?branch=pr-en-us-55509)
 
 </div>
@@ -65,9 +69,9 @@ agent answers *from that data* instead of inventing a response.
     You help planning and materials teams with questions about capacity, contract manufacturers, and materials.
 
     Guidelines:
-    - Always be clear and concise
+    - Always be friendly and helpful
     - Use the supply chain policy documentation to answer questions accurately
-    - If you don't know the answer, admit it and suggest contacting the planning desk directly
+    - If you don't know the answer, admit it and suggest contacting the support team directly
     ```
 
 1. Download the sample supply chain policy document. Open a new browser tab and navigate to:

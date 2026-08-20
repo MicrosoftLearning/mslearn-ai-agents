@@ -41,10 +41,39 @@ python ../setup/check_env.py --task 5
 (the function tools from Task 4) *and* **checks live material stock and consumption** (the tools
 you host here).
 
-**Concept reinforced**: the MCP server/client split — a server *registers* tools; a client
-*discovers and calls* them — plus how one agent can hold **more than one kind of tool** at
-once. In `respond()` you *route* each call to the right place: local Python functions run
-in-process, MCP tools run over the server session.
+This task combines local Python functions with tools provided by an MCP server. In
+`respond()`, you route each call to the correct place.
+
+<style>
+/* "Ask Anton" just-in-time concept blocks */
+details.concept { margin:.6rem 0 1rem; }
+details.concept > summary { display:inline-block; cursor:pointer; list-style:none;
+    font-size:.85em; font-weight:600; color:#6b4ba1; background:#6b4ba112;
+    border:1px solid #6b4ba133; border-radius:999px; padding:.2em .7em; }
+details.concept > summary::-webkit-details-marker { display:none; }
+details.concept > summary::before { content:"Ask Anton: "; font-weight:700;
+    padding-left:1.5em;
+    background:url("../Media/anton-avatar.png") left center / 1.25em 1.25em no-repeat; }
+details.concept > summary:hover { background:#6b4ba1; color:#fff; border-color:#6b4ba1; }
+details.concept[open] > summary { border-bottom-left-radius:0; border-bottom-right-radius:0; }
+details.concept .concept-body { border:1px solid #6b4ba133; border-top:none;
+    border-radius:0 8px 8px 8px; padding:.6rem .9rem; background:#6b4ba108; font-size:.95em; }
+</style>
+
+<details markdown="1" class="concept">
+<summary>When should a tool run locally or on an MCP server?</summary>
+<div class="concept-body" markdown="1">
+
+A local function runs in the same process as your application. It is a good fit for logic
+owned by that application. An MCP server exposes tools through a standard protocol, so
+different agents and clients can discover and reuse them. In this task, capacity functions
+run locally while shared inventory functions run on the MCP server.
+
+</div>
+</details>
+
+Caldova's three factories are Ashford, Brightwater, and Calderwood. The code uses `site`
+as the parameter name for a factory.
 
 > **How this builds on Task 4**: This capstone *combines* the capacity-planner tools from Task 4
 > with a new MCP server. You don't need to have finished Task 4 — those tools
@@ -61,10 +90,20 @@ in-process, MCP tools run over the server session.
 
 > **Try it first**: Wire up **server.py** and **client.py** using the comments in each file.
 > As you go, consider: why must diagnostic output go to `stderr` (or be suppressed) rather
-> than `stdout`? *(Hint: MCP speaks JSON-RPC over stdio, so anything printed to stdout is
-> parsed as protocol messages — a stray banner corrupts the stream. That's why the server
-> starts with `show_banner=False`.)* And: once the agent has **both** tool sets, how does
-> your code know whether a given `function_call` should run a local function or an MCP tool?
+> than `stdout`? Once the agent has **both** tool sets, how does your code know whether a
+> given `function_call` should run a local function or an MCP tool?
+
+<details markdown="1" class="concept">
+<summary>Why must an MCP server keep stdout clean?</summary>
+<div class="concept-body" markdown="1">
+
+This MCP server exchanges JSON-RPC messages over standard input and output. The client
+interprets every line on `stdout` as part of that protocol, so a log message or startup
+banner can corrupt the connection. Send diagnostics to `stderr` or suppress them. That is
+why the server starts with `show_banner=False`.
+
+</div>
+</details>
 
 <details markdown="1">
 <summary>Show a solution</summary>

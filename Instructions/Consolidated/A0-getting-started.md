@@ -15,13 +15,18 @@ lab:
 
 # Getting started
 
-This page sets up everything the **Build and extend AI agents** lab needs. **Every task begins
-here** — complete this page first. Each task is written so you can then do it on its own; if
-you're working through the whole lab in one sitting, you only need to do this setup once.
+Prepare the shared cloud resources and local Python environment for the **Build and extend
+AI agents** lab. Complete this setup once before starting a task.
 
-**Your scenario:** you work at **Caldova**, a pharmaceutical manufacturer preparing an
-accelerated product launch. Across the lab you'll build the supply chain assistant that
-powers the business, adding one capability per task.
+## The case
+
+**Caldova** is a pharmaceutical manufacturer preparing an early product launch. Its three
+factories cannot produce everything the launch requires, so you will build a supply chain
+assistant to help the planning team evaluate its options.
+
+Before you add capabilities to the assistant, you need a Microsoft Foundry project, a
+deployed model, and the starter code. You reuse this setup throughout the lab, whether you
+complete one task or the full sequence.
 
 > **Note**: Some of the technologies used in this lab are in preview or in active
 > development. You may experience some unexpected behavior, warnings, or errors.
@@ -36,7 +41,7 @@ Before starting, ensure you have:
 - [Git](https://git-scm.com/downloads) installed on your local machine
 - Basic familiarity with Python
 
-> \* Python 3.14 isn't supported yet: some dependencies have no 3.14 build. This lab was tested with Python 3.13.12.
+> **Note**: Python 3.14 isn't supported yet because some dependencies have no 3.14 build. This lab was tested with Python 3.13.12.
 
 ## Create a Microsoft Foundry project
 
@@ -44,9 +49,54 @@ You need a Foundry project and a deployed model for every code task. You can cre
 in the portal (the default), or provision them with one command using the Azure Developer
 CLI (`azd`).
 
-### Option A — Create the project in the portal (default)
+<style>
+/* "Ask Anton" just-in-time concept blocks */
+details.concept { margin:.6rem 0 1rem; }
+details.concept > summary { display:inline-block; cursor:pointer; list-style:none;
+    font-size:.85em; font-weight:600; color:#6b4ba1; background:#6b4ba112;
+    border:1px solid #6b4ba133; border-radius:999px; padding:.2em .7em; }
+details.concept > summary::-webkit-details-marker { display:none; }
+details.concept > summary::before { content:"Ask Anton: "; font-weight:700;
+    padding-left:1.5em;
+    background:url("../Media/anton-avatar.png") left center / 1.25em 1.25em no-repeat; }
+details.concept > summary:hover { background:#6b4ba1; color:#fff; border-color:#6b4ba1; }
+details.concept[open] > summary { border-bottom-left-radius:0; border-bottom-right-radius:0; }
+details.concept .concept-body { border:1px solid #6b4ba133; border-top:none;
+    border-radius:0 8px 8px 8px; padding:.6rem .9rem; background:#6b4ba108; font-size:.95em; }
+.setup-tabs { display:grid; grid-template-columns:auto auto 1fr; margin:1rem 0; }
+.setup-tabs > input { position:absolute; width:1px; height:1px; overflow:hidden;
+    clip:rect(0 0 0 0); white-space:nowrap; }
+.setup-tabs > label { padding:.55rem .9rem; border-bottom:2px solid #d4d4d8;
+    cursor:pointer; font-weight:600; color:#52525b; }
+.setup-tabs > input:focus-visible + label { outline:2px solid #1a45a5; outline-offset:2px; }
+.setup-tabs > input:checked + label { color:#1a45a5; border-bottom-color:#1a45a5; }
+.setup-tabs .setup-panel { display:none; grid-column:1 / -1; padding-top:.75rem; }
+#setup-portal:checked ~ .setup-portal-panel,
+#setup-azd:checked ~ .setup-azd-panel { display:block; }
+</style>
 
-Microsoft Foundry uses projects to organize models, resources, data, and other assets.
+<details markdown="1" class="concept">
+<summary>What is a Microsoft Foundry project?</summary>
+<div class="concept-body" markdown="1">
+
+A Microsoft Foundry project is a workspace for building and managing an AI application.
+It gives you one place to work with the application's agents, models, tools, and evaluations.
+In this lab, the project contains the model deployment and agents used by the Caldova
+assistant.
+
+[Learn more →](https://learn.microsoft.com/azure/ai-foundry/what-is-foundry)
+
+</div>
+</details>
+
+<div class="setup-tabs">
+<input type="radio" name="setup-method" id="setup-portal" checked="checked" />
+<label for="setup-portal">Option A: Azure portal</label>
+<input type="radio" name="setup-method" id="setup-azd" />
+<label for="setup-azd">Option B: Azure Developer CLI</label>
+<div class="setup-panel setup-portal-panel" markdown="1">
+
+### Create the project in the portal
 
 1. In a web browser, open the [Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes, and if necessary use the **Foundry** logo at the top left to navigate to the home page.
 
@@ -70,10 +120,13 @@ Microsoft Foundry uses projects to organize models, resources, data, and other a
 
 Keep this browser tab open — you'll use it in Task 1.
 
-### Option B — Provision with azd (optional, one command)
+</div>
+<div class="setup-panel setup-azd-panel" markdown="1">
 
-If you'd rather not click through the portal, the lab ships an optional `azd` template that
-creates the Foundry resource, a project, and a model deployment for you.
+### Provision with azd
+
+Choose this option if you prefer to set up the Azure resources from the terminal. The
+included `azd` template creates the Foundry resource, project, and model deployment for you.
 
 1. Install the [Azure Developer CLI](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd).
 
@@ -87,10 +140,13 @@ creates the Foundry resource, a project, and a model deployment for you.
 1. Answer the prompts (environment name, region). When it finishes, `azd` writes
     `PROJECT_ENDPOINT` and `MODEL_DEPLOYMENT_NAME` into `Python/.env` for you.
 
-    > **Note**: This provisions the resources but does **not** create the grounded portal
-    > agent — Task 1 does that. If you're starting at Task 3, run
+    > **Note**: These commands create the Azure resources, but they don't create the grounded
+    > agent used in Task 1. If you're starting at Task 3, run
     > `python ../setup/bootstrap_agent.py` from the `Python` folder after `azd up` to create
     > it. When you're done with the lab, run `azd down` to delete everything it created.
+
+</div>
+</div>
 
 ## Get the starter code
 
