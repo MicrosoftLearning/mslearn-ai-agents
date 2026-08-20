@@ -2,7 +2,7 @@
 title: 'Task 6 – Promote your assistant to a hosted agent'
 lab:
     title: 'Task 6 – Promote your assistant to a hosted agent'
-    description: 'Take the Caldova assistant you built as a prompt agent and deploy it as a hosted agent - your own code running in a Foundry-managed container - with the Azure Developer CLI.'
+    description: 'Implement and deploy the Caldova assistant as a hosted agent: your own code running in a Foundry-managed container with the Azure Developer CLI.'
     type: 'task'
     parent: 'A'
     order: 6
@@ -42,18 +42,46 @@ python ../setup/check_env.py --task 6
 
 ---
 
-**Goal**: take the **same Caldova assistant** you've been building and run it as a
-**hosted agent** — your own code, packaged and deployed to Foundry Agent Service, invokable by
-reference just like the prompt agents you built earlier.
+**Goal**: implement and deploy the **Caldova assistant** as a **hosted agent**. Your own code
+runs in Foundry Agent Service and can be invoked by reference like the prompt agents you built
+earlier.
 
-**Prompt agent vs. hosted agent** — in every earlier task you built a *prompt agent*: you
-described the agent with a `PromptAgentDefinition` (a model, instructions, and tools) and let
-Foundry run it. That's fast and declarative, but the logic has to fit in a prompt-and-tools
-definition. A *hosted agent* is **your own code** — any framework or plain Python — packaged as
-a container and run on Foundry-managed infrastructure. You choose the runtime behavior, and the
-platform handles scaling, session state, identity, and an endpoint. It's the natural next step
-when an assistant outgrows a prompt definition, and it's how you'd operationalize the assistant
-for Teams or Microsoft 365 delivery later.
+This is the same assistant role and business scenario, implemented in a different way. The
+hosted version keeps the Caldova instructions and conversation history while this task focuses
+on request handling and deployment. Policy grounding and tools from the earlier tasks are
+outside the scope of this hosted implementation.
+
+A prompt agent is defined with a model, instructions, and tools. A hosted agent runs your
+own code in a managed container.
+
+<style>
+/* "Ask Anton" just-in-time concept blocks */
+details.concept { margin:.6rem 0 1rem; }
+details.concept > summary { display:inline-block; cursor:pointer; list-style:none;
+    font-size:.85em; font-weight:600; color:#6b4ba1; background:#6b4ba112;
+    border:1px solid #6b4ba133; border-radius:999px; padding:.2em .7em; }
+details.concept > summary::-webkit-details-marker { display:none; }
+details.concept > summary::before { content:"Ask Anton: "; font-weight:700;
+    padding-left:1.5em;
+    background:url("../Media/anton-avatar.png") left center / 1.25em 1.25em no-repeat; }
+details.concept > summary:hover { background:#6b4ba1; color:#fff; border-color:#6b4ba1; }
+details.concept[open] > summary { border-bottom-left-radius:0; border-bottom-right-radius:0; }
+details.concept .concept-body { border:1px solid #6b4ba133; border-top:none;
+    border-radius:0 8px 8px 8px; padding:.6rem .9rem; background:#6b4ba108; font-size:.95em; }
+</style>
+
+<details markdown="1" class="concept">
+<summary>What is the difference between prompt agents and hosted agents?</summary>
+<div class="concept-body" markdown="1">
+
+A **prompt agent** is declarative: you provide a model, instructions, and tools, and Foundry
+runs the agent. A **hosted agent** packages your own framework or Python code in a container,
+giving you more control over runtime behavior. Foundry manages deployment, scaling, session
+state, identity, and the endpoint. Hosted agents are useful when the logic no longer fits in
+a prompt-and-tools definition.
+
+</div>
+</details>
 
 In this task you use the **Responses protocol**, so your hosted agent stays OpenAI-compatible —
 the same client code that called your prompt agents can call this one.
@@ -147,7 +175,7 @@ The complete file is in `Solution/Python/hosted_agent/main.py`.
 1. Chat with it in the inspector, or invoke it from a second terminal:
 
     ```
-    azd ai agent invoke --local "How long does review take for a capacity request?"
+    azd ai agent invoke --local "What information should a planner gather before moving production to another factory?"
     ```
 
 ## Deploy to Foundry Agent Service
@@ -164,18 +192,17 @@ The complete file is in `Solution/Python/hosted_agent/main.py`.
 1. Invoke the deployed agent:
 
     ```
-    azd ai agent invoke "A planner needs five weeks of premium contract capacity. What will it cost at expedited priority?"
+    azd ai agent invoke "Caldova can move work between factories or hire an approved manufacturing partner. Summarize the factors the planning team should consider."
     ```
 
 > **Same reference, your code now**: a hosted agent is invoked exactly like the prompt agents
-> you built — by name, through the OpenAI-compatible client. Any app that used
-> `agent_reference` against a prompt agent can point at this hosted agent instead; the
-> difference is that the logic answering each turn is now **your code** running in a container,
-> not a prompt definition.
+> you built — by name, through the OpenAI-compatible client. An app that uses
+> `agent_reference` can point at this hosted agent. The logic answering each turn is now **your
+> code** running in a container, not a prompt definition.
 
-> ✅ **Checkpoint**: You promoted the Caldova assistant from a prompt agent to a hosted
-> agent, tested it locally with `azd ai agent run`, deployed it with `azd deploy`, and invoked
-> the deployed agent by name.
+> ✅ **Checkpoint**: You implemented the Caldova assistant as a hosted agent, tested it locally
+> with `azd ai agent run`, deployed it with `azd deploy`, and invoked the deployed agent by
+> name.
 
 ## Clean up
 

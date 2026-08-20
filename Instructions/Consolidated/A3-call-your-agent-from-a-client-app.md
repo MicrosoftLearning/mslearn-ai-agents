@@ -47,10 +47,46 @@ python ../setup/check_env.py --task 3
 the playground — including charts the agent produces (from code interpreter), which render
 **inline** in the chat window.
 
-**Concept reinforced**: consuming an agent programmatically with the Foundry SDK — loading
-an existing agent by name and driving it with the Responses API. A provided UI shell
-(`caldova_ui.py`) turns your agent into a browser chat app, so you focus on the agent code,
-not the interface.
+You load the existing agent by name and send messages to it from a provided web interface.
+
+<style>
+/* "Ask Anton" just-in-time concept blocks */
+details.concept { margin:.6rem 0 1rem; }
+details.concept > summary { display:inline-block; cursor:pointer; list-style:none;
+    font-size:.85em; font-weight:600; color:#6b4ba1; background:#6b4ba112;
+    border:1px solid #6b4ba133; border-radius:999px; padding:.2em .7em; }
+details.concept > summary::-webkit-details-marker { display:none; }
+details.concept > summary::before { content:"Ask Anton: "; font-weight:700;
+    padding-left:1.5em;
+    background:url("../Media/anton-avatar.png") left center / 1.25em 1.25em no-repeat; }
+details.concept > summary:hover { background:#6b4ba1; color:#fff; border-color:#6b4ba1; }
+details.concept[open] > summary { border-bottom-left-radius:0; border-bottom-right-radius:0; }
+details.concept .concept-body { border:1px solid #6b4ba133; border-top:none;
+    border-radius:0 8px 8px 8px; padding:.6rem .9rem; background:#6b4ba108; font-size:.95em; }
+</style>
+
+<details markdown="1" class="concept">
+<summary>How does an app call a Foundry agent?</summary>
+<div class="concept-body" markdown="1">
+
+The **Foundry SDK** gives your Python code access to projects and agents. The **Responses
+API** sends a user's input and returns the agent's response, including tool output. An
+`agent_reference` tells the API which saved agent should handle the request, while a
+conversation keeps messages together across turns.
+
+</div>
+</details>
+
+<details markdown="1" class="concept">
+<summary>What does Code Interpreter do?</summary>
+<div class="concept-body" markdown="1">
+
+Code Interpreter gives the agent a managed environment where it can run code against
+attached files. Here, the agent reads `weekly_output.csv`, calculates results, and creates
+a chart. The client detects the generated image and displays it in the chat.
+
+</div>
+</details>
 
 **Set up:**
 
@@ -121,7 +157,7 @@ Your browser opens a chat window at `http://localhost:7860`. Ask for something t
 code interpreter:
 
 ```
-Analyze the weekly sales data and create a chart of revenue over time.
+Analyze the weekly production output data and create a chart of output over time.
 ```
 
 The agent's analysis appears in the chat and the **chart is shown inline**. Close the
