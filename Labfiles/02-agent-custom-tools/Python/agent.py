@@ -32,14 +32,14 @@ def main():
         # Create a thread for the chat session
         
 
-        # Create a list to hold function call outputs that will be sent back as input to the agent
-        
-        
         while True:
             user_input = input("Enter a prompt for the astronomy agent. Use 'quit' to exit.\nUSER: ").strip()
             if user_input.lower() == "quit":
                 print("Exiting chat.")
                 break
+
+            # Create a list to hold function call outputs that will be sent back as input to the agent
+            
 
             # Send a prompt to the agent
            
