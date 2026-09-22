@@ -19,7 +19,7 @@ anything) is missing, so you can fix it before running the task.
 
 Tasks and what they need:
 
-    Task 1  (core, code)      PROJECT_ENDPOINT, MODEL_DEPLOYMENT_NAME
+    Task 1  (core, code)      PROJECT_ENDPOINT, AGENT_NAME
     Task 2  (core, code)      PROJECT_ENDPOINT, MODEL_DEPLOYMENT_NAME, AGENT_NAME
     Task 3  (optional, code)  PROJECT_ENDPOINT, AGENT_NAME
 
@@ -312,7 +312,7 @@ def _read_quoted(text, quote, escape_aware):
 
 # Which .env keys each task needs to run on its own.
 TASK_REQUIREMENTS = {
-    1: ["PROJECT_ENDPOINT", "MODEL_DEPLOYMENT_NAME"],
+    1: ["PROJECT_ENDPOINT", "AGENT_NAME"],
     2: ["PROJECT_ENDPOINT", "MODEL_DEPLOYMENT_NAME", "AGENT_NAME"],
     3: ["PROJECT_ENDPOINT", "AGENT_NAME"],
 }
@@ -356,7 +356,7 @@ FIX_HINTS = {
         "(for example, gpt-4o). You can see it in the Foundry portal under your project."
     ),
     "AGENT_NAME": (
-        "Tasks 2 and 3 evaluate a grounded agent. Either reuse the knowledge agent "
+        "Every task uses a grounded agent. Either reuse the knowledge agent "
         "from Lab B and set AGENT_NAME to its name, or create one here by running, "
         "from the Python folder: python ../setup/bootstrap_agent.py"
     ),

@@ -62,20 +62,20 @@ result = evaluate(
             "column_mapping": {
                 "query": "${data.query}",
                 "context": "${data.context}",
-                "response": "${outputs.response}",
+                "response": "${target.response}",
             }
         },
         "relevance": {
             "column_mapping": {
                 "query": "${data.query}",
-                "response": "${outputs.response}",
+                "response": "${target.response}",
             }
         },
         "similarity": {
             "column_mapping": {
                 "query": "${data.query}",
                 "ground_truth": "${data.ground_truth}",
-                "response": "${outputs.response}",
+                "response": "${target.response}",
             }
         },
     },

@@ -96,8 +96,8 @@ it runs". The **Optional** task then goes after safety.
 
 By completing the **Core** tasks of this exercise, you'll be able to:
 
-- **Trace an agent** with OpenTelemetry, export the traces to Azure Monitor, and read them
-  in the Foundry portal — including custom spans you add around your own code.
+- **Trace an agent** with OpenTelemetry, export the traces to Azure Monitor, and read them —
+  Foundry's own server-side trace and your custom spans are both there, in different views.
 - **Evaluate answer quality** against ground truth using built-in evaluators
   (groundedness, relevance, similarity) and a JSONL dataset.
 
@@ -143,11 +143,10 @@ how it stands up to attack.
 - **Core only (~1h):** do Tasks 1–2.
 - **Everything (~1h 35m):** add **Task 3**, the red team scan.
 
-> **One agent, three questions**: Task 1 traces an agent you create in code. Tasks 2 and 3
-> both point at the **grounded knowledge agent** from
-> [Lab B](B-integrate-agents-with-enterprise-knowledge-and-m365.md). If you haven't done Lab B,
-> one command creates an equivalent agent so this lab stands alone — see
-> [Getting started](D0-getting-started.md).
+> **One agent, three questions**: all three tasks point at the same **grounded knowledge
+> agent** — Task 1 traces it, Tasks 2 and 3 measure it. If you haven't done
+> [Lab B](B-integrate-agents-with-enterprise-knowledge-and-m365.md), one command creates an
+> equivalent agent so this lab stands alone — see [Getting started](D0-getting-started.md).
 
 ## Measure, don't guess
 
@@ -168,8 +167,8 @@ production.
 
 Across this lab you:
 
-- **Instrumented an agent** with OpenTelemetry, exported traces to Application Insights, and
-  read them — including your own custom spans — in the Foundry portal.
+- **Instrumented an agent** with OpenTelemetry and exported traces to Application Insights —
+  reading Foundry's automatic server-side trace and your own custom spans, side by side.
 - **Evaluated a grounded agent** against a ground-truth dataset with built-in groundedness,
   relevance and similarity evaluators, and got a score you can compare across changes.
 - (Optionally) **Red teamed the agent** with adversarial attack strategies and your own seed
@@ -184,7 +183,7 @@ If you're finished, delete the resources you created to avoid unnecessary Azure 
 1. In the [Azure portal](https://portal.azure.com), navigate to the resource group that contains your Foundry resource.
 1. On the toolbar, select **Delete resource group**, enter the resource group name, and confirm.
 
-> The code you run in Task 1 deletes the agent version it creates. The agent Tasks 2 and 3
-> measure is removed when you delete the resource group. If you provisioned with `azd`, run
-> `azd down` instead — but note that Application Insights, if you created it from the Foundry
-> portal, is a separate resource and is deleted with the resource group rather than by `azd`.
+> All three tasks measure the same `caldova-knowledge-agent`, so deleting the resource group
+> removes it along with everything else. If you provisioned with `azd`, run `azd down`
+> instead — but note that Application Insights, if you created it from the Foundry portal, is
+> a separate resource and is deleted with the resource group rather than by `azd`.

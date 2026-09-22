@@ -21,10 +21,12 @@ lab:
 *Part of the **Observe, evaluate, and secure your agents** lab. New here? Start with [Getting started](D0-getting-started.md).*
 
 > **Set up (start here):** This task needs a Foundry project, an **Application Insights
-> resource connected to it**, and the starter code. If you haven't already, complete
-> [Getting started](D0-getting-started.md) to create your project, connect Application
-> Insights, clone the code, and set `PROJECT_ENDPOINT` and `MODEL_DEPLOYMENT_NAME` in
-> `Python/.env`. Then, from the `Python` folder you opened in VS Code, verify you're ready:
+> resource connected to it**, a grounded agent to trace, and the starter code. If you
+> haven't already, complete [Getting started](D0-getting-started.md) to create your
+> project, clone the code, set `PROJECT_ENDPOINT` and `AGENT_NAME` in `Python/.env` (point
+> it at your [Lab B](B-integrate-agents-with-enterprise-knowledge-and-m365.md) agent, or
+> create one with `python ../setup/bootstrap_agent.py`), and connect Application Insights.
+> Then, from the `Python` folder you opened in VS Code, verify you're ready:
 
 ```
 python ../setup/check_env.py --task 1
@@ -76,8 +78,10 @@ them at a different backend tomorrow without rewriting your instrumentation.
 
 > **Server-side traces come free.** Now that Application Insights is connected to your
 > project, Foundry already records traces for agents it hosts — no code required. What you
-> add here is **client-side** instrumentation: spans around *your* code, so you can see your
-> logic and the agent's work in one timeline.
+> add here is **client-side** instrumentation: spans around *your* code. Both land in the same
+> Application Insights resource, but Foundry's **Agents > Traces** page only renders its own
+> server-side view (`Invoke Agent` / `Execute tool` / `Chat`) — to see your own spans and
+> attributes alongside it, you'll look directly at Application Insights.
 
 Open the `Python` folder and activate the virtual environment from [Getting started](D0-getting-started.md) (`.\labenv\Scripts\Activate.ps1`), then continue below.
 
@@ -93,7 +97,6 @@ Open **traced_agent.py** and add code at each commented placeholder.
     # Add references
     from azure.identity import DefaultAzureCredential
     from azure.ai.projects import AIProjectClient
-    from azure.ai.projects.models import PromptAgentDefinition
     from azure.monitor.opentelemetry import configure_azure_monitor
     from opentelemetry import trace
     ```
@@ -146,23 +149,18 @@ Open **traced_agent.py** and add code at each commented placeholder.
     tracer = trace.get_tracer(__name__)
     ```
 
-1. **Create the agent staff are talking to**:
+1. **Look up the agent** — its `id` (not just its name) is needed to correlate traces with
+    this specific agent in the Foundry portal:
 
     ```python
-    # Create the agent staff are talking to
-    agent = project_client.agents.create_version(
-        agent_name=AGENT_NAME,
-        definition=PromptAgentDefinition(
-            model=model_deployment,
-            instructions=INSTRUCTIONS,
-        ),
-    )
-    print(f"Agent created (name: {agent.name}, version: {agent.version})")
+    # Look up the agent so its id can be included in agent_reference
+    agent = project_client.agents.get(agent_name=agent_name)
     ```
 
 1. **Ask each question inside its own span** — this is the part that pays off. An outer span
     represents the review; each question gets a child span, tagged with attributes you choose
-    so you can tell them apart in the portal:
+    so you can tell them apart in the portal. This reuses `caldova-knowledge-agent` rather
+    than standing up a separate agent just for this task:
 
     ```python
     # Ask each question inside its own span
@@ -176,19 +174,11 @@ Open **traced_agent.py** and add code at each commented placeholder.
                 response = openai_client.responses.create(
                     conversation=conversation.id,
                     input=question,
-                    extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
+                    extra_body={"agent_reference": {"name": agent.name, "id": agent.id, "type": "agent_reference"}},
                 )
                 question_span.set_attribute("caldova.answer_length", len(response.output_text))
                 print(f"\nQ{number}: {question}")
                 print(f"A{number}: {response.output_text}")
-    ```
-
-1. **Clean up the agent version** so you don't leave test agents behind:
-
-    ```python
-    # Clean up resources by deleting the agent version
-    project_client.agents.delete_version(agent_name=agent.name, agent_version=agent.version)
-    print("\nAgent deleted")
     ```
 
 1. Save the file (**Ctrl+S**).
@@ -205,15 +195,11 @@ Open **traced_agent.py** and add code at each commented placeholder.
     python traced_agent.py
     ```
 
-1. You should see the three answers print, then the agent delete itself:
+1. You should see the three answers print:
 
     ```
-    Agent created (name: caldova-planning-assistant, version: 1)
-
     Q1: How long does review take for a capacity request with a complete brief?
     A1: ...
-
-    Agent deleted
     ```
 
     > If you get an error about the connection string, Application Insights isn't connected to
@@ -221,16 +207,29 @@ Open **traced_agent.py** and add code at each commented placeholder.
 
 ### Read the traces
 
+**Two views, two purposes.** Foundry's **Agents > Traces** page shows the automatic
+**server-side** trace of the agent's own turn (`Invoke Agent` > `Execute tool` / `Chat`) — it
+confirms tracing is working, but it doesn't surface the **client-side** spans your script just
+added. To see `morning-planning-review`, `planner-question`, and their custom attributes, look
+at the Application Insights resource itself:
+
 1. In the [Foundry portal](https://ai.azure.com), open your project, select **Agents**, then
-    **Traces**.
+    **caldova-knowledge-agent**, then **Traces**, to confirm the run arrived (telemetry takes a
+    minute or two — wait and refresh if it isn't there yet). Selecting a trace here shows
+    Foundry's own `Invoke Agent` / `Execute tool` / `Chat` view, not your custom spans.
 
-1. Find the most recent trace and select it. Telemetry takes a minute or two to arrive — if
-    it isn't there, wait and refresh.
+1. Open the Application Insights resource in the [Azure portal](https://portal.azure.com):
+    open the resource group you created for this project, and select the Application Insights
+    resource in it.
 
-1. Step through the spans. You should see your `morning-planning-review` span at the top with
-    three `planner-question` children, and inside each one the model call the SDK emitted.
+1. In Application Insights, expand **Investigate** in the left navigation, select **Search**,
+    and search for `morning-planning-review`.
 
-1. Select a `planner-question` span and look at its attributes. Your `caldova.question_number`
+1. Select a matching result to open its **end-to-end transaction details**. This is the raw
+    span tree: your `morning-planning-review` span at the top, three `planner-question`
+    children, and inside each one the model call the SDK emitted.
+
+1. Select a `planner-question` span and look at its properties. Your `caldova.question_number`
     and `caldova.answer_length` are there alongside the standard GenAI attributes.
 
 1. Compare the durations of the three questions. That's the planning lead's complaint,

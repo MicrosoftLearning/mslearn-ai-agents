@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 project_endpoint = os.getenv("PROJECT_ENDPOINT")
-model_deployment = os.getenv("MODEL_DEPLOYMENT_NAME")
+agent_name = os.getenv("AGENT_NAME", "caldova-knowledge-agent")
 
 # Turn on GenAI tracing
 
@@ -19,13 +19,6 @@ QUESTIONS = [
     "Which contract manufacturers could fast-track us inside a three-month window?",
 ]
 
-AGENT_NAME = "caldova-planning-assistant"
-INSTRUCTIONS = (
-    "You are the Caldova planning assistant. You answer questions from planning "
-    "and materials teams about capacity, contract manufacturers, and suppliers. "
-    "Keep answers short enough to read between meetings."
-)
-
 # Connect to the project
 
     # Read the Application Insights connection string and start exporting traces
@@ -34,11 +27,8 @@ INSTRUCTIONS = (
     # Get a tracer for this script
 
 
-    # Create the agent staff are talking to
+    # Look up the agent so its id can be included in agent_reference
 
 
     # Ask each question inside its own span
-
-
-    # Clean up resources by deleting the agent version
 

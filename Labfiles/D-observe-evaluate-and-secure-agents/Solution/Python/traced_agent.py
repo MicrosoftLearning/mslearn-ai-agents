@@ -4,14 +4,13 @@ from dotenv import load_dotenv
 # Add references
 from azure.identity import DefaultAzureCredential
 from azure.ai.projects import AIProjectClient
-from azure.ai.projects.models import PromptAgentDefinition
 from azure.monitor.opentelemetry import configure_azure_monitor
 from opentelemetry import trace
 
 # Load environment variables from .env file
 load_dotenv()
 project_endpoint = os.getenv("PROJECT_ENDPOINT")
-model_deployment = os.getenv("MODEL_DEPLOYMENT_NAME")
+agent_name = os.getenv("AGENT_NAME", "caldova-knowledge-agent")
 
 # Turn on GenAI tracing
 os.environ.setdefault("AZURE_EXPERIMENTAL_ENABLE_GENAI_TRACING", "true")
@@ -23,13 +22,6 @@ QUESTIONS = [
     "How much is five weeks of premium contract capacity at expedited priority?",
     "Which contract manufacturers could fast-track us inside a three-month window?",
 ]
-
-AGENT_NAME = "caldova-planning-assistant"
-INSTRUCTIONS = (
-    "You are the Caldova planning assistant. You answer questions from planning "
-    "and materials teams about capacity, contract manufacturers, and suppliers. "
-    "Keep answers short enough to read between meetings."
-)
 
 # Connect to the project
 with (
@@ -51,15 +43,8 @@ with (
     # Get a tracer for this script
     tracer = trace.get_tracer(__name__)
 
-    # Create the agent staff are talking to
-    agent = project_client.agents.create_version(
-        agent_name=AGENT_NAME,
-        definition=PromptAgentDefinition(
-            model=model_deployment,
-            instructions=INSTRUCTIONS,
-        ),
-    )
-    print(f"Agent created (name: {agent.name}, version: {agent.version})")
+    # Look up the agent so its id can be included in agent_reference
+    agent = project_client.agents.get(agent_name=agent_name)
 
     # Ask each question inside its own span
     with tracer.start_as_current_span("morning-planning-review") as shift_span:
@@ -72,12 +57,8 @@ with (
                 response = openai_client.responses.create(
                     conversation=conversation.id,
                     input=question,
-                    extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
+                    extra_body={"agent_reference": {"name": agent.name, "id": agent.id, "type": "agent_reference"}},
                 )
                 question_span.set_attribute("caldova.answer_length", len(response.output_text))
                 print(f"\nQ{number}: {question}")
                 print(f"A{number}: {response.output_text}")
-
-    # Clean up resources by deleting the agent version
-    project_client.agents.delete_version(agent_name=agent.name, agent_version=agent.version)
-    print("\nAgent deleted")

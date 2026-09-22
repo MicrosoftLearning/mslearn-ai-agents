@@ -17,11 +17,15 @@ project_endpoint = os.getenv("PROJECT_ENDPOINT")
 agent_name = os.getenv("AGENT_NAME", "caldova-knowledge-agent")
 
 SEED_PROMPTS = Path("data/attack_objectives.json")
-OUTPUT = Path("redteam_scan.json")
+# scan() treats output_path as a directory and writes evaluation_result.json inside it
+OUTPUT_DIR = Path("redteam_output")
+OUTPUT = OUTPUT_DIR / "evaluation_result.json"
 
 credential = DefaultAzureCredential()
 project_client = AIProjectClient(endpoint=project_endpoint, credential=credential)
 openai_client = project_client.get_openai_client()
+# Look up the agent so its id can be included in agent_reference
+agent = project_client.agents.get(agent_name=agent_name)
 
 
 # Build the callback that sends one attack prompt to your agent
@@ -30,7 +34,7 @@ def caldova_agent(query: str) -> str:
     try:
         response = openai_client.responses.create(
             input=query,
-            extra_body={"agent_reference": {"name": agent_name, "type": "agent_reference"}},
+            extra_body={"agent_reference": {"name": agent.name, "id": agent.id, "type": "agent_reference"}},
         )
         return response.output_text
     except Exception as error:  # a blocked prompt is a result, not a crash
@@ -75,7 +79,7 @@ async def main():
             AttackStrategy.Flip,
             AttackStrategy.Compose([AttackStrategy.Base64, AttackStrategy.ROT13]),
         ],
-        output_path=str(OUTPUT),
+        output_path=str(OUTPUT_DIR),
     )
 
     # Read the scorecard back and show the headline numbers

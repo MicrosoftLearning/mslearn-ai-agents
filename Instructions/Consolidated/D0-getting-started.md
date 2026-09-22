@@ -72,11 +72,16 @@ portal (the default), or provision them with one command using the Azure Develop
 ### Option B — Provision with azd (optional, one command)
 
 If you'd rather not click through the portal, the lab ships an optional `azd` template that
-creates the Foundry resource, a project, and a model deployment for you.
+creates the Foundry resource, a project, and a model deployment for you. This runs from inside
+the repo, so clone it first if you haven't already:
+
+```
+git clone https://github.com/MicrosoftLearning/mslearn-ai-agents.git
+```
 
 1. Install the [Azure Developer CLI](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd).
 
-1. From the `Labfiles/D-observe-evaluate-and-secure-agents` folder, run:
+1. From the `Labfiles/D-observe-evaluate-and-secure-agents` folder in the repo you just cloned, run:
 
     ```
     azd auth login
@@ -89,6 +94,55 @@ creates the Foundry resource, a project, and a model deployment for you.
     > **Note**: `azd up` does **not** create the Application Insights resource Task 1 needs —
     > connect that in the portal using the steps below. When you're done with the lab, run
     > `azd down` to delete everything it created.
+
+## Get the starter code
+
+1. In VS Code, open the Command Palette (**Ctrl+Shift+P**), run **Git: Clone**, and enter:
+
+    ```
+    https://github.com/MicrosoftLearning/mslearn-ai-agents.git
+    ```
+
+    > If you already cloned the repo for the `azd` option above, skip this and just open it.
+
+1. Open the cloned repo, then **File > Open Folder** and select `mslearn-ai-agents/Labfiles/D-observe-evaluate-and-secure-agents/Python`. This single folder holds the starter code for **every** task in this lab — you use one virtual environment and one `.env` throughout.
+
+1. Right-click **requirements.txt** and choose **Open in Integrated Terminal**. Then create a virtual environment and install packages:
+
+    ```
+    python -m venv labenv
+    .\labenv\Scripts\Activate.ps1
+    pip install -r requirements.txt
+    ```
+
+    > This install is larger than the other labs — it includes the evaluation SDK and, for
+    > Task 3, PyRIT. Give it a few minutes.
+
+1. Open the **.env** file and set `PROJECT_ENDPOINT` to your project endpoint and `MODEL_DEPLOYMENT_NAME` to your model deployment name. Save the file. (If you used `azd up`, these are already filled in.)
+
+    > **Tip**: In the Foundry Toolkit VS Code extension, right-click your project deployment and select **Copy Project Endpoint** to get the endpoint URL.
+
+## Get an agent to measure (needed for every task)
+
+Every task uses a **grounded** agent — one that answers from the Caldova
+knowledge base rather than from the model's own memory. You have two ways to get one:
+
+- **You did [Lab B](B-integrate-agents-with-enterprise-knowledge-and-m365.md)**: set `AGENT_NAME`
+  in `.env` to that agent's name (`caldova-knowledge-agent` if you kept the default) and you're
+  done.
+- **You didn't**: create an equivalent agent here. Sign in and run, from the `Python` folder with
+  the virtual environment active:
+
+    ```
+    az login
+    ```
+
+    ```
+    python ../setup/bootstrap_agent.py
+    ```
+
+    This uploads the documents in `Python/knowledge/`, grounds an agent named
+    `caldova-knowledge-agent` on them with File Search, and writes `AGENT_NAME` into your `.env`.
 
 ## Connect Application Insights (needed for Task 1)
 
@@ -110,57 +164,8 @@ for your agents without any code at all.
     Insights resource. If you created it yourself, you already have it.
 
 > **Why this matters**: your Foundry project can only hand your code a connection string if
-> something is connected. Task 1 asks the project for that string, so this step has to happen
-> first.
-
-## Get the starter code
-
-1. In VS Code, open the Command Palette (**Ctrl+Shift+P**), run **Git: Clone**, and enter:
-
-    ```
-    https://github.com/MicrosoftLearning/mslearn-ai-agents.git
-    ```
-
-1. Open the cloned repo, then **File > Open Folder** and select `mslearn-ai-agents/Labfiles/D-observe-evaluate-and-secure-agents/Python`. This single folder holds the starter code for **every** task in this lab — you use one virtual environment and one `.env` throughout.
-
-1. Right-click **requirements.txt** and choose **Open in Integrated Terminal**. Then create a virtual environment and install packages:
-
-    ```
-    python -m venv labenv
-    .\labenv\Scripts\Activate.ps1
-    pip install -r requirements.txt
-    ```
-
-    > This install is larger than the other labs — it includes the evaluation SDK and, for
-    > Task 3, PyRIT. Give it a few minutes.
-
-1. Open the **.env** file and set `PROJECT_ENDPOINT` to your project endpoint and `MODEL_DEPLOYMENT_NAME` to your model deployment name. Save the file. (If you used `azd up`, these are already filled in.)
-
-    > **Tip**: In the Foundry Toolkit VS Code extension, right-click your project deployment and select **Copy Project Endpoint** to get the endpoint URL.
-
-## Get an agent to measure (needed for Tasks 2 and 3)
-
-Tasks 2 and 3 measure a **grounded** agent — one that answers from the Caldova
-knowledge base rather than from the model's own memory. You have two ways to get one:
-
-- **You did [Lab B](B-integrate-agents-with-enterprise-knowledge-and-m365.md)**: set `AGENT_NAME`
-  in `.env` to that agent's name (`caldova-knowledge-agent` if you kept the default) and you're
-  done.
-- **You didn't**: create an equivalent agent here. Sign in and run, from the `Python` folder with
-  the virtual environment active:
-
-    ```
-    az login
-    ```
-
-    ```
-    python ../setup/bootstrap_agent.py
-    ```
-
-    This uploads the documents in `Python/knowledge/`, grounds an agent named
-    `caldova-knowledge-agent` on them with File Search, and writes `AGENT_NAME` into your `.env`.
-
-> Task 1 doesn't need this agent — it creates and deletes its own.
+> something is connected. Do this before starting Task 1, which asks the project for that
+> string.
 
 ## Check you're ready for a task
 

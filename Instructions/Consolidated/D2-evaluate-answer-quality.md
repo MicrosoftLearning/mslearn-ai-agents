@@ -33,8 +33,8 @@ python ../setup/check_env.py --task 2
 ```
 
 > **Continuing from a previous task?** If you just finished another task in the same
-> `Python` folder, your project, virtual environment, and `.env` are already set — but Task 1
-> didn't need `AGENT_NAME`, so check that it's set before you start.
+> `Python` folder, your project, virtual environment, and `.env` are already set — go
+> straight to **Look at the dataset first** below.
 
 ---
 
@@ -149,7 +149,7 @@ Open **evaluate_agent.py** and add code at each commented placeholder.
 
 1. **Run the evaluation** — `evaluate()` reads the dataset, calls the target once per row, and
     passes each evaluator exactly the columns it needs. `column_mapping` is how you say which
-    column is which: `${data.x}` comes from the file, `${outputs.x}` comes back from the target:
+    column is which: `${data.x}` comes from the file, `${target.x}` comes back from the target:
 
     ```python
     # Run the evaluation
@@ -166,20 +166,20 @@ Open **evaluate_agent.py** and add code at each commented placeholder.
                 "column_mapping": {
                     "query": "${data.query}",
                     "context": "${data.context}",
-                    "response": "${outputs.response}",
+                    "response": "${target.response}",
                 }
             },
             "relevance": {
                 "column_mapping": {
                     "query": "${data.query}",
-                    "response": "${outputs.response}",
+                    "response": "${target.response}",
                 }
             },
             "similarity": {
                 "column_mapping": {
                     "query": "${data.query}",
                     "ground_truth": "${data.ground_truth}",
-                    "response": "${outputs.response}",
+                    "response": "${target.response}",
                 }
             },
         },
