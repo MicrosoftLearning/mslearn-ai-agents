@@ -115,6 +115,7 @@ Complete the **Core** task first — it ends with a working, grounded enterprise
 you can call from code. Then expand any **Optional** tasks that interest you.
 
 <!-- BEGIN GENERATED: task-table - do not edit by hand; run: python tools/generate_lab_blocks.py -->
+
 | Section | Task | Level | Time |
 | --- | --- | --- | --- |
 | **Core** | [Task 1 – Create a Foundry IQ knowledge agent and connect from code](B1-create-a-foundry-iq-knowledge-agent.md) | ▰▰▰▱▱ L300 | ~35 min |
@@ -127,6 +128,7 @@ you can call from code. Then expand any **Optional** tasks that interest you.
 > 🔒 Tasks marked with a lock need access your account may not have. Each one opens
 > with a quick check and tells you what to do if you don't have it — nothing else in
 > this lab depends on them.
+
 <!-- END GENERATED: task-table -->
 
 **Choosing your path** — pick the tasks that fit the time you have:

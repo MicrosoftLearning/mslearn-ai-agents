@@ -151,7 +151,7 @@ def replace_block(text: str, name: str, content: str, path: Path) -> str:
         + re.escape(name) + r" -->",
         re.S,
     )
-    replacement = f"{begin}\n{content}\n{end}"
+    replacement = f"{begin}\n\n{content}\n\n{end}"
     if not pattern.search(text):
         raise SystemExit(
             f"{path.name}: expected a '{name}' block. Add the markers where it belongs:\n"

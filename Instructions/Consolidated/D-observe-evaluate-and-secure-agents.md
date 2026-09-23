@@ -127,6 +127,7 @@ inside and a scorecard for its answers. Then add the **Optional** task if you wa
 how it stands up to attack.
 
 <!-- BEGIN GENERATED: task-table - do not edit by hand; run: python tools/generate_lab_blocks.py -->
+
 | Section | Task | Level | Time |
 | --- | --- | --- | --- |
 | **Core** | [Task 1 – Trace your agent](D1-trace-your-agent.md) | ▰▰▰▱▱ L300 | ~25 min |
@@ -134,6 +135,7 @@ how it stands up to attack.
 | *Optional* | [Task 3 – Red team your agent](D3-red-team-your-agent.md) | ▰▰▰▰▱ L400 | ~35 min |
 
 **Core tasks:** about **60 minutes**. **Full lab**, including every optional task: about **1 hour 35 minutes**.
+
 <!-- END GENERATED: task-table -->
 
 **Choosing your path** — pick the tasks that fit the time you have:

@@ -38,8 +38,36 @@ python ../setup/check_env.py --task 4
 **Goal**: Give an agent tools backed by your **own Python functions**, and process the
 function calls it makes.
 
-**Concept reinforced**: the function-calling loop — the agent decides *which* tool to
-call and with *what* arguments; your code executes it and returns the result.
+You describe each function as a tool, then write the loop that runs the function selected
+by the agent.
+
+<style>
+/* "Ask Anton" just-in-time concept blocks */
+details.concept { margin:.6rem 0 1rem; }
+details.concept > summary { display:inline-block; cursor:pointer; list-style:none;
+    font-size:.85em; font-weight:600; color:#6b4ba1; background:#6b4ba112;
+    border:1px solid #6b4ba133; border-radius:999px; padding:.2em .7em; }
+details.concept > summary::-webkit-details-marker { display:none; }
+details.concept > summary::before { content:"Ask Anton: "; font-weight:700;
+    padding-left:1.5em;
+    background:url("../Media/anton-avatar.png") left center / 1.25em 1.25em no-repeat; }
+details.concept > summary:hover { background:#6b4ba1; color:#fff; border-color:#6b4ba1; }
+details.concept[open] > summary { border-bottom-left-radius:0; border-bottom-right-radius:0; }
+details.concept .concept-body { border:1px solid #6b4ba133; border-top:none;
+    border-radius:0 8px 8px 8px; padding:.6rem .9rem; background:#6b4ba108; font-size:.95em; }
+</style>
+
+<details markdown="1" class="concept">
+<summary>How does an agent call a Python function?</summary>
+<div class="concept-body" markdown="1">
+
+The agent receives a JSON schema describing each function's purpose and parameters. It can
+then return a function name and arguments instead of a final answer. Your application runs
+the matching Python function, sends its output back, and lets the agent use that result in
+its reply. The model chooses the call, but your code controls what actually runs.
+
+</div>
+</details>
 
 **Set up:**
 
@@ -47,6 +75,9 @@ call and with *what* arguments; your code executes it and returns the result.
     environment (`.\labenv\Scripts\Activate.ps1`) and confirm `PROJECT_ENDPOINT` and
     `MODEL_DEPLOYMENT_NAME` are set in **.env** (see [Getting started](A0-getting-started.md)).
     Then review **functions.py**, which contains the capacity planner's helper functions.
+
+    Caldova's three factories are Ashford, Brightwater, and Calderwood. The code uses
+    `site` as the parameter name for a factory.
 
 > **Try it first**: Look at `next_available_slot(site)` in **functions.py**. How would
 > you describe its single `site` parameter to the model so it knows when and how to

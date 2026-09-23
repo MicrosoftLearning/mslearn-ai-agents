@@ -35,10 +35,10 @@ python ../setup/check_env.py --task 2
 ---
 
 The **Model Context Protocol (MCP)** lets an agent discover and call tools hosted by a
-server. Behind the scenes, the Caldova platform team is rebuilding the
-supply chain platform on Azure — so in this task you'll connect an agent to the **Microsoft Learn
-Docs** remote MCP server, giving the team an assistant that can pull trusted, up-to-date
-Azure documentation on demand.
+server. Caldova's platform team is rebuilding the supply chain system on Azure. In this
+separate supporting exercise, you create a platform documentation agent and connect it to
+the **Microsoft Learn Docs** remote MCP server. The agent can then retrieve trusted,
+up-to-date Azure documentation on demand.
 
 <style>
 /* "Ask Anton" just-in-time concept blocks */
@@ -63,6 +63,10 @@ details.concept .concept-body { border:1px solid #6b4ba133; border-top:none;
 The **Model Context Protocol (MCP)** solves this by letting an agent discover tools at
 runtime. With MCP, tools live on a **server** that acts as a live catalog. Your agent
 (through a **client**) asks the server what tools are available and calls them on demand.
+
+A local function runs inside your application. An MCP tool can run on another server and
+be shared by many clients. In this task, the documentation tool is hosted remotely by
+Microsoft Learn.
 
 [Learn more →](https://review.learn.microsoft.com/en-us/training/modules/build-extend-ai-agents/5-connect-agents-to-mcp?branch=pr-en-us-55509)
 
@@ -145,6 +149,18 @@ Open **remote_mcp_agent.py** and add code at each commented placeholder.
 
 1. **Process any MCP approval requests** — because the tool requires approval, the agent
     pauses and asks permission before each call. This loop auto-approves each request:
+
+    <details markdown="1" class="concept">
+    <summary>Why does an MCP tool require approval?</summary>
+    <div class="concept-body" markdown="1">
+
+    An MCP call can send information to another service or trigger an external action.
+    Approval creates a trust boundary: the application can inspect the requested server and
+    tool before allowing the call. This sample auto-approves requests only from the expected
+    `api-specs` server so you can practice the approval flow without a user interface.
+
+    </div>
+    </details>
 
     ```python
     # Process any MCP approval requests that were generated

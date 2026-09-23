@@ -116,6 +116,7 @@ Complete the **Core** task first — it ends with a working, tool-using agent. T
 **Optional** tasks that interest you.
 
 <!-- BEGIN GENERATED: task-table - do not edit by hand; run: python tools/generate_lab_blocks.py -->
+
 | Section | Task | Level | Time |
 | --- | --- | --- | --- |
 | **Core** | [Task 1 – Build an agent with a tool](C1-create-an-agent-with-a-tool.md) | ▰▰▰▱▱ L300 | ~30 min |
@@ -124,6 +125,7 @@ Complete the **Core** task first — it ends with a working, tool-using agent. T
 | *Optional* | [Task 4 – Classify and route a support ticket](C4-classify-and-route-a-ticket.md) | ▰▰▰▱▱ L300 | ~30 min |
 
 **Core tasks:** about **30 minutes**. **Full lab**, including every optional task: about **2 hours**.
+
 <!-- END GENERATED: task-table -->
 
 **Choosing your path** — pick the tasks that fit the time you have:

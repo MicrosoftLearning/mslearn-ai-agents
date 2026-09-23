@@ -33,8 +33,8 @@ jobs:
     outputs:
       labs: ${{ steps.list.outputs.labs }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.13"
       - id: list
@@ -50,9 +50,9 @@ jobs:
       matrix:
         lab: ${{ fromJSON(needs.discover.outputs.labs) }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           # Matches what the labs tell learners to install ("Python 3.13 or
           # later") and what they are tested against. Testing on anything else
@@ -82,7 +82,7 @@ jobs:
       # These labs are maintained asynchronously, so a red badge nobody is
       # watching is worth nothing. Open an issue instead.
       - name: Open an issue for the failure
-        uses: actions/github-script@v7
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
             const title = 'SDK contract check failed';

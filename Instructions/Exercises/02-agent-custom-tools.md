@@ -153,7 +153,6 @@ Now you're ready to create an AI agent that uses MCP server tools to access exte
     ```python
    # Add references
    from azure.ai.projects import AIProjectClient
-   from azure.ai.projects.models import FunctionTool
    from azure.identity import DefaultAzureCredential
    from azure.ai.projects.models import PromptAgentDefinition, FunctionTool
    from openai.types.responses.response_input_param import FunctionCallOutput, ResponseInputParam
@@ -312,6 +311,8 @@ Now that you've created the agent with the function tools, you can send messages
    input_list: ResponseInputParam = []
     ```
 
+    This list is created inside the chat loop so that each turn starts with a fresh set of function call outputs.
+
 1. Find the comment **Send a prompt to the agent** and add the following code:
 
     ```python
@@ -375,8 +376,8 @@ Now that you've created the agent with the function tools, you can send messages
    # Send function call outputs back to the model and retrieve a response
    if input_list:
        response = openai_client.responses.create(
+           conversation=conversation.id,
            input=input_list,
-           previous_response_id=response.id,
            extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
        )
    # Display the agent's response
@@ -384,6 +385,8 @@ Now that you've created the agent with the function tools, you can send messages
     ```
 
     This code checks if there are any function call outputs in the input list, and if so, it sends them back to the agent as input to retrieve an updated response. Finally, it prints the agent's response.
+
+    Note that the outputs are attached to the same **conversation**, so the function calls are resolved in conversation state and the agent's answer is saved to the chat history. Sending them back with `previous_response_id` instead would make the *next* message fail with *"No tool output found for function call"*.
 
 1. Find the comment **Delete the agent when done** and add the following code:
 
