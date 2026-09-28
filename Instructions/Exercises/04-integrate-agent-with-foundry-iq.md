@@ -80,7 +80,6 @@ Now you'll configure your agent that uses Foundry IQ to search the knowledge bas
     - **Resource group**: *Use the same resource group as your project*
     - **Region**: *The same location as your project*
     - **Pricing tier**: Free *if available, otherwise choose Basic*
-    - **Foundry IQ Knowledge base capabilities**: Pause til next month
 
     > **Note**: If you run into any problems creating the resource here, select the link at the bottom of the form to create it from the Azure portal instead.
 
