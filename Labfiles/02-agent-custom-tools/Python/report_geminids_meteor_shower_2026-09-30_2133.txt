@@ -1,0 +1,23 @@
+======================================
+  CONTOSO OBSERVATORIES - SESSION REPORT
+======================================
+Date:           2026-09-30 21:33
+Observer:       Bellows College
+Event:          Geminids Meteor Shower
+Location:       South America
+
+NEXT VISIBLE EVENT
+  Event:        Geminids Meteor Shower
+  Date:         12-14
+
+TELESCOPE BOOKING
+  Tier:         premium
+  Hours:        5
+  Hourly Rate:  $300.00
+  Priority:     normal
+  Multiplier:   1.25x
+
+COST SUMMARY
+  Base Cost:    $1500.00
+  Total Cost:   $1875.00
+======================================
