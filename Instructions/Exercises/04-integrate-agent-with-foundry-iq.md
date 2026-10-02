@@ -73,7 +73,7 @@ Now you'll configure your agent that uses Foundry IQ to search the knowledge bas
 
 1. Select **Save** to save your current agent configuration.
 1. Then, in the **Knowledge** section, expand the **Add** dropdown, and select **Connect to Foundry IQ**.
-1. In the Foundry IQ setup window, select **Connect to an AI Search resource** and then **Create new resource** which should open up a dialog to create the resource.
+1. In the Connect to Foundry IQ window, select **Connect to an AI Search resource** and then **Create new resource** which should open up a dialog to create the resource.
 1. Create a search resource with the default settings:
     - **Resource name**: *A globally unique name*
     - **Subscription**: *Your Azure subscription*
@@ -81,7 +81,7 @@ Now you'll configure your agent that uses Foundry IQ to search the knowledge bas
     - **Region**: *The same location as your project*
     - **Pricing tier**: Free *if available, otherwise choose Basic*
 
-    > **Note**: If you run into any problems creating the resource here, select the link at the bottom of the form to create it from the Azure portal instead.
+    > **Important**: If you run into any problems creating the resource here or see a warning message saying **This region is at capacity**, select the link at the bottom of the form to create it from the Azure portal instead.
 
 Now you'll upload sample product information documents to connect to with Foundry IQ.
 
@@ -157,13 +157,13 @@ When you create an agent in the portal, its Foundry IQ (knowledge) tool runs **w
    
     > **Note**: If you're unable to sign in with the Foundry Toolkit extension, you my need to select the Azure extension. Sign in there, then navigate back to the Foundry Toolkit to access your resources.
 
-1. Under **Microsoft Foundry Resources**, choose **Set Default Project** and select the project you created earlier.
-1. Expand the project section. Under **Prompt Agents**, select your `product-expert-agent` agent to open the **Agent Builder** window.
+1. Under **Microsoft Foundry Resources**, choose **Set Foundry Project** and select the project you created earlier.
+1. Select the **Agents** section. Under **Prompt Agents** tab on the page opened, select your `product-expert-agent` agent to open the **Agent Builder** window.
 1. In the **Tools** section, you should already see a tool named with a `kb-knowledgebase` prefix followed by a unique ID (for example, `kb-knowledgebase677-7w5fj`). This is the Foundry IQ knowledge base tool, and it was added automatically when you connected Foundry IQ in the portal.
 
     > **Note**: The agent lists more than one tool. The Foundry portal adds a **Web search** tool to new agents by default, and you may also see a standalone **Azure AI Search** tool. The agent actually calls the `kb-knowledgebase...` tool when it searches your knowledge base, so setting approval on any other tool has no effect.
 
-1. Select the ellipsis (**...**) icon on the `kb-knowledgebase...` tool, then select **Ask for approval for all tools**, and save your changes if you're prompted.
+1. Select the ellipsis (**...**) icon on the `kb-knowledgebase...` tool, then select **Configure** and select the **Never auto-approve tools**, and save your changes, on the top of the playground panel select **Deploy** to save your changes.
 
 Your agent will now request approval each time it uses Foundry IQ to search the knowledge base, which the client app you complete next will handle.
 
