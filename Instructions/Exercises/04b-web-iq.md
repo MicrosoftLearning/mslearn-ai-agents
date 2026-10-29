@@ -141,7 +141,7 @@ Now that you have added the Web IQ tool to your agent, it can choose to use it w
    Are they playing any gigs soon?
     ```
 
-    If the band have any pcoming gigs, the results might reflect them (if not, try a follow up prompt like `What about U2?` or some other artist you know to be touring.)
+    If the band have any upcoming concerts, the results might reflect them (if not, try a follow up prompt like `What about U2?` or some other artist you know to be touring.)
 
 1. Try searching for a images:
 
