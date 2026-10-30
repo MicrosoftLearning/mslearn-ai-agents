@@ -9,9 +9,9 @@ lab:
 
 # Integrate web search into an agent using Web IQ
 
-In this exercise, you'll use Microsoft Web IQ to integrate web search results into an AI agent's context; enabling the agent to access up to date information that was not included in its training data.
+In this exercise, you'll use Microsoft Web IQ to integrate web search results into an AI agent's context; enabling the agent to access up-to-date information that was not included in its training data.
 
-> **Important**: Microsoft Web IQ requires a *paid* Azure subscription, such as an account in an organization's tenant or a pay-as-you-go personal subscription. Free trial subscriptions or a ones that are pre-funded with Azure credits (such as MSDN benefit subscriptions) are <u>not</u> supported.
+> **Important**: Microsoft Web IQ requires a *paid* Azure subscription, such as an account in an organization's tenant or a pay-as-you-go personal subscription. Free trial subscriptions or ones that are pre-funded with Azure credits (such as MSDN benefit subscriptions) are <u>not</u> supported.
 
 This exercise should take approximately **30** minutes to complete.
 
@@ -31,7 +31,7 @@ Now that you have a Web IQ resource, you can test it in the Web IQ portal.
 
 1. In the page for your Web IQ resource, select **Go to Web IQ portal** and navigate to the Web IQ portal.
 
-    When prompted, select you Azure subscription and the Web IQ resource you just created.
+    When prompted, select your Azure subscription and the Web IQ resource you just created.
 
 1. Open your Web IQ resource in the playground.
 
@@ -45,6 +45,8 @@ Now that you have a Web IQ resource, you can test it in the Web IQ portal.
 1. Run the default request and review the results returned in the pane on the right (you can view the returned JSON or preview the formatted results).
 1. View the **Profile management** page, and note that the default API key is listed here. You can copy it to the clipboard for use in a connection to the resource from a Foundry project.
 
+> **Tip**: If the copy button next to the API key isn't visible or accessible, zoom out in your browser until you can select it.
+
 ## Create a Microsoft Foundry project
 
 Microsoft Foundry uses *projects* to organize models, resources, data, and other assets used to develop an AI solution.
@@ -52,7 +54,7 @@ Microsoft Foundry uses *projects* to organize models, resources, data, and other
 > **Note**: Many components of Microsoft Foundry, including the Microsoft Foundry portal, are subject to continual development. This reflects the fast-moving nature of artificial intelligence technology. Some elements of your user experience may differ from the images and descriptions in this exercise!
 
 1. In a new web browser tab (leaving the Web IQ portal open), open [Microsoft Foundry](https://ai.azure.com){:target="_blank"} at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that are opened the first time you sign in, and if necessary use the **Foundry** logo at the top left to navigate to the home page.
-1. If it isn't already enabled, in the tool bar the top of the page, enable the **New Foundry** option.
+1. If it isn't already enabled, in the toolbar at the top of the page, enable the **New Foundry** option.
 1. If you do not have any existing projects, one may be created for you. If not, create a new project with a unique name; expanding the  **Advanced options** area to specify the following settings for your project (or you can select an existing project if you have one!):
     - **Foundry resource**: *A valid name for your Foundry resource.*
     - **Subscription**: *Your Azure subscription*
@@ -133,7 +135,7 @@ Now that you have added the Web IQ tool to your agent, it can choose to use it w
    What can you tell me about The Rolling Stones?
     ```
 
-    You may get a similar response to the previous attemot; but it might include additional information obtained from the web.
+    You may get a similar response to the previous attempt; but it might include additional information obtained from the web.
 
 1. Try a prompt that requires up-to-date information:
 
@@ -141,9 +143,9 @@ Now that you have added the Web IQ tool to your agent, it can choose to use it w
    Are they playing any gigs soon?
     ```
 
-    If the band have any upcoming concerts, the results might reflect them (if not, try a follow up prompt like `What about U2?` or some other artist you know to be touring.)
+    If the band have any upcoming concerts, the results might reflect them (if not, try a follow-up prompt like `What about U2?` or some other artist you know to be touring.)
 
-1. Try searching for a images:
+1. Try searching for images:
 
     ```
     Find me pictures of the band.
