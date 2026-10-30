@@ -121,7 +121,7 @@ Now you're ready to create an AI agent that uses a custom tool to process expens
 
 1. Review the code in the file. It contains:
     - Some **import** statements to add references to commonly used namespaces
-    - A *main* function that loads a file containing expenses data, asks the user for instructions, and and then calls...
+    - A *main* function that loads a file containing expenses data, asks the user for instructions, and then calls...
     - A **process_expenses_data** function in which the code to create and use your agent must be added
 
 1. At the top of the file, after the existing **import** statement, find the comment **Add references**, and add the following code to reference the namespaces in the libraries you'll need to implement your agent:

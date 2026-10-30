@@ -118,6 +118,10 @@ assistant.
 
 1. Set the **Agent name** to `caldova-agent` and create the agent. The playground opens with a deployed model already selected for you.
 
+1. Raise the model's rate limit. In the left pane, select **Models**, select the deployed `caldova-agent` model, select details tab, and select **Edit**. Set **Tokens per minute rate limit** to **100,000** and save.
+
+    > **Important**: The default rate limit is often too low for the tool-calling tasks in this lab. Reasoning models such as gpt-5 and the remote MCP server in Task 2 use many tokens per request, which can cause `429 rate_limit_exceeded` errors.
+
 Keep this browser tab open — you'll use it in Task 1.
 
 </div>
