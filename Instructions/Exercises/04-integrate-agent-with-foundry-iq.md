@@ -44,17 +44,18 @@ Let's start by creating a Foundry project with the new Foundry experience.
     - **Foundry resource**: *Create a new Foundry resource or select an existing one*
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Create or select a resource group*
-    - **Location**: *Select any available region*\*
-
-    > \* Some Azure AI resources are constrained by regional model quotas. In the event of a quota limit being exceeded later in the exercise, there's a possibility you may need to create another resource in a different region.
+    - **Location**: *Select a region that supports the models and services used in this exercise*
 
 1. Select **Create** and wait for your project to be created. This may take a few minutes.
 1. When your project is created, you'll see the project home page.
 
+> **Important**: Regional capacity and model quotas vary. If deployment is unavailable, create your project in another supported region where the required models, Azure AI Search, and Azure Blob Storage are available.
+
 ## Create an agent
 
-1. On the home page, select the **Build** tab, then on the **Agents** tab select **Create agent**.
-1. Create your agent with a descriptive name, such as `product-expert-agent`.
+1. In the Foundry portal, create a new agent named `product-expert-agent`. If prompted, set the **Interaction mode** to **Text**.
+
+    When ready, your agent opens in the agent playground.
 
 When creating an agent, it will deploy the default model (like `gpt-5`). Once your agent is created, you'll see the agent playground with that default model automatically selected for you.
 
@@ -81,13 +82,13 @@ Now you'll configure your agent that uses Foundry IQ to search the knowledge bas
     - **Region**: *The same location as your project*
     - **Pricing tier**: Free *if available, otherwise choose Basic*
 
-    > **Important**: If you run into any problems creating the resource here or see a warning message saying **This region is at capacity**, select the link at the bottom of the form to create it from the Azure portal instead.
+    > **Important**: If creation fails here, use the link at the bottom of the form to try the Azure portal. If the region is at capacity there too, create your project and required resources in another supported region.
 
 Now you'll upload sample product information documents to connect to with Foundry IQ.
 
 1. Download the sample product information files by opening a new browser tab and navigating to `https://github.com/MicrosoftLearning/mslearn-ai-agents/raw/main/Labfiles/04-integrate-agent-with-foundry-iq/data/contoso-products.zip`
 1. Extract the files from the zip, which should be 3 PDFs detailing the products from Contoso.
-1. Open a new tab and navigate to the Azure portal at `https://portal.azure.com`. In the top search bar, search fo **Storage accounts** and select **Storage accounts** from the services section.
+1. Open a new tab and navigate to the Azure portal at `https://portal.azure.com`. In the top search bar, search for **Storage accounts** and select **Storage accounts** from the services section.
 1. Create a storage account with the following settings:
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Use the same resource group as your project*
@@ -101,7 +102,8 @@ Now you'll upload sample product information documents to connect to with Foundr
 1. Browse for the files extracted from the zip file, select all 3 PDF files, and select **Upload**.
 1. Once your files are uploaded, navigate to the search service you created.
 1. On the left pane, under **Security + networking** > **Keys**, select **Both** for API Access control and confirm the selection. Once complete, leave the Azure Portal tab open and navigate back to the Foundry portal tab and refresh the page.
-1. Verify you are on the **Knowledge** page, select **Create a knowledge base**, choosing **Azure Blob Storage** as your knowledge source, then select **Connect**.
+1. Verify you are on the **Knowledge** page, select **Create a knowledge base**.
+1. Expand **Add sources* and select **Azure Blob Storage**. 
 1. Configure your knowledge source with the following settings:
     - **Name**: `ks-contosoproducts`
     - **Description**: `Contoso product catalog items`
@@ -155,7 +157,7 @@ When you create an agent in the portal, its Foundry IQ (knowledge) tool runs **w
 
 1. Select the **Foundry Toolkit** icon in the sidebar, and sign in to your Azure account if you're prompted.
    
-    > **Note**: If you're unable to sign in with the Foundry Toolkit extension, you my need to select the Azure extension. Sign in there, then navigate back to the Foundry Toolkit to access your resources.
+    > **Note**: If you're unable to sign in with the Foundry Toolkit extension, you may need to select the Azure extension. Sign in there, then navigate back to the Foundry Toolkit to access your resources.
 
 1. Under **Microsoft Foundry Resources**, choose **Set Foundry Project** and select the project you created earlier.
 1. Select the **Agents** section. Under **Prompt Agents** tab on the page opened, select your `product-expert-agent` agent to open the **Agent Builder** window.

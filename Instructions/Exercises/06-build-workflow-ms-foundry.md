@@ -133,7 +133,7 @@ In this section, you'll create a workflow that helps triage and respond to custo
 
 3. In the **Agent** node editor, under **Select an agent**, select **Create new agent**.
 
-4. Enter an agent name such as *Triage-Agent* and select **Create**.
+4. Enter an agent name such as *Triage-Agent* and select **Create**. If prompted, set the **Interaction mode** to **Text**.
 
 ### Configure the agent settings
 
@@ -272,7 +272,7 @@ In this section, you'll add conditional logic to route the ticket based on its c
 
 3. In the **Agent** node editor, select **Create new agent**.
 
-4. Enter an agent name such as *Resolution-Agent* and select **Create**.
+4. Enter an agent name such as *Resolution-Agent* and select **Create**. If prompted, set the **Interaction mode** to **Text**.
 
 5. In the agent editor, set the **Instructions** field to the following prompt:
 
