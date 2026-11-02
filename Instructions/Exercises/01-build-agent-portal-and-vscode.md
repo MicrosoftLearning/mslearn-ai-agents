@@ -42,7 +42,7 @@ Microsoft Foundry uses projects to organize models, resources, data, and other a
 
 1. Expand **Advanced options** and specify the following settings:
     - **Microsoft Foundry resource**: *A valid name for your Foundry resource*
-    - **Region**: *Select one available near you*\**
+    - **Region**: *Select one available near you*\*
     - **Subscription**: *Your Azure subscription*
     - **Resource group**: *Select your resource group, or create a new one*
 
@@ -50,13 +50,13 @@ Microsoft Foundry uses projects to organize models, resources, data, and other a
 
 1. Select **Create** and wait for your project to be created.
 
-1. When your project is created, a welcome dialog may appear. Select **Next** to read through the welcome message, and then select **Create agent**.
+1. When your project is created, close any welcome dialogs.
 
-    You can also select **Start building** on the home page, and select **Create agents** from the drop-down menu.
+1. In the Foundry portal, create a new agent named `it-support-agent`. If prompted, set the **Interaction mode** to **Text**.
 
-1. Set the **Agent name** to `it-support-agent` and create the agent.
+    When ready, your agent opens in the agent playground.
 
-The playground will open for your newly created agent. You'll see that an available deployed model is already selected for you.
+1. In the model drop-down list, ensure that a model has been deployed and selected for your agent.
 
 ## Configure your agent with instructions and grounding data
 
