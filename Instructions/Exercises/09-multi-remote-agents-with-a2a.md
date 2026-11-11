@@ -10,9 +10,9 @@ lab:
 
 # Connect to remote agents with A2A protocol
 
-In this exercise, you'll use Azure AI Agent Service with the A2A protocol to create simple remote agents that interact with one another. These agents will assist technical writers with preparing their developer blog posts. A title agent will generate a headline, and an outline agent will use the title to develop a concise outline for the article. Let's get started.
+In this exercise, you'll use Microsoft Foundry with the Agent Framework and the A2A protocol to create simple remote agents that interact with one another. These agents will assist technical writers with preparing their developer blog posts. A title agent will generate a headline, and an outline agent will use the title to develop a concise outline for the article. A routing agent will discover both agents and delegate work to them over A2A. Let's get started.
 
-> **Tip**: The code used in this exercise is based on the Microsoft Foundry SDK for Python. You can develop similar solutions using the SDKs for Microsoft .NET, JavaScript, and Java. Refer to [Microsoft Foundry SDK client libraries](https://learn.microsoft.com/azure/ai-foundry/how-to/develop/sdk-overview) for details.
+> **Tip**: The code used in this exercise is based on the Agent Framework and A2A SDKs for Python. You can develop similar solutions using the SDKs for Microsoft .NET, JavaScript, and Java. Refer to [Microsoft Foundry SDK client libraries](https://learn.microsoft.com/azure/ai-foundry/how-to/develop/sdk-overview) for details.
 
 This exercise should take approximately **30** minutes to complete.
 
@@ -26,6 +26,7 @@ Before starting this exercise, ensure you have:
 - An active [Azure subscription](https://azure.microsoft.com/free/)
 - [Python 3.13](https://www.python.org/downloads/) installed
 - [Git](https://git-scm.com/downloads) installed on your local machine
+- The [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli) installed (used to sign in with `az login`)
 
 > \* Python 3.14 isn't supported yet: some dependencies have no 3.14 build. This lab was tested with Python 3.13.12.
 
@@ -61,12 +62,12 @@ At the core of any generative AI project, there’s at least one generative AI m
 
    > **Tip**: You can also access the Model Catalog by selecting the **+** icon next to **Models** in the Resources section, or by pressing **F1** and running the command **Foundry Toolkit: Show model catalog**.
 
-1. In the Model Catalog, locate the **gpt-5** model (you can use the search bar to find it quickly).
+1. In the Model Catalog, locate the **gpt-5.4** model (you can use the search bar to find it quickly).
 
-1. Select **Deploy** next to the gpt-5 model.
+1. Select **Deploy** next to the gpt-5.4 model.
 
 1. Configure the deployment settings:
-   - **Deployment name**: Enter a name like "gpt-5"
+   - **Deployment name**: Enter a name like "gpt-5.4"
    - **Deployment type**: Select **Global Standard** (or **Standard** if Global Standard is not available)
    - **Model version**: Leave as default
    - **Tokens per minute**: Leave as default
@@ -81,7 +82,7 @@ At the core of any generative AI project, there’s at least one generative AI m
 
 ## Clone the starter code repository
 
-For this exercise, you'll use starter code that will help you connect to your Foundry project and create an agent that can process expenses data. You'll clone this code from a GitHub repository.
+For this exercise, you'll use starter code that already hosts Foundry agents and a routing client. You'll add the key pieces that turn those agents into A2A agents. You'll clone this code from a GitHub repository.
 
 1. In VS Code, open the Command Palette (**Ctrl+Shift+P** or **View > Command Palette**).
 
@@ -99,30 +100,26 @@ For this exercise, you'll use starter code that will help you connect to your Fo
 
 1. Once the repository opens, select **File > Open Folder** and navigate to `mslearn-ai-agents/Labfiles/09-build-remote-agents-with-a2a`, then choose **Select Folder**.
 
-1. In the Explorer pane, expand the **Python** folder to view the code files for this exercise.
-
-1. In the Explorer view, navigate to the **Labfiles/09-build-remote-agents-with-a2a/Python** folder to find the starter code for this exercise.
+1. In the Explorer view, navigate to the **Labfiles/09-build-remote-agents-with-a2a/python** folder to find the starter code for this exercise.
 
     The provided files include:
 
     ```output
    python
-   ├── outline_agent/
-   │   ├── agent.py
-   │   ├── agent_executor.py
-   │   └── server.py
-   ├── routing_agent/
-   │   ├── agent.py
-   │   └── server.py
-   ├── title_agent/
-   │   ├── agent.py
-   |   ├── agent_executor.py
-   │   └── server.py
-   ├── client.py
-   └── run_all.py
+   ├── agent_definitions.py
+   ├── agent_executor.py
+   ├── a2a_server.py
+   ├── routing_client.py
+   ├── run_all.py
+   ├── requirements.txt
+   └── .env
     ```
 
-    Each agent folder contains the Azure AI agent code and a server to host the agent. The **routing agent** is responsible for discovering and communicating with the **title** and **outline** agents. The **client** allows users to submit prompts to the routing agent. `run_all.py` launches all the servers and runs the client.
+    - **agent_definitions.py** defines the Foundry-backed **title** and **outline** agents, and the A2A **agent card** for each one.
+    - **agent_executor.py** receives incoming A2A messages and runs the agent.
+    - **a2a_server.py** hosts an agent as an A2A server. You start it with `--agent-type title` or `--agent-type outline`.
+    - **routing_client.py** contains the **routing agent**, which discovers the title and outline agents and sends them work, and a chat loop that lets you submit prompts to it.
+    - **run_all.py** starts both agent servers and then runs the routing client.
 
 1. Right-click on the **requirements.txt** file and select **Open in Integrated Terminal**.
 
@@ -134,248 +131,163 @@ For this exercise, you'll use starter code that will help you connect to your Fo
    pip install -r requirements.txt
     ```
 
-1. Open the **.env** file, replace the **your_project_endpoint** placeholder with the endpoint for your project (copied from the project deployment resource in the Foundry Toolkit extension) and ensure that the MODEL_DEPLOYMENT_NAME variable is set to your model deployment name. Use **Ctrl+S** to save the file after making these changes.
+    > **Tip**: If `pip install` fails with a 404 or metadata error for one of the packages, upgrade `pip` with `python -m pip install --upgrade pip` and run the install command again.
+
+1. Open the **.env** file, replace the **your-account** and **your-project** placeholders in `FOUNDRY_PROJECT_ENDPOINT` with the endpoint for your project (copied from the project deployment resource in the Foundry Toolkit extension) and ensure that the `FOUNDRY_MODEL` variable is set to your model deployment name. Use **Ctrl+S** to save the file after making these changes.
 
 ## Create a discoverable agent
 
-In this task, you create the title agent that helps writers create trendy headlines for their articles. You also define the agent's skills and card required by the A2A protocol to make the agent discoverable.
+In this task, you create the title agent that helps writers create trendy headlines for their articles. You also define the agent's skill and card, which the A2A protocol uses to make the agent discoverable.
 
 > **Tip**: As you add code, be sure to maintain the correct indentation. Use the existing comments as a guide, entering the new code at the same level of indentation.
 
-1. Open the **title_agent/agent.py** file in the code editor.
+1. Open the **agent_definitions.py** file in the code editor.
 
-1. Find the comment **Create the agents client** and add the following code to connect to the Azure AI project:
+    The file already contains the instructions for both agents (`TITLE_INSTRUCTIONS` and `OUTLINE_INSTRUCTIONS`) and a complete outline agent. Use the outline agent code as a reference for the title agent.
 
-    > **Tip**: Be careful to maintain the correct indentation level.
-
-    ```python
-   # Create the agents client
-   self.client = AgentsClient(
-       endpoint=os.environ['PROJECT_ENDPOINT'],
-       credential=DefaultAzureCredential(
-           exclude_environment_credential=True,
-           exclude_managed_identity_credential=True
-       )
-   )
-    ```
-
-1. Find the comment **Create the title agent** and add the following code to create the agent:
+1. In the `create_title_agent` function, find the comment **Create the title agent** and add the following code to create the agent:
 
     ```python
    # Create the title agent
-   self.agent = self.client.create_agent(
-       model=os.environ['MODEL_DEPLOYMENT_NAME'],
-       name='title-agent',
-       instructions="""
-       You are a helpful writing assistant.
-       Given a topic the user wants to write about, suggest a single clear and catchy blog post title.
-       """,
+   return Agent(client=client, name="TitleAgent", instructions=TITLE_INSTRUCTIONS)
+    ```
+
+    The `client` is a `FoundryChatClient` connected to the model deployment in your Foundry project. The `Agent` class combines the model with the agent's instructions.
+
+1. In the `get_title_agent_card` function, find the comment **Define the agent skill** and add the following code to describe what the agent can do:
+
+    ```python
+   # Define the agent skill
+   skill = AgentSkill(
+       id="generate_blog_title",
+       name="Generate Blog Title",
+       description="Generates a blog title based on a topic.",
+       tags=["title", "agent-framework"],
+       examples=["Give me a title for a post about remote agents."],
    )
     ```
 
-1. Find the comment **Create a thread for the chat session** and add the following code to create the chat thread:
+1. Find the comment **Create the agent card** and add the following code to define the metadata that makes the agent discoverable:
 
     ```python
-   # Create a thread for the chat session
-   thread = self.client.threads.create()
-    ```
-
-1. Locate the comment **Send user message** and add this code to submit the user's prompt:
-
-    ```python
-   # Send user message
-   self.client.messages.create(thread_id=thread.id, role=MessageRole.USER, content=user_message)
-    ```
-
-1. Under the comment **Create and run the agent**, add the following code to initiate the agent's response generation:
-
-    ```python
-   # Create and run the agent
-   run = self.client.runs.create_and_process(thread_id=thread.id, agent_id=self.agent.id)
-    ```
-
-    The code provided in the rest of the file will process and return the agent's response.
-
-1. Save the code file (*CTRL+S*). Now you're ready to share the agent's skills and card with the A2A protocol.
-
-1. Open the **title_agent/server.py** file in the code editor.
-
-1. Find the comment **Define agent skills** and add the following code to specify the agent’s functionality:
-
-    ```python
-   # Define agent skills
-   skills = [
-       AgentSkill(
-           id='generate_blog_title',
-           name='Generate Blog Title',
-           description='Generates a blog title based on a topic',
-           tags=['title'],
-           examples=[
-               'Can you give me a title for this article?',
-           ],
-       ),
-   ]
-    ```
-
-1. Find the comment **Create agent card** and add this code to define the metadata that makes the agent discoverable:
-
-    ```python
-   # Create agent card
-   agent_card = AgentCard(
-       name='Microsoft Foundry Title Agent',
-       description='An intelligent title generator agent powered by Foundry. '
-       'I can help you generate catchy titles for your articles.',
-       url=f'http://{host}:{port}/',
-       version='1.0.0',
-       default_input_modes=['text'],
-       default_output_modes=['text'],
-       capabilities=AgentCapabilities(),
-       skills=skills,
+   # Create the agent card
+   return AgentCard(
+       name="TitleAgent",
+       description="Generates a catchy blog post title for a given topic.",
+       version="1.0.0",
+       default_input_modes=["text"],
+       default_output_modes=["text"],
+       capabilities=_CAPABILITIES,
+       supported_interfaces=[AgentInterface(url=url, protocol_binding="JSONRPC", protocol_version="1.0")],
+       skills=[skill],
    )
     ```
 
-1. Locate the comment **Create agent executor** and add the following code to initialize the agent executor using the agent card:
+    The agent card is like a business card for the agent. It tells other agents the agent's name, what it does, and the URL and protocol to use to contact it. Other agents read the description to decide when to use this agent.
+
+1. Save the code file (*CTRL+S*).
+
+## Host the agent as an A2A server
+
+In this task, you expose the title agent over HTTP so that other agents can discover it and send it messages.
+
+1. Open the **a2a_server.py** file in the code editor.
+
+    The `main` function creates the Foundry client, creates the agent and its card for the type you choose, and creates a **request handler** that connects the A2A protocol to the agent. The `Starlette` web app then needs routes for the A2A endpoints.
+
+1. In the `routes` list, find the comment **Serve the agent card** and add the following code:
 
     ```python
-   # Create agent executor
-   agent_executor = create_foundry_agent_executor(agent_card)
+   # Serve the agent card so other agents can discover this one
+   *create_agent_card_routes(agent_card),
     ```
 
-    The agent executor will act as a wrapper for the title agent you created.
+    This publishes the agent card at `/.well-known/agent-card.json`, the standard location where A2A clients look for it.
 
-1. Find the comment **Create request handler** and add the following to handle incoming requests using the executor:
+1. Find the comment **Accept A2A messages** and add the following code:
 
     ```python
-   # Create request handler
-   request_handler = DefaultRequestHandler(
-       agent_executor=agent_executor, task_store=InMemoryTaskStore()
-   )
+   # Accept A2A messages (JSON-RPC) and pass them to the request handler
+   *create_jsonrpc_routes(request_handler, "/"),
     ```
 
-1. Under the comment **Create A2A application**, add this code to create the A2A-compatible application instance:
+    This adds the endpoint that receives A2A messages from other agents and hands them to the request handler.
+
+1. Save the code file (*CTRL+S*).
+
+## Enable messages to reach the agent
+
+The server can now receive A2A messages, but something needs to run the agent when one arrives. That's the job of the agent executor. In this task, you complete the executor that the request handler calls.
+
+1. Open the **agent_executor.py** file in the code editor.
+
+    The `AgentExecutor` class must implement the methods `execute` and `cancel`. The `cancel` method and the code that streams the agent's reply back as A2A **artifacts** are already provided. The `TaskUpdater` object reports the task's progress to the caller.
+
+1. In the `execute` method, find the comment **Convert the A2A message into arguments for the Agent Framework agent** and add the following code:
 
     ```python
-   # Create A2A application
-   a2a_app = A2AStarletteApplication(
-       agent_card=agent_card, http_handler=request_handler
-   )
+   # Convert the A2A message into arguments for the Agent Framework agent
+   run = a2a_to_run(context.message, stream=True)
     ```
 
-    This code creates an A2A server that will share the title agent's information and handle incoming requests for this agent using the title agent executor.
-
-1. Save the code file (*CTRL+S*) when you have finished.
-
-## Enable messages between the agents
-
-In this task, you use the A2A protocol to enable the routing agent to send messages to the other agents. You also allow the title agent to receive messages by implementing the agent executor class.
-
-1. Open the **routing_agent/agent.py** file in the code editor.
-
-    The routing agent acts as an orchestrator that handles user messages and determines which remote agent should process the request.
-
-    When a user message is received, the routing agent:
-    - Starts a conversation thread.
-    - Uses the `create_and_process` method to evaluate the best-matching agent for the user's message.
-    - The message is routed to the appropriate agent over HTTP using the `send_message` function.
-    - The remote agent processes the message and returns a response.
-
-    The routing agent finally captures the response and returns it to the user through the thread.
-
-    Notice that the `send_message` method is async and must be awaited for the agent run to complete successfully.
-
-1. Add the following code under the comment **Retrieve the remote agent's A2A client using the agent name**:
+1. Find the comment **Run the agent and stream each update** and add the following code:
 
     ```python
-   # Retrieve the remote agent's A2A client using the agent name 
-   client = self.remote_agent_connections[agent_name]
+   # Run the agent and stream each update back to the caller as an A2A artifact
+   stream = agent.run(run["messages"], session=session, options=run["options"], stream=True)
     ```
 
-1. Locate the comment **Construct the payload to send to the remote agent** and add the following code:
-
-    ```python
-   # Construct the payload to send to the remote agent
-   payload: dict[str, Any] = {
-       'message': {
-           'role': 'user',
-           'parts': [{'kind': 'text', 'text': task}],
-           'messageId': message_id,
-       },
-   }
-    ```
-
-1. Find the comment **Wrap the payload in a SendMessageRequest object** and add the following code:
-
-    ```python
-   # Wrap the payload in a SendMessageRequest object
-   message_request = SendMessageRequest(id=message_id, params=MessageSendParams.model_validate(payload))
-    ```
-
-1. Add the following code under the comment **Send the message to the remote agent client and await the response**:
-
-    ```python
-   # Send the message to the remote agent client and await the response
-   send_response: SendMessageResponse = await client.send_message(message_request=message_request)
-    ```
-
-1. Save the code file (*CTRL+S*) when you have finished. Now the routing agent is able to discover and send messages to the title agent. Let's create the agent executor code to handle those incoming messages from the routing agent.
-
-1. Open the **title_agent/agent_executor.py** file in the code editor.
-
-    The `AgentExecutor` class implementation must contain the methods `execute` and `cancel`. The cancel method has been provided for you. The `execute` method includes a `TaskUpdater` object that manages events and signals to the caller when the task is complete. Let's add the logic for task execution.
-
-1. In the `execute` method, add the following code under the comment **Process the request**:
-
-    ```python
-   # Process the request
-   await self._process_request(context.message.parts, context.context_id, updater)
-    ```
-
-1. In the `_process_request` method, add the following code under the comment **Get the title agent**:
-
-    ```python
-   # Get the title agent
-   agent = await self._get_or_create_agent()
-    ```
-
-1. Add the following code under the comment **Update the task status**:
-
-    ```python
-   # Update the task status
-   await task_updater.update_status(
-       TaskState.working,
-       message=new_agent_text_message('Title Agent is processing your request...', context_id=context_id),
-   )
-    ```
-
-1. Find the comment **Run the agent conversation** and add the following code:
-
-    ```python
-   # Run the agent conversation
-   responses = await agent.run_conversation(user_message)
-    ```
-
-1. Find the comment **Update the task with the responses** and add the following code:
-
-    ```python
-   # Update the task with the responses
-   for response in responses:
-       await task_updater.update_status(
-           TaskState.working,
-           message=new_agent_text_message(response, context_id=context_id),
-       )
-    ```
+    The code that follows turns each update from the agent into an A2A artifact and sends it back to the caller.
 
 1. Find the comment **Mark the task as complete** and add the following code:
 
     ```python
    # Mark the task as complete
-   final_message = responses[-1] if responses else 'Task completed.'
-   await task_updater.complete(
-       message=new_agent_text_message(final_message, context_id=context_id)
+   await updater.complete()
+    ```
+
+1. Save the code file (*CTRL+S*).
+
+    The title agent is now a complete A2A agent. The outline agent uses the same server and executor code, with its own instructions and card, so you don't need to write it again.
+
+## Discover and call remote agents
+
+In this task, you complete the routing agent. It discovers the title and outline agents from their agent cards and uses them as tools.
+
+1. Open the **routing_client.py** file in the code editor.
+
+    The routing agent is a Foundry-backed agent whose **tools** are the remote agents. When you send it a prompt, it decides which remote agent to call, sends that agent an A2A message, and uses the reply to answer you. For a request that needs a title and an outline, it calls the title agent first and passes the title to the outline agent.
+
+    The `main` function loops over the URL of each remote agent.
+
+1. Find the comment **Discover the remote agent by fetching its agent card** and add the following code:
+
+    ```python
+   # Discover the remote agent by fetching its agent card
+   card = await A2ACardResolver(httpx_client=http_client, base_url=url).get_agent_card()
+    ```
+
+1. Find the comment **Connect to the remote agent over A2A** and add the following code:
+
+    ```python
+   # Connect to the remote agent over A2A
+   remote = await stack.enter_async_context(
+       A2AAgent(name=card.name, description=card.description, agent_card=card, url=url)
    )
     ```
 
-    Now your title agent has been wrapped with an agent executor that the A2A protocol will use to handle messages. Great work!
+    `A2AAgent` is a client for the remote agent. From the routing agent's point of view, it behaves like any other agent.
+
+1. Find the comment **Give the routing agent the remote agent as a tool it can call** and add the following code:
+
+    ```python
+   # Give the routing agent the remote agent as a tool it can call
+   tools.append(remote.as_tool())
+    ```
+
+    The `as_tool` method wraps the remote agent as a function tool. Its name and description come from the agent card, which is how the routing agent knows what each remote agent does.
+
+1. Save the code file (*CTRL+S*).
 
 ## Test the application
 
@@ -389,7 +301,7 @@ In this task, you use the A2A protocol to enable the routing agent to send messa
    python run_all.py
     ```
 
-    The application runs using the credentials for your authenticated Azure session to connect to your project and create and run the agent. You should see some output from each server as it starts.
+    The application uses the credentials for your authenticated Azure session to connect to your project. `run_all.py` starts the title agent and the outline agent as A2A servers, waits for each one to become healthy, and then starts the routing client. You should see the routing agent discover both agents.
 
 1. Wait until the prompt for input appears, then enter a prompt such as:
 
@@ -397,15 +309,31 @@ In this task, you use the A2A protocol to enable the routing agent to send messa
    Create a title and outline for an article about React programming.
     ```
 
-    After a few moments, you should see a response from the agent with the results.
+    After a few moments, you should see a response with a title from the title agent and an outline from the outline agent. The routing agent sent each request to those agents over A2A. You can experiment with different prompts to see how the routing agent uses the remote agents.
 
 1. Enter `quit` to exit the program and stop the servers.
 
     You can also use `deactivate` to exit the Python virtual environment in the terminal.
 
+### Optional: Explore the agent card
+
+To see what the routing agent saw during discovery, start a server on its own and request its agent card:
+
+```
+python a2a_server.py --agent-type title
+```
+
+Then, in a second terminal, enter:
+
+```
+curl http://localhost:10007/.well-known/agent-card.json
+```
+
+The JSON that's returned is the agent card you defined. Press **Ctrl+C** in the first terminal to stop the server.
+
 ## Clean up
 
-If you've finished exploring Azure AI Agent Service, you should delete the resources you have created in this exercise to avoid incurring unnecessary Azure costs.
+If you've finished exploring Microsoft Foundry, you should delete the resources you have created in this exercise to avoid incurring unnecessary Azure costs.
 
 1. Return to the browser tab containing the Azure portal (or re-open the [Azure portal](https://portal.azure.com) at `https://portal.azure.com` in a new browser tab) and view the contents of the resource group where you deployed the resources used in this exercise.
 1. On the toolbar, select **Delete resource group**.
