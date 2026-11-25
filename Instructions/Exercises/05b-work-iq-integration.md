@@ -1,7 +1,7 @@
 ---
 lab:
     title: 'Work IQ - Workplace intelligence for AI agents (optional)'
-    description: 'Build AI agents that access Microsoft 365 workplace data using Work IQ and the Model Context Protocol for meeting prep, project tracking, and action items.'
+    description: 'Build AI agents that access Microsoft 365 workplace data using Work IQ for meeting prep, project tracking, and action items.'
     level: 300
     duration: 40
     islab: true
@@ -10,510 +10,258 @@ lab:
 
 # Work IQ - Workplace intelligence for AI agents
 
-In this lab, you'll build an AI agent that accesses your Microsoft 365 workplace data using **Work IQ** - Microsoft's contextual intelligence layer built on the Model Context Protocol (MCP). You'll create a workplace intelligence agent that can prepare for meetings, track projects, extract action items, and answer workplace questions using real M365 data.
+In this lab, you'll use the **Microsoft Foundry portal** to create an AI agent that accesses your Microsoft 365 workplace data using **Work IQ** - Microsoft's workplace intelligence layer. You'll configure a Work IQ MCP tool, add it to an agent, and ask questions about your meetings, email, and Teams messages.
 
 This lab takes approximately **40** minutes.
 
-> **Note:** This is an **optional/advanced lab** that requires a Microsoft 365 Copilot license. It's designed for enterprise learners, Microsoft employees, or those with M365 Copilot access. Standard M365 accounts without Copilot will not work.
+> **Note:** This is an **optional/advanced lab** that requires usage-based billing with Copilot Credits for Work IQ API access.
 
 ## Prerequisites
 
-Before starting this lab, ensure you have:
+Before you begin, ensure you have:
 
-- Basic understanding of AI agents and the Model Context Protocol (MCP)
-- **Microsoft 365 with Copilot License**
-- IT admin approval for Work IQ (organizational accounts only)
-- [Node.js 18](https://nodejs.org/en/download/) or later installed
-- [Python 3.13](https://www.python.org/downloads/) installed
-- [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli) installed (authenticated with `az login`)
-- Active M365 data (emails, meetings, Teams chats) to query
+- An [Azure subscription](https://azure.microsoft.com/free/) with permissions to create AI resources.
+- A **Microsoft 365 account** with workplace data (emails, meetings, or Teams chats) to query.
+- Basic familiarity with the Microsoft Foundry portal.
+- [Usage-based billing with Copilot Credits](https://learn.microsoft.com/en-us/microsoft-365-copilot/usage-based-billing-overview-copilot-credits) enabled for Work IQ API access.
+- **Azure RBAC roles**:
+    - The **Foundry User** role on the Foundry project for the developer identity, the agent's runtime identity, and any user identity involved in OAuth flows.
+    - The **Foundry Project Manager** role on the Foundry project for creating a Foundry connection to the Work IQ endpoint.
+- The **Microsoft Entra Global Administrator** role assigned to your account, or an eligible assignment you can activate through **Microsoft Entra Privileged Identity Management (PIM)**, in your Microsoft 365 tenant. You'll use this role to provision the Work IQ service principal and grant admin consent for `WorkIQAgent.Ask`. Activate the role just in time and deactivate it after setup. Day-to-day Work IQ use doesn't require this role.
 
-> \* Python 3.14 isn't supported yet: some dependencies have no 3.14 build. This lab was tested with Python 3.13.12.
+## Create a Foundry project
 
-> **Important:** Work IQ **only works** with Microsoft 365 Copilot-enabled accounts. You cannot complete this lab without Copilot.
+Microsoft Foundry uses projects to organize models, resources, data, and other assets used to develop an AI solution.
 
-## Install Work IQ
+1. In a web browser, open the [Foundry portal](https://ai.azure.com) at `https://ai.azure.com` and sign in using your Azure credentials. Close any tips or quick start panes that open the first time you sign in and, if necessary, use the **Foundry** logo at the top left to navigate to the home page.
 
-1. Open your terminal or command prompt.
+    > **Important**: For this lab, you're using the **New** Foundry experience.
 
-2. Install Work IQ globally via npm:
+2. In the top banner, select **Start building** to try the new Microsoft Foundry experience.
 
-    ```bash
-   npm install -g @microsoft/workiq
+3. When prompted, create a **new** project and enter a valid name for your project (for example, *work-iq-lab*).
+
+4. Expand **Advanced options** and specify the following settings:
+    - **Foundry resource**: *Create a new Foundry resource or select an existing one*
+    - **Subscription**: *Your Azure subscription*
+    - **Resource group**: *Create or select a resource group*
+    - **Location**: *Select any available region*\*
+
+    > \* Some Azure AI resources are constrained by regional model quotas. If you exceed a quota limit later in the exercise, you may need to create another resource in a different region.
+
+5. Select **Create** and wait for your project to be created.
+
+6. When your project is created, close any welcome dialogs.
+
+## Provision the Work IQ service principal
+
+The Work IQ service principal must exist in your tenant before you can add Work IQ API permissions to an app registration. This is a **one-time setup per organization**. Check whether it already exists before provisioning it.
+
+1. Open the [Microsoft Entra admin center](https://entra.microsoft.com), select your Microsoft 365 tenant, and go to **Entra ID** > **Enterprise applications** > **All applications**. Remove restrictive filters, including **Application type**, and filter by **Application ID** using `fdcc1f02-fc51-4226-8753-f668596af7f7`.
+
+    - If a matching application exists, skip to **Create or reuse a Microsoft Entra app registration**.
+
+2. If provisioning is needed, open [Azure Cloud Shell](https://shell.azure.com) and sign in with your Microsoft 365 tenant account.
+
+    Alternatively, use a terminal with [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli) installed and sign in using `az login --tenant <tenant-id>`, replacing `<tenant-id>` with your Microsoft 365 tenant ID.
+
+3. Run the following command to provision the Work IQ service principal:
+
+    ```azurecli
+   az ad sp create --id fdcc1f02-fc51-4226-8753-f668596af7f7
     ```
 
-3. Accept the End User License Agreement:
+4. Confirm that the command returns service principal details with `appId` set to `fdcc1f02-fc51-4226-8753-f668596af7f7`. If the command reports that the service principal already exists, you can continue. Resolve any other errors before proceeding.
 
-    ```bash
-   workiq accept-eula
+    > **Note:** For the full tenant setup guidance, see [Enable your tenant for Work IQ](https://learn.microsoft.com/microsoft-365/copilot/extensibility/work-iq/enable-work-iq).
+
+## Create or reuse a Microsoft Entra app registration
+
+If your organization already has an app registration approved for this Work IQ connection, reuse it. Confirm that it is in the same tenant as your Microsoft 365 account and has the delegated **WorkIQAgent.Ask** permission with admin consent. Otherwise, complete the following steps.
+
+1. Open the [Microsoft Entra admin center](https://entra.microsoft.com) and select **Entra ID** > **App registrations**.
+
+2. Select **New registration** and enter a descriptive name, such as `work-iq-lab-app`.
+
+3. Set **Supported account types** to **Accounts in this organizational directory only**, and select **Register**.
+
+4. On the app's **Overview** page, copy the **Application (client) ID** and **Directory (tenant) ID**. Keep these values for the Foundry connection.
+
+5. Select **API permissions** > **Add a permission** > **APIs my organization uses**.
+
+6. Search for **Work IQ** (application ID `fdcc1f02-fc51-4226-8753-f668596af7f7`) and select it.
+
+7. Select **Delegated permissions**, select **WorkIQAgent.Ask**, and then select **Add permissions**.
+
+    This permission lets the app query the signed-in user's Microsoft 365 workplace intelligence, including mail, files, meetings, and chats.
+
+8. Select **Grant admin consent for [your tenant]**, review the confirmation dialog, and select **Yes**.
+
+9. Confirm that admin consent has been granted for this permission in your tenant.
+
+## Create a client secret for the Foundry connection
+
+If you are reusing an existing app registration and have an approved, unexpired client secret available from your organization's secret store, reuse it. Otherwise, create a secret as follows.
+
+1. In your app registration, select **Certificates & secrets** > **Client secrets** > **New client secret**.
+
+2. Enter a description, choose an expiration that complies with your organization's policy, and select **Add**.
+
+3. Immediately copy the secret **Value**, not the **Secret ID**. The value is only displayed once. Store it in **Azure Key Vault** or another approved secret store.
+
+    > **Important:** Never commit the secret to source control or print or log it. Rotate it before it expires. If the value is no longer available, create a new secret rather than trying to recover it.
+
+4. Ensure you have the **Application (client) ID**, **Directory (tenant) ID**, and **client secret value** available for creating the Foundry connection.
+
+    You'll use these values in the next section to configure the Work IQ MCP tool.
+
+5. If you activated the **Global Administrator** role through PIM, deactivate it when tenant setup and admin consent are complete. Day-to-day Work IQ use doesn't require this role.
+
+## Create the Work IQ MCP tool
+
+Now you'll connect the remote Work IQ MCP server to your Foundry project using the app registration details.
+
+1. Return to your project in the [Foundry portal](https://ai.azure.com).
+
+2. In the left navigation, select **Tools**, and then select the **Tools** tab.
+
+3. Select **Connect a tool**. In **Select a tool**, select the **Catalog** tab.
+
+4. Search for **Work IQ MCP**, select it, and then select **Create**.
+
+5. If prompted for a name, enter `work-iq-mcp`. Confirm that the MCP endpoint is:
+
+    ```text
+   https://workiq.svc.cloud.microsoft/mcp
     ```
 
-4. Test your Work IQ installation:
+6. Configure authentication using the following values:
 
-    ```bash
-   workiq ask -q "What meetings do I have today?"
+    | Field | Value |
+    | --- | --- |
+    | **Client ID** | Your app registration's **Application (client) ID** |
+    | **Client secret** | Your app registration's client secret **Value** |
+    | **Authorization URL** | `https://login.microsoftonline.com/{tenant-id}/oauth2/v2.0/authorize` |
+    | **Token URL** | `https://login.microsoftonline.com/{tenant-id}/oauth2/v2.0/token` |
+    | **Refresh URL** | `https://login.microsoftonline.com/{tenant-id}/oauth2/v2.0/token` |
+    | **Scopes** | `offline_access fdcc1f02-fc51-4226-8753-f668596af7f7/WorkIQAgent.Ask` |
+
+    Replace `{tenant-id}` in all three URLs with your **Directory (tenant) ID**.
+
+7. Save the tool connection and copy the **OAuth redirect URL** provided by Foundry.
+
+    > **Important:** If connection fields can't be edited after creation, delete and recreate the lab connection to correct any values. Don't delete a shared connection used by other agents.
+
+### Register the OAuth redirect URL
+
+Before you can sign in through the tool, your app registration must accept the redirect URL generated by Foundry.
+
+1. In the [Microsoft Entra admin center](https://entra.microsoft.com), go to **Entra ID** > **App registrations** and open the app you configured earlier.
+
+2. Select **Authentication** > **Add Redirect URI configuration** > **Web**. If the app already has a Web platform, add a redirect URI to that platform instead.
+
+3. Paste the exact **OAuth redirect URL** from Foundry into **Redirect URIs**, and select **Configure** or **Save**, as appropriate.
+
+    Be sure to preserve any existing redirect URIs if you are reusing an app registration.
+
+4. Return to your Foundry project. Confirm that the configured **Work IQ MCP** tool is listed on the **Tools** page.
+
+    > **Note:** This integration uses delegated authentication. Work IQ requests run as the user who authorizes the connection and honor that user's Microsoft 365 permissions. Application-only authentication isn't supported. For more information, see [Connect a Microsoft Foundry project to Work IQ](https://learn.microsoft.com/microsoft-365/copilot/extensibility/work-iq/mcp/quickstart/foundry).
+
+## Create an agent and add Work IQ
+
+1. In your Foundry project, navigate to **Agents**.
+
+2. Select **New Agent** > **Build an agent** and create a new agent named `workplace-intelligence-agent`.
+
+    For this agent, you can leave the default **Interaction mode** set to **Text**.
+
+3. Set the agent's **Instructions** to:
+
+    ```text
+   You are a workplace intelligence assistant.
+   Use Work IQ to answer questions about the signed-in user's Microsoft 365
+   meetings, email, and Teams messages.
+   Keep responses concise and include source links when available.
+   If no matching data is found, say so. Don't invent workplace information.
+   If a tool call fails, explain the failure instead of presenting it as no data.
+   For this lab, only read and summarize information. Don't create, send,
+   update, or delete Microsoft 365 content.
     ```
 
-5. **If the test succeeds** - You'll see meeting information from your M365 calendar. Continue to the next task!
+4. In the agent's **Tools** section, select **Add** > **Add tools**.
 
-6. **If you see "Admin consent required":**
+5. In the list of Configured tools, select the **Work IQ MCP** tool you created.
 
-   - The command will display a consent URL
-   - Send this URL to your IT administrator with the message: "I need Work IQ access for the Microsoft Learn AI Agents lab"
-   - Wait for admin approval, then retry the test command
+6. Save the agent configuration. Confirm that **Work IQ MCP** appears in the agent's tools list.
 
-7. **If you see "No M365 Copilot license":**
+## Authorize the connection and approve a tool call
 
-   - Unfortunately, you cannot complete this lab without a Copilot license
-   - You can still read through the instructions to understand the concepts
-   - Consider this lab optional and return to it when you have Copilot access
+The app's admin consent, your sign-in authorization, and tool-call approval serve different purposes. Admin consent approves the app's delegated permission; authorization connects your user account; tool-call approval lets you review an individual request before it runs.
 
-## Prepare to develop an app in Visual Studio Code
+1. In the agent playground, start a new conversation and enter:
 
-Now let's use Visual Studio Code to develop an app. The code files for your app have been provided in a GitHub repo.
-
-1. Start Visual Studio Code, and open a terminal window.
-
-2. Enter the command to clone the repo to a local folder (it doesn't matter which folder):
-
-    ```bash
-   git clone https://github.com/MicrosoftLearning/mslearn-ai-agents.git
+    ```text
+   Use Work IQ to summarize my upcoming meetings for today.
     ```
 
-3. When the repository has been cloned, open the folder in Visual Studio Code.
+    You may be prompted to authorize the connection to Work IQ. Follow the prompts to authorize access.
 
-    > **Note**: If Visual Studio Code shows you a pop-up message prompting you to trust the code you are opening, select **Yes, I trust the authors** to continue.
+2. When the agent requests permission to call the tool, inspect the tool name and arguments. Confirm that the request matches your question and doesn't change any workplace data, then select **Allow** or **Approve** for this call.
 
-4. Wait while additional files are installed to support the Python code projects in the repo (if prompted).
+3. Wait for the agent's response. Inspect the tool-call details in the playground and confirm that the Work IQ call completed without errors.
 
-    > **Note**: If you are prompted to install required assets to build and debug, select **Not Now**.
+4. Compare the answer with your calendar and follow any source links provided. If you have no meetings today, try a day when you know you have a meeting.
 
-5. In the **Explorer** pane, expand the **Labfiles/05b-work-iq-integration/Python** folder.
+## Verify connectivity with basic prompts
 
-    The provided files include application code, configuration settings, and the agent client starter code.
+Try a few more questions in the playground. Review and approve the Work IQ tool calls for each request. Responses depend on your account's data and permissions, so use topics and dates that you recognize.
 
-6. In the terminal, enter the command to create a Python virtual environment:
+### Find recent email
 
-    ```bash
-   python -m venv venv
+1. Enter:
+
+    ```text
+   Use Work IQ to find three recent emails I received this week.
+   List the subject, sender, and date, and include source links when available.
     ```
 
-7. Activate the virtual environment:
+2. Compare the results with your mailbox. If no matching messages are found, broaden the time range to the past month.
 
-   **Windows:**
+### Find a Teams discussion
 
-    ```bash
-   venv\Scripts\activate
+1. Enter the following prompt, replacing `[topic]` with a topic you know appears in your Teams messages:
+
+    ```text
+   Use Work IQ to find recent Teams messages about [topic] from the past month.
+   Summarize the discussion and include source links when available.
     ```
 
-   **macOS/Linux:**
+2. Check that the summary matches a discussion you can access in Teams. If your account has no Teams messages, try another email or meeting query instead.
 
-    ```bash
-   source venv/bin/activate
+### Ask a follow-up question
+
+1. Refer to a meeting, email, or discussion returned in an earlier answer:
+
+    ```text
+   Using Work IQ, find any action items assigned to me in that discussion.
+   Include deadlines only if they are explicitly stated in the source.
     ```
 
-8. Install required Python packages:
+2. Check the answer against the original source. It is valid for the agent to report that no explicit action items were found.
 
-    ```bash
-   pip install -r requirements.txt
-    ```
+You've verified connectivity when you can observe successful Work IQ tool calls and compare at least one grounded response with data in your calendar, mailbox, or Teams. Great work!
 
-9. Configure your `.env` file:
+## Clean up
 
-   In the lab folder, open the `.env` file and update it with your Foundry project endpoint:
+The portal doesn't automatically delete the resources created in this lab.
 
-    ```env
-   PROJECT_ENDPOINT=https://your-project.services.ai.azure.com/api/projects/your-id
-   MODEL_DEPLOYMENT_NAME=gpt-5
-    ```
+1. If you no longer need the agent, delete `workplace-intelligence-agent` from your project's **Agents** page.
 
-   > **Tip:** To get your endpoint: In VS Code, open the **Foundry Toolkit** extension, right-click on your active project, and select **Copy Endpoint**. The Foundry Toolkit is included in the Foundry Toolkit for VS Code extension.
+2. On the project's **Tools** page, remove the Work IQ MCP tool connection if you created it solely for this lab and no other agent uses it.
 
-### Verify setup
+3. In the Microsoft Entra admin center, delete the client secret you created solely for this lab. If you created a dedicated lab app registration and no other application or connection uses it, delete that app registration as well. Don't delete shared app registrations, secrets, or the tenant's Work IQ service principal.
 
-Ensure you have:
+4. If you created an Azure resource group solely for this lab, open the [Azure portal](https://portal.azure.com), review its contents, and delete it only after confirming that all its resources are no longer needed. If you reused a resource group, don't delete it; remove only lab-specific resources you no longer need, including any model deployment created solely for this lab.
 
-- Work IQ installed and accessible (`workiq --version` works)
-- Admin consent approved (or personal M365 account with Copilot)
-- `workiq_lab.py` - Main interactive application
-- `requirements.txt` - Python dependencies installed
-- `.env` file configured with your project endpoint
-
-## Explore Workplace Intelligence Scenarios
-
-In this exercise, you'll run a unified interactive application that demonstrates five workplace intelligence scenarios using a single AI agent with Work IQ tools.
-
-### Launch the lab application
-
-1. Ensure you're in the lab directory with your virtual environment activated.
-
-2. Run the lab application:
-
-    ```bash
-   python workiq_lab.py
-    ```
-
-3. The application will:
-   - Validate Work IQ setup
-   - Connect to your Microsoft Foundry project
-   - Initialize the Work IQ MCP client
-   - Create a workplace intelligence agent
-   - Display an interactive menu with 5 scenarios
-
-### Meeting Prep scenario
-
-This scenario helps you prepare for meetings by gathering relevant context.
-
-1. From the main menu, select **1 - Meeting Prep**.
-
-2. When prompted, enter a meeting topic or time, such as:
-   - "my 2pm meeting"
-   - "Q4 Planning session"
-   - "team standup"
-
-3. The agent will:
-   - Find your meeting details (time, attendees, agenda)
-   - Search recent emails about the topic
-   - Look for previous meetings on this subject
-   - Summarize key points and decisions
-   - Suggest discussion points
-
-4. Review the output and note:
-   - How sources are cited (emails, meetings, dates)
-   - How the agent synthesizes information from multiple sources
-   - The time saved compared to manual searching
-
-**Reflection:** How does this differ from manually searching your email and calendar?
-
-### Project Status scenario
-
-This scenario tracks project updates across your workplace tools.
-
-1. From the main menu, select **2 - Project Status**.
-
-2. Enter a project name you're working on, such as:
-   - "Website redesign"
-   - "Q1 OKRs"
-   - "Customer onboarding"
-
-3. The agent will:
-   - Search emails and Teams messages about the project
-   - Find related meetings and their outcomes
-   - Identify recent decisions and changes
-   - List blockers or issues mentioned
-   - Summarize next steps and deadlines
-
-4. Analyze the results:
-   - How comprehensive is the status update?
-   - What sources did the agent use?
-   - Could this be built with traditional APIs? What's the development effort difference?
-
-### Action Items scenario
-
-This scenario extracts your open tasks from various sources.
-
-1. From the main menu, select **3 - Action Items**.
-
-2. Choose a time range (or press Enter for "this week"):
-   - "today"
-   - "last 3 days"
-   - "this month"
-
-3. The agent will:
-   - Search meeting notes for assigned action items
-   - Look for task-related emails sent to you
-   - Check Teams messages where you were mentioned
-   - Identify items with deadlines
-   - Prioritize by urgency if possible
-
-4. Examine the output:
-   - Are all your action items captured?
-   - How accurate is the prioritization?
-   - Where were action items found (meetings, emails, Teams)?
-
-### Combined Intelligence scenario
-
-This scenario demonstrates using **both** Work IQ (workplace data) and Foundry IQ (knowledge base) together.
-
-> **Note:** This scenario requires Azure AI Search configured in your Foundry project with an indexed knowledge base.
-
-1. From the main menu, select **4 - Combined Intelligence**.
-
-2. Enter a topic that exists in both your workplace discussions and official documentation:
-   - "remote work policy"
-   - "expense reporting"
-   - "security guidelines"
-
-3. The agent will:
-   - Search workplace data (Work IQ): emails, meetings, Teams discussions
-   - Search knowledge base (Foundry IQ): official docs, policies, procedures
-   - Compare workplace discussions with official documentation
-   - Identify gaps or inconsistencies
-   - Provide a comprehensive summary with labeled sources
-
-4. Compare the two perspectives:
-   - What's documented officially vs. discussed informally?
-   - Are there any contradictions?
-   - Which source is more up-to-date?
-
-**Key Insight:**
-
-- **Work IQ** tells you what people are actually doing and saying
-- **Foundry IQ** tells you what's officially documented
-- **Together** they provide complete context for decision-making
-
-### Custom Query scenario
-
-This scenario lets you explore your workplace data with your own questions.
-
-1. From the main menu, select **5 - Custom Query**.
-
-2. Try different types of workplace questions:
-
-   **Email searches:**
-
-    ```
-   Find emails about the budget from my manager
-    ```
-
-   **Meeting summaries:**
-
-    ```
-   What was decided in yesterday's standup?
-    ```
-
-   **Team activity:**
-
-    ```
-   What did the engineering team discuss this week?
-    ```
-
-   **Document discovery:**
-
-    ```
-   Show me shared documents about security policies
-    ```
-
-3. Experiment with:
-   - Different time ranges
-   - Different data sources (emails vs. meetings vs. Teams)
-   - Different levels of specificity
-   - Follow-up questions to refine results
-
-4. Note what works well:
-   - Specific queries usually work better than vague ones
-   - Including time ranges improves relevance
-   - Names and keywords help narrow results
-
-## Explore and Experiment
-
-Now that you've completed all scenarios, take 5-10 minutes to explore on your own.
-
-### Test edge cases
-
-1. Try queries about data you don't have - how does the agent respond?
-
-2. Ask ambiguous questions - how does the agent handle them?
-
-3. Search for very old information - what are the limits?
-
-### Explore different query styles
-
-1. **Very specific**: "Find the email from John about Q3 budget sent on January 15th"
-
-2. **Very broad**: "Tell me about recent developments"
-
-3. **Comparative**: "Compare this week's discussions to last week's"
-
-### View Work IQ capabilities
-
-From the main menu, select **6 - View Work IQ Capabilities** to review:
-
-- Architecture overview
-- Data sources available
-- Security and privacy model
-- Work IQ vs. Foundry IQ comparison
-- Common use cases
-
-## Understanding the Code
-
-Let's examine the key patterns used in this lab.
-
-### Pattern 1: Work IQ MCP Client Initialization
-
-```python
-from mcp import ClientSession, StdioServerParameters
-from mcp.client.stdio import stdio_client
-
-# Store server parameters for reuse
-self.workiq_server_params = StdioServerParameters(
-    command="npx",
-    args=["-y", "@microsoft/workiq", "mcp"]
-)
-
-# Fetch available tools from Work IQ MCP server
-async def _fetch():
-    async with stdio_client(self.workiq_server_params) as (read, write):
-        async with ClientSession(read, write) as session:
-            await session.initialize()
-            tools_result = await session.list_tools()
-            return tools_result.tools
-
-raw_tools = asyncio.run(_fetch())
-```
-
-Rather than maintaining a persistent connection, a new MCP session is opened per operation. `StdioServerParameters` stores the command and arguments used to launch the Work IQ MCP server subprocess each time.
-
-### Pattern 2: Creating Agent with Work IQ Tools
-
-```python
-from azure.ai.projects.models import PromptAgentDefinition, FunctionTool
-
-# Convert MCP tools to FunctionTool objects
-workiq_tools = [
-    FunctionTool(
-        name=tool.name,
-        description=tool.description,
-        parameters=tool.inputSchema,
-    )
-    for tool in raw_tools
-]
-
-# Create agent with Work IQ tools
-self.agent = self.project_client.agents.create_version(
-    agent_name="workplace-intelligence-agent",
-    definition=PromptAgentDefinition(
-        model=self.model_deployment,
-        instructions="You are a workplace intelligence assistant...",
-        tools=workiq_tools  # Work IQ tools added here
-    )
-)
-
-# Keep a map of raw tools for lookup during execution
-self.raw_tools_map = {tool.name: tool for tool in raw_tools}
-```
-
-Each MCP tool is wrapped in a `FunctionTool` object and passed to a `PromptAgentDefinition`. The raw tools map enables efficient lookup when the agent calls a tool by name.
-
-### Pattern 3: Executing Queries with Responses API
-
-```python
-# Create conversation
-conversation = self.openai_client.conversations.create(
-    items=[{"type": "message", "role": "user", "content": query}]
-)
-
-# Create response with agent
-response = self.openai_client.responses.create(
-    conversation=conversation.id,
-    extra_body={"agent_reference": {"name": self.agent.name, "type": "agent_reference"}}
-)
-```
-
-This uses the Responses API pattern (not the old Runs/Threads pattern) for cleaner agent execution.
-
-### Pattern 4: Tool Call Loop
-
-After the initial response, the agent may request one or more Work IQ tool calls. These must be executed and fed back to continue the conversation:
-
-```python
-from openai.types.responses.response_input_param import FunctionCallOutput
-
-while True:
-    if response.status == "failed":
-        break
-
-    input_list = []
-    for item in response.output:
-        if item.type == "function_call":
-            kwargs = json.loads(item.arguments)
-
-            # Call the Work IQ tool via MCP
-            async def _execute():
-                async with stdio_client(self.workiq_server_params) as (read, write):
-                    async with ClientSession(read, write) as session:
-                        await session.initialize()
-                        return await session.call_tool(item.name, kwargs)
-
-            result = asyncio.run(_execute())
-            input_list.append(
-                FunctionCallOutput(
-                    type="function_call_output",
-                    call_id=item.call_id,
-                    output=result.content[0].text,
-                )
-            )
-
-    if input_list:
-        # Send tool results back and continue
-        response = self.openai_client.responses.create(
-            input=input_list,
-            previous_response_id=response.id,
-            extra_body={"agent_reference": {"name": self.agent.name, "type": "agent_reference"}}
-        )
-    else:
-        break  # No more tool calls - final response ready
-```
-
-The loop continues until the agent produces a response with no pending function calls, at which point `response.output_text` contains the final answer.
-
-## Clean Up
-
-The lab automatically cleans up the agent when you exit:
-
-```python
-self.openai_client.agents.delete_version(
-    agent_name=self.agent.name,
-    version=self.agent.version
-)
-```
-
-No Azure resources are created in this lab (Work IQ uses your M365 license), so no additional cleanup is needed.
-
-## Troubleshooting
-
-### "Work IQ command not found"
-
-**Solution:** Install Work IQ:
-
-```bash
-npm install -g @microsoft/workiq
-```
-
-### "Admin consent required"
-
-**Solution:**
-
-1. Run `workiq mcp` to get the consent URL
-2. Send to your IT admin for approval
-3. Or use a personal M365 account with Copilot
-
-### "No M365 Copilot license"
-
-**Solution:** This lab requires Copilot. Either:
-
-- Purchase M365 Copilot license ($30/month)
-- Use organizational account with Copilot
-- Read through the lab to understand concepts without hands-on
-
-### "MCP server not responding"
-
-**Solution:** Test Work IQ directly:
-
-```bash
-workiq ask -q "What meetings do I have?"
-```
-
-If this fails, reinstall:
-
-```bash
-npm install -g @microsoft/workiq
-```
-
-### "No data returned"
-
-**Solution:**
-
-- Ensure your M365 account has emails, meetings, Teams activity
-- Try broader queries
-- Check if your query matches your actual data
+    > **Important:** Model usage and Work IQ requests can incur charges. Follow your organization's retention and billing policies when deciding what to keep.
