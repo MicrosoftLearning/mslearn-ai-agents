@@ -57,6 +57,8 @@ Let's start by creating a Foundry project with the new Foundry experience.
 
     When ready, your agent opens in the agent playground.
 
+    > **Note**: If you see a suggestion to create or use a **toolbox**, ignore it. It isn't relevant for this lab.
+
 1. In the model drop-down list, ensure a model is selected for your agent. If a model isn't deployed yet, select **Browse models** and deploy **gpt-5**, or any other supported model in your region.
 
 ## Configure your data and Foundry IQ
