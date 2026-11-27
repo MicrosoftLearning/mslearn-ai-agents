@@ -49,7 +49,7 @@ Let's start by creating a Foundry project with the new Foundry experience.
 1. Select **Create** and wait for your project to be created. This may take a few minutes.
 1. When your project is created, you'll see the project home page.
 
-> **Important**: Regional capacity and model quotas vary. If deployment is unavailable, create your project in another supported region where the required models, Azure AI Search, and Azure Blob Storage are available.
+> **Important**: Regional capacity, model availability, and quotas vary. Check [Region availability for Foundry Models](https://learn.microsoft.com/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure-region-availability#global-standard) to ensure your selected region supports `gpt-5` (or another Foundry IQ-compatible GPT-5 series model), `text-embedding-3-small`, Azure AI Search, and Azure Blob Storage.
 
 ## Create an agent
 
@@ -57,7 +57,9 @@ Let's start by creating a Foundry project with the new Foundry experience.
 
     When ready, your agent opens in the agent playground.
 
-When creating an agent, it will deploy the default model (like `gpt-5`). Once your agent is created, you'll see the agent playground with that default model automatically selected for you.
+    > **Note**: If you see a suggestion to create or use a **toolbox**, ignore it. It isn't relevant for this lab.
+
+1. In the model drop-down list, ensure a model is selected for your agent. If a model isn't deployed yet, select **Browse models** and deploy **gpt-5**, or any other supported model in your region.
 
 ## Configure your data and Foundry IQ
 
@@ -111,10 +113,10 @@ Now you'll upload sample product information documents to connect to with Foundr
     - **Container name**: `contosoproducts`
     - **Authentication type**: *API Key*
     - **Content extraction mode**: *minimal*
-    - **Embedding model**: *Select the available deployed model, likely text-embedding-3-small*
-    - **Chat completions model**: *Select the available deployed model, likely gpt-5*
+    - **Embedding model**: *Select a deployed embedding model, such as text-embedding-3-small (or deploy one if needed)*
+    - **Chat completions model**: *Select your deployed chat model, such as gpt-5*
 1. Select **Create**.
-1. On the knowledge base creation page, select the `gpt-5` model from the **Chat completions model** dropdown, leaving the rest of the field defaults as is.
+1. On the knowledge base creation page, select your deployed chat model (such as `gpt-5`) from the **Chat completions model** dropdown, leaving the rest of the field defaults as is.
 1. Select **Save knowledge base**, and then refresh your browser to verify the knowledge source status is *active*. If it isn't yet, wait a minute and refresh your page until it is.
 1. Select the back button to return to the **Knowledge** page, then select the **Manage** link next to the *Connection* drop-down.
 1. Scroll down to the **Connected resources**, where you should see your search service. Select that row, find the **Authentication** section.

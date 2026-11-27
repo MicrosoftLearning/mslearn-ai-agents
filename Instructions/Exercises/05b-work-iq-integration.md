@@ -47,7 +47,7 @@ Microsoft Foundry uses projects to organize models, resources, data, and other a
     - **Resource group**: *Create or select a resource group*
     - **Location**: *Select any available region*\*
 
-    > \* Some Azure AI resources are constrained by regional model quotas. If you exceed a quota limit later in the exercise, you may need to create another resource in a different region.
+    > \* Some Azure AI resources and deployment types are constrained by regional availability and quotas. Check [Region availability for Foundry Models](https://learn.microsoft.com/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure-region-availability#global-standard) to choose a region that supports `gpt-5` (or another Work IQ-compatible GPT-5 series model) with **Global Standard** or **Standard** deployments.
 
 5. Select **Create** and wait for your project to be created.
 
@@ -176,7 +176,9 @@ Before you can sign in through the tool, your app registration must accept the r
 
     For this agent, you can leave the default **Interaction mode** set to **Text**.
 
-3. Set the agent's **Instructions** to:
+3. In the model drop-down list, ensure a model is selected for your agent. If a model isn't deployed yet, select **Browse models** and deploy **gpt-5**, or any other supported model in your region.
+
+4. Set the agent's **Instructions** to:
 
     ```text
    You are a workplace intelligence assistant.
@@ -189,11 +191,11 @@ Before you can sign in through the tool, your app registration must accept the r
    update, or delete Microsoft 365 content.
     ```
 
-4. In the agent's **Tools** section, select **Add** > **Add tools**.
+5. In the agent's **Tools** section, select **Add** > **Add tools**.
 
-5. In the list of Configured tools, select the **Work IQ MCP** tool you created.
+6. In the list of Configured tools, select the **Work IQ MCP** tool you created.
 
-6. Save the agent configuration. Confirm that **Work IQ MCP** appears in the agent's tools list.
+7. Save the agent configuration. Confirm that **Work IQ MCP** appears in the agent's tools list.
 
 ## Authorize the connection and approve a tool call
 
