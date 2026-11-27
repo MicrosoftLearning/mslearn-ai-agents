@@ -45,7 +45,7 @@ Microsoft Foundry uses projects to organize models, resources, data, and other a
     - **Resource group**: *Create or select a resource group*
     - **Location**: *Select any available region*\*
 
-    > \* Some Azure AI resources are constrained by regional model quotas. In the event of a quota limit being exceeded later in the exercise, there's a possibility you may need to create another resource in a different region.
+    > \* Some Azure AI resources and deployment types are constrained by regional availability and quotas. Check [Region availability for Foundry Models](https://learn.microsoft.com/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure-region-availability#global-standard) to choose a region that supports `gpt-5` (or another compatible GPT-5 series model) with **Global Standard** or **Standard** deployments.
 
 1. Select **Create** and wait for your project to be created.
 
@@ -55,7 +55,7 @@ Microsoft Foundry uses projects to organize models, resources, data, and other a
 
     When ready, your agent opens in the agent playground.
 
-1. In the model drop-down list, ensure that a model has been deployed and selected for your agent.
+1. In the model drop-down list, ensure a model is selected for your agent. If a model isn't deployed yet, select **Browse models** and deploy **gpt-5**, or any other supported model in your region.
 
 ## Configure your agent with instructions and grounding data
 

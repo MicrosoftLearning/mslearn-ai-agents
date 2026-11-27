@@ -47,7 +47,9 @@ As a developer, you may spend some time working in the Foundry portal; but youâ€
 
     If a default project is already active, the project name will appear under **My Resources**. You can create a new project by right-clicking on the active project and selecting **Switch Default Project**.
 
-6. Select your Azure subscription and resource group, then enter a name for your Foundry project to create a new project for this exercise.
+6. Select your Azure subscription, resource group, and a supported region, then enter a name for your Foundry project to create a new project for this exercise.
+
+    > **Tip**: Model and deployment-type availability vary by region. Check [Region availability for Foundry Models](https://learn.microsoft.com/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure-region-availability#global-standard) to choose a region that supports `gpt-5` with **Global Standard** (or **Standard**) deployments.
 
     When the deployment is complete, you should see the project appear in the Foundry Toolkit pane as the default project.
 
@@ -60,6 +62,8 @@ At the core of any generative AI project, thereâ€™s at least one generative AI m
    > **Tip**: You can also access the Model Catalog by selecting the **+** icon next to **Models** in the Resources section, or by pressing **F1** and running the command **Foundry Toolkit: Show model catalog**.
 
 1. In the Model Catalog, locate the **gpt-5** model (you can use the search bar to find it quickly).
+
+   > **Note**: This exercise recommends **gpt-5** because it is validated with the Microsoft Agent Framework tools in this lab and matches the starter configuration, though you can substitute another tool-capable GPT-5 series model supported in your region if needed (just update `MODEL_DEPLOYMENT_NAME` in `.env` to match).
 
 1. Select **Deploy** next to the gpt-5 model.
 

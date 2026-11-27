@@ -137,13 +137,15 @@ In this section, you'll create a workflow that helps triage and respond to custo
 
 ### Configure the agent settings
 
-1. In the editor, under **Details**, select the **Parameters** button near the model name.
+1. In the editor, under **Details**, ensure a model is selected for your agent. If a model isn't deployed yet, select **Browse models** in the model drop-down list and deploy **gpt-5**, or any other supported model in your region.
+
+2. Select the **Parameters** button near the model name.
 
     ![Screenshot of the Parameters button in the agent editor.](../Media/agent-parameters.png)
 
-2. In the **Parameters** pane, next to **Text format**, select **JSON Schema**.
+3. In the **Parameters** pane, next to **Text format**, select **JSON Schema**.
 
-3. In the **Add response format** pane, enter the following definition and select **Save**:
+4. In the **Add response format** pane, enter the following definition and select **Save**:
 
     ```json
    {
@@ -172,7 +174,7 @@ In this section, you'll create a workflow that helps triage and respond to custo
    }
     ```
 
-4. In the Agent Details pane, set the **Instructions** field to the following prompt:
+5. In the Agent Details pane, set the **Instructions** field to the following prompt:
 
     ```output
    Classify the user's problem description into exactly ONE category from the list below. Provide a confidence score from 0 to 1.
@@ -196,15 +198,15 @@ In this section, you'll create a workflow that helps triage and respond to custo
    - Billing ONLY applies when money was charged, refunded, or paid incorrectly
     ```
 
-5. Select **Node settings** to configure the input and output of the agent.
+6. Select **Node settings** to configure the input and output of the agent.
 
-6. Set the **Input message** field to the `Local.CurrentTicket` variable.
+7. Set the **Input message** field to the `Local.CurrentTicket` variable.
 
-7. Under **Save agent output message as**, create a new variable named `TriageOutputText`.
+8. Under **Save agent output message as**, create a new variable named `TriageOutputText`.
 
-8. Under **Save the output json_object as**, create a new variable named `TriageOutputJson`.
+9. Under **Save the output json_object as**, create a new variable named `TriageOutputJson`.
 
-9. Select **Done** to save the node.
+10. Select **Done** to save the node.
 
 ## Handle low-confidence classifications
 
@@ -274,7 +276,7 @@ In this section, you'll add conditional logic to route the ticket based on its c
 
 4. Enter an agent name such as *Resolution-Agent* and select **Create**. If prompted, set the **Interaction mode** to **Text**.
 
-5. In the agent editor, set the **Instructions** field to the following prompt:
+5. In the agent editor, ensure your deployed model is selected, and set the **Instructions** field to the following prompt:
 
     ```output
    You are a customer support resolution assistant for ContosoPay, a B2B payments and invoicing platform.
